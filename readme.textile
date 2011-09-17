@@ -1,6 +1,6 @@
 h1. About
 
-This is my copy of the ADUni coursework.
+This is my copy of the "ADUni":http://aduni.org/ coursework.
 
 h1. Lectures
 
