@@ -1,0 +1,26 @@
+<%@ Page language="c#" Codebehind="wealth.cs" AutoEventWireup="false" Inherits="pset1.wealth" %>
+<html><head>
+<meta content=True name=vs_showGrid>
+<meta content="Microsoft Visual Studio 7.0" name=GENERATOR>
+<meta content=C# name=CODE_LANGUAGE></head>
+<body>
+<p>This is a .NET version of the wealth clock at <a 
+href="http://www.webho.com/WealthClock">http://www.webho.com/WealthClock</A></P>
+<table>
+  <tr>
+    <td><strong>Current US 
+      Population:</STRONG></TD>
+    <td><% = us_population %></TD></TR>
+  <tr>
+    <td><strong>MSFT Share 
+      Price:</STRONG></TD>
+    <td>$<% = ms_price %></TD></TR>
+  <tr>
+    <td><strong>Gates 
+      Wealth:</STRONG></TD>
+    <td><% = gates_shares*ms_price %></TD></TR>
+  <tr>
+    <td><strong>Your share</strong></TD>
+<td>$<% = gates_shares * ms_price / us_population %></td></TR></TABLE>
+	
+</body></html>

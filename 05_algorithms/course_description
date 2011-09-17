@@ -1,0 +1,21 @@
+<p>
+The design and analysis of algorithms is studied.  Methodologies
+include:  divide and conquer, dynamic programming, and greedy
+strategies.  Their applications involve: sorting, ordering and
+searching, graph algorithms, geometric algorithms, mathematical
+(number theory, algebra and linear algebra) algorithms, and string
+matching algorithms. 
+</p><p>
+We study algorithm analysis - worst case, average case, and amortized,
+with an emphasis on the close connection between the time complexity
+of an algorithm and the underlying data structures.  We study
+NP-Completeness and methods of coping with intractability.  Techniques
+such as approximation and probabilistic algorithms are studied for
+handling the NP-Complete problems. 
+</p><p>
+Text:  <i>Introduction to Algorithms</i>, Cormen, Rivest, Leiserson.
+</p><p>
+Reference:  <i>Computers and Intractability</i>, Garey and Johnson
+</p><p>
+Requirements: Two exams, six problem sets.
+</p><br>

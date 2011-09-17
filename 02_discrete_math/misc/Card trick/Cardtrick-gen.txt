@@ -1,0 +1,86 @@
+Subject: Re: Card trick
+Date: Wed, 01 Nov 2000 08:35:19 EST
+From: BRamelson@aol.com
+To: <shai@stonehill.edu>
+
+I guess you can use a technique like this to compress an image but JPEG does
+a much better job.  It also takes into account that small distortions of the
+image will not alter its appearance.
+
+What is interesting here is that all the standard compression algorithms
+assume that the data needs to be reconstructed in order.  Is there ever a
+case when order doesn't matter? I still haven't thought of one.
+
+- Brian.
+
+In a message dated Tue, 31 Oct 2000  9:39:32 AM Eastern Standard Time, Shai
+Simonson <shai@stonehill.edu> writes:
+
+<<
+
+BRamelson@aol.com wrote:
+
+> Here are a couple of variations that I thought of:
+> 1. Instead of revealing n-1 cards, reveal p cards and the magician must
+> determine the hidden n-p cards.
+>
+> 2. Allow for duplicates.  This problem is like having N decks of cards with
+M
+> cards each and one card is chosen from each of the N decks.  N-1 cards are
+> revealed and the magician must figure out the remaining concealed card.
+This
+> one is particularly interesting for your class since it gets into
+> combinations with replacement.
+
+    Sometimes you think more like a mathematician than an engineer.
+
+    These are both good natural generalizations opening up lots of new
+questions.
+
+>
+>
+> One of the reasons this problem is so interesting to me is that it is a form
+> of compression.  Essentially, we are taking advantage of the fact that the
+> encoding can be ordered and the information being trasnferred does not need
+> to be ordered.  I've been trying to think if there is an application of this
+> type of compression in the real world but I haven't thought of one yet.
+>
+
+    You mean the idea of "compressing" unordered chunks of M items into
+ordered
+chunks of N items, where N<M?
+
+    I thought about this on the train to work today.   There was a mural on
+the
+wall of South Station made out of tiny little blurs, which close up look like
+nothing and farther away look like a clear picture.  It seemed to me that if
+you
+wanted to transfer this picture over a wire, you could break it up into small
+enough chunks so that the order of the blurs wouldnt matter within that chunk
+--
+that is you could reconstruct them in any order and not ruin the big picture
+in a
+noticable way.  Then we could use this scheme to send chunks of 5 by an
+ordered
+set of 4... a 20% compression and we pay virtually nothing....  some "blur"
+perhaps that no one will notice...
+
+    What do you think of this?
+
+>
+> - Brian.
+
+--
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн----
+ Shai Simonson, Professor
+ ArsDigita University
+ 141 Portland St. (Use 80 Prospect St. for mailing)
+ Cambridge, MA 02139
+
+Voice Mail:   (617) 386-4236
+Fax:  (617) 494-8174
+Email:   shai@stonehill.edu
+Home Page:  http://academics.stonehill.edu/compsci/SHAI.HTM
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-----
+
+ >>

@@ -1,0 +1,208 @@
+Subject: Re: Exploding bank vaults
+Date: Thu, 8 Jun 2000 06:32:55 -0700 (PDT)
+From: "Samuel J. Klein" <sjklein4913@yahoo.com>
+To: Shai Simonson <shai@stonehill.edu>
+
+A complete answer:
+
+If the time of transmission of a message from one man
+to the next is less than K (but equal to or greater
+than K-1) blinks, and the players cannot count as high
+as 2K, then I cannot even synchronize two players.
+
+If the players can count as high as 2K, then all is
+well.
+
+In the given case, you said that the players could
+count as high as two, so a solution to the problem
+exists if the time of transmission of a message is
+less than one blink of the light.
+
+Now proceed as follows:
+
+In round 1, each player determines whether he is a
+middleman (M-A), a semi-middleman (S-A) or neither.
+Now remove the middlemen and the semi-middlemen from
+the line.  We are left with two sub-lines of neithers.
+
+In round 2, we determine the middlemen and the
+semi-middlemen of these two sub-lines (the M-B's nd
+the S-B's).  We remove these middlemen and
+semi-middlemen from the original line and are left
+with four sub-lines of neithers.
+
+We proceed in this fashion until all participants are
+labeled either M-X or S-X.  (Since there at least
+2^(k-1) new middlemen in the k-th round, the number o
+middlemen all told will eventually equal n, the
+(finite) number of players in the game.)
+
+Each player now knows his designation and knows how
+many rounds there are in the game.  In particular, the
+M(last)'s know they are the last middlemen.
+
+The left-most player now sends a message "A" to the
+player on his right. Every player who recieves the
+message, other than an M-A or an S-A, transmits he
+message on the next blink of the light to the player
+on his far side.
+
+If an M-A player receives the message, he sends a "B"
+message to his two neighbors on the next blink of the
+light. If an S-A player receives the message, he first
+coordinates with his S-A twin.  On the next blink of
+the light, he tells the other S-A player to send a "B"
+message on the following blink of the light to the
+player on his far side.  He himself sends a "B"
+message the other way on the same light-blink (the
+second blink after he received his "A" message).  (He
+can count to two.)  The two S-A players are thus
+synchronized.
+
+In like manner, the "B" message is transmitted by
+every player except the M-B and the S-B players.  Upon
+receiving a "B" message, an M-B player sends a "C"
+message to his two immediate neighbors;  an S-B player
+takes a moment to coordinate with his S-B twin and
+both then send "C" messages simultaneously to their
+non-twin neighbors.
+
+Eventually, the N middlemen receive "N" messages.  If
+a player is an S-N, he tells his immediate neighbors
+(on the next blink) that they are to turn their keys
+in their locks on the blink following their reception
+of the message.  He himself turns his key in his lock
+on the blink following his sending of that message.
+
+If he is an S-N, he first coordinates with his twin on
+the next blink.  Both S-N's then send the key-turning
+message simultaneously to their non-twin neighbors on
+the following blink.  (Again, the first S-N can count
+to two.)  And everybody turns his key in his lock on
+the blink after that.
+
+If the vault doesn't explode, it will open.
+
+Graphically, this can be pictured in real time as a
+rectangle in the first quadrant in the Cartesian plane
+with one vertex at the origin.  The x-axis represents
+the line of players, the y-axis is the time line.
+
+Initially, the rectangle has a single vertical
+midline.
+
+A ray projects from the origin at an initial angle.
+When it hits the miline, it breaks in two.  One half
+follows the original path, the other reflects in the
+midline.  Simultaneously, two vertical quarter-lines
+appear.
+
+When these new rays hit the quarter-lines, each splits
+in two, ray and reflection. Simultaneously, four
+vertical eighth-lines appear.
+
+Eventually, there will be 2^n rays arriving at an
+equal spacing at the same time.  And here the graphic
+demonstration ends.
+
+For people who think in binary numbers, the above
+rectangle can be scaled so that the base extends from
+0 to 1. Let the points in h base be given by their
+binary expansions (i.e., 5/32 = 0.00101).
+
+A ray projects from the origin at an initial angle.
+When the first digit after the decimal point changes,
+the ray splits (ray and reflection). The
+second-generation rays split again after the second
+digit after the decimal point changes.  The third
+generation rays split again when the third digit after
+the decimal point changes.  And so on.
+
+(I sippose the decimal point should be called a binary
+point.)
+
+_____________________
+
+It takes a bit of talking (and smoothing out) to see
+how this evolving picture represents the original
+problem.  Indeed, it takes a bit of talking to justify
+some of the above statements.  If you want to talk any
+of this out with me, give me a ring.  (802-865-5039)
+
+                                   Sam
+
+--- Shai Simonson <shai@stonehill.edu> wrote:
+>
+>
+> "Samuel J. Klein" wrote:
+>
+> > I am not sure that I understand the constraint.
+> >
+> > Can the players count at all?
+> >
+> > If A sends a message to the man on his right and
+> asks
+> > him to return the message immediately, can he
+> count
+> > the blinks between sending and receiving the
+> message?
+>
+>     No he cannot.
+>
+> >
+> >
+> > Does he know that the fifth message he receives is
+> the
+> > fifth message?
+>
+>     No he might not.
+>
+> >
+> >
+> > When you say that the largest number a player can
+> > remember is K are you asking for the length of the
+> > line I can synchronize as a function of K or are
+> you
+> > asking me to synchronize a line of any length,
+> > independent of K?
+> >
+>
+>     The latter.  I am asking you to synchronize a
+> line of any length,
+> given K as the limit of memory for each person.
+> That is, you must commit to your strategy assuming a
+> fixed K, and then I
+> will tell you how many people are actually in the
+> line.
+>
+>
+>
+> >
+> > __________________________________________________
+> > Do You Yahoo!?
+> > Yahoo! Photos -- now, 100 FREE prints!
+> > http://photos.yahoo.com
+>
+> --
+>
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+> Shai Simonson, Professor
+> ArsDigita University
+> 80 Prospect St.
+> Cambridge, MA
+>
+> Department of Mathematics and Computer Science
+> Stonehill College, North Easton, MA 02357
+> Voice: (508) 565-1008 Fax: (508) 565-1444
+> Email: shai@stonehill.edu
+> Home Page:
+> http://academics.stonehill.edu/compsci/SHAI.HTM
+>
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-
+>
+>
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Photos -- now, 100 FREE prints!
+http://photos.yahoo.com

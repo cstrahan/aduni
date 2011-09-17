@@ -1,0 +1,282 @@
+2000-05-12  Andreas Hyden  <a.hyden@cyberpoint.se>
+
+	* same-gnome.desktop: Added Swedish translation.
+
+1999-05-05  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* same-gnome.c (area_event): Fix from Winston I. Brybin
+	ph0t0n@hotmail.com that fixes a small case in which the code would
+	not notice when you leave the board with the mouse and you return
+	to the same X/Y pair you left on.  Fixes a cheating bug :-)
+
+1999-02-19  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* help/C/Makefile.am (index.html): Don't fail if `db2html' failed.
+	(install-data-local): Likewise.
+
+1999-02-13  Ian Peters  <ipeters@acm.org>
+
+	* same-gnome.c (main): Add a default value for config load
+
+1999-02-13  Ian Peters  <ipeters@acm.org>
+
+	* same-gnome.c (main): Instead of defaulting to marbles.png, actually
+	checks stored value for png file.
+
+1999-02-03  Arturo Espinosa <arturo@nuclecu.unam.mx>
+
+	* Makefile.am: SUBDIRS = help
+	* added help subir.
+	* C: moved to help.
+
+1999-01-10  Nat Friedman  <nat@nat.org>
+
+	* same-gnome.c (main): Added an AppBar.  Removed the 'hb' widget
+ 	and the 'frame' widgets.  Packed the score labels into the appbar
+ 	instead of the hb widget.  Added a friendly welcome message.
+
+	Standardized the menus.
+	
+1998-12-30  Carsten Schaar  <nhadcasc@fs-maphy.uni-hannover.de>
+
+	* same-gnome.c (main): Removed any reference to the cloned client.
+	(save_state): Changed to use the config file stuff, that is
+ 	offered by the gnome client API.
+	(restart): Likewise.
+
+1998-10-10  Carsten Schaar  <nhadcasc@fs-maphy.uni-hannover.de>
+
+	* same-gnome.c (main): Use 'gnome_master_client' instead of
+ 	'gnome_client_new_default'.  Connect to the gnome client's 'die'
+ 	signal.
+	(client_connect): Removed.
+	(client_die): New function, that quits the game, if the session manager
+	sends a 'die' signal.
+
+1998-09-24  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* same-gnome.c (game_quit_callback): Do not use the deprecated
+	routines. 
+
+	Use accelerators.
+
+1998-07-25  Nuno Ferreira  <nmrf@rnl.ist.utl.pt>
+
+	* same-gnome.desktop: Added Portuguese translation.
+
+Wed May 06 10:04:03 1998  Kjartan Maraas  <kmaraas@fib.hl.no>
+
+	* same-gnome.c: removed a compiler warning.
+	
+Thu Apr  2 01:50:44 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* same-gnome.c (game_quit_callback): Use stock buttons.  Show the
+	widget.
+
+1998-03-29  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* same-gnome.c (main): Use `stones.png' as default scenario when
+	no scenario has been specified on the command line.
+
+Sat Mar 21 10:54:57 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* same-gnome.c: Use gnome_message_box_*, not gnome_messagebox_*.
+
+	* same-gnome.c (game_maybe_quit): New function.
+	(game_quit_callback): Connect game_maybe_quit to "clicked" signal
+	of messagebox.
+
+Sun Mar  8 15:54:03 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* Makefile.am (same_gnome_LDADD): Don't link with libsupport.a.
+
+	* Makefile.am (INCLUDES): Added GNOME_INCLUDEDIR.
+
+	* same-gnome.c (parse_an_arg): New function.
+	(parse_args): Removed.
+	(main): Use new gnome_init.  Create session manager client.
+	(client_connect): Use previous id, not current one.
+	(options): New structure
+	(parser): New structure.
+	(fname): New global.
+
+1998-02-28  Arturo Espinosa <arturo@nuclecu.unam.mx>
+
+        * same-gnome.c: Minor bug-fixes.
+
+1998-02-28  Arturo Espinosa <arturo@nuclecu.unam.mx>
+
+        * same-gnome.c: We are now using PNGs instead of XPM.
+                        Now using GNOME_APP_UI's for the menus.
+                        Fix: Preferences menu now remembers scenario in use.
+                        Changing scenario doesn't start a new game.
+                        Using as much STOCK elements as possible.
+                        Other look fixes.
+
+1998-02-19  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* same-gnome.c (main): Added app_id "same-gnome".
+
+1998-02-18  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* same-gnome.c: Wheeee!  Same-gnome is now imlib-ified.  I still
+	have to figure a way to handle the clip masks in a proper way.
+	Hmmm.  Maybe we should define an extra configuration option for a
+	window background?
+
+	* same-gnome.c (client_connect): Changed name from connect to
+	client_connect to avoid collision with connect(2).
+
+	* Makefile.am (same_gnome_LDADD): Added -lgdk_imlib to the list of
+	libraries.
+
+Mon Feb 16 19:59:47 KST 1998  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
+
+	* Makefile.am (INCLUDES): Define GNOMELOCALEDIR.
+
+	* same-gnome.c (main): Add bindtextdomain().
+
+1998-02-15  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* same-gnome.c: Look for `getopt.h' in `support' too.
+	* Makefile.am (same_gnome_LDADD): Include `libsupport.a'.
+
+1998-02-14  Carsten Schaar  <nhadcasc@fs-maphy.uni-hannover.de>
+
+	* same-gnome.c (save_state): Changed to use new SM support.
+	(connect): New function.
+	(parse_args): Changed to use new SM support.
+
+Sat Feb 14 09:43:48 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* Makefile.am (same_gnome_LDADD): Added INTLLIBS.
+	(Games_DATA): New macro.
+	(install-data-local): Don't install same-gnome.desktop.
+
+1998-02-07  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* Makefile.am (install-data-local): Install game `setgid' only if
+	chown to `games' succeeded.
+
+Tue Feb  3 10:57:13 EST 1998 Nathan Bryant <bryant@cs.usm.maine.edu>
+
+	* same-gnome.c: gnome_score_init.
+	* Makefile.am: install setgid.
+
+Sun Feb  1 00:02:27 ART 1998  Horacio J. Peña  <horape@compendium.com.ar>
+
+	* *: changed samegnome by same-gnome.
+
+Fri Jan 30 13:26:55 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* same-gnome.c (restart): Don't return a value.
+
+1998-01-28  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* Makefile.am: Misc. fixes.
+
+Tue Jan 27 13:57:26 1998  Federico Mena	<federico@bananoid.nuclecu.unam.mx>
+	
+	* Makefile.am (install-data-local): Updated installation of the
+	.desktop files.
+
+Tue Jan 27 13:59:41 ART 1998  Horacio J. Peña  <horape@compendium.com.ar>
+
+	* same-gnome.c: Added Help menu and About dialog.
+	(delete_session): new function (session-management)
+
+Tue Jan 27 03:56:10 ART 1998  Horacio J. Peña (n.) <horape@compendium.com.ar>
+
+	* Makefile.am: Creates $(scoredir)/same-gnome.scores.
+	* TODO: Actualized.
+
+1998-01-26  Mark Galassi  <rosalia@cygnus.com>
+
+	* Makefile.am (LDADD): added $(DL_LIB) since these are now
+	required for any user of libgnome.a.
+
+Sun Jan 25 23:38:30 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* same-gnome.c: Replaced "Quit" with "Exit".
+
+Tue Jan 27 11:28:08 1998  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
+
+	* same-gnome.c (main): Add textdomain().
+
+Mon Jan 26 01:19:20 ART 1998	Horacio J. Peña (n.) <horape@compendium.com.ar>
+
+	* same-gnome.c: Session-management aware.
+	(session_id): new global.
+	(restarted): new global.
+	(debugging): new global.
+	(struct ball): named.
+	(save_state): new function.
+	(restart): new function.
+	(parse_args): new function
+
+Sat Jan 24 15:43:09 1998  Eckehard Berns  <eb@berns.prima.de>
+
+	* same-gnome.c (create_menu): changed _() to N_() in same_menu and
+	gettexted them in create_menu.
+
+Wed Jan 21 20:11:45 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* same-gnome.c (show_scores): Use simplified
+	`gnome_scores_display' routine.
+	
+Wed Jan 21 01:18:34 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* same-gnome.c (show_scores): cast hs to GNOME_SCORES.
+
+Tue Jan 20 17:39:25 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* same-gnome.c (load_scenario): Force the number of colors to
+	three.  The right fix it to let the user tweak the number of
+	colors from 3 to heigh / STONE_SIZE.
+	(game_preferences_callback): Add a frame to the preferences, make
+	it look nicer. 
+
+Sun Jan 18 03:10:15 1998  Horacio J. Peña (n.) <horape@compendium.com.ar>
+
+	(Warning: All this changes have a lot of memory leaks.)
+	* same-gnome.c: (ncolors) new global variable.
+	(show_scores): new function.
+	(game_top_ten_callback): new function.
+	(end_of_game): new function.
+	(check_game_over): it was an empty function. Coded.
+	(fill_board): Handles more than 3 colors.
+	(load_scenario): Fixed loading of pixmaps. Handles more than 3 colors.
+	(set_selection): Changed a bit to support preferences.
+	(set_selection_def): new function.
+	(yes): Changed a bit to support preferences.
+	(fill_menu): fixed a memory leak. (One fixed, a lot added :) :( )
+	(load_scenario_callback): Support preferences.
+	(game_preferences_callback): Support preferences.
+	(same_menu): i18n'ed.
+	(main): simplified (load_scenario does the deleted check)
+	
+Wed Dec 31 18:21:41 1997  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* same-gnome.c (main): use GnomeApp widget.  Should we make
+	GnomeApp a container probably?  So we could get rid of
+	gnome_app_set_contents and use gtk_container_add
+
+Fri Jan  2 00:15:32 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* same-gnome.c (create_main_window): Declare return type.
+	(main): Cast app to right type.
+
+Sun Dec  7 12:05:25 1997  Tom Tromey  <tromey@cygnus.com>
+
+	* Makefile.am (samegnome_LDADD): Added x_libs.
+
+Mon Nov  3 22:54:02 1997  Tom Tromey  <tromey@cygnus.com>
+
+	* same-gnome.desktop (Info): Corrected description; same-gnome
+	isn't mines.
+
+Wed Oct 29 23:21:01 1997  Tom Tromey  <tromey@cygnus.com>
+
+	* same-gnome.c: Don't define `_'; it is defined properly
+	elsewhere.
+

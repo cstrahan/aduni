@@ -1,0 +1,1156 @@
+**** Problem Set 1 Solutions
+**** by Chris Crick
+
+<<<<<<<<Poly.java>>>>>>>>
+
+/**
+The <em>Poly</em> class contains methods for performing arithmetic on single-variable polynomials with integer coefficients.
+@author Chris Crick
+*/
+
+public class Poly implements Function, Comparable
+{
+    private int[] coefficients = null;
+    private int degree = 0;
+
+    /**
+       Creates a new polynomial.
+       @param coef An array of integers representing polynomial coefficients.  coef[0] represents the constant coefficient,
+       coef[1] represents the coefficient of the first-degree term, and so on.
+       @return A Poly object.
+    */
+       
+    public Poly(int[] coef)
+    {
+	coefficients = coef;
+	degree = this.checkDegree();
+    }
+
+    private int checkDegree() // Any time we create or modify a polynomial, we'll run this to update the degree variable.
+    {
+	int i = 0;
+
+	for (i = (coefficients.length - 1); i > 0; i--)
+	    {
+		if (coefficients[i] != 0) break;
+	    }
+	return (i);
+    }
+
+    /** Identifies the highest-degree polynomial term with a nonzero coefficient, or 0 if the polynomial has no nonzero coefficients.
+	@return An integer representing the polynomial's degree.
+    */
+
+    public int degree()
+    {
+	return this.degree;
+    }
+
+    /** Converts a Poly representation to an algebraic string representation, using x as a variable value
+	@return A string of polynomial terms.
+    */
+
+    public String toString()
+    {
+	String text = "";
+	String[] textElement = new String[(degree + 1)];
+
+	for (int i = 0; i < degree; i++)
+	    {
+		if (coefficients[i] < -1)
+		    textElement[i] = (" - " + Math.abs(coefficients[i]) + "x^" + i);
+		else if (coefficients[i] == -1)
+		    textElement[i] = (" - x^" + i);
+		else if (coefficients[i] == 0)
+		    textElement[i] = "";
+		else if (coefficients[i] == 1)
+		    textElement[i] = (" + x^" + i);
+		else
+		    textElement[i] = (" + " + coefficients[i] + "x^" + i);
+	    }
+	textElement[degree] = (coefficients[degree] + "x^" + degree); // We don't want the arithmetic in front of our first term.
+	if (coefficients[degree] == 1)
+	    textElement[degree] = textElement[degree].substring(1); // If we've got a coefficient of 1 or -1, we want to eliminate it.
+	if (coefficients[degree] == -1)
+	    textElement[degree] = ("-" + textElement[degree].substring(2));
+
+	if (textElement[0].length() > 0)
+	    textElement[0] = textElement[0].substring(0, textElement[0].indexOf("x")); // Chop off the x^0 part, leaving just the coefficient.
+	if ((degree > 0) && (textElement[1].length() > 0))
+	    textElement[1] = textElement[1].substring(0, (textElement[1].indexOf("x") + 1)); // Chop off the ^1 part, leaving just the coefficient and x. 
+
+	if ((degree > 0) && ((coefficients[0] == 1) || (coefficients[0] == -1))) // Having eliminated all of the "1"s, we have to replace them in the constant term.
+	    textElement[0] = (textElement[0] + "1");
+
+	for (int i = degree; i >= 0; i--)
+	    text = text + textElement[i];
+
+	return (text);
+    }
+
+    /**
+       Adds a polynomial in the same variable to the Poly on which the <em>add</em> method is called.
+       @param a The polynomial to add.
+       @return A new Poly representing the sum.
+    */
+
+    public Poly add(Poly a)
+    {
+	if (degree < a.degree)
+	    return (a.add(this)); // This catches the case when a is a larger-degree polynomial -- otherwise the function would be much more complicated.
+	else
+	    {
+	        int[] ansArray = new int[(degree + 1)];
+		
+		for (int i = 0; i <= a.degree; i++)
+		    ansArray[i] = (coefficients[i] + a.coefficients[i]); // As long as both arrays have something to add, do so.
+		for (int i = (a.degree + 1); i <= degree; i++)
+		    ansArray[i] = coefficients[i]; // Fill in the rest of the answer polynomial with the coefficients of the larger-degree polynomial.
+		
+		return (new Poly(ansArray));
+	    }
+    }	
+
+    /**
+       Multiplies a polynomial in the same variable to the Poly on which the <em>add</em> method is called.
+       @param a The polynomial to multiply.
+       @return A new Poly representing the product.
+    */
+
+    public Poly mul(Poly a)
+    {
+	int ansSize = (degree + a.degree + 1);
+	int[] ansArray = new int[ansSize];
+
+	for (int i = 0; i < ansSize; i++) // Initialize the array, since we're going to be adding things higgledy-piggledy.
+	    ansArray[i] = 0;
+
+	for (int i = 0; i <= degree; i++)
+	    for (int j = 0; j <= a.degree; j++)
+		ansArray[(i + j)] = (ansArray[(i + j)] + (coefficients[i] * a.coefficients[j]));
+
+	return (new Poly(ansArray));
+    }
+
+    /**
+       Scales a polynomial by an integer constant.
+       @param s The integer which scales the polynomial.
+       @return A new Poly representing the product.
+    */
+
+    public Poly scale(int s)
+    {
+	int[] ansArray = new int[(degree + 1)];
+
+	for (int i = 0; i <= degree; i++)
+	    ansArray[i] = (s * coefficients[i]);
+
+	return (new Poly(ansArray));
+    }
+
+    /**
+       Adds two polynomials together.
+       @param a The first polynomial in the sum.
+       @param b The second polynomial in the sum.
+       @return A Poly representing the sum.
+    */
+
+    public static Poly add(Poly a, Poly b)
+    {
+	return (a.add(b));
+    }
+
+    /**
+       Multiplies two polynomials together.
+       @param a The first polynomial to multiply.
+       @param b The second polynomial to multiply.
+       @return A Poly representing the product.
+    */
+
+    public static Poly mul(Poly a, Poly b)
+    {
+	return (a.mul(b));
+    }
+
+    /**
+       Evaluates the numerical answer to a polynomial, given a value for x.
+       @param x The value to substitute in for x in the polynomial.
+       @return A double representing the evaluated polynomial.
+    */
+
+    public double evaluate(double x)
+    {
+	double answer = 0;
+
+	for(int i = 0; i <= degree; i++)
+		answer = answer + (coefficients[i] * (Math.pow(x, i)));
+
+	return(answer);
+    }
+
+    /**
+       Computes definite integrals of polynomials by computing the antiderivatives, rather than by doing geometric approximations.
+       @param a The lower bound of the integral.
+       @param b The upper bound of the integral.
+       @param N Not used, but maintained for symmetry and compatibility.  Feel free to pass any integer at all.
+       @return A double representing the evaluated integral.
+    */
+
+    public double defIntegral(double a, double b, int N)
+    {
+	double answer = 0;
+
+	for(int i = 0; i <= degree; i++) // Compute the antiderivative of each polynomial term, substitute a and b in for the variable, and subtract.
+		answer = answer + (((coefficients[i] * Math.pow(b, (i + 1))) / (i + 1))
+				   - ((coefficients[i] * Math.pow(a, (i + 1))) / (i + 1)));
+	return(answer);
+    }
+
+    /**
+       Implements the standard Java compareTo method, which returns -1, 0, or 1 depending on the equality of two polynomials.
+       @param a The polynomial with which to compare.
+       @return An integer representing the result of the comparison.
+
+    public int compareTo(Object a)
+    {
+	if (degree < ((Poly)a).degree)
+	    return (-1);
+	else if	(degree > ((Poly)a).degree)
+	    return (1);
+	
+	for (int i = degree; (i >= 0); i--)
+	    {
+		if (coefficients[i] < ((Poly)a).coefficients[i])
+		    return (-1);
+		else if (coefficients[i] > ((Poly)a).coefficients[i])
+		    return (1);
+	    }
+	return (0);
+    }
+}
+
+
+<<<<<<<<Rfunc.java>>>>>>>>
+
+
+/**
+   An abstract class to compute various behaviors of functions over the real numbers.
+   @author Chris Crick
+*/
+
+public abstract class RFunc
+{
+
+    /**
+       An abstract placeholder for the various ways of evaluating functions depending on their identities.
+    */
+
+    public abstract double evaluate(double x);
+
+    /**
+       A method for determining a root of a continuous function.  If multiple roots lie between the brackets, the method does not guarantee any particular one
+       will be returned, only that one of them will be.
+       @param a The first parameter, a double.  If f(a) is positive, then f(b) must be negative, and vice versa.
+       @param b The second parameter, also a double.  Its evaluation within the function in question must be opposite in sign to that of parameter a.
+       @param maxerr A small number, say 10E-8, representing the smallest acceptable error for the return value.
+       @return A double representing a root of the function, plus or minus maxerr.
+    */
+    public double bracketRoot(double a, double b, double maxerr)
+    {
+	double x = ((a + b) / 2.0);
+	
+	if ((b - a) < maxerr)
+	    return (x);
+
+	double fx = evaluate(x);
+	double fa = evaluate(a);
+
+	if (((fx < 0) && (fa < 0)) || ((fx >= 0) && (fa >= 0)))
+	    return (bracketRoot(x,b,maxerr));
+	else
+	    return (bracketRoot(a,x,maxerr));
+    }
+
+    /**
+       A method that computes an approximation of a definite integral.
+       @param a The lower limit of the integration.
+       @param b The upper limit of the integration.
+       @param N The granularity of the integration calculation.  The higher the number, the more accurate the answer, but the method guarantees a minimum accuracy.
+       @return The result of the integration.  This result is guaranteed to be accurate to at least 10^-8, but can be made more accurate by choosing a higher
+       value for N.
+    */
+
+    public double defIntegral(double a, double b, int N)
+    {
+	double firstTest = defIntegralHelper(a, b, N);
+
+	N = (N * 2);
+
+	double secondTest = defIntegralHelper(a, b, N);
+	double error = (secondTest - firstTest);
+
+	if ((error < 0.00000001) && (error > -0.00000001))
+	    return (secondTest);
+	else
+	    return (defIntegral(a, b, N));
+    }
+
+    private double defIntegralHelper(double a, double b, int N)
+    {
+	double length = ((b - a) / N);
+	double area = 0;
+
+	for (int i = 1; i < N; i++)
+	    {
+		area = area + (length * (evaluate(a + (length * i))));
+	    }
+
+	return ((length * ((evaluate(a) + evaluate(b)) / 2)) + area);
+    }
+}
+
+
+<<<<<<<<RfuncLib.java>>>>>>>>
+
+
+/**
+   An abstract class to compute various behaviors of functions over the real numbers, using the Function interface.
+   @author Chris Crick
+*/
+
+public class RFuncLib
+{
+    /**
+       A method for determining a root of a continuous function.  If multiple roots lie between the brackets, the method does not guarantee any particular one
+       will be returned, only that one of them will be.
+       @param a The first parameter, a double.  If f(a) is positive, then f(b) must be negative, and vice versa.
+       @param b The second parameter, also a double.  Its evaluation within the function in question must be opposite in sign to that of parameter a.
+       @param maxerr A small number, say 10E-8, representing the smallest acceptable error for the return value.
+       @param f An object implementing a particular function and its associated operations, including evaluate.
+       @return A double representing a root of the function, plus or minus maxerr.
+    */
+    public static double bracketRoot(double a, double b, double maxerr, Function f)
+    {
+	double x = ((a + b) / 2.0);
+	
+	if ((b - a) < maxerr)
+	    return (x);
+
+	double fx = f.evaluate(x);
+	double fa = f.evaluate(a);
+
+	if (((fx < 0) && (fa < 0)) || ((fx >= 0) && (fa >= 0)))
+	    return (bracketRoot(x,b,maxerr,f));
+	else
+	    return (bracketRoot(a,x,maxerr,f));
+    }
+
+    /**
+       A method that computes an approximation of a definite integral.
+       @param a The lower limit of the integration.
+       @param b The upper limit of the integration.
+       @param N The granularity of the integration calculation.  The higher the number, the more accurate the answer, but the method guarantees a minimum accuracy.
+       @param f An object implementing a particular function and its associated operations, including evaluate.
+       @return The result of the integration.  This result is guaranteed to be accurate to at least 10^-8, but can be made more accurate by choosing a higher
+       value for N.
+    */
+
+    public static double defIntegral(double a, double b, int N, Function f)
+    {
+	double firstTest = defIntegralHelper(a, b, N, f);
+
+	N = (N * 2);
+
+	double secondTest = defIntegralHelper(a, b, N, f);
+	double error = (secondTest - firstTest);
+
+	if ((error < 0.00000001) && (error > -0.00000001))
+	    return (secondTest);
+	else
+	    return (defIntegral(a, b, N, f));
+    }
+
+    private static double defIntegralHelper(double a, double b, int N, Function f)
+    {
+	double length = ((b - a) / N);
+	double area = 0;
+
+	for (int i = 1; i < N; i++)
+	    {
+		area = area + (length * (f.evaluate(a + (length * i))));
+	    }
+
+	return ((length * ((f.evaluate(a) + f.evaluate(b)) / 2)) + area);
+    }
+}
+
+
+<<<<<<<<Function.java>>>>>>>>
+
+
+public interface Function
+{
+    public double evaluate(double x);
+}
+
+
+<<<<<<<<PQueue.java>>>>>>>>
+
+
+public class PQueue implements PriorityQueue
+{
+    private class Element
+    {
+	public Element next = null;
+	public Comparable datum = null;
+    }
+
+    private Element head = null;
+    private int length = 0;
+
+    public void insert(Comparable a)
+    {
+	Element newelement = new Element();
+	newelement.datum = a;
+
+	if (head == null)
+	    {
+		head = newelement;
+		length = 1;
+	    }
+	else if (head.datum.compareTo(a) < 0) // If the new element belongs at the top of the list.
+	    {
+		newelement.next = head;
+		head = newelement;
+		length++;
+	    }
+	else
+	    {
+		Element current = head;
+		while (current.next != null) // Traverse the list, comparing the next element to our element to be inserted, and rearrange pointers.
+		    {
+			if (current.next.datum.compareTo(a) < 0)
+			    {
+				newelement.next = current.next; // Part 1 of the insertion process.
+				break;
+			    }
+			else
+			    current = current.next; // Chase the pointer down the list.
+		    }
+		current.next = newelement; // Part 2 of the insertion process -- the only one performed if we're at the end of the list.
+		length++;
+	    }
+    }
+
+    public Comparable removeMax()
+    {
+	Comparable answer = head.datum;
+	head = head.next;
+	length--;
+	return (answer);
+    }
+
+    public boolean empty()
+    {
+	return (length == 0);
+    }
+    public int length()
+    {
+	return (length);
+    }
+}
+
+
+<<<<<<<<Probtester.java>>>>>>>>
+This is my driver function that tests everything in problems 1 - 8.
+
+
+public class Probtester
+{
+
+    public static void main (String[] args)
+    {
+	int[] testArray1 = {-4, 3, 1, 0, 0, 8, 1};
+	int[] testArray2 = {1, 0, 4, -2, -6};
+	int[] testArray3 = {-1, 2, 1};
+	int[] testArray4 = {1, -1};
+	Poly test1 = new Poly(testArray1);
+	Poly test2 = new Poly(testArray2);
+	Poly test3 = new Poly(testArray3);
+	Poly test4 = new Poly(testArray4);
+	
+	Poly test5 = test2.add(test1);
+	Poly test6 = Poly.mul(test3, test4);
+	Poly test7 = test1.scale(-2);
+
+	Poly test8 = new Poly(new int[] {-3, 0, 1});
+	Poly test9 = new Poly(new int[] {-1, -1, 1});
+	Poly test10 = new Poly(new int[] {-4, 0, 1});
+
+	double cosroot = (RFuncLib.bracketRoot(1.0, 3.0, 0.00000001, CosFunc.f));
+	double cosintegral1 =
+	    (RFuncLib.defIntegral(0.0, (Math.PI / 2), 1024, CosFunc.f));
+	double cosintegral2 =
+	    (RFuncLib.defIntegral(0.0, Math.PI, 1024, CosFunc.f));
+
+	double poly3answer = test3.evaluate(2);
+	double polyroot1 = RFuncLib.bracketRoot(1.0, 2.0, 0.00000001, test8);
+	double polyroot2 = RFuncLib.bracketRoot(1.0, 2.0, 0.00000001, test9);
+	double polyintegral = test10.defIntegral(0.0, 2.0, 1024);
+	
+	System.out.print("Poly1: ");
+	System.out.println(test1.toString());
+	System.out.print("Poly2: ");
+	System.out.println(test2.toString());
+	System.out.print("Poly1 + Poly2: ");
+	System.out.println(test5.toString());
+	System.out.print("Poly1 * -2: ");
+	System.out.println(test7.toString());
+	System.out.println();
+	System.out.print("Poly3: ");
+	System.out.println(test3.toString());
+	System.out.print("Poly4: ");
+	System.out.println(test4.toString());
+	System.out.print("Poly3 * Poly4: ");
+	System.out.println(test6.toString());
+	System.out.println();
+	System.out.print("Root of cos(x): ");
+	System.out.println(cosroot);
+	System.out.print("Integral (0-(PI/2)) of cos(x): ");
+	System.out.println(cosintegral1);
+	System.out.print("Integral (0-PI) of cos(x): ");
+	System.out.println(cosintegral2);
+	System.out.println();
+	System.out.print("Poly3 (x = 2): ");
+	System.out.println(poly3answer);
+	System.out.print("Root of (x^2 - 3): ");
+	System.out.println(polyroot1);
+	System.out.print("Root of (x^2 - x - 1): ");
+	System.out.println(polyroot2);
+	System.out.print("Integral (0-2) of (x^2 - 4): ");
+	System.out.println(polyintegral);
+
+	String edam = "edam";
+	String gruyere = "gruyere";
+	String mozzarella = "mozzarella";
+	String stilton = "stilton";
+	String camembert = "camembert";
+	Integer one = Integer.valueOf("1");
+	Integer two = Integer.valueOf("2");
+	Integer three = Integer.valueOf("3");
+	Integer four = Integer.valueOf("4");
+
+	PQueue testq = new PQueue();
+	System.out.println();
+	System.out.println("Length of empty queue: " + testq.length());
+	testq.insert(mozzarella);
+	testq.insert(edam);
+	testq.insert(stilton);
+	System.out.println("Should be stilton: " + testq.removeMax());
+	System.out.println("Should be mozzarella: " + testq.removeMax());
+	testq.insert(camembert);
+	System.out.println("Should be edam: " + testq.removeMax());
+	testq.insert(gruyere);
+	testq.insert(camembert);
+	System.out.println("Should be gruyere: " + testq.removeMax());
+	System.out.println("Should be camembert: " + testq.removeMax());
+	System.out.println("Length of queue (should be 1): " + testq.length());
+	System.out.println("Should be camembert: " + testq.removeMax());
+	System.out.println("Should be true: " + testq.empty());
+
+	testq.insert(three);
+	testq.insert(two);
+	testq.insert(four);
+	testq.insert(one);
+	System.out.println("Should be 4: " + testq.removeMax());
+	System.out.println("Should be 3: " + testq.removeMax());
+
+	/* This code causes the program to throw
+	   "Exception in thread "main" java.lang.ClassCastException: java.lang.String
+	   at java.lang.Integer.compareTo(Integer.java:868)
+	   at PQueue.insert(PQueue.java:22)
+	   at Probtester.main(Probtester.java:100)
+	   testq.insert(edam);
+	   testq.insert(one);
+	   testq.insert(gruyere);
+	   System.out.println("Could be anything: " + testq.removeMax());
+	   System.out.println("Could be anything: " + testq.removeMax());
+	   System.out.println("Could be anything: " + testq.removeMax());
+	*/
+
+	System.out.println("Length of queue (should be 2): " + testq.length());
+
+	testq = new PQueue();
+	testq.insert(test2);
+	testq.insert(test1);
+	testq.insert(test4);
+	testq.insert(test3);
+	System.out.println();
+	System.out.println("Poly 1-4 in sorted order:");
+	System.out.println(testq.removeMax());
+	System.out.println(testq.removeMax());
+	System.out.println(testq.removeMax());
+	System.out.println(testq.removeMax());
+    }
+}
+
+
+<<<<<<<<Output of the program Probtester>>>>>>>>
+
+
+Poly1: x^6 + 8x^5 + x^2 + 3x - 4
+Poly2: -6x^4 - 2x^3 + 4x^2 + 1
+Poly1 + Poly2: x^6 + 8x^5 - 6x^4 - 2x^3 + 5x^2 + 3x - 3
+Poly1 * -2: -2x^6 - 16x^5 - 2x^2 - 6x + 8
+
+Poly3: x^2 + 2x - 1
+Poly4: -x + 1
+Poly3 * Poly4: -x^3 - x^2 + 3x - 1
+
+Root of cos(x): 1.5707963295280933
+Integral (0-(PI/2)) of cos(x): 0.9999999969360694
+Integral (0-PI) of cos(x): 1.3856103764364747E-16
+
+Poly3 (x = 2): 7.0
+Root of (x^2 - 3): 1.732050810009241
+Root of (x^2 - x - 1): 1.6180339865386486
+Integral (0-2) of (x^2 - 4): -5.333333333333334
+
+Length of empty queue: 0
+Should be stilton: stilton
+Should be mozzarella: mozzarella
+Should be edam: edam
+Should be gruyere: gruyere
+Should be camembert: camembert
+Length of queue (should be 1): 1
+Should be camembert: camembert
+Should be true: true
+Should be 4: 4
+Should be 3: 3
+Length of queue (should be 2): 2
+
+Poly 1-4 in sorted order:
+x^6 + 8x^5 + x^2 + 3x - 4
+-6x^4 - 2x^3 + 4x^2 + 1
+x^2 + 2x - 1
+-x + 1
+
+
+<<<<<<<<Output of the program PolyTest>>>>>>>>
+
+
+1
+x + 1
+5x + 5
+-x - 1
+0
+8x^4 + 4x^3 + 2x^2 + x + 1
+8x^4 + 3x^3 - x + 1
+8x^4 + 3x^3 - x + 1
+8x^4 + 3x^3 + 2
+8x^4 + 4x^3 + 2x^2 + 2x + 2
+8x^4 + 4x^3 + 2x^2 + 2x + 2
+x^2 + 2x + 1
+x^3 + 3x^2 + 3x + 1
+x^4 + 4x^3 + 6x^2 + 4x + 1
+x^8 + 8x^7 + 28x^6 + 56x^5 + 70x^4 + 56x^3 + 28x^2 + 8x + 1
+8
+
+
+<<<<<<<<Output of the program FuncTest>>>>>>>>
+
+
+3.1415927
+3.1415927
+0.6931472
+0.6931472
+2.7182817
+2.7182817
+1.0
+1.0
+2.3890562
+2.3890562
+-0.61370564
+-0.61370564
+
+
+<<<<<<<<Output of the program FuncTest2>>>>>>>>
+
+
+3.0
+1.7320508
+3.0
+2.236068
+5.0
+1.618034
+0.618034
+0.618034
+5.3333335
+
+
+<<<<<<<<Output of the program FuncTest3>>>>>>>>
+
+
+3.1415927
+4.0
+2.7182817
+1.0
+2.3890562
+-0.61370564
+3.0
+8
+1.7320508
+3.0
+2.236068
+5.0
+5.0
+1.618034
+0.618034
+0.618034
+5.3333335
+5.3333335
+
+
+<<<<<<<<Answers to questions posed in the text>>>>>>>>
+
+		
+Problem 3
+
+If we were doing inordinately complex operations to huge objects, the
+overhead of creating and manipulating new objects might become
+excessive, and we might want to change data within our objects
+whenever possible, instead.  However, our polynomials are pretty
+small, so this isn't a big issue.  I did program a few things to make
+mutators possible later on -- my checkDegree function will be
+responsible for doing housekeeping on an aspect of the internal state,
+for instance.  Avoiding the complexities of managing changing state is
+a good reason to make immutable objects if it's not too expensive to
+do so.
+
+The static methods work more like most people are used to seeing
+functions, and they emphasize the symmetry of the operation -- it
+doesn't matter which polynomial is in which position, and they should
+both be treated the same.  However, giving the method to an instance
+of the class makes a lot of sense, especially if we were going to
+implement mutation -- we would be mutating our instance by applying
+another polynomial to it.
+
+Problem 6
+
+The interface method is a little more flexible, since Java does not
+support multiple inheritance -- with interfaces, we can have more than
+one hierarchy of functionality, and extend whichever classes are most
+appropriate.  However, it's kind of a clunky and inelegant way to do
+it, because we must always implement all of the functions specified in
+the interface, whether or not it was appropriate.  We also spoil some
+nice polymorphisms, as happened with our Poly method for finding
+integrals through use of the indefinite integral.  After implementing
+the interface, that functionality was no longer available except on an
+ad hoc basis using the Poly class itself, rather than the polymorphic
+RFuncLib functions -- an ugly kludge.
+
+Problem 8
+
+Trying to compare integers and strings causes a compiler error, the
+details of which are noted in the Probtester.java code.
+
+The only solution I can think of is to include type-checking in all
+functions of this sort in order to catch errors.
+
+The Comparator solution basically "types" the TreeMap.  One would
+still need to insert error checking into the Comparator code (we can't
+really get away from it), but this implementation does have the
+advantage that a particular queue can't hold strings one moment and
+integers the next, so it's probably easier to follow and less prone to
+error in the first place.
+
+
+<<<<<<<<Definitions and comments for Problem 7, the geography package>>>>>>>>
+
+
+/**
+   An interface for dealing with named objects.
+*/
+
+public interface NamedObject
+{
+    public String name();
+}
+
+/**
+   A class to hold and manipulate geographic coordinates.
+*/
+
+public class Point
+{
+    private float latitude;
+    private float longitude;
+    
+    /**
+       Constructs a new geographic point from lat-long coordinates using the WGS 84 datum.
+       @param latd Degrees of latitude.
+       @param latm Minutes of latitude.
+       @param lats Seconds of latitude.
+       @param longd Degrees of longitude.
+       @param longm Minutes of longitude.
+       @param longs Seconds of longitude.
+       @return A new point object.
+    */
+
+    public Point(int latd, int latm, float lats, int longd, int longm, int longs);
+
+    /**
+       Constructs a new geographic point from decimalized lat-long coordinates using the WGS 84 datum.
+       @param lat Latitude of the point.
+       @param lon Longitude of the point.
+    */
+
+    public Point(float lat, float lon);
+
+    /**
+       Constructs a new geographic point from UTM coordinates using the WGS 84 datum.
+       @param loc String representing UTM coordinates.
+       @return A new point object.
+    */
+
+    public Point(String utm);
+
+    /**
+       Changes the coordinates of a point using lat-long coordinates.
+       @param latd Degrees of latitude.
+       @param latm Minutes of latitude.
+       @param lats Seconds of latitude.
+       @param longd Degrees of longitude.
+       @param longm Minutes of longitude.
+       @param longs Seconds of longitude.
+    */
+
+    public void setPoint(int latd, int latm, float lats, int longd, int longm, int longs);
+
+    /**
+       Changes the coordinates of a point using decimalized lat-long coordinates.
+       @param lat Latitude of the point.
+       @param lon Longitude of the point.
+     */
+       
+    public void setPoint(float lat, float lon);
+
+    /**
+       Changes the coordinates of a point using UTM coordinates.
+       @param loc String representing UTM coordinates.
+    */
+
+    public void setPoint(String utm);
+
+    /**
+       Returns the decimalized latitude of a point.
+       @param p A Point object.
+       @return A float representing latitude.
+    */
+
+    public float getLatitude(Point p);
+
+    /**
+       Returns the decimalized longitude of a point.
+       @param p A Point object.
+       @return A float representing longitude.
+    */
+
+    public float getLongitude(Point p);
+
+    /**
+       Extracts the degrees from a decimalized latitude or longitude.  Use in conjuction with @see extractMinutes and @see extractSeconds.
+       @param deg A decimalized latitude or longitude.
+       @return The degrees portion of the argument passed in.
+    */
+
+    public static int extractDegrees(float deg);
+
+    /**
+       Extracts the minutes from a decimalized latitude or longitude.  Use in conjuction with @see extractDegrees and @see extractSeconds.
+       @param deg A decimalized latitude or longitude.
+       @return The minutes portion of the argument passed in.
+    */
+
+    public static int extractMinutes(float deg);
+
+    /**
+       Extracts the seconds from a decimalized latitude or longitude.  Use in conjunction with @see extractDegrees and @see extractMinutes.
+       @param deg A decimalized latitude or longitude.
+       @return The Seconds portion of the argument passed in.
+    */
+
+    public static float extractSeconds(float deg);
+
+    /**
+       Converts degrees-minutes-seconds latitude or longitude to a decimalized number.
+       @param deg Degrees.
+       @param min Minutes.
+       @param sec Seconds.
+       @return A decimalized longitude or latitude.
+    */
+
+    public static float decimalize(int deg, int min, float sec);
+
+    /**
+       Returns the distance between the Point and any other coordinates.
+       @param lat The decimalized latitude to check against.
+       @param lon The decimalized longitude to check against.
+       @return The distance between the Point and the coordinates.
+    */
+
+    public float distance(float lat, float lon);
+
+    /**
+       Returns the distance between two points.
+       @param point The point to measure against.
+       @return The distance between the instance point and the argument point.
+    */
+
+    public float distance(Point point); // ********** Assigned Method **********
+
+    /* Other ideas: more coordinate translations, handling different geodesic datums */
+}
+
+/**
+   A class representing Points that have names.
+*/
+public class NamedPoint extends Point implements NamedObject
+{
+    String name;
+    Place belongsTo;
+
+    /**
+       Constructs a new Point with a name and a containing area.  All of the rest of the parameters are the same as in the Point class.
+       @param name The name of the point.
+       @param belongs The name of the place containing the point.
+    */
+
+    /* This constructor populates all of its parent Places. */
+
+    public NamedPoint(float lat, float lon, String name, Place belongs);
+
+    /* I'd probably include all of the rest of the constructors that I used in the Point class here. */
+
+    /**
+       Provides the name of the point.
+       @param point The point to name.
+       @return The name of the point.
+    */
+
+    public String name(NamedPoint point);
+}
+
+/**
+   A class representing straight-line boundaries between two geographical entities.
+*/
+
+public class BoundarySegment // ********** Assigned class ***********
+{
+    private Point northpoint; // The class will figure out what north and south are.  Arbitrarily, if the line runs due east-west, northpoint will
+    private Point southpoint; // be set to the westernmost point.
+    private Place toeast = null; // Again, if the line runs due east-west, arbitrarily, the toeast Place will be on the south, the towest on the north.
+    private Place towest = null;
+    private double length;
+    
+    /**
+       Constructs a new boundary segment out of two Points.
+       @param start The starting Point for the segment.
+       @param end The ending Point for the segment.
+       @param oneside By convention, the Place calling the BoundarySegment constructor.
+       @param otherside The Place on the other side of the border.
+       @return A new boundary segment.
+    */
+
+    /* This is a really hardworking function that also checks the neighboring place to determine whether it knows about the existence of this boundary segment.
+       If not, it adds itself to the neighbor's boundary array.  It also does the math to determine which Point is which and which Place is on which side. */
+
+    public BoundarySegment(Point start, Point end, Place oneside, Place otherside);
+
+    /**
+       Given a Place, returns the Place on the other side of the border.  Used for the @see neighbors() function in the Place class.  Can only be called using
+       a Place that contains this BoundarySegment.
+       @param check The Place to reference.
+       @return The Place on the other side of the border.
+    */
+
+    public Place borderOf(Place check); // ********** Assigned Method **********
+
+    /**
+       Provides the length of the BoundarySegment.
+       @return A float representing the length.
+    */
+
+    public float length();
+}
+
+/**
+   A class representing any generic geographic feature with an area enclosed by boundaries.
+*/
+
+public class Place implements NamedObject
+{
+    private BoundarySegment[] boundary;
+    private Place belongsTo; // Identifies the enclosing geographic area.
+    private Place[] contains; // Identifies sub-areas.
+    private NamedPoint[] sites; // Identifies points of geographic interest.
+    private float area;
+    private String name;
+
+    /**
+       Constructs a new Place, but without borders.  These must be added next.
+       @param name The name of the new place.
+       @param belongs The enclosing Place object, or null if none.
+       @return The new place.
+    */
+
+    /* This function also does the deep magic of looking through the data of the array to which it belongs, and populates its own data with those objects which
+       are in the same area as itself. */
+
+    public Place(String name, Place belongs);
+
+    /**
+       Returns the name of the place.
+       @param place The Place in question.
+    */
+
+    public String name(Place place);
+
+    /**
+       Creates a new boundary segment out of two Points and a neighbor.
+       @param from One of the boundary endpoints.
+       @param to The other boundary endpoint.
+       @param neighbor The Place on the opposite side of the boundary segment.
+    */
+
+    public void newBoundarySegment(Point from, Point to, Place neighbor);
+
+    /**
+       Returns the total length of the Place's boundary.
+       @return A float representing the length.
+    */
+
+    public float boundaryLength(); // ********** Assigned Method **********
+
+    /**
+       Returns the area of the Place.
+       @return A float representing the area.
+    */
+
+    public float area(); // ********** Assigned Method **********
+
+    /**
+       Returns an array of the neighbors of the Place.
+       @return An array of Places representing the neighbors.
+    */
+
+    public Place[] neighbors(); // *********** Assigned Method **********
+}
+
+/**
+   A class representing cities.
+*/
+
+public class City extends NamedPoint // *********** Assigned Class ***********
+{
+    private int pop;
+
+    /**
+       Turns a NamedPoint into a city by giving it a population.
+       @param point The point to populate.
+       @param pop The population of the city.
+       @return A new city.
+    */
+
+    public City(NamedPoint point, int pop);
+
+    /* I would probably also add constructors that explicitly created the City using the same parameters as a NamedPoint, but I got tired of typing. */
+
+    /**
+       Provides the city's population.
+       @return An integer representing the population.
+    */
+
+    public void population();
+}
+
+/**
+   A class representing countries.
+*/
+
+public class Country extends Place // ********** Assigned Class **********
+{
+    private City cap;
+
+    /* Country will just use the Place constructor. */
+
+    /**
+       The method to set the country's capital.
+       @param capital The capital city.
+    */
+
+    /* If the capital city is not already in the list of NamedPoints, it will add it. */
+
+    public void setCapital(City capital);
+
+    /**
+       Returns an array of all of the cities within the country.
+       @return An array of cities belonging to the country.
+    */
+
+    public City[] getCities(); // ********** Assigned Method **********
+
+    /**
+       Returns the capital city.
+       @return The City object representing the country's capital.
+    */
+
+    public City capital(); // ********** Assigned Method **********
+}
+
+/**
+   A class representing states.  It could also be used to represent smaller political subdivisions.
+*/
+
+public class State extends Country // ********** Assigned Class **********
+{
+    /**
+       Returns the country to which the State belongs.
+       @return The country (or immediately higher political entity) to which the state belongs.
+    */
+
+    public Country getCountry(); // ********** Assigned Method **********
+}
+
+/**
+   A class representing a river, which has a name and an array of points defining its course from mouth to head.
+*/
+
+/* After much thought and reworking, I decided this should _not_ be a collection of BoundarySegments, because it just doesn't fit into the right abstraction,
+   and we lose functionality in terms of discussing the direction. */
+
+public class River implements NamedObject // ********** Assigned Class **********
+{
+    Point[] course;
+    float length;
+    String name;
+
+    /**
+       Creates a new River from an array of Points.
+       @param coursearray An array of points defining the course of a river, with coursearray[0] representing the mouth of the river.
+       @return A new River object.
+    */
+
+    public River(Point[] coursearray);
+
+    /**
+       Returns the name of the river.
+       @return A string representing the river's name.
+    */
+
+    public String name();
+}
+
+
+
+

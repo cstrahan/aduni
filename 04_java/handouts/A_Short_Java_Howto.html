@@ -1,0 +1,94 @@
+<html>
+<head>
+  <title>
+   Handout 1
+  </title>
+</head>
+<body bgcolor="#ffffff">
+<h1>OOP in Java: Handout 1</h1>
+<hr>
+<h3>A Short Java How-to</h3>
+<h4>How to compile a class</h4>
+From UNIX shell, run:
+<pre>
+javac MyClass.java
+</pre>
+Or, if you need to specify a classpath other than the default:
+<pre>
+javac -classpath mypath MyClass.java
+</pre>
+This should produce a class file MyClass.class. The javac compiler
+will try to (recursively) locate and compile any classes used by the 
+compiled class. However, don't depend on it to recognize that the
+source (.java) and object (.class) files are out of sync for any class.
+Either remove all .class files before compiling, or use <code>make</code>.
+You will save yourself a lot of frustration.
+
+Note: The javac compiler is pretty insistant that the file MyClass.java contain
+the class MyClass.
+
+<h4>How to run a Java program</h4>
+To run a Java program, you call the Java runtime with the class containing
+the <code>main()</code> for your function. No extension is required on
+the class name.
+<pre>
+java  MyClass
+</pre>
+
+<h4>How to time a Java program</h4>
+It is occasionally interesting to find out exactly how slow a Java program is.
+You can do this by runnint the UNIX <code>time</code> command.
+<pre>
+time java  MyClass
+</pre>
+This will display user, system, and total elapsed time used by the process
+(in a more or less unreadable format).
+
+<h4>How to specify a classpath</h4>
+This is somewhat system specific but in UNIX it is generally a list of
+directories, and/or .jar files separated by ':'. (If ':' doesn't work,
+try ';' and remember to enclose in "" to avoid the semicolon from being
+interpreted by the shell.)
+<pre>
+javac -classpath "foo:.:/user/me/classes/:libdir/goodstuff.jar"  MyClass
+</pre>
+Note that .jar files, being archives, look like paths to javac.
+<h4>How to ...</h4>
+Submit question and we will add answers.
+
+<hr>
+<h3>Useful Resources</h3>
+<a href="http://java.sun.com/j2se/1.2/docs/api/index.html">Java 1.2 API</a>:
+Beautiful documentation for many Java classes and interfaces from the
+class libraries. You can also get the Java 1.3 documentation as well.
+<p>
+<a href="http://java.sun.com/j2se/1.2/docs/index.html">Java 1.2 Doc Homepage</a>:
+A list of links to Java documentation.
+<p>
+<a href="http://java.sun.com/j2se/1.3/docs/index.html">Java 1.3 Doc Homepage</a>:
+A list of links to Java documentation.
+<p>
+<a href="http://java.sun.com/j2se/javadoc/index.html">Javadoc Homepage</a>:
+A list of links to documentation on Javadoc.
+<p>
+<a href="http://java.sun.com/">java.sun.com</a>: Java home page at Sun. You can
+find lots of stuff from here (eg servlet API documentation), but it's harder
+than you'd think.
+<p>
+<a href="http://www.google.com/">Google</a>: An excellent resource. If you are
+stuck, type in your question (or it's keywords) and go. I find it the best
+question answering system and best overall resource on the Web. To find
+information on some programming structure, problem or utility, try searching
+on "mytopic tutorial" or "mytopic reference". Ex. Searching on "java threads tutorial" will find a lot useful information on how to use threads in Java.
+<p>
+<a href="http://www.gnu.org/manual/make-3.77/html_mono/make.html">Some documentation on GNU make</a>: Tedious, but useful.
+<p>
+<a href="http://www.eckelobjects.com/">Bruce Eckel's MindView inc page</a>
+Bruve Eckel is the author of Thinking in Java, Thinking in Patterns, and several other books. The Thinking in Java book is a good complement to the Core Java book
+used in class. TIJ2 is available from free in HTML or PDF from this site (which
+is a good reason in itself to go buy it). [Note: I consider TIJ2 and Core Java 
+to be the two best Java book out there. I think the Core Java is a better
+reference and overview (which is why I chose it for the course),
+while the TIJ is probably a better beginning tutorial and OOP manifesto.]
+</body>
+</html>

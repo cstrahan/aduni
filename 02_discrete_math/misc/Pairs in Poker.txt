@@ -1,0 +1,36 @@
+Subject: Re: [Fwd: (no subject)]
+Date: Thu, 23 Nov 2000 01:12:25 -0500 (EST)
+From: Andy Latto <andy.latto@pobox.com>
+To: shai@stonehill.edu
+
+   This is a note from my Bridge partner, who is a Poker expert, a software
+   engineer and a pretty darn good mathematician :-)
+
+But who gets a little careless sometimes...
+
+      Date: Thu, 16 Nov 2000 12:20:59 -0500
+      From: Shai Simonson <shai@stonehill.edu>
+      Organization: ArsDigita University
+      X-Accept-Language: en
+      Content-Type: text/plain; charset=iso-8859-1
+
+      Approximately -- what are the real odds to get a pair and no better in 5
+      card poker hand
+
+   Exactly a pair is 13 * 6 * C(12,4)/ C(52,5). I proved this in class last
+   week. I think it ended up being 42%
+
+Oops! That should have been 13 * 6 * C(12,4) * 4^4 / C(52,5)
+
+      How about a pair or better?
+
+   The odds are just a hair under 50%. The median 5-card hand is something
+   like AKQJ4.
+
+Exact chance of a no-pair hand is
+
+  ((C(13,5) * 5^4) - (4 * C(13,5)) - (10 * 5^4) + 40)/C(52,5),
+
+which should  be a tiny bit above .5
+
+                                           Andy

@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>
+Recitation 6 Notes
+</title>
+</head>
+<body bgcolor="#ffffff">
+
+<center><h2> Ars Digita University <br>  Theory of Computation   <br>
+ Recitation 6, 05/10/01 </h2></center>
+
+<h2>Topics</h2>
+<ul>
+<li>Rigorous proofs using the pumping lemma.
+<li>More constructions with context free grammars.
+<li> Chomsky Normal Form.
+</ul>
+
+<h2> Problems to work on </h2>
+
+<p>
+
+<ol>
+
+<li> Finish working on the CFG problems from the lst handout.
+
+<li> (Warmup). Generate the grammar for 0*1(0+1)*.
+
+
+<li> Using the grammar above, What are the leftmost and rightmost
+derivation for the strings 1001, 0011? What are the parse trees?
+
+
+
+<li> (Text 2.13) Consider the following grammar.
+
+<pre>
+
+S --> TT | U
+T --> 0T | T0 | 1
+U --> 0U00 | 1
+
+</pre>
+
+Describe the language it generates.
+
+</ol>
+
+<h3> Chomsky Normal Form </h3>
+
+<ol start=5>
+<li> Put the following grammar in Chomsky Normal form. (Text 2.14)
+
+<pre>
+
+A --> BAB | B | epsilon
+B --> 00 | espilon
+
+</pre>
+
+<li> Put the following grammar in Chomsky Normal form.
+
+<pre>
+
+A --> BAB | B | BC
+B --> 00 | epsilon
+C --> AA
+
+</pre>
+</ol>
+
+
+<h3> Rigorous pumping lemma proofs</h3>
+
+Problems from previous handouts kindly reproduced here.
+Rigorously prove using the pumping lemma.
+
+
+<ol start=7>
+
+<li> Prove that the language { x<sup>2<sup>n</sup></sup> | n >= 0 } is not
+regular.
+
+
+<li> Show that the set of all strings of zeros that have length that is
+a perfect cube can not be described by a regular expression.
+
+
+</ol>
+<hr>
+Dimitri Kountourogiannis, <a href="mailto://dimitrik@alum.mit.edu">dimitrik@alum.mit.edu</a>
+</html>
+
+
+
+

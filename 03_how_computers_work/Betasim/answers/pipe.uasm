@@ -1,0 +1,10 @@
+.include "shared\beta"
+
+        MOVC(1,R1)
+        MOVC(2,R2)
+
+        ADD(R1,R2,R3)
+        SUB(R2,R1,R2)
+        ADD(R3,R2,R3)
+
+        HALT()

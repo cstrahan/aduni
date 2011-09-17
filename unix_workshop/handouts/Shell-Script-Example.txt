@@ -1,0 +1,24 @@
+#!/bin/sh
+
+IP=64.64.103.140
+
+for f in $* ; do
+  if [ ! -e ${f} ] ; then
+    echo "${f} doesn't seem to exist.  Shame on you."
+  else
+    BASE=`basename ${f}`
+    RAMNAME=`echo ${BASE} | sed -e 's/rm$/ram/'`
+    if [ -e ${BASE} ] ; then
+      echo "Link exists for ${f}"
+    else
+      ln -s ${f} .
+    fi
+    if [ -e ${RAMNAME} ] ; then
+      echo "${RAMNAME} already exists..."
+    else
+      echo "rtsp://${IP}/${BASE}" > ${RAMNAME}
+      echo "Added ${RAMNAME}"
+    fi
+  fi
+done
+

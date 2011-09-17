@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Date: 6 March 2001</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Name resolution in Grapevine: a distributed mail system</c></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">Grapevine is a distributed email system that has two main components - registration servers that are used for name resolution and resource location and message servers responsible for delivery of email messages. The name resolution algorithm was designed on the assumption that reading of email messages are more frequent than delivery of messages; hence reads are designed to be much more performant than updates. Thus, updates to a registration server are propagated slowly that can result in inconsistent registration information being obtained by a message server.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">A worst-case scenario of name resolution can occur in certain message delivery attempts especially if concomitant changes to the destination individual's inboxes are done. The message delivery scenario happens as follows. A client sending a message connects with any message server that is up and accepts it for delivery. The message server then has to obtain a preferred inbox site for the recipient based on the inbox site list ordering for that individual and the present accessibility of these message servers. The getting of this information is optimized by the use of an <c props="font-style:italic">inbox site cache </c>and a <c props="font-style:italic">down server list</c>.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">The message server attempts to obtain the recipient's preferred inbox, first by checking its own inbox site cache for a hint and then checking the down server list to make sure that the preferred inbox's server is not down. In the best case, the hint obtained is an active message server and the message is delivered to the preferred inbox. However, if the cache does not contain the recipient or if the preferred inbox is located on a 'down server', the message server will have to look up the individual's list of inboxes at a registration server.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">In the worst case, every inbox on the recipient's list might be on a server that is down. The message server will try each inbox in turn and on being unable to send the message will queue it for later delivery. Yet another worst case scenario occurs if the recipient's inbox has been recently removed or relocated by an update to a registration server and the information has not yet propagated to the message server that is attempting the delivery. This may lead to attempted redelivery to all the outdated servers, until either an updated registration server or one of the destination message servers sends a cache flush message to the original message server attempting the delivery. However, at the second attempt, a cache flush message will be sent to the original server by one of the destination servers and further futile attempts will be prevented.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">The overall effect of the worst case is that the message takes somewhat longer to reach a preferred inbox and it may have to travel through multiple message servers when it is being redirected because of an update to the recipient's inbox list. However, a delay of few minutes in message delivery will hardly effect the user.</p>
+</section>
+</abiword>

@@ -1,0 +1,14 @@
+Some ideas about the footella project
+
+Header
+
+MessageID		16 bytes
+Payload Descriptor	1 byte
+TTL			1 byte			
+Hops			1 byte
+Payload length		4 bytes (long)
+
+
+
+
+Payload

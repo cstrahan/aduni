@@ -1,0 +1,234 @@
+Subject: Re: [Fwd: A new puzzle]
+Date: Thu, 15 Jun 2000 19:20:24 -0700 (PDT)
+From: "Samuel J. Klein" <sjklein4913@yahoo.com>
+To: Shai Simonson <shai@stonehill.edu>
+
+I have looked at Weiping's answer for n=7.
+
+I have shown that an upper bound for Span(7) is 16.  I
+claimed (but did not demonstrate) that I could always
+locate a chosen integer from among 16, given 7
+questions.  Weiping demonstrated a way to do this.
+
+Between us, we have evaluated Span(7).
+
+To put his approach in my own words:
+
+Write the first 16 integers in binary notation and
+consider only the last four digits in each binary
+number.
+
+The first four questions are:
+
+      Is the i-th digit a 0?  (i = 1,2,3,4)
+
+If all of the answers are truthful, we have an integer
+T.
+If the first player has lied once, we have a choice of
+four integers - A,B,C,D - depending on the place of
+the lie.
+
+If T, then the first player can still lie (once).  If
+A,B,C or D, the first player must tell the truth from
+now on.
+
+The fifth question is:
+
+   Is the chosen integer A,B or C?
+
+If the answer is "Yes", then the chosen integer is
+either T,A,B or C, and the first player has used up
+his lie.  Finding one integer from among four with two
+truthful questions is easy.
+
+If the answer is "No", then the chosen integer is
+either T or D.  If D, then the first player has used
+up his lie;  if T, then he has one lie to go.
+
+The last two questions are then:
+
+      Is the chosen integer T?
+
+      Is the chosen integer T?
+
+If the answers are Yes-Yes, then the chosen integer is
+T, since the first player cannot lie twice.
+
+Similarly, if the answers are No-No, then the chosen
+integer is D, since the first player cannot lie twice.
+
+If the answers are either Yes-No or No-Yes, then the
+chosen integer is T, since only T has a lie to spare.
+_______________________________
+
+We can generalize this to any n of the form (2^k)-1 by
+induction.
+
+Rather than demonstrate this for general k, let me
+demonstrate it for n=15 (that is, for k=4).
+
+I have shown that an upper bound for Span(l5) is 2^11.
+
+I shall show that Span(15)=2^11 is attainable.  That
+is, if the first player can choose from the first
+2^11 integers, I can locate the chosen integer with 15
+questions, provided that he can lie at most once.
+
+First, write the first 2^11 integers as binary numbers
+and focus on the last 11 integers in the binary
+expansions.
+
+The first 11 questions are:
+
+   Is the digit in the i-th place a 0?  (i=1,2,...,11)
+
+We have reduced the set of possible integers to
+twelve:  (T,A,B,C,D,E,F,G,H,I,J,K).  T if the first
+player has always told the truth;  A,B,... or K if the
+first player lied, the exact integer depending on the
+place of the lie.
+
+The twelfth question is:
+
+   Is the chosen integer in the set (A,B,C,D,E,F,G)?
+
+If the answer is "Yes", then the first player has
+already lied, the set of choices for the chosen
+integer is (T,A,B,C,D,E,F,G), and we have the problem
+of locating one integer among eight, given three
+truthful questions.  Obviously doable.
+
+If the answer is "No", then the set of choices is
+(T,H,I,J,K), T if the first player has never lied, H
+or I or J or K if the first player has already lied.
+We have to find the chosen integer from among five,
+one for which the first player can still lie once,
+four for which he in constrained to tell the truth.
+But this is the case that we dealt with when
+evaluating Span(7).
+
+We can use induction to evaluate Span(n), where
+n=(2^k)-1.
+___________________________
+
+At this point, it should be intuitively obvious that,
+for gneral n, Span(n) should be in the general
+vicinity of (2^n)/(n+1), but you can divide the
+integers into subsets and evaluate Span(n) exactly for
+each subset.
+So there is a good deal of work left to do.
+
+Personal note:  When I solved this problem, there was
+one subset defined by some very peculiar properties of
+its members.  I did not know whether any integers
+existed with that combination of properties.  I did
+not publish my solution, but presented it at a lecture
+at Yeshiva University in New York.  Two weeks later, I
+received a telephone call from a mathematician at Bell
+Labs (New Jersey), giving me an integer with just
+those properties.  (The caller was not present at my
+lecture.)
+___________________________
+
+--- Shai Simonson <shai@stonehill.edu> wrote:
+> I am forwarding this to you FYI.
+>
+> Weiping was a grad student of mine and he is quite
+> clever.
+>
+> I have not had time yet to check through his points,
+> but basically he is
+> claiming that he
+> can do better than your method, because your upper
+> bound assumes that we
+> cannot adapt our questions to the answers in real
+> time.  If we do adapt,
+> he has claims to have a strategy for a better way.
+>
+>
+>
+> --
+>
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+> Shai Simonson, Professor
+> ArsDigita University
+> 80 Prospect St.
+> Cambridge, MA
+>
+> Department of Mathematics and Computer Science
+> Stonehill College, North Easton, MA 02357
+> Voice: (508) 565-1008 Fax: (508) 565-1444
+> Email: shai@stonehill.edu
+> Home Page:
+> http://academics.stonehill.edu/compsci/SHAI.HTM
+>
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-
+>
+>
+
+> ATTACHMENT part 2 message/rfc822
+> Date: Thu, 15 Jun 2000 10:54:44 -0500 (CDT)
+> From: Weiping Shi <wshi@silo.csci.unt.edu>
+> To: Shai Simonson <shai@stonehill.edu>
+> Subject: Re: A new puzzle
+>
+>
+> > > Example (assume all yes answer. no is symmetric)
+> > > S0={1,...,8}, S1={9,...,16} ->
+> > > S0={1,...,4}, S1={9,...,12}, S2={5,...,8} ->
+> > > S0={1,2}, S1={9,10}, S2={5,6}, S3={3,4} ->
+> > > S0={1}, S1={9}, S2={5}, S3={3}, S4={2}
+> >
+> > That is a clever idea.  So if he tells the truth
+> the whole time, the answer is in
+> > S0.
+> > If he lies at step i, then the "range" is held by
+> the set Si, which eventually
+> > holds  the correct value.
+> >
+> >
+> > But I have no idea how to tell WHEN he lies.  Why
+> is that so transparent?
+> > Adding the  XOR "Did you lie in question i" is a
+> little hard for me to analyze.
+> > Does the addition of this FORCE him to lie at some
+> particular time?  It seems that
+> > he can always answer yes, and you still don't at
+> which i, he has lied....
+> >
+> >
+>
+> To tell when he lied, I'll have to add another set
+> of questions.
+> If he lied at 1,2,3,4 questions, then he can't lie
+> again.
+> So two questions can tell us where he lied.
+> Did you lie at {1,2,3}?
+>       yes(truth) -> {1,2,3}
+>       yes(lie) -> {0}
+>       no(truth) -> {0,4}
+>       no(lie) -> {}
+>
+> For "yes" answer, since he lied, so he has to tell
+> the truth here on.
+> Therefore two more questions are sufficient
+> to identify {0,1,2,3}.
+> For "no" answer, we ask did you lie at {4}?
+>       yes(truth) -> {4}
+>       yes(lie) -> {0}
+>       no(truth) -> {0}
+>       no(lie) -> {}
+>
+> For "no" answer, the puzzle is solved.
+> For "yes" answer, one more solves the puzzle.
+>
+> So adaptive algorithm uses 6 queries if he
+> never lies, and 7 if he lies once.
+> Non-adaptive algorithm (such as Hamming code)
+> always need 7.
+>
+
+__________________________________________________
+Do You Yahoo!?
+Send instant messages with Yahoo! Messenger.
+http://im.yahoo.com/

@@ -1,0 +1,304 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture15</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Java on the Web</h2>
+<h3>Java in the Browser: Applets</h3>
+<ul>
+<li> Early in the development of Java, the ability to run Java programs
+(called applets) inside browsers was hyped as both the future of Java and the
+future of the Web. It is probably fair to say at this point, neither is true.
+<li> The main benefits of Applets were the added power of Java vs HTML, and
+the ability to create a better, more interactive UI than was currently
+available from HTML. To a great extent, these issues have been solved
+by a combination of client-side scripting (JavaScript and VB), and 
+binary extensions (plug-ins and ActiveX controls). It is a rarity to find
+a site that depends of Java applets to run.
+<li> In fact, even if you create an applet using Java 1.2 and Swing to
+develop a great UI, you are unlike to find a browser that can run it.
+Netscape 4 and IE only support Java 1.0, Netscape 6 allows the user to
+specify a Java virtual machine to run, while later version of IE are
+dropping Java compatability. Sun supplies a Java plug-in for IE and Netscape
+that enables Java 1.2 applets, but getting a substantial population of
+user to download this and install it is difficult. (I don't plan to
+install it).
+<li> On the other hand, building an applet is easy. Instead of containing
+your application in a JFrame, you extend <code>JApplet</code>. Eliminate
+the main() and frame specific code (the sizing, 
+the default close, the call to show()).
+<li> The <code>JApplet</code> class have four methods you can override
+<ul>
+<li>init() -- This is where to put one-time init code. This method is called
+when an applet is loaded into the browser for the first time.
+<li>start() -- This where to put the non-init part of main(). This method is
+ called each time the user returns to a page containing your applet.
+<li>stop() -- This is called each time the user leaves a page containing your
+applet
+<li>destroy() -- called when the browser shuts down
+</ul>
+Converting an application to an applet is simply rearranging the top-level
+startup and shutdown into these four methods. They can call into the rest
+of your classes as usual.
+<li> One other difference between an applet and application is the
+number fo things you cannot do. In general you can't access files, execute
+programs, or open net connections to machines other than the applet's home.
+<li> Now that you have an applet class file on your web server, you must embed
+it in a Web page so it will be downloaded and displayed by users. Here again,
+time has passed Applets by
+<li> In early versions of HTML embedding an applet was straightforward using
+the APPLET tag
+<pre>
+&lt;APPLET CODE=MyApplet.class" WIDTH=300 HEIGHT=300 &gt;
+</pre>
+<li> However, in HTML4.0 the APPLET tag has been deprecated. One must use 
+either the OBJECT tag or the EMBED tag. The OBJECT tag is a syntactic 
+nightmare with 35 attribute and is best handled with automatic HTML generating
+tools.
+<li> Again incompatability abounds, even if you write Java 1.2 applets and
+expect your user population to download the Java plugin, the HTML to
+include an applet in a Web page different substantially between Netscape
+and IE
+<li> If you like hopeless endeavors, you can try to convert your SameJava 
+game into an applet, this should be pretty straightforward. Following the
+book you can generate HTML code to embed it in a Web page (depending on the
+brrowser version of the client). However, the chances that many will
+go through the trouble of assembling the client-side technology neccesary to
+run you applet are slim.
+</ul>
+<h3>Very Brief Intro to Web Programming</h3>
+Though client-side Java, in the form of applets, is a dying technology,
+server-side Java is alive and vibrant. Some of the most interesting
+applications of Java are in Web server tools and technology, and much of the
+XML work on the Web is being done first in Java.
+<p>
+<ul>
+<li> The underlying protocol used by the Web is HTTP. In this protocol,
+the client (browser) establishes a socket connection to the Web server, sends
+a request for a page, downloads the response on the socket, then closes
+the socket connection.
+<li> Although, the downloaded response could be any type of data, we will 
+assume it is text/HTML.
+<li> The job of the server, then, is to listen for connections, receive
+requests for download (in the form of a pathname), and send back an HTML
+page.
+<li> The simplest case for the server is if the URL corresponds to a static
+HTML page. This is just a text file on the servers filesystem containing
+HTML, which is simply opened and downloaded to the client.
+<li> As Web sites became more ambitious, they wanted to do more than
+serve static pages. For example a site than returns the current time,
+or current price of a stock, must do some computation and perhaps some
+database access.
+<li> The original mechanism to do server-side computation was CGI. Web
+servers would map some portion of the server's path space  (usually
+all paths starting with /cgi-bin/) to programs or scripts rather than
+files.
+<li>Under CGI, the Web server would fork a new process to run the program or
+script, which would perform the necessary computation
+and then write HTML on its standard output stream 
+(equiv to System.out in Java). THe Web server would re-direct this output stream to the client. So the HTML page the client receives is never stored on the
+server but dynamicly computed by the CGI script.
+<li> The CGI method was successfull but slow, the process of forking off
+new processes for each request was expesive. Furthermore, it made sharing
+resources between CGI processes (for example database connections) difficult.
+<p>
+To address these issues, Web server developed the ability to run certain
+sorts of programs and scripts 'in-process' by multithreading the Web server.
+Now each script runs in its own thread but can share things like database
+connections (which are expensive to set up).
+<li> Different Web server support different programming/scripting languages 
+in-process. AOLserver (which AD uses) supports Tcl and C APIs, Apache
+can support a variety using plugin modules, though Perl is commonly used,
+MS IIS supports VB.
+<li> Not to be left out, Java developed a system for running Java programs
+'in-process' to handle Web requests. In fact there are two related
+technologies, servlets and JSP. The main difference between them
+is the authoring model. Using servlets, the author writes a
+Java program that emits HTML (usually though a series of calls to println()).
+Using JSP, the author writes in HTML with the ability to call Java methods
+through special tags, which are evaluated on the server <em>before</em>
+the page is sent to the Web browser.
+<p>
+Since Java programs, unlike C, requires a Java runtime, most Web servers
+do not run servlets directly. The are a few Web server, like Apache Tomcat
+which specialize in server-side Java (at the expense of standard Web page
+performance). Often a dual strategy is adopted, one server for Java pages
+and one for static and traditional CGI.
+</ul>
+<h3>Servlets</h3>
+<ul>
+<li> Servlets are Java programs meant to be invoked by a Web server (and
+associated server container) in reponse to a Web request. The servlet performs
+arbitrary computation  and eventually write HTML to an output stream.
+<li> A Servlet enabled Web servers map a portion of their web space to
+correspond to servlet applications. These are invoked through paths
+with the particular servlet class as the last element in the path.
+<li> Servlets, like other Java programs are classes. In particular, 
+all servlets must extend the class Servlet. For HTTP requests, which is what
+we are interested in, there is a subclass HttpServlet which has added
+utilities for dealing with HTTP requests.
+<li> HttpServlet has only a few methods to overwrite, the most important are
+<code>init</code> and <code>service</code>.
+<li> The <code>init()</code> method is call once, the first time the servlet
+is loaded into the Web server. It should be used for one-time initialization.
+<li> The <code>service()</code> method is called once for each HTTP request.
+<li> A sample "Hello ADU" servlet is shown below.
+<pre>
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class ServTest extends HttpServlet {
+
+    public void service(HttpServletRequest request, 
+			HttpServletResponse response)
+			throws IOException, ServletException{
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+	out.println("&lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/head&gt;");
+	out.println("&lt;body&gt;&lt;h1&gt;Hello ADU servlet&lt;/h1&gt;");
+	out.println("&lt;/body&gt;&lt;/html&gt;");
+    }
+}
+</pre>
+<li> The two arguments to the service() methods are an HttpServletRequest
+object (just another class), and a HttpServletResponse object. The Request
+object represents the user's request and contains header information (such
+as what-type of browser the user is at) plus any query arguments (from
+HTML forms, for example).
+<li> The Response object is the connection back to the client. This object
+have a PrintWriter on which the servlet should write it's HTML.
+<li> The servlet above is very basic, it simply gets the PrintWriter from
+the response object and writes a trivial HTML file. Note that even
+in this trivial example we are getting a lot of println()'s. Imagine
+if we were writing a page with hundreds of lines of HTML!
+<li> Servlets can call other classes and generally operate as any other Java
+program. It can access files on the server and does not have the restrictions
+that an applet does.
+<li> <b>Threading</b>: One important point to remember is that ALL incoming
+requests share the same servlet! In order words, all servlet code is implicitly
+and massively multithreaded. As a consequence of this, instance variables on
+a servlet are of limited use and should generally be read-only as they
+are shared by all threads. Of course one could always synchronize the service()
+method or some utility methods, however, this has the effect of serializing
+all requests into the server and will slow down performance significantly.
+<li> <b>Sessions</b>: As Web sites become more complex, the <em>state-free</em>
+nature of the HTTP protocol becomes a limitation. Remember, a basic HTTP
+transaction is open a connection, send request, get data, close connection.
+Once the connection is closed, both sides can forget about each other. This
+is a problem when building any sort of e-commerce site which has multi-turn
+interactions, the user browses, addes things to the shopping cart, and
+finally pays. If the server forgot the contents of the cart after every
+turn, it would be a disaster.
+<p>This problem is addressed at the protocol level by remembering some
+information associated with the current Web session which can be used to
+tag session information on the server. There are two ways to keep this
+information, the first is to build it into the Web pages sent down and
+the URLs sent back. This is known as URL-rewriting. The second method
+uses cookies, small files stored on the client's machine to identify the
+current user and session. The details of the session management protocol
+are irrelevent here. Only the fact that it is possible is important.
+<li> Once we are able to identify a user and session, we still need to
+access all of the data for that particular session. In many systems, a database
+is used to track session data between requests. However, Java provides
+a convenient mechanism in the servlet packages: the <code>Session</code>
+object.
+<li> As part of the request handling process, the servlet mechanism will 
+retrieve a session object for a request. This is either the current session
+associated with this user, or a new session. The session object supports
+the ability to add and retrieve data by keyword (as in a Hashtable).
+The session object is not shared between thread (as only one thread at 
+a time is processing requests from any given client), and is the preferred
+place to put program data meant to be user/session specific.
+<li> The code below shown a simple servlet that maintains a counter
+holding the number of times each user has called it. Each user will get their
+own count which will be independently updated. (Actually, this only counts
+recent visits to the page as sessions typically time out after 1/2 hour.
+<pre>
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class ServTest extends HttpServlet {
+
+    public void service(HttpServletRequest request, 
+			HttpServletResponse response)
+			throws IOException, ServletException{
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+	HttpSession session = request.getSession();
+	Integer count = (Integer)session.getAttribute("count");
+	if(count == null)
+	    count = new Integer(0);
+	session.setAttribute("count",new Integer(count.intValue() + 1));
+	out.println("&lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/head&gt;");
+	out.println("&lt;body&gt;&lt;h1&gt;Hello ADU servlet&lt;/h1&gt;");
+	out.println("count = " + count);
+	out.println("&lt;/body&gt;&lt;/html&gt;");
+    }
+}
+</pre>
+</ul>
+<h3>JSP</h3>
+<ul>
+<li> Note that even in out small examples, a lot of our servlet is 
+println()'s generating HTML. This would be similar in any 'in-process'
+Tcl or Perl program as well. This is not the most elegant way to author
+HTML.
+<li> As Web technology progressed, an alternately mechanism arose. Instead
+of a server-side program which generated HTML with println() statements,
+one writes an HTML page with special tags that invoke server-side
+processing. (Note this is different from the special tags that contain
+JavaScript and invoke client-side processing).
+<p>
+Probably the first example of this technology was Microsoft's Active Server
+Pages (ASP). Other examples are Allaire's ColdFusion and PHP (the open source
+favorite. Java's entry into this are is called JSP, JavaServer Pages.
+<li>JSP pages (forgive th redundency) are standard HTML with special
+tags that invoke Java functionality. The most straightforward of these
+are tags that simple lines of Java code. These server-side script tags
+can perform computation and generate HTML which is inserted into the
+larger HTML document in place of the script tag. 
+<li> JSP and Servlets are intimately related. In fact JSP pages are actually
+converted into servlets as they are loaded.
+<li> Below is a sample JSP page to print the date
+<pre>
+
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;JSP Test&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Hello ADU&lt;/h1&gt;
+It's &lt;%= new java.util.Date().toString() %&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+
+<li> Since they are effectively servlets. JSP pages have access to the
+Request,Response, and Session objects.
+<li> There are about 20 different tag types in JSP pages beyond invoking
+basic Java code. Many of these deal with accessing <em>JavaBeans</em>, which
+are (one of) Java's implementation of <em>components</em>. Indeed, much
+of JSP seems to be designed to push the use of JavaBeans.
+Other tags deal with connecting the Web server-side application to
+a database using JDBC. Another topic for another day.
+<li> The purported advantage of the server-scripting/component combination
+(JSP and JavaBeans in the case of Java), is that is promotes the
+separation of the programming logic (done in Java and encapsulated in
+components), and the presentation, done in HTML.
+However, JSP, JavaBeans, and related server-side techologies represent 
+the cutting edge of programming technology today. As such they are 
+surrounded by both intense vendor competition and tremendous hype. It remains
+to be seen whether they are the wave of the future or will go the way of
+applets.
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,40 @@
+
+University of PA course
+
+http://www.seas.upenn.edu/~cse121
+
+Java, JavaScript, XML, Python Tutorials online:
+Here's a link to some Java, JavaScript, XML, Python Tutorials online. Thanks to Rob and
+Seth for the pointer.
+
+http://www.phrantic.com/scoop/toc.htm
+
+I found a few interesting links for some Gnutella
+background that others might find useful.
+
+Open-Source 'Napster' Shut Down by Christopher Jones 
+1:25 p.m. Mar. 15, 2000 PST 
+http://www.wirednews.com/news/technology/0,1282,34978,00.html
+Slashdot: before and after the AOL Crackdown
+     (Notice the dates are only one day apart!)
+http://slashdot.org/articles/00/03/14/0949234.shtml
+http://slashdot.org/articles/00/03/15/1754208.shtml
+A nice history from cnn.com http://www.cnn.com/2000/TECH/computing/05/12/mp3.guerrillas.idg/index.html
+Enjoy!
+
+Bryon
+Team GnutRockne (Rockme?)
+"Reagan should have stayed an actor."
+Contributed by Bryon Gill on 01-23-2001
+
+A visual index to Swing Components.
+For those who like pictures.
+
+http://web2.java.sun.com/docs/books/tutorial/uiswing/components/components.html
+
+
+Here's a nice little reference for CVS
+
+http://www.loria.fr/~molli/cvs/doc/cvs_toc.html
+
+

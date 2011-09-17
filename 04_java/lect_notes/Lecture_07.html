@@ -1,0 +1,256 @@
+<html>
+<head>
+  <title>
+   Lecture 7
+  </title>
+</head>
+<body bgcolor="#88aaff">
+<h3>Stream I/O</h3>
+<h4>Introduction</h4>
+Up until now, we have been working with programs that call classes
+manipulate data and occasionally print something out. We have been
+building classes and testing them with fixed values. The is a limit
+to how useful such a program can be as it has limited interaction
+with the outside world. In the next few lectures we are going to
+deal with how to get information into and out of our programs.
+<p>
+Today we are talking about Stream IO, which will allow use to
+read from and write to files and  terminal windows (as well as
+networks connections as we'll see next week).
+<p>
+The Java stream library is particularly (and unnecessarily) complex,
+so we will first discuss the general properties of stream IO. Then
+map these ideas onto the Java implementation.
+<h4>Where does stream input come from (or go)?</h4>
+<ul>
+ <li>Files
+ <li>Terminal Window: a special mechanism to handle typed input and display
+output.(Emulates the notion of CRT's connected to computer through serial
+ports.)
+ <li>Network connections
+ <li>Printers and other device (audio, USB, modem).
+ <li>Other programs (as in UNIX pipes '|').
+</ul>
+
+<h4>Stream semantics</h4>
+    <ul>
+    <li> Streams (in the most general sense) are a very common model of
+I/O. The basic ideas of Streams are supported in most environments (even if
+they are not called such).
+    <li> The basic idea of a data stream can be visualized as some
+sort of pipe or hose for data. Your program has one end of this pipe, while
+the other end is connected to the file or device you are interacting with.
+Your program pushes data input the pipe and it (can be read from the other
+end). Your program can also remove data from the pipe and use it.
+    <li> The primitive form of data supported by streams is usually bytes.
+Any more complex data type characters, Strings, integers, objects, etc. must
+be built up from bytes. This opens the issues of data formats which we will
+address laters.
+    <li>There are 4 basic operations associated with streams which you
+should find in any implementation: open,close,read,write.
+    <li> stream = open(device or file name)
+     <ul>
+     <li> Creates a new stream (sometimes implemented with a construction
+rather than an open() routine.)     
+     <li> Arguments will depend on what sort of device is geing opened
+     <li> Returns error code or throw error if can't open
+     </ul>
+    <li>close(stream); -- closes the given stream. Closed streams
+are no longer available for reading and writing.
+    <li>num = read(byte[] buf,int nbytes, Stream stream)
+     <ul>
+     <li> reads up to 'nbytes' worth of data (bytes)  from the stream into
+buf.
+     <li> Returns number of bytes actually read.
+     <li> Read data is removed from the stream, the next read will get 
+different data (pipe metaphor).
+     </ul>
+    <li>num = write(byte[] buf,int nbytes, Stream stream)
+     <ul>
+     <li> writes up to 'nbytes' worth of data (bytes)  from buf to the
+stream.
+     <li> Returns number of bytes actually written.
+    </ul>
+  <li><b>Blocking:</b> If we are reading from a terminal window, network
+or another program. It may happen that there is no input in the stream
+to be read (for example, nothing has been typed to the terminal). In
+this case most read() implementation will wait for some input to appear before
+returning. It is said to be "blocked". This is convenient as the
+program does not has to handling this case any differently, on the
+other hand it has implications which we will encounter later.
+    <li> The write(), open(), and close() operations can also block. This
+is rare when dealing with local files, but common when dealing with
+network connections or other programs.
+    <li> Sometimes a program does not want to block (because then it is stuck).
+Most stream implementation provide an method (in Java called 'available()')
+that indicates whether there in any data in the stream to read.
+  <li><b>Buffering</b> Sometimes a program wants to read bytes 1 at a time.
+However, that underlying mechanism for reading bytes from the Operating
+System (the ultimate source) is pretty expensive, and we would like to read
+data in large chunks to minimize this overhead. To do this most
+stream implementation provide "buffered" reads and writes, which internally
+read and write large chunks  from the operating system to maximize
+efficiency, yet let the programmer read and write (to the buffer) 
+in whatever sizes are convenient. In many stream implementations, buffering
+is hidden or implicit, in Java it is explicit.
+  </ul>
+
+<h4>Data Formats</h4>
+In general, we do not want to read and write uninterpreted bytes. We are
+interested in reading higher-level datatypes, integers, floats, characters,
+object, text strings etc. This leads to the problem of how to read bytes 
+and assemble them into the datatypes we are interesting in. In general,
+to do this we need to know how the data is stored in the file we are
+reading (or produced by the source we are reading from).
+<p>
+Note on binary format: You may be used to looking at text files. However,
+store large amounts of numerical or inunterpreted data (such as compiled
+code) is very inefficient. For example, a Java int take 4 bytes of memory
+in binary form, if we store it in text form, it will take about 10 bytes.
+Hence, non-text data is often stores be directly dumping the memory
+representations into a file. These are known as <em>binary</em> files.
+<p>
+For example, an integer in Java is 4 bytes. This would usually be stored
+as 4 consecutive bytes in a file, so we can read 4 byte to construct our 
+integer. However, in which order should the bytes be assembed? It turns
+out different machines and systems organize this differently. In some
+languages, such as C, one actually has to assemble all of your datatypes
+by hand from bytes, and worry about what type of machine they were
+originally written on. Fortunately, Java saves us much of that work
+(at the price of complexity in the number of stream classes).
+<p>
+This problem of data formats occurs in text strings as well. Many text
+files in Western systems are stored using 1 byte per character. For
+Western alphabets, this works fine and there are standard encodings,
+such as ASCII and Latin 1). For non-western language, such as Chinese,
+we been more bytes per character and the encoding becomes more complex.
+</ul>
+<h4>The Java stream library</h4>
+  <ul>
+  <li>
+The Java stream classes as found in the packages java.io and must
+be included with the line
+<pre>
+import java.io.*;
+</pre>
+  <li>The Java system is quite complex. Some of it is explained in detail
+in the book. Some of it you just need to get from grovellin over
+the online documentation and trying things out (sad, but this is often the
+way of things). We can only try to give an overview of the structure
+and a road map to using it.
+  <li>Separates basic streaming, buffering, and data conversion into
+       separate classes. Complete hierarchy is on pages 698-699.
+  <li>One must glue together a pipeline of classes to do the desired
+IO function.
+  <li>Flexible, not a gentle slope system. Simple things are not very simple
+to do.
+  <li> The complexity of the Java library can be somewhat reduced by
+thinking of it as split and duplicated along several dimensions. (Most
+other systems have more general mechansims which do not require this many 
+classes)
+  <li> The first split is between reading/writing binary data and text
+data. Internally, Java uses a 2-byte character encoding known as Unicode.
+Since this is different from the encoding of the majority of text files, 
+Java must do special format conversion on reading and writing, hence
+the distinction.
+  <li> The second split is between reading and writing (input and output).
+many system don't explicitly separate these and streams can be used for both.
+Java however does.
+  <li> The result of the first two splits is 4 top-level classes.
+  <ul>
+  <li><code>InputStream</code> -- binary input
+  <li><code>OutputStream</code> -- binary output
+  <li><code>Reader</code> -- text input
+  <li><code>Write</code> -- text output
+  </ul>
+  <li> Unfortunately, we are not done yet. These are really abstract class.
+In order to do anything useful, we must instantiate a subclass of one
+of these (sometimes several). Java provides scads of these with different
+functionality.
+  <li>One thing we haven't walked about is how to connect the other end of the
+stream. Java provides a number of classes to do this (in groups of 4 based on 
+our split). The most important is probably the File versions (<code>
+FileReader, FileWriter, FileInputStream, FileOutputStream </code>) which
+open a file to use as the other end of the stream.
+  <li> The FileInputStream etc constructors will all through errors
+if the file cannot be opened (for whatever reason).
+  <li>Java also provides analgous classes to connect to compressed files
+(ZIP and gzip), and other programs, and Strings (very handy sometimes).
+  <li> Some of the IO classes merely add additional functionality, in
+which case the other end of the stream is connected to a more primative
+stream. 
+  <li>One of these features is buffering, Java provides (again 4) different
+classes for buffering IO. These should always be used (for efficiency) unless
+there is a good reason not to.
+  <li>Another feature is reading/writing binary data types. Java only
+provides these in binary versions (natch) not text version. These
+classes are <code>DataInputStream</code> and <code>DataOutputStream</code>.
+( which implement the <code>DataInput</code> and <code>DataOutput</code>
+interfaces respectively). These classes support methods such as
+<pre>
+       int readInt();   // on DataInputStream -- write an int in binary format
+       void writeInt(int n);   // on DataOutputStream -- read an int from binary file
+</pre>
+An analogous methods for other basic data types.
+  <li>Finally, there is a nice utility class that knows how to
+print various datatypes as text string (as opposed to first converting
+them to strings in your pgm and writing the strings). This is the
+PrintWriter class. It has methods such as 
+<pre>
+       void printFloat(float f);  
+</pre>
+  </ul>
+</ul>
+<h4>Some examples</h4>
+<pre>
+Read a line of input from the terminal and print it back.
+
+  InputStream in1 = System.in; // get InputStream from system, byte stream
+  InputStreamReader in2 = new InputStreamReader(in1); // adds Unicode conversion
+  BufferedReader instream = new BufferedReader(in2); // add buffering
+
+  // BufferedReader support readLine() so we can get a line (strips newline)
+  String line = instream.readLine();
+  System.out.println(line); 
+</pre>
+<pre>
+Read binary data from a file (note try/catch to handle IOExceptions)
+
+  try{
+   DataInputStream in = 
+        new DataInputStream ( 
+           new BufferedInputStream(
+              new FileInputStream("infile.bin")));
+   
+   int data = in.readInt();
+  }
+  catch(IOException e){
+    // code to handle IO exceptions (no file, etc)
+  }
+
+</pre>
+
+
+<h4>Tokenizing</h4>
+One other class that is useful enough to be worth mentioning in StringTokenizer.
+This class will break up a text line into a sequence ot words (or a sequence of
+tokens separated by some other character). See description in book.
+<h4>File and directory manipulation</h4>
+  <ul>
+  <li>Java has a class File that directly manipuilates files and directories.
+  <li>It can test for existance, return protections, test type, create, delete.
+  <li>It can also deal with directories: Creating dirs, notion of current dir, home dir
+  </ul>
+</li>
+</ul>
+<h3>Recitation</h3>
+<ul>
+<li>Finish 'common tasks' and file/dir calls if not done
+in lecture.
+</ul>
+
+</body>
+
+
+
+

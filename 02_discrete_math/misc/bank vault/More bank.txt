@@ -1,0 +1,324 @@
+Subject: RE: [Fwd: ArsDigita University]
+Date: Mon, 5 Jun 2000 21:23:34 -0400
+From: "Ramelson, Brian" <bramelson@lucent.com>
+To: 'Shai Simonson' <shai@stonehill.edu>
+
+Yes, this algorithm is used to find the middle (one or two) people in a
+region.
+Yes, this replaces the 3,3x idea.  Have you figured out a way to make that
+work with n not being a power-of-2-plus-1?
+The optimization I was talking about is a way to minimize the number of
+people in a region that need to perform the experiment.  That is, if the
+difference between the reflection from the upstream and downstream is
+greater than 10, then we can skip over the next 5 people downstream and
+continue.
+This is pretty much a way to fix the algorithm that Pradeep came up with as
+far as messages interfering with each other.  If you don't wait for the
+reflections on both sides before passing the token down then you the second
+to last person in the region will think he is the middle.  Since the
+reflection from the upstream side will follow down with the passing of the
+'experiment token' and collide at the second to last person in the region.
+
+-----Original Message-----
+From: Shai Simonson [mailto:shai@stonehill.edu]
+Sent: Monday, June 05, 2000 7:41 PM
+To: Ramelson, Brian
+Subject: Re: [Fwd: ArsDigita University]
+
+Let me clarify... your method is meant to replace the "find the middle"
+subroutine?
+
+So you will send the experiment token down, waiting for the two reflections
+to
+bounce back, and then you know if you are middle ot not.  If not middle,
+then
+pass the token and try again?
+
+This is meant to replace the x, 3x idea?
+
+I agree that your idea is more elegant than the x, 3x (you call it "rate")
+idea.  And as you say, if the counting ability exceeds the size of the
+range,
+then the token needs to be passed down only once.  (Although this
+generalization
+is not surprising -- after all it is not hard to find the middle when you
+can
+count).
+
+"Ramelson, Brian" wrote:
+
+> One way to solve this problem is to pass an 'experiment token' to the
+> downstream neighbor.  The person receiving the token runs the experiment
+by
+> sending a message in both the downstream and upstream directions.  He
+holds
+> the token until he recieves the reflection from both sides.  If he
+receives
+> them simultaneously, then he is the middle.  If he recieves them separated
+> by on clock cycle, then the region size is even and both he and his
+neighbor
+> are the middle.  If the case where he is the sole middle he then acts and
+> the 'end' for both sides.  If there are 2 middles, he informs his neighbor
+> and they each become the 'end' for their side of the new regions.
+> If he receives the reflections separated by more than 1 clock cycle, then
+he
+> must first wait until the second reflection is returned and then passes on
+> the 'experiment token' to his downstream neighbor.
+>
+> An interesting optimization to this algorithm is that if he can count
+higher
+> than 2, then he can keep track of how many clock ticks the reflections
+were
+> offset and if this is within his range of counting he can simply pass the
+> end information down that many number of people.  If it is greater than
+his
+> count capability, then he can pass the 'experiment token' down that far.
+>
+> I like this approach better than the rate approach since this will work
+with
+> any 'n' whereas it still isn't clear that the rate approach will work with
+> an 'n' that is not a power-of-2-plus-1.
+>
+> > -----Original Message-----
+> > From: Shai Simonson [SMTP:shai@stonehill.edu]
+> > Sent: Thursday, June 01, 2000 10:52 AM
+> > To:   Kyle Nicholls
+> > Cc:   Luis Rodriguez; Rajeev Surati; Brian Ramelson; Shai Simonson
+> > Subject:      Re: [Fwd: ArsDigita University]
+> >
+> > This is very clever.
+> >
+> > But I had a section of his idea I did not understand.  Please forward
+this
+> > to him.
+> >
+> >
+> >
+> > See below:
+> >
+> >
+> >
+> >
+> > Kyle Nicholls wrote:
+> >
+> > > This guy is good :-)
+> > >
+> > > Thanks for your help today.
+> > >
+> > > Kyle
+> > >
+> > > Pradeep Atluri wrote:
+> > > >
+> > > > Dear Kyle,
+> > > >
+> > > > I believe the n-man safe-opening problem you posed can be solved as
+> > follows.
+> > > >
+> > > > First create an initial state in which each man has (i.e. agrees to
+> > remember) the
+> > > > value 0, except for those at the ends, who have the value 1.  This
+is
+> > done very
+> > > > simply by the first man assuming the value 1.  If he is alone, he
+goes
+> > to the safe
+> > > > and opens it.  If he is not alone, then he turns to his neighbor and
+> > instructs him
+> > > > as follows:
+> > > >
+> > > > "On each clock cycle check the values of yourself and your
+neighbors.
+> > If none among
+> > > > you have the value 0, then you are to step forward to the safe and
+> > turn your key on
+> > > > the next clock cycle.
+> > > >
+> > > > "Now, I am your upstream neighbor; look for your downstream
+neighbor.
+> > If he exists,
+> > > > then assume the value 0, pass along these instructions, and wait to
+> > hear from your
+> > > > downstream neighbor that we are finished.  When you hear we are
+> > finished, pass this
+> > > > information back to your upstream neighbor.
+> > > >
+> > > > "If you have no downstream neighbor, then assume the value 1 and
+tell
+> > your upstream
+> > > > neighbor that we are finished."
+> > > >
+> > > > When the first man hears that they are finished, the initial state
+has
+> > been
+> > > > achieved.
+> > > >
+> > > > If n=1 or 2, the final state has been achieved already, and the
+> > problem is solved.
+> > > >
+> > > > For n>2, we now define a "region" of the line of men as a
+continguous
+> > series of men
+> > > > with the value 0 bordered by two men with the value 1.  The region
+> > size is the
+> > > > number of men with value 0 in the region.  The strategy is to
+> > recursively subdivide
+> > > > each region by placing the value 1 on the man in the center of each
+> > region with each
+> > > > iteration.  (If there is an odd number of men in a region, then
+there
+> > is a single
+> > > > man in the center; if there is an even number, then both men in the
+> > center will have
+> > > > the value 1 placed on them.)  Within each region, the one or two
+> > center men who take
+> > > > on the value 1 thereafter define two new subregions of equal size,
+> > again bounded by
+> > > > men with value 1.  These iterations continue until finally all
+> > subregions are
+> > > > completely filled (by recursive bisection bisection) with the value
+1.
+> > In the next
+> > > > clock cycle, all of the men should step forward simultaneously.
+> >
+> >     Up to here - seems very well done.
+> >
+> > >
+> > > >
+> > > > One way of accomplishing the bisection of a region is as follows:
+> > > >
+> > > > When the first man (with value 1) hears that the initial state has
+> > been achieved, he
+> > > > instructs his neighbor as follows:
+> > > >
+> > > > "I am your upstream neighbor. Check to see if both of your neighbors
+> > have the value
+> > > > 1.  If they do, then in the next clock cycle assume the value 1
+> > yourself.  [The
+> > > > problem is thus solved for region size of 1.]
+> > > >
+> > > > "If I have the value 1 but your downstream neighbor has the value 0,
+> > then in the
+> > > > next clock cycle, instruct him to check on his downstream neighbor.
+> > If his
+> > > > downstream neighbor has a value of 1, then he should  tell you, and
+> > both of you
+> > > > should assume a value of 1 on the following cycle. [The problem is
+> > thus solved for
+> > > > region size of 2.]  If he finds that his downstream neighbor has a
+> > value of 0, then
+> > > > the region size is greater than 2 and you are not a central man; he
+> > and you should
+> > > > await further instruction.
+> > > >
+> > > > "If I have the value 0, you should continue the experiment as
+follows.
+> > First, ask
+> > > > both your upstream neighbor (myself) and your downstream neighbor to
+> > notify you if
+> > > > either has a neighbor with the value 1. If either does not, then he
+is
+> > to pass along
+> > > > the same request to his other neighbor, and to pass back word as
+soon
+> > as they hear
+> > > > that a neighbor with value 1 has been found.  Your task is to listen
+> > for feedback
+> > > > from your upstream and downstream neighbors.
+> >
+> > >
+> > > >
+> > > > "If you receive simultaneous sightings of distal neighbors with
+value
+> > 1 from both
+> > > > your adjoining neighbors, then you are a (single) central man.
+> >
+> >
+> >
+> >     It seems that there are MANY messages being sent upstream and
+> > downstream
+> > simultaneously.
+> > I agree that the middle person(s) will receive word on both sides and
+they
+> > will know they
+> > are middle people.
+> >
+> > But during that proces, and AFTER that,  there are still stray messages
+> > running around,
+> > which might incorrectly inform other people that they are middles when
+in
+> > fact they are
+> > not yet middles.  Can you convince me that this will never happen?  Can
+> > you "kill" the old
+> > messages?  Do you need to?
+> >
+> > A less elegant but more clearly correct idea, is for the person with
+value
+> > 1, to send one
+> > message out at the rate of one flash per pass in the downstream
+direction,
+> > and another at
+> > the rate of 3 flashes per pass.   These two messages will be passed on
+by
+> > zeros, and
+> > reflected back by ones.  They will cross at the "middle" person.  When a
+> > person finds out
+> > that they are middle, they "kill" the messages by not passing them on.
+> > This allows a more
+> > controlled approach for the message passing.
+> >
+> >
+> >
+> >
+> > > You should take on
+> > > > the value 1 on the next clock cycle.  This defines two new
+subregions
+> > (one upstream
+> > > > of you, one downstream of you.)  Repeat the bisection algorithm on
+the
+> > next clock
+> > > > cycle. [Tell each of your neighbors that you are their upstream
+> > neighbor; you now
+> > > > define upstream for both new subregions.]
+> > > >
+> > > > If you receive sightings of distal neighbors with value 1 from both
+> > adjoining
+> > > > neighbors with an interval of one clock cycle, then you are one of
+two
+> > central men.
+> > > > On the next clock cycle, inform the neighbor whose message came
+later
+> > that both you
+> > > > and he should take the value 1 on the following clock cycle.  You
+and
+> > your neighbor
+> > > > each now define your own subregion.  Each of you should repeat the
+> > bisection
+> > > > algorithm, but each in opposite directions (since each of you define
+> > the upstream
+> > > > for your new subregions.)
+> > > >
+> > > > If you receive sighting of distal neighbors with value 1 from both
+> > adjoining
+> > > > neighbors with an interval of greater than one clock cycle, then you
+> > are not a
+> > > > central man.  Pass these instructions along to the neighbor who is
+> > slower in
+> > > > notifying you of a distal neighbor with value 1.  [This will repeat
+> > the "am I a
+> > > > center man?" experiment from a more central location.]
+> > > >
+> > > > I believe that this algorithm solves the problem.
+> > > >
+> > > > --Pradeep Atluri
+> > > >
+> > > > P.S. Please let me know whether we can arrange for an interview with
+> > Dr. Greenspun
+> > > > on Wednesday afternoon.  Otherwise, we can do a telephone interview
+on
+> > any day but
+> > > > Thursday.
+> > > >
+> > > > __________________________________________________
+> > > > Do You Yahoo!?
+> > > > Send instant messages & get email alerts with Yahoo! Messenger.
+> > > > http://im.yahoo.com/

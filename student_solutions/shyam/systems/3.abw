@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Date: 5 March 2001</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Is the stream-based I/O model an efficient one for bit-mapped displays?</c></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Basing all the Unix I/O on a stream-based model was a simple and powerful abstraction since various programs could talk to each other via a common mode of communication. Also,  application programs could do any type of I/O access without worrying about the kind of device. In addition, programs were easily extensible for new I/O devices since the mode of communication with the new devices would not change from those already in use for files and devices.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">At the time the Unix I/O model was designed most devices in use were sequential and it made sense to have a stream model. However, with the introduction of graphical user interfaces, stream-based communication for screen display is probably inefficient. Output to a graphical video display is a frequently used I/O task in modern computers and it is advantageous to make this process as efficient as possible. Thus, it is highly probably that if GUIs were present at the time the Unix I/O design decisions were made, a different paradigm like memory-mapping would have been used for displays while retaining the stream-based model for files and other sequential devices.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Consider the example of moving a window on a bit-mapped display. Using a stream-based I/O to move such a window can have a high overhead of system calls. For rewriting the window in the new position, each row requires a seek system call to locate the starting point of each line of the window. Similarly, to repaint at the prior location of the window would require a system call for each row to be repainted. On the other hand, a memory-mapping system would require only a couple of system calls: one to read into memory the bits representing the windows and another to write out the modified bits back on to disk or to the video memory. Once the bits have been read, the application can modify the bits directly without using system calls. Since, the mapped bits are manipulated only once the overhead is small. Thus, for reasons of efficiency, a memory-mapping model would be better than a stream-based one for GUI displays.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:center; text-indent:0.0000in"></p>
+</section>
+</abiword>

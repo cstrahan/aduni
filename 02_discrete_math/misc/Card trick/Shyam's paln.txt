@@ -1,0 +1,60 @@
+Subject: Re: [Fwd: Card Trick Pset and Pset 7]
+Date: Mon, 27 Nov 2000 08:44:45 -0800 (PST)
+From: Weiping Shi <weiping_shi@yahoo.com>
+To: Shai Simonson <shai@stonehill.edu>
+
+Very interesting. So that's the general
+solution. For a deck of n cards, pick any k.
+Then there are (n choose k) ways. On the other
+hand, there are (n choose k-1)*(k-1)! ways to
+show k-1 cards. So if n <= k!+k-1,
+then there is a way to encode.
+That gives n=124 for k=5.
+
+> Date: Sat, 25 Nov 2000 00:19:20 +0000
+> To: Shai Simonson <shai@stonehill.edu>
+> From: Shyam Visweswaran <shyam@jipmer.org>
+> Subject: Re: Card Trick Pset and Pset 7
+>
+> Hi Shai:
+>
+> Does a better strategy for the card trick be
+> rememberable by a human?
+> Or will it be a list of computer-geenrated numbers
+> that the magician can look
+> up?
+>
+> I get a coding for choosin 3 cards with a deck of 8
+> cards. See the enclosed
+> file.
+> Also generated an apparently unique coding for
+> choosing 4 cards from a deck
+> of 20 cards. Its a huge list and i am looking over
+> it to see if  there are
+> really
+> no duplicates.
+>
+> Shyam
+>
+> > First number on the sublist is the hidden card
+>
+> (card 3 8)
+> (done, count 56, calculated combinations 56)
+> (8 6 7)(8 5 7)(8 5 6)(7 6 5)(8 4 7)
+> (8 4 6)(7 6 4)(5 4 8)(7 4 5)(6 5 4)
+> (8 3 7)(8 3 6)(7 6 3)(5 3 8)(7 3 5)
+> (6 5 3)(4 8 3)(4 7 3)(6 3 4)(5 4 3)
+> (2 7 8)(2 6 8)(7 2 6)(2 5 8)(7 2 5)
+> (6 5 2)(4 2 8)(4 2 7)(6 2 4)(5 4 2)
+> (3 8 2)(3 7 2)(3 6 2)(5 2 3)(4 3 2)
+> (1 8 7)(1 8 6)(1 7 6)(1 8 5)(1 7 5)
+> (6 1 5)(1 8 4)(1 7 4)(6 1 4)(5 4 1)
+> (3 1 8)(3 1 7)(3 1 6)(5 1 3)(4 3 1)
+> (2 8 1)(2 7 1)(2 6 1)(2 5 1)(4 1 2)
+> (3 2 1)
+>
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Shopping - Thousands of Stores. Millions of Products.
+http://shopping.yahoo.com/

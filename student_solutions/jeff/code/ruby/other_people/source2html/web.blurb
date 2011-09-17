@@ -1,0 +1,6 @@
+<b>code2html</b> generates a set of nicely formatted and linked HTML
+files from source code.
+
+<p>Files beginning with <em>test</em> are unit test files.  You can
+find the acceptance test files <a
+href="accept/source.html">here</a>.

@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+
+<quotelist>
+   <quote id="1">
+      <body>
+      It takes less time to do a thing right than it does to explain why you
+      did it wrong.
+      </body>
+      <source type="fortune file">
+      H.W. Longfellow
+      </source>
+   </quote>
+
+   <quote id="2">
+      <body>
+      Q:	"What is the burning question on the mind of every dyslexic
+		existentialist?"
+      A:	"Is there a dog?"
+      </body>
+   <source>Anonymous</source>
+   </quote>
+
+   <quote>
+      <body>
+      Providence, New Jersey, is one of the few cities where Velveeta cheese
+      appears on the gourmet shelf.
+      </body>
+      <source>Bill Clinton</source>
+   </quote>
+
+</quotelist>

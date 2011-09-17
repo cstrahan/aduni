@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Date: 7 March 2001</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Extending the effective length of the Ethernet cable</c></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">In the original Ethernet design, the Ether or the coaxial cable for a single network was limited to a kilometer and could have 256 stations and a transmission speed of 3 megabits per second. The length of a single Ethernet cable was limited by signal degradation and noise and the ability of the transceivers to drive the signal across the length of the cable. The biggest advantage of this small network was that it was passive and distributed so that failure of a single component - whether a transceiver, interface or controller - did not bring the network down.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">However, a distributed system like the Ethernet should be scalable easily and Metcalfe and Boggs came up with several approaches to extend the effective length of the Ethernet cable. The simplest approach was the use of an unbuffered <c props="font-style:italic">packet repeater</c> to connect between multiple Ether segments. Such a repeater would amplify the signal that it received from one Ether cable and transmit it to the other. This extended the maximum signal cover beyond 1 kilometer, the physical limit of a single cable. However, the number of stations on the entire network connected via repeaters, was still limited to 255. The main tradeoff of introducing repeaters was that it made an interconnecting Ethernet component active, which meant that the failure of a single repeater could disconnect part of a network form another thus affecting the functioning whole network. Compared to this the failure of a single transceiver affected only a single computer. The signal cover could have been extended to distances beyond 1 kilometer by using more powerful and sophisticated transceivers that could drive the signal over longer distances; this would have meant more expensive transceivers with less reliability.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">With longer Ethernet cables comes the possibility of increased traffic due to the addition of more computers to the network. This can reach a point where the network is so busy that even if it was physically possible to extend the cable (say by using a repeater), this availability could not be used. The traffic at a given point in the Ether cable can be reduced by the use of an unbuffered traffic-filtering repeater or <c props="font-style:italic">packet filter</c>. The packet filter passes packets from one Ether segment to another only if the destination segment is located on the new segment. Thus, a packet filter extends the traffic cover as well as the signal cover of the network. The tradeoff of using packet filters is similar to the use of packet repeaters - failure of a single packet filter could potentially affect the whole network.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">Thus, though at the smallest and simplest level, the Ethernet is a good distributed system resilient to single component failures; scaling it involves introduction of active components whose failure could affect the whole network. Scalability is obtained at the cost of robustness.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:center; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+</section>
+</abiword>

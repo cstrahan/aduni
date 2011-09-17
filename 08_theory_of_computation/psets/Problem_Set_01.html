@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>ADUni - Theory of Computation - Problem Set 01</title>
+</head>
+
+<body fgcolor=black bgcolor=white>
+<center>
+A R S D I G I T A &nbsp V N I V E R S I T Y<br>
+<font size=+2>Month 8: Theory of Computation</font><br>
+Problem Set 1 - Prof. Shai Simonson
+</center>
+
+
+<ol>
+<li><font size=+1>DFAs</font><p>
+Draw Deterministic Finite Automata to accept the following sets of strings over the alphabet {0,1}:</b><p>
+
+	<ol type=a> 
+	<li>All strings that contain exactly 4 "0"s.
+	<li>All strings ending in "1101".
+	<li>All strings containing exactly 4 "0"s and at least 2 "1"s.
+	<li>All strings whose binary interpretation is divisible by 5.
+	<li>(1.4c) All strings that contain the substring 0101.
+	<li>(1.4e) All strings that start with 0 and have odd length or start with 1 and have even length.
+	<li>(1.4f) All strings that don’t contain the substring 110.
+	<li>(1.4g) All strings of length at most five.
+	<li>(1.4i) All strings where every odd position is a 1.
+	</ol><p>
+ 
+<li><font size=+1>NFAs</font><p>
+Draw Non-deterministic Finite Automata with the specified number of states to accept the following sets:<p>
+	<ol type=a>
+	<li>All strings containing exactly 4 "0"s or an even number of "1"s. (8 states)
+	<li>All strings such that the third symbol from the right end is a "0". (4 states)
+	<li>All strings such that some two zeros are separated by a string whose length is 4i for some i >= 0. (6 states)
+	<li>(1.5b) All strings that contain the substring 0101. (5 states)
+	<li>(1.5c) All strings that contain an even number of zeros or exactly two ones. (6 states)
+	<li>(1.5e) The language 0*1*0*0. (3 states)
+	</ol><p>
+
+<li><font size=+1>Converting NFAs to DFAs</font><p>
+	<ol type=a>
+	<li>Convert the NFA in 2f into a Deterministic Automaton.
+	<li>1.12a in the text.
+	<li>1.12b in the text.
+	</ol><p>
+
+<li><font size=+1>Discrete Math Review – Proofs</font><p>
+Analyze the two languages below.  They are two descriptions of the same language – strings of balanced parentheses.<p>
+
+Language 1: The set of strings where each string w has an equal number of zeros and ones; and any prefix of w has at least as many zeros as ones.<br>
+Language 2: The set of strings defined inductively as follows: if w is in the set then 0w1 is also in the set; if u and v are in the set then so is uv; and the empty string is in the set.<p>
+
+	<ol type=a>
+	<li>Prove that every string in Language 2 is contained in Language 1.
+	<li>Extra Credit: Prove they are equal (i.e. Language 1 is also contained in Language 2).
+	</ol><p>
+
+<li><font size=+1>Closure Problems</font><p>
+You may use examples to illustrate your proofs.<p>
+
+	<ol type=a>
+	<li>Prove that if L1 is regular and L2 is regular then so is L1-L2 (the set of all strings in L1 but not in L2).
+	<li>Prove that if L is regular then Prefix(L) is regular. Prefix(L) is the set of all strings which are a proper prefix of a string in L.
+	<li>Prove that Regular Sets are closed under MIN. MIN(R), where R is a regular set, is the set of all strings w in R where every proper prefix of w is in not in R. (Note that this is not simply the complement of PREFIX).
+	<li>Prove that Regular Sets are NOT closed under infinite union. (A counterexample suffices).
+	<li>What about infinite intersection?
+	<li>Extra Credit: (1.42) Prove that if L is regular so is Half(L).  Half(L) is the set of all first halves of strings in L.
+	</ol><p>
+
+<li><font size=+1>Regular Expressions</font><p>
+Write regular expressions for each of the following languages over the alphabet {0,1}. Provide justification that your regular expression is correct.<p>
+
+	<ol type=a>
+	<li>The set of all strings in which every pair of adjacent zeros appears before any pair of adjacent ones.
+	<li>The set of all strings not containing 101 as a substring.
+	<li>The set of all strings with at most one pair of consecutive zeros and one pair of consecutive ones.
+	</ol><p>
+
+<li><font size=+1>Converting Finite Automata to Regular Expressions</font><p>
+	<ol type=a> 
+	<li>1.16a in the text.
+	<li>1.16b in the text.
+	</ol><p>
+ 
+<li><font size=+1>Regular Expression Identities</font><p>
+Prove (give at least a few words of justification), or disprove (by counterexample) that each pair of regular expressions represent the same language.  Assume that r, s and t represent regular expressions over the alphabet {0,1}.<p>
+
+	<ol type=a>
+	<li>r(s + t) and rs + rt 
+	<li>(r*)*and r*            
+	<li>(r + s)* and r*s*
+	</ol><p>
+
+<li><font size=+1>Final States</font><p>
+
+	<ol type=a>
+	<li>Explain why every NFA can be converted to an equivalent one that has a single final state.   
+	<li>Give a counterexample to show that this is not true for DFA’s.  
+	<li>Extra Credit:  Describe the languages that are generated from a DFA with just one final state.
+	</ol><p>
+ 
+<li><font size=+1>Optional Extra Problems</font><p>
+
+	<ol type=a>
+	<li>Draw a Finite Automaton to accept the following regular expression and succinctly describe the set in English.<br>
+	[00 + 11 + (01 + 10)(00 + 11)*(01 + 10)]*
+	
+	<li>The language of addition: 1.25 in the text.
+	<li>Show that the following is a regular language:<br>
+	(1.41) The strings that contain an equal number of occurrences of the substrings 01 and 10
+	</ol>
+</ol>
+
+</body>
+</html>

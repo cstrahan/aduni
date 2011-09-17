@@ -1,0 +1,2432 @@
+Marmalade -- A Gnutella Client
+Team:	  Mike Carpenter
+	  Chris Crick
+	  Anthony Lim
+	  Gador Manzano-Guillen
+	  Shyam Visweswaran
+
+We began our project by imagining a few simple program components and
+envisioning how they would fit together.  We would have four main
+components, and would focus on making a solid console-oriented client
+before we began worrying about a GUI.  Each of us would implement the
+four components in a very basic way, so that we could have something
+which worked properly before we started to add features.  We all began
+by implementing the classes which would represent our packets, and
+designed methods which could assemble and disassemble byte streams.
+We then split up to begin working on the program components.
+
+Shyam began work on the Connector, which establishes connections and
+handshakes properly with other Gnutella hosts.  It is also be
+responsible for maintaining a list of open connections and routing
+outgoing packets properly.  Chris started with the Server threads,
+which sit on top of each socket and react to incoming packets,
+performing housekeeping and routing them appropriately.  He also took
+on the local filesystem searching and retrieval.  Gador was
+responsible for the Searcher, which implemented our user interface,
+built Query packets and sent them out.  Anthony created the packet
+handling routines which maintain tables of incoming and outgoing
+packets, dropping or routing each packet appropriately.  Finally, Mike
+began work on what would eventually become our GUI.
+
+We discussed interface details as we went along rather than try to
+account for everything during the initial design.  Chris was largely
+responsible for collecting all of the work and attempting a nightly
+build, adjusting interface details appropriately until everything
+worked as planned.  Working in the same room, it was easy to discover
+upon trying to implement some method that our existing interfaces were
+not quite appropriate.  "Hey, Chris!  The Connector now provides the
+Server a Connection object, rather than a Socket!  Change the
+constructor -- it'll make life a lot easier!"
+
+By Thursday, we had a working packet sniffer that could connect to any
+Gnutella client and parse the packets it received -- thus we knew that
+our Packet objects were correct.  We discovered that our understanding
+of what "Big-Endian" means was 180 degrees out from what the authors
+of the Gnutella protocol claimed, so we had to reverse all of our
+byte-parsing methods.  The weekend saw the addition of downloading,
+and by Monday uploading worked too -- we had a fully functional
+Gnutella client, though still only on the command line.
+
+While Chris and Shyam finished the networking and file-transfer
+program segments, Gador, Anthony and Mike began translating our
+console output into GUI form.
+
+Here follows a basic explanation of our class and program segment
+hierarchies:
+
+public class Marmalade 
+Contains the main method.  Gets setup information from the Preferences
+class, initializes Handler hash tables, creates the SharedDirectory
+data structure, and starts the Searcher, Listener, PeriodicConnector
+and Pinger threads.
+
+public class Preferences
+Keeps a file on disk called preferences.txt which stores user settings
+between sessions -- shared directory, download directory, whether or
+not to auto-connect, and a list of known Gnutella hosts to which to
+connect.
+
+public class SharedDirectory 
+Builds a list of files and associated indices within the shared
+directory.  Contains methods for generating ResultSets for
+incorporation into QueryHits based on query strings, as well as
+methods that provide files for downloads.
+
+public class Searcher 
+Controls user interface and implements all GUI panes and panels.
+Provides inform methods for all program segments which need to
+communicate to the user.  Gets search strings from the user and
+creates Queries out of them, which it then sends to the NetworkManager
+for sending.  Matches incoming Query Hits against queries it has
+generated to determine whether to report them to the user.  Starts the
+Downloader thread if asked to do so by the user.
+
+public class NetworkManager 
+Contains methods for routing outbound packets.  Figures out which
+hosts are live and sends packets to one, all but one, or all connected
+hosts, depending on the method called.  Also kills Connections which
+have timed or errored out and removes them from the HostArray.
+
+public class Connector extends Thread 
+Creates a Connection and attempts to perform a Gnutella handshake with
+the servent on the other side.  Adds the Connection to the HostArray
+if successful.
+
+public class Connection
+Maintains a socket, an IPAddress and a set of text and byte input and
+output streams connected to the socket.
+
+public class Downloader extends Thread
+Called by the Searcher to initiate an HTTP connection and attempt to
+download a File, based on information gleaned from a QueryHit.
+
+public class Listener extends Thread
+Monitors a port for incoming connections.  Determines if the
+connection matches the Gnutella protocol.  Passes connections that do
+not match to a DownloadServer thread for further processing.  Adds
+good connections to the HostArray and starts a Server to handle
+incoming packets.
+
+public class PeriodicConnector extends Thread
+Cycles through our HostCache trying to connect to known hosts.
+Contains methods that turn it on and off.
+
+public class Pinger extends Thread
+Sends out pings periodically.  Maintains information gathered from
+response Pongs and passes it to the Searcher for display.
+
+public class DownloadServer extends Thread 
+Determines whether a connection is a valid HTTP file request.  Matches
+request with a file provided by SharedDirectory and transfers it to
+the requesting client.
+
+public class Server extends Thread
+Monitors a particular connection.  Assembles incoming bytes into the
+proper Packets.  Performs accounting on packets such as updating TTL
+and Hops.  Starts the proper Handler to deal with each packet.
+
+public classes PingHandler, PongHandler, QHandler, QHitHandler extend Thread
+Maintain hash tables of packets that enter the system.  Analyze
+incoming packets and discards them if we've seen them before.  Call
+the NetworkManager for writing to the network, according to whether we
+want to send a packet to a particular host (Pongs and QueryHits --
+must be routed to wherever the matching Ping or Query came from) or to
+all hosts except one (Pings and Queries -- we don't want to send them
+back to wherever we got them).
+
+public class HostArray
+Keeps a list of open Connections and contains methods for adding and
+removing Connections from the list.
+
+public class HostCache
+Loads a list of known Gnutella addresses and provides them to the
+PeriodicConnector.
+
+public class Mine
+Contains methods for determining our own network information, such as
+IP address, ServentID, port, and speed.
+
+public class Packet, Ping, Pong, Query, QueryHit, ResultSet
+Contain constructors and selectors for all of the data passed as
+Gnutella packets.  Hide all of the bitwise operations and byte array
+construction from the rest of the program segments.
+
+public class Host
+Simple data structure that holds a host's name and port.
+public class Marmalade
+{
+    public static void main(String[] args)
+    {
+	System.out.println("Setting up hash tables...");
+	QHandler.initQueryTable();
+	PingHandler.initPingTable();
+	System.out.println("Determining network address...");
+	Mine.updateAddress();
+	System.out.println("Reading preferences file...");
+	Preferences.readFromFile();
+	System.out.println("Setting up file table...");
+	new SharedDirectory(Preferences.SHAREPATH, Preferences.SAVEPATH);
+	System.out.println("Loading cache hosts...");
+	HostCache.loadCache();
+  
+	new Searcher();
+	Listener listener = new Listener();
+	listener.start(); // Beginning listening for network connections
+	PeriodicConnector periodicconnector = new PeriodicConnector(Preferences.AUTO_CONNECT); // Begin actively trying to connect
+	periodicconnector.start();
+	Pinger pinger = new Pinger();
+	pinger.start(); // Start sending out periodic pings.
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.io.*;
+import java.util.*;
+
+public class Preferences
+{
+  public static String  FILE_NAME = "preferences.txt";
+  public static int MAX_LIVE;
+  public static int MAX_CACHE;
+  public static boolean AUTO_CONNECT;
+    public static String SHAREPATH;
+    public static String SAVEPATH;
+  public static Host[] HOSTS_CACHE = new Host[0];
+      
+  public static void readFromFile()
+  {
+    try
+    {
+          int i = 1;
+          BufferedReader fileIn = new BufferedReader(new FileReader(FILE_NAME));
+          String line;
+          while ((line = fileIn.readLine()) != null)
+          {
+            if (line.startsWith("Max-Live: "))
+            {
+              MAX_LIVE = Integer.parseInt(line.substring(10));
+              continue;
+            }
+            else if (line.startsWith("Max-Cache: "))
+            {
+              MAX_CACHE = Integer.parseInt(line.substring(11));
+              continue;
+            }
+            else if (line.startsWith("Auto-Connect: "))
+            {
+              AUTO_CONNECT = ((Boolean.valueOf(line.substring(14))).booleanValue());
+              continue;
+            }
+	    else if (line.startsWith("Shared-Directory: "))
+		{
+		    SHAREPATH = line.substring(18);
+		    System.out.println("Shared-Directory is " + SHAREPATH);
+		    continue;
+		}
+	    else if (line.startsWith("Download-Directory: "))
+		{
+		    SAVEPATH = line.substring(20);
+		    System.out.println("Download-Directory is " + SAVEPATH);
+		    continue;
+		}
+            
+            StringTokenizer t = new StringTokenizer(line, ":");
+            Host[] temp = new Host[i];
+            System.arraycopy(HOSTS_CACHE, 0, temp, 0, i-1);
+            temp[i-1] = new Host(t.nextToken(), Integer.parseInt(t.nextToken()));
+            HOSTS_CACHE = temp;
+            i++;
+          }
+          fileIn.close();
+    }
+    catch (IOException e)
+    {
+      System.out.println("Unable to read preferences file");
+    }
+  }
+  
+  
+  public static void writeToFile()
+  {
+    try
+    {
+          PrintWriter fileOut = new PrintWriter(new FileWriter(FILE_NAME));
+          fileOut.println("Max-Live: " + MAX_LIVE);
+          fileOut.println("Max-Cache: " + MAX_CACHE);
+          fileOut.println("Auto-Connect: " + AUTO_CONNECT);
+          fileOut.println("Shared-Directory: " + SHAREPATH);
+	  fileOut.println("Download-Directory: " + SAVEPATH);
+          for (int i = 0; i < HOSTS_CACHE.length; i++)
+          {
+            fileOut.println(HOSTS_CACHE[i].getName() + ":" + HOSTS_CACHE[i].getPort());
+          }
+          
+          fileOut.close();
+    }
+    catch (IOException e)
+    {
+      System.out.println("Unable to write to preferences file");
+    }
+  }
+}
+
+    
+      
+import java.io.*;
+import java.util.*;
+
+public class SharedDirectory
+{
+    static ArrayList filestoshare = new ArrayList();
+    static ArrayList filesizes = new ArrayList();
+    static File savepath;
+    static int numfiles = 0;
+    static long bytes = 0;
+
+    public SharedDirectory(String sharepath, String savepath)
+    {
+	generateFileList(new File(sharepath));
+	this.savepath = new File(savepath);
+    }
+    
+    public static void generateFileList(File directorytosearch)
+    {
+	String[] filenames = directorytosearch.list(); // All of the files and directories in the current folder.
+
+	for (int i = 0; i < filenames.length; i++)
+	    {
+		File f = new File(directorytosearch.getPath(), filenames[i]); // All of the File objects in the current folder.
+		if (f.isHidden() || !(f.canRead())) // Don't ever report the existence of hidden files or ones for which we have incorrect permissions.
+		    continue;
+		if (f.isDirectory()) {
+		    generateFileList(f);} // Recurse through all subfolders.
+		else
+		    {
+		    filestoshare.add(f); // Each file will have a unique index in this ArrayList, which will become the Gnutella File Index for the Result Set.
+		    Integer size = new Integer((int)(f.length()));
+
+		    filesizes.add(size); // Sure wish ArrayLists could hold ints rather than Integers.
+
+		    numfiles++;
+		    bytes += size.intValue();
+		    }
+	    }
+    }
+
+    public static ResultSet search(String query) // Eventually, this would be better as a wackadexy thing, but for now it's linear.
+    {
+	ArrayList r = new ArrayList(); /* Because of the way ResultSets work, we have to know how many hits we have before we assemble our ResultSet, so we'll
+					  store them temporarily here.  A better design decision would have been to have ResultSet use ArrayLists internally.
+					  If we have time, we'll make the change. */
+
+	for (int i = 0; i < filestoshare.size(); i++)
+		if ((((File)filestoshare.get(i)).getName()).indexOf(query) != -1) // Check to see if the query is a substring of the filename
+		    {
+			r.add(new Integer(i)); // File index
+			r.add(new Integer(((Integer)filesizes.get(i)).intValue())); /* This legerdemain is necessary because Integers are objects, but we want
+											  to copy their values, not their pointers. */
+			r.add(((File)filestoshare.get(i)).getName()); // Add the name of the matching file.
+		    }
+	ResultSet results = new ResultSet((int)(r.size() / 3));  /* Now we know how many answers we're giving, so we can dimension the ResultSet properly.
+								    We divide by three because we also store our index and file size. */
+	for (int i = 0; i < r.size(); i += 3) // Yipes! ---
+	    results.addResult(((Integer)r.get(i)).intValue(), ((Integer)r.get(i + 1)).intValue(), ((String)r.get(i + 2)));
+	
+	return (results);
+    }
+
+    public static boolean validate(int index, String filename)
+    {
+	if (index < numfiles)
+	    return (((File)filestoshare.get(index)).getName().equals(filename));
+	else
+	    return (false);
+    }
+
+    public static File getFile(int index) // This method should only be called after the index has been validated.
+    {
+	return ((File)filestoshare.get(index));
+    }
+
+    public static int getFileSize(int index) // Call only after validating.
+    {
+	return (((Integer)filesizes.get(index)).intValue());
+    }
+
+    public static int getOurNumFiles()
+    {
+	return (numfiles);
+    }
+
+    public static int getOurKb()
+    {
+	return ((int)(bytes / 1000));
+    }
+
+    public static File getOurSavePath()
+    {
+	return (savepath);
+    }
+}
+
+
+
+
+
+/**
+   Big hairy GUI
+*/
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import javax.swing.border.*;
+
+
+public class Searcher
+{
+    // private static int Speed has to come from the user.
+    static LinkedList searches = new LinkedList();
+    static SearchPanel mypanel;
+    static ConnectionPanel myconnectionpanel;
+    static MonitorPanel mymonitorpanel;
+    
+    //added constructor
+    
+    public Searcher()
+    {
+	/*	JFrame myframe = new JFrame();
+		myframe.setSize(800,600);
+		mypanel = new SearchPanel();
+		myframe.getContentPane().add(mypanel);
+		myframe.show();
+	*/
+	TabbedPaneFrame frame = new TabbedPaneFrame();
+	mypanel = frame.getSearchPanel();
+	myconnectionpanel = frame.getConnectionPanel();
+	mymonitorpanel = frame.getMonitorPanel();
+	frame.show();
+    }
+    
+    public static void addSearch(Query search) // Called when the user presses the "Search" button
+    {
+	searches.add(search);
+    }
+    
+    public static void clear() // Called when the user presses the "Clear" button
+    {
+	searches = new LinkedList();
+    }
+    
+    public static void addFileTransfer(IPAddress ip, String name)
+    {
+	mypanel.addFileTransfer(ip, name);
+    }
+    
+    public static void updateConnectionStatus(IPAddress ip, String name, String status)
+    {
+	mypanel.updateConnectionStatus(ip, name, status);
+    }
+    
+    public static void updateFileTransferStatus(IPAddress ip, String name, int percent)
+    {
+	mypanel.updateFileTransferStatus(ip, name, percent);
+    }
+    
+    public static void inform(IPAddress ip, QueryHit qh)
+    {
+	Integer port = new Integer(qh.getPort());
+	String myip = qh.getIP().toString();
+	
+	Iterator iter = searches.iterator();
+	while (iter.hasNext())
+	    {
+		Query b = (Query) iter.next();
+		if(qh.compare(b))
+		    {
+			ResultSet r = qh.getResults();
+			while (r.more())
+			    {
+				Integer index = new Integer(r.getIndex());
+				Integer size = new Integer(r.getFilesize());
+				String name = r.getName();
+				mypanel.addQHit(index, name, size, myip, port);
+			    }
+		    }
+	    }
+    }
+
+    public static void inform(Query q)
+    {
+	mymonitorpanel.addQuery(q.getIP().toString(), q.getIP().getPort(), q.getSearchString());
+    }
+    
+    public static void updateInfo(int hosts, int totalkb, int totalfiles) 
+    {
+	myconnectionpanel.updateStats(hosts, totalfiles, totalkb);
+    }
+}
+
+class TabbedPaneFrame extends JFrame implements ChangeListener
+{  
+  private JTabbedPane tabbedPane;
+  private ConnectionPanel cPanel;
+  private SearchPanel sPanel;
+  private MonitorPanel mPanel;
+  
+  public TabbedPaneFrame()
+  {
+    setTitle("Marmalade");
+    
+    // get screen dimensions
+    Toolkit kit = Toolkit.getDefaultToolkit();
+    Dimension screenSize = kit.getScreenSize();
+    int inset = 100;
+
+    setBounds(inset, inset, 800, 550);
+    
+    //setBounds(inset, inset, screenSize.width - inset*2, screenSize.height - inset*2);
+    
+    //int screenHeight = screenSize.height;
+    //int screenWidth = screenSize.width;
+    
+    //center frame on screen
+    //setSize(screenWidth - 300, screenHeight - 300);
+    //setLocation (screenWidth / 4, screenHeight / 4);
+    
+       JMenuBar menuBar = new JMenuBar();
+    //menuBar.setBackground(new Color(0, 128, 128));
+   setJMenuBar(menuBar);
+   JMenu fileMenu = new JMenu ("File");
+   menuBar.add(fileMenu);
+   JMenu optionsMenu = new JMenu ("Options");
+   menuBar.add(optionsMenu);
+
+    cPanel = new ConnectionPanel();
+    sPanel = new SearchPanel();
+    mPanel = new MonitorPanel();
+
+    //Border etched = BorderFactory.createEtchedBorder();
+    //Border titled = BorderFactory.createTitledBorder(line, "Connections");
+    Border line = BorderFactory.createLineBorder(Color.black);    
+    cPanel.setBorder(line);
+    sPanel.setBorder(line);
+    mPanel.setBorder(line);
+
+    tabbedPane = new JTabbedPane();
+    tabbedPane.addChangeListener(this);
+    tabbedPane.addTab("Search", sPanel);
+    tabbedPane.addTab("Connections", cPanel);
+    tabbedPane.addTab("Monitor", mPanel);
+
+    addWindowListener(new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {System.exit(0);}
+	    });
+    
+    getContentPane().add(tabbedPane, "Center");
+  }
+  
+  public void stateChanged(ChangeEvent event)
+  {  
+    JTabbedPane pane = (JTabbedPane)event.getSource();
+  }
+    
+    public ConnectionPanel getConnectionPanel()
+    {
+	return(cPanel);
+    }
+
+    public SearchPanel getSearchPanel()
+    {
+	return(sPanel);
+    }
+
+    public MonitorPanel getMonitorPanel()
+    {
+	return(mPanel);
+    }
+}
+
+class MonitorPanel extends JPanel
+{
+  private static DefaultTableModel monitorModel;
+  private static JTable table;
+  
+  public MonitorPanel()
+  {
+    setLayout(null);
+    
+    monitorModel = new DefaultTableModel(0, 0);
+    monitorModel.addColumn((Object) "Remote host");
+    monitorModel.addColumn((Object) "Port");
+    monitorModel.addColumn((Object) "Query");
+    
+    JTable monitorTable = new JTable(monitorModel);
+    
+    JScrollPane scroll = new JScrollPane (monitorTable);
+    scroll.setBackground(Color.blue);
+    add(scroll);
+    scroll.setBounds(50, 50, 700, 400);
+  }
+    
+    public void addQuery(String host, int port, String query)
+    {
+	Object[] newRow = new Object[3];
+	newRow[0] = host;
+	newRow[1] = new Integer(port);
+	newRow[2] = query;
+	monitorModel.insertRow(0, newRow);
+    }
+}
+
+
+
+
+class ConnectionPanel extends JPanel
+{
+  private static DefaultTableModel liveModel;
+  private static DefaultTableModel cacheModel;
+  private static DefaultTableModel statsModel;
+  private static JTextField ipField;
+  private JTable table;
+  
+  public ConnectionPanel()
+  {
+    setLayout(null);
+    ipField = new JTextField(20);
+    add(ipField);
+    ipField.setBounds (200, 200, 200, 25);
+    
+    JButton connectButton = new JButton("Connect");
+      
+    add(connectButton);
+    connectButton.setBounds (420, 200, 150, 25);
+    connectButton.addActionListener(new ConnectAction());
+    
+    liveModel = new DefaultTableModel(0, 0);
+    liveModel.addColumn((Object) "Remote host");
+    liveModel.addColumn((Object) "Port");
+    liveModel.addColumn((Object) "Type");
+    liveModel.addColumn((Object) "Status");
+    
+    JTable liveTable = new JTable(liveModel);
+    
+    JScrollPane scroll = new JScrollPane (liveTable);
+    scroll.setBackground(Color.blue);
+    add(scroll);
+    scroll.setBounds(50, 50, 700, 120);
+    
+  	Object[] newRow = new Object[3];
+    liveModel.addRow(newRow);
+
+
+    statsModel = new DefaultTableModel(0, 0);
+    statsModel.addColumn((Object) "Hosts");
+    statsModel.addColumn((Object) "Total Files");
+    statsModel.addColumn((Object) "Total kB");
+    
+    JTable statsTable = new JTable(statsModel);
+    
+    JScrollPane statsScroll = new JScrollPane (statsTable);
+    statsScroll.setBackground(Color.blue);
+    add(statsScroll);
+    statsScroll.setBounds(50, 280, 300, 50);
+    
+    Object[] new2Row = new Object[3];
+    statsModel.addRow(new2Row);
+
+
+    cacheModel = new DefaultTableModel(0, 0);
+    cacheModel.addColumn((Object) "Remote host Cache");
+    
+    JTable cacheTable = new JTable(cacheModel);
+    
+    JScrollPane cacheScroll = new JScrollPane (cacheTable);
+    cacheScroll.setBackground(Color.blue);
+    add(cacheScroll);
+    cacheScroll.setBounds(450, 280, 300, 180);
+    
+  	Object[] new1Row = new Object[1];
+    cacheModel.addRow(new1Row);
+  }
+
+    public static void updateStats(int hosts, int files, int kb)
+    {
+	statsModel.setValueAt(new Integer(hosts), 0, 0);
+	statsModel.setValueAt(new Integer(files), 0, 1);
+	statsModel.setValueAt(new Integer(kb), 0, 2);
+    }
+	
+  class ConnectAction implements ActionListener
+  {
+    public void actionPerformed(ActionEvent event)
+    {
+	String ip = ipField.getText();
+	StringTokenizer st = new StringTokenizer(ip, ":");
+	if (st.countTokens() == 2)
+	    {
+		ip = st.nextToken();
+		int port = Integer.parseInt(st.nextToken());
+		Connector connector = new Connector(ip, port, 20000);
+		connector.start();
+	    }
+    }
+  }
+}
+
+class SearchPanel extends JPanel
+{
+    private static DefaultTableModel searchModel;
+    private static DefaultTableModel downloadModel;
+    private static JTextField searchField;
+    private static JTable table;
+    private static JTable downloadtable;
+    
+    public SearchPanel()
+    {
+	setLayout(null);
+	searchField = new JTextField(30);
+	add(searchField);
+	searchField.setBounds (50, 25, 200, 25); //(sets location and size of search field)
+	
+	JButton searchButton = new JButton("Search");
+	add(searchButton);
+	searchButton.setBounds (300, 25, 200, 25);
+	searchButton.addActionListener(new SearchAction());
+	
+	JButton clearButton = new JButton("Clear");
+	add(clearButton);
+	clearButton.setBounds(550, 25, 200, 25);
+	clearButton.addActionListener(new ClearAction());
+	
+	JButton download = new JButton ("Download");
+	add(download);
+	download.setBounds (300, 290, 200, 25);
+	download.addActionListener(new DownloadAction());
+	
+	searchModel = new DefaultTableModel(0,0);
+	searchModel.addColumn((Object) "File Index");
+	searchModel.addColumn((Object) "File Name");
+	searchModel.addColumn((Object) "File Size");
+	searchModel.addColumn((Object) "IP Address");
+	searchModel.addColumn((Object) "Port");
+
+	downloadModel = new DefaultTableModel(0,0);
+	downloadModel.addColumn((Object) "IP Address");
+	downloadModel.addColumn((Object) "File");
+	downloadModel.addColumn((Object) "Connection Status");
+	downloadModel.addColumn((Object) "File Transfer Progress");
+
+	table = new JTable(searchModel);
+	table.getTableHeader().setBackground(Color.black);
+	table.getTableHeader().setForeground(Color.red);
+
+	downloadtable = new JTable(downloadModel);
+	downloadtable.getTableHeader().setBackground(Color.black);
+	downloadtable.getTableHeader().setForeground(Color.orange);
+	
+	JScrollPane scroll = new JScrollPane (table);
+	add(scroll);
+	scroll.setBounds(50,70,700,200);
+
+	scroll = new JScrollPane(downloadtable);
+	add(scroll);
+	scroll.setBounds(50,330,700,130);
+    }
+    
+    public static void addQHit (Integer index, String name, Integer size, String ip, Integer port)
+    {
+	Object[] newRow = new Object[5];
+	newRow[0] = index;
+	newRow[1] = name;
+	newRow[2] = size;
+	newRow[3] = ip;
+	newRow[4] = port;
+	searchModel.addRow(newRow);
+    }
+
+    public static void addFileTransfer(IPAddress ip, String name)
+    {
+	for (int i = 0; i < downloadtable.getRowCount(); i++) /* If we've already tried downloading the same thing before, update it properly on the table rather
+								 than adding a new one. */
+	    if (((IPAddress)downloadtable.getValueAt(i,0)).equals(ip) && ((String)downloadtable.getValueAt(i,1)).equals(name))
+		updateConnectionStatus(ip, name, "Connecting...");
+	Object[] newRow = new Object[4];
+	newRow[0] = ip;
+	newRow[1] = name;
+	newRow[2] = "Connecting...";
+	newRow[3] = "0% Complete";
+	downloadModel.addRow(newRow);
+    }
+
+    public static void updateConnectionStatus(IPAddress ip, String name, String status)
+    {
+	for (int i = 0; i < downloadtable.getRowCount(); i++)
+	    if (((IPAddress)downloadtable.getValueAt(i,0)).equals(ip) && ((String)downloadtable.getValueAt(i,1)).equals(name))
+		{
+		    downloadModel.setValueAt(status,i,2);
+		    break;
+		}
+    }
+    
+    public static void updateFileTransferStatus(IPAddress ip, String name, int percent)
+    {
+	for (int i = 0; i < downloadtable.getRowCount(); i++)
+	    if (((IPAddress)downloadtable.getValueAt(i,0)).equals(ip) && ((String)downloadtable.getValueAt(i,1)).equals(name))
+		{
+		    downloadModel.setValueAt((String)(percent + "% Complete"), i, 3);
+		    break;
+		}
+    }
+
+    class DownloadAction implements ActionListener
+    {
+	public void actionPerformed(ActionEvent event)
+	{
+	    int rowIndex = table.getSelectedRow();
+	    Integer index = (Integer) table.getValueAt(rowIndex,0);
+	    String name = (String) table.getValueAt(rowIndex,1);
+	    String ip = (String) table.getValueAt(rowIndex,3);
+	    Integer port = (Integer) table.getValueAt(rowIndex,4);
+	    Downloader downloader = new Downloader(index.intValue(), name, ip, port.intValue());
+	    downloader.start();
+	}
+    }
+    
+    class SearchAction implements ActionListener
+    {
+	public void actionPerformed(ActionEvent event)
+	{
+	    Query a = new Query (0, searchField.getText()); // All searches are minimum speed 0 for now...
+	    NetworkManager.writeToAll(a);
+	    Searcher.addSearch(a);
+	}
+    }
+    
+    class ClearAction implements ActionListener
+    {
+	public void actionPerformed(ActionEvent event)
+	{
+	    searchModel.setRowCount(0);
+	    downloadModel.setRowCount(0);
+	    Searcher.clear();
+	}
+    }
+}		   
+
+	      
+ 
+
+
+/*
+  Network Manager - started by main
+*/
+import java.net.*;
+import java.io.*;
+import java.util.Arrays;
+
+public class NetworkManager
+{
+  public static void writeToOne(IPAddress ip, Packet packet)
+  {
+    if (HostArray.isLive(ip))
+    {
+      Connection connection = HostArray.getConnection(ip);
+      try
+      {
+        connection.getByteWriter().write (packet.contents(), 0, packet.totalLength());
+        connection.getByteWriter().flush();
+      }
+      catch (IOException e)
+      {
+        try
+        {
+          connection.getSocket().close();
+          HostArray.removeConnection(ip);
+        }
+        catch (IOException exception)
+        {
+          System.err.println(exception);
+        }
+      } 
+    }
+  }
+  
+  
+
+  public static void writeToAll(Packet packet)
+  {
+    for (int i = 0; i < HostArray.getCount(); i++)
+    {
+      Connection c = HostArray.getConnection(i);
+      try
+      {
+        c.getByteWriter().write (packet.contents(), 0, packet.totalLength());
+        c.getByteWriter().flush();
+      }
+      catch (IOException e)
+      {
+        try
+        {
+          c.getSocket().close();
+          HostArray.removeConnection(c);
+        }
+        catch (IOException exception)
+        {
+          System.err.println(exception);
+        }
+      }
+    }
+  }
+
+
+  public static void writeButOne(IPAddress ip, Packet packet)
+  {
+    for (int i = 0; i < HostArray.getCount(); i++)
+    {
+      Connection c = HostArray.getConnection(i);
+      if (!(c.compareConnections(ip)))
+      {
+        try
+        {
+          c.getByteWriter().write (packet.contents(), 0, packet.totalLength());
+          c.getByteWriter().flush();    
+        }
+        catch (IOException e)
+        {
+          try
+          {
+          c.getSocket().close();
+          HostArray.removeConnection(c);
+          }
+          catch (IOException exception)
+          {
+            System.err.println(exception);
+          }
+        }
+      }
+    }
+  }
+        
+  public static void notify(IPAddress ip) // Remove socket from open connection list, based on its IP.
+  {
+    if (HostArray.isLive(ip))
+    {
+	System.out.println("Killing " + ip);
+      Connection c = HostArray.getConnection(ip);
+      try
+      {
+        c.getSocket().close();
+        HostArray.removeConnection(c);
+      }
+      catch (IOException e)
+      {
+        System.err.println(e);
+      }
+    }
+  }
+}
+
+
+
+import java.net.*;
+import java.io.*;
+import java.util.Arrays;
+
+public class Connector extends Thread
+{
+  public String GREETING = "GNUTELLA CONNECT/0.4";
+  public String READY = "GNUTELLA OK";
+  public byte[] greeting = (GREETING + "\n\n").getBytes();
+  public byte[] ready = (READY + "\n\n").getBytes();
+    
+  private Connection connection;
+  
+  private static int TIMEOUT = 10000;
+
+  // Constructor for making a connection to a servent
+  public Connector (String aHost, int aPort, int t)
+  {
+    try
+    {
+      Socket socket = new Socket(aHost, aPort);
+      
+      connection = new Connection(socket, Connection.OUTGOING);
+    }
+    catch (IOException e) {} // This will be caught in the run method's exception if something bad happened.
+  }
+
+  public Connector (String aHost, int aPort)
+  {
+    this(aHost, aPort, TIMEOUT);
+  }
+
+  public void run()
+  {
+    try
+    {
+      System.out.println("Connecting to " + connection.getIPAddress());
+	
+      connection.getByteWriter().write(greeting, 0, greeting.length);
+      connection.getByteWriter().flush();
+	
+      String incoming = connection.getTextReader().readLine();
+      String newline = connection.getTextReader().readLine();
+        
+      if (incoming == null || incoming.indexOf(READY) == -1)
+	    {
+        return;
+	    }
+      else
+	    {
+        HostArray.addConnection(connection);
+        
+        Server server = new Server(connection);
+        server.start();
+	    }
+    }
+    catch (Exception e)
+    {
+	    System.out.println("Connection failed.");
+    }
+  }
+}
+
+  
+
+
+
+
+    
+/**
+   Connection object
+   Socket, IPAddress, Reader, Writer
+   Whoever calls should catch IOExceptions
+*/
+import java.net.*;
+import java.io.*;
+
+public class Connection
+{
+  public static int INCOMING = 1;
+  public static int OUTGOING = 2;
+    public static int DOWNLOADING = 3;
+    public static int UPLOADING = 4;
+  
+  private Socket socket;
+  private int status;
+  private IPAddress ip;
+  private BufferedReader textReader;
+  private BufferedInputStream byteReader;
+  private BufferedOutputStream byteWriter;
+  
+  public Connection(Socket socket, int status) throws IOException
+  {
+    this.socket = socket;
+    this.status = status;
+    
+    int port = socket.getPort();
+    byte[] ipbytes = socket.getInetAddress().getAddress();
+    int[] ipints = new int[4];
+    for (int i = 0; i < 4; i++)
+      ipints[i] = ((int)(ipbytes[i]) & 0xff);
+    
+    ip = new IPAddress(ipints[0], ipints[1], ipints[2], ipints[3], port);
+    textReader = new BufferedReader (new InputStreamReader (socket.getInputStream()));
+    byteReader = new BufferedInputStream (socket.getInputStream());
+    byteWriter = new BufferedOutputStream (socket.getOutputStream());
+  }
+  
+  public int getStatus()
+  {
+      return (status);
+  }
+
+    public void changeStatus(int status)
+    {
+	this.status = status;
+    }
+  
+  public Socket getSocket()
+  {
+    return socket;
+  }
+  
+  public IPAddress getIPAddress()
+  {
+    return ip;
+  }
+  
+  public BufferedReader getTextReader()
+  {
+    return textReader;
+  }
+  
+  public BufferedInputStream getByteReader()
+  {
+    return byteReader;
+  }
+  
+  public BufferedOutputStream getByteWriter()
+  {
+    return byteWriter;
+  }
+  
+  public void setSocket(Socket socket)
+  {
+    this.socket = socket;
+  }
+  
+  public void closeTextReader() throws IOException
+  {
+    textReader.close();
+  }
+  
+  public void closeByteReader() throws IOException
+  {
+    byteReader.close();
+  }
+  
+  public void closeByteWriter() throws IOException
+  {
+    byteWriter.close();
+  }
+  
+  public void closeStreams() throws IOException
+  {
+    this.closeTextReader();
+    this.closeByteReader();
+    this.closeByteWriter();
+  }
+  
+  public boolean compareConnections(IPAddress ip)
+  {
+    if (ip.equals(this.getIPAddress())) return true;
+    else return false;
+  }
+}
+
+import java.io.*;
+import java.net.*;
+
+public class Downloader extends Thread
+{
+    private int myindex;
+    private String myname;
+    private String myip;
+    private int myport;
+    private boolean oktodownload = false;
+    private int filesize = 0;
+
+    public Downloader (int index, String name, String ip, int port)
+    {
+	myindex = index;
+	myname = name;
+	myip = ip;
+	myport = port;
+    }
+
+    public void run()
+    {
+	try
+	    {System.out.println("Downloader started.");
+		Socket s = new Socket(myip, myport);
+		Connection connection = new Connection(s, Connection.DOWNLOADING);
+
+		Searcher.addFileTransfer(connection.getIPAddress(), myname);
+
+		String greetstring = ("GET /get/" + myindex + "/" + myname + " HTTP/1.0\r\nConnection: Keep-Alive\r\nRange: bytes=0-\r\n\r\n"); 
+		byte[] greeting = greetstring.getBytes();
+
+		connection.getByteWriter().write(greeting, 0, greeting.length);
+		connection.getByteWriter().flush();
+		
+		String responseline;
+
+		while (!((responseline = connection.getTextReader().readLine()).equals(""))) // Run through the HTTP header
+		    {
+			responseline = connection.getTextReader().readLine();
+			if (responseline.startsWith("Content-length: "))
+			    {
+				filesize = Integer.parseInt(responseline.substring(16)); // Start reading right after the space
+				oktodownload = true;
+				Searcher.updateConnectionStatus(connection.getIPAddress(), myname, "Received handshake...");
+			    }
+		    }
+
+		if (oktodownload)
+		    {
+			File towrite = new File((SharedDirectory.getOurSavePath().getPath() + File.separatorChar + myname));
+			if (towrite.createNewFile())
+			    {
+				BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(towrite));
+				Searcher.updateConnectionStatus(connection.getIPAddress(), myname, "Downloading...");
+				for (int i = 0; i < filesize; i++)
+				    {
+				    out.write((byte)connection.getByteReader().read());
+				    if (((i % 10000) == 0) && (i != 0)) // Give the user an update every 10 kb of downloading.
+					// Good Lord, Java's typecasting leads to absurd parentheses! -------------v
+					Searcher.updateFileTransferStatus(connection.getIPAddress(), myname, ((int)((((double)i) / filesize) * 100)));
+				    }
+				Searcher.updateFileTransferStatus(connection.getIPAddress(), myname, 100);
+				Searcher.updateConnectionStatus(connection.getIPAddress(), myname, "Complete.");
+			    }
+			else
+			    {
+				Searcher.updateConnectionStatus(connection.getIPAddress(), myname, "Unable to create new file in shared directory.");
+			    }
+		    }
+		else
+		    {
+			Searcher.updateConnectionStatus(connection.getIPAddress(), myname, "Bad HTTP handshake.");
+		    }
+	    }
+	catch (IOException e)
+	    {
+		System.out.println("Unable to connect.");
+	    }
+    }
+}
+		
+
+
+
+import java.net.*;
+import java.io.*;
+import java.util.Arrays;
+
+public class Listener extends Thread
+{
+  private static int LISTENING_PORT = 6346;
+  
+  public Connection connection;
+  
+  public static String GREETING = "GNUTELLA CONNECT/0.4";
+  public static String READY = "GNUTELLA OK";
+  public static String BUSY = "GNUTELLA BUSY";
+  public static byte[] greeting = (GREETING + "\n\n").getBytes();
+  public static byte[] ready = (READY + "\n\n").getBytes();
+  public static byte[] busy = (BUSY + "\n\n").getBytes();
+
+  public void run()
+  {
+    try
+	{
+	    ServerSocket ss = new ServerSocket(LISTENING_PORT);
+      	    
+	    while (true)
+		{
+		    Socket socket = ss.accept();
+		    connection = new Connection(socket, Connection.INCOMING);
+		    
+		    String incoming = connection.getTextReader().readLine();
+		    if (incoming == null) continue;
+		    else if (incoming.indexOf(GREETING) == -1)
+        {
+			    DownloadServer downloadserver = new DownloadServer(connection, incoming);
+			    downloadserver.start();
+			    continue;
+        }
+        else if (HostArray.getCount() >= Preferences.MAX_LIVE)
+        {
+ 			    connection.getTextReader().readLine(); // Gets rid of the extra newline
+			    connection.getByteWriter().write(busy, 0, busy.length);
+			    connection.getByteWriter().flush();
+        }
+		    else
+        {
+			    connection.getTextReader().readLine(); // Gets rid of the extra newline
+          connection.getByteWriter().write(ready, 0, ready.length);
+			    connection.getByteWriter().flush();
+			    
+			    HostArray.addConnection(connection);
+          Server server = new Server(connection);
+			    server.start();
+			}
+		}
+	}
+    catch (IOException e)
+	{
+	    System.out.println(e.getMessage());
+	}
+  }
+}
+
+/*
+  Tries to connect periodically to the hosts int the HostCache
+*/
+
+public class PeriodicConnector extends Thread
+{
+    private static boolean execute;  
+    
+    public PeriodicConnector(boolean execute)
+    {
+	this.execute = execute;
+    }
+
+    public void run()
+    {
+	while (true)
+	    {
+		if ((HostArray.getCount() > 5) || !execute) continue;
+		
+		for (int i = 0; i < HostCache.getCount(); i++)
+		    {
+			String ipString = HostCache.getIP(i);
+			if (!(HostArray.isLive(ipString)))
+			    {
+				HostCache.connectHost(i);
+			    }
+			
+			try
+			    {
+				sleep (10000);
+			    }
+			catch (Exception e)
+			    {
+				System.out.println(e.getMessage());
+			    }
+		    }
+	    }
+    }
+    
+    public static void turnOn()
+    {
+	execute = true;
+    }
+    
+    public static void turnOff()
+    {
+	execute = false;
+    }
+}
+
+
+
+
+public class Pinger extends Thread
+{
+    static int hosts = 0;
+    static int totalkb = 0;
+    static int totalfiles = 0;
+    static Ping myping;
+
+    public void run()
+    {
+	while(true)
+	    {
+		try
+		    {
+			sleep(30000);
+		    }
+		catch (Exception e)
+		    {
+			System.out.println(e.getMessage());
+		    }
+		Searcher.updateInfo(hosts, totalkb, totalfiles);
+		myping = new Ping();
+		hosts = 0;
+		totalkb = 0;
+		totalfiles = 0;
+		NetworkManager.writeToAll(myping);
+	    }
+    }
+
+    public static void inform(Pong pong)
+    {
+	if (pong.compare(myping))
+	    {
+		hosts++;
+		totalfiles += pong.getNumFiles();
+		totalkb += pong.getKb();
+	    }
+    }
+	
+}
+import java.util.*;
+import java.io.*;
+
+public class DownloadServer extends Thread
+{
+    Connection myconnection;
+    String incoming;
+
+    public DownloadServer(Connection c, String incoming)
+    {
+	c.changeStatus(Connection.UPLOADING);
+	myconnection = c;
+	this.incoming = incoming;
+    }
+
+    public void run()
+    {
+	StringTokenizer st = new StringTokenizer(incoming, "/");
+	if ((st.countTokens() == 5) &&
+	    (st.nextToken().equals("GET ")) &&
+	    (st.nextToken().equals("get")))
+	    {
+		int index = Integer.parseInt(st.nextToken());
+		String filename = st.nextToken();
+	
+		if ((index > 0) && (filename.endsWith(" HTTP")))
+		    {
+			filename = filename.substring(0, (filename.length() - 5));
+			if (SharedDirectory.validate(index, filename))
+			    {
+				File tosend = SharedDirectory.getFile(index);
+				int size = SharedDirectory.getFileSize(index);
+				String responsestring = ("HTTP 200 OK\r\nServer: Marmalade\r\nContent-type: application/binary\r\nContent-length: " +
+							 size + "\r\n\r\n");
+				byte[] response = responsestring.getBytes();
+
+				try
+				    {
+					myconnection.getByteWriter().write(response, 0, response.length);
+					myconnection.getByteWriter().flush();
+					BufferedInputStream in = new BufferedInputStream(new FileInputStream(tosend));
+					for (int i = 0; i < size; i++)
+					    {
+						myconnection.getByteWriter().write((byte)in.read());
+					    }
+					myconnection.getByteWriter().close();
+				    }
+				catch (Exception e)
+				    {
+					System.out.println("Unable to upload file.");
+				    }
+				    
+			    }
+		    }
+	    }
+    }
+}
+import java.io.*;
+import java.net.*;
+
+class Server extends Thread
+{
+    BufferedInputStream in;
+    IPAddress mine;
+    
+    public Server(Connection c)
+    {
+      in = c.getByteReader();
+      mine = c.getIPAddress();
+    }
+    
+  public void run()
+  {
+    while (true)
+    {
+      try
+      {
+        if (in.available() < Packet.HEADER_LENGTH)
+			    continue;
+        byte[] temp = new byte[Packet.HEADER_LENGTH];
+
+        for (int i = 0; i < Packet.HEADER_LENGTH; i++)
+			    temp[i] = (byte)in.read();
+        Packet header = new Packet(temp);
+
+        if ((header.identify() != Packet.PONG) && (header.identify() != Packet.PING) &&
+            (header.identify() != Packet.QUERY) && (header.identify() != Packet.QUERYHIT))
+			    break; // If the data is not something we expect, die.
+
+        byte[] newpacket = new byte[(header.length() + Packet.HEADER_LENGTH)]; /* The syntax here is unfortunate, because headers don't store
+												  their own size. */
+        header.decrementTtl();
+        header.incrementHops();
+
+        for (int i = 0; i < Packet.HEADER_LENGTH; i++) // First fill the packet with the header.
+			    newpacket[i] = temp[i];
+        for (int i = Packet.HEADER_LENGTH; i < (header.length() + Packet.HEADER_LENGTH); i++) // Then fill the rest.
+			    newpacket[i] = (byte)in.read();
+
+        if (header.getTtl() < 0) // Kill old packets (but only after we've removed them from the input stream).
+			    continue;
+
+        if (header.identify() == Packet.PING) // We don't have to do any packet construction if all we've got is a Ping.
+        {
+          Ping ping = new Ping(newpacket);
+          PingHandler handler = new PingHandler(mine, ping);
+          handler.start();
+          continue;
+        }
+
+        if (header.identify() == Packet.PONG)
+        {
+          Pong pong = new Pong(newpacket);
+          PongHandler handler = new PongHandler(mine, pong);
+          handler.start();
+          Pinger.inform(pong);
+          continue;
+        }
+        else if (header.identify() == Packet.QUERY)
+        {
+          Query query = new Query(newpacket);
+          QHandler handler = new QHandler(mine, query);
+          handler.start();
+          continue;
+        }
+        else
+        {
+          QueryHit queryhit = new QueryHit(newpacket);
+          QHitHandler handler = new QHitHandler(mine, queryhit);
+          handler.start();
+          Searcher.inform(mine, queryhit);
+        }
+      }
+      catch (Exception e)  // If there's a problem, we just die.
+      {
+        break;
+      }
+    }
+    NetworkManager.notify(mine);
+  }
+}
+
+import java.util.*;
+
+class PingHandler extends Thread
+{
+    public static Map pt;  //ping table    
+    Ping ping;
+
+    public PingHandler (IPAddress pingIP, Ping ping)
+    {
+	this.ping = ping;
+	ping.setIP (pingIP);  //set ping's IP Address
+    }
+
+    public static void initPingTable()
+    {
+	pt = new Hashtable (5000);
+    }
+
+    public void run()
+    {
+	if (!pt.containsKey(ping))  //check that ping is not already in table
+	    {
+		NetworkManager.writeButOne(ping.getIP(), ping);
+		pt.put ((Packet) ping, ping);
+		Pong response = new Pong(Mine.getPort(), Mine.getIPAddress(), SharedDirectory.getOurNumFiles(),
+					 SharedDirectory.getOurKb(), ping.getMessageID());
+		NetworkManager.writeToOne(ping.getIP(), response);
+	    }
+    }
+}
+
+
+
+/**Similar to QHitHandler, PongHandler will process pongs that match pings forwarded
+   by us, not pings that originated with Pinger.*/
+
+class PongHandler extends Thread
+{
+    Pong pong;
+    IPAddress pingIP;
+    IPAddress ip;
+    Ping pingMatch;
+
+    public PongHandler (IPAddress ip, Pong pong)
+    {
+	this.pong = pong;
+	this.ip = ip;
+    }
+
+    public void run()
+    {
+	if (PingHandler.pt.containsKey(pong))
+	    {
+		pingMatch = (Ping) PingHandler.pt.get((Packet) pong); /**Matching pong is used as key to obtain original ping.*/
+		pingIP = pingMatch.getIP();
+		NetworkManager.writeToOne (pingIP, pong);
+	    }
+    }
+}
+
+
+
+import java.util.*;
+
+class QHandler extends Thread
+{
+    //static variables
+    public static Map qt;  //query table
+
+    //instance variables
+    Query query;
+    QueryHit queryHit;
+    IPAddress myIP;
+    IPAddress queryIP; 
+    ResultSet searchResult;
+    int numHits;
+    int port;
+    int speed;
+    ResultSet result;
+    byte[] serventID;
+    byte[] queryID;
+   
+    public QHandler (IPAddress queryIP, Query query)
+    {
+	this.query = query;
+	query.setIP(queryIP);  //set IPAddress of query
+    }
+
+    public static void initQueryTable()
+    {
+	qt = new Hashtable (5000);
+    }
+
+    //QHandler handles incoming queries.  
+    public void run()
+    {
+	//hmmm.. this seems like potential bug.  I want to check that query is not in table.  But even if query table contains key,
+	//that does not necessarily mean it is in table, b/c two queries can have SAME HASHCODE VALUE.  I need to have some other means.
+	//Will talk to Rusty @ this on Monday.
+
+	if (!qt.containsKey(query)) //check that query is not already in table
+	    {
+		Searcher.inform(query); // Give information to the Search Monitor panel
+		NetworkManager.writeButOne(query.getIP(), query);  /*Query is forwarded to all connected nodes
+								     except one from which query came. */
+		qt.put((Packet) query, query);    //add query to table, indexed by its unique MessageID
+		searchResult = SharedDirectory.search(query.getSearchString());  //check shared directory for query match
+		numHits = searchResult.getSize();
+
+		if (numHits != 0)   //package a query hit to send out if there is at least one query match
+		    {
+			queryID = query.getMessageID();
+			port = Mine.getPort();
+			myIP = Mine.getIPAddress();
+			speed = Mine.getSpeed();
+			serventID = Mine.getServentIdentifier();
+			queryHit = new QueryHit(numHits, port, myIP, speed, searchResult, serventID, queryID);
+			NetworkManager.writeToOne(query.getIP(), queryHit);  //send qHit back to node that sent original query
+		    }
+	    }
+    }
+}
+
+
+
+
+import java.util.*;
+
+/**QHitHandler will process query hits that match queries forwarded by us, not queries
+   that originated from us (which will be handled by searcher).*/
+
+class QHitHandler extends Thread
+{
+    //instance variables
+    QueryHit queryHit;
+    IPAddress queryIP;   /**ipAddress of original query is what matters.  We need this
+		            to route queryHit appropriately*/
+    IPAddress ip;   //ipAddress of node that sent query hit.  Not important.
+    Query queryMatch;
+
+    public QHitHandler (IPAddress ip, QueryHit queryHit)
+    {
+	this.queryHit = queryHit; 
+	this.ip = ip; 
+    }
+
+    public void run()
+    {
+	if (QHandler.qt.containsKey(queryHit)) //note that this time we check for presence of query in table
+	    {
+		queryMatch = (Query) QHandler.qt.get((Packet) queryHit);  /**Matching query hit is used as the key to
+									     obtain the original query.*/
+		queryIP = queryMatch.getIP();  //Get original query in order to extract its addressing information.
+		NetworkManager.writeToOne(queryIP, queryHit);  //Pass qHit and addressing information onto Network Manager.
+	    }
+    }
+}
+
+
+import java.io.*;
+import java.net.*;
+import java.util.Arrays;
+
+public class HostArray
+{
+    private static Connection[] hosts;
+  
+    public static boolean isNull()
+    {
+	if (hosts == null) return true;
+	else return false;
+    }
+    
+    public static synchronized int getCount()
+    {
+	if (isNull()) return 0;
+	else return hosts.length;
+    }
+    
+    public static synchronized void addConnection(Connection c)
+    {
+	if (isNull())
+	    {
+		hosts = new Connection[1];
+		hosts[0] = c;
+	    }
+	else if (!isLive(c))
+	    {
+		Connection[] temp = new Connection[hosts.length + 1];
+		System.arraycopy(hosts, 0, temp, 0, hosts.length);
+		temp[hosts.length] = c;
+		hosts = temp;
+      }
+    }
+
+    public static synchronized void removeConnection(Connection c)
+    {
+	removeConnection(c.getIPAddress());
+    }
+    
+    public static synchronized void removeConnection(IPAddress ip)
+    {
+	if (!(isNull()) && isLive(ip))
+	    {
+		Connection[] temp = new Connection[hosts.length - 1];
+		int j = 0;
+		for (int i = 0; i < hosts.length; i++)
+		    {
+          if (ip.equals(hosts[i].getIPAddress())) 
+          {
+            continue;
+          }
+          temp[j] = hosts[i];
+			j++;
+		    }
+		hosts = temp;
+	    }
+    }
+    
+    public static synchronized Connection getConnection(int i)
+    {
+	if ((!isNull() && (i < getCount())))
+	    return hosts[i];
+	else return null;
+    }
+    
+    public static synchronized Connection getConnection(IPAddress ip)
+    {
+	Connection c = null;
+	for (int i = 0; i < hosts.length; i++)
+	    {
+		if (ip.equals(hosts[i].getIPAddress())) c = hosts[i];
+	    }
+	return c;
+    }
+    
+  public static synchronized boolean isLive(String ipString)
+  {
+    if (!isNull())
+    {
+      for (int i = 0; i < hosts.length; i++)
+      {
+        InetAddress inet = hosts[i].getSocket().getInetAddress();
+        if ((ipString.equals(inet.getHostName())) || (ipString.equals(inet.getHostAddress())))
+	    return true;
+      }
+      return false;
+    }
+    else return false;
+  }
+  
+
+    public static synchronized boolean isLive(Connection c)
+    {
+	return (isLive(c.getIPAddress()));
+    }
+    
+    public static synchronized boolean isLive(IPAddress ip)
+    {
+	for (int i = 0; i < hosts.length; i++)
+	    {
+		if (ip.equals(hosts[i].getIPAddress())) return true;
+	    }
+	return false;
+    }
+}
+
+
+
+
+/*
+  Host cache - list of IP addresses to load on start up
+*/
+import java.util.Arrays;
+
+public class HostCache
+{
+  private static Host[] hosts;
+  
+  public static void loadCache()
+  {
+    hosts = new Host[(Preferences.HOSTS_CACHE).length];
+    System.arraycopy(Preferences.HOSTS_CACHE, 0, hosts, 0, (Preferences.HOSTS_CACHE).length);
+  }
+  
+  
+  public static synchronized int getCount()
+  {
+    if (isNull()) return 0;
+    else return (hosts.length);
+  }
+  
+  public static String getIP(int i)
+  {
+    return (hosts[i].getName());
+  }
+  
+  public static int getPort(int i)
+  {
+    return (hosts[i].getPort());
+  }
+
+  public static boolean isNull()
+  {
+    if (hosts == null) return true;
+    else return false;
+  }
+
+  public static void addConnection(Connection c)
+  {
+    Host h = new Host(c.getIPAddress().toString(), c.getIPAddress().getPort());
+    addHost(h);
+  }
+  
+  public static synchronized void addHost(Host h)
+  {
+    if (isNull())
+	  {
+      hosts = new Host[1];
+      hosts[0] = h;
+      System.out.println("Host added in HostCache " + h.getName());
+ 	  }
+    else if (!isPresent(h))
+	  {
+      Host[] temp = new Host[hosts.length + 1];
+      System.arraycopy(hosts, 0, temp, 0, hosts.length);
+      temp[hosts.length] = h;
+      hosts = temp;
+      System.out.println("Host added in HostCache " + h.getName() + " total hosts " + getCount());
+ 	  }
+  }
+
+  public static void removeConnection(Connection c)
+  {
+    Host h = new Host(c.getIPAddress().toString(), c.getIPAddress().getPort());
+    removeHost(h);
+  }
+
+  public static synchronized void removeHost(Host h)
+  {
+    if (!(isNull()) && isPresent(h))
+    {
+      Host[] temp = new Host[hosts.length - 1];
+      int j = 0;
+      for (int i = 0; i < hosts.length; i++)
+      {
+        if (h.equals(hosts[i])) continue;
+        temp[j] = hosts[i];
+        j++;
+      }
+      hosts = temp;
+      System.out.println("Host removed in HostCache " + h.getName() + " Hosts left " + getCount());
+    }
+  }
+
+  public static synchronized boolean isPresent(Host h)
+  {
+    for (int i = 0; i < hosts.length; i++)
+    {
+      if (h.equals(hosts[i])) return true;
+    }
+    return false;
+  }
+
+  public static void connectHost(int i)
+  {
+    if (!isNull())
+    {
+      System.out.println("Attempting to connect to " + getIP(i) + ":" + getPort(i));
+      Connector connector = new Connector(getIP(i), getPort(i), 20000);
+      connector.start();
+    }
+  }
+}
+
+
+
+
+
+    
+      
+/*
+  Lame way to get local IP address. Java's localHost method returns
+  127.0.0.1; s this opens a socket to Sun' web server.
+*/
+import java.net.*;
+
+public class Mine
+{
+  static  int port  = 6346;
+  static  String  ipString = "127.0.0.1";
+  static  IPAddress ipObject = new IPAddress(127,0,0,1,6346);
+    static  byte[] serventID = new byte[16];
+    
+  public static void updateAddress()
+  {
+    try
+    {
+      Socket s = new Socket("java.sun.com", 80);
+      ipString = s.getLocalAddress().getHostAddress();
+      System.out.println("Local address: " + ipString);
+      byte[] ipbytes = s.getLocalAddress().getAddress();
+      ipObject = new IPAddress(ipbytes[0], ipbytes[1], ipbytes[2], ipbytes[3], port);
+      for (int i = 0; i < 16; i++)
+	  serventID[i] = ipbytes[i % 4];
+      s.close();
+    }
+    catch (Exception e)
+    {
+    }
+  }
+
+    public static IPAddress getIPAddress()
+    {
+      return ipObject;
+    }
+  
+    public static byte[] getServentIdentifier()
+    {
+	return serventID;
+    }
+		    
+  public static int getPort()
+  {
+    return port;
+  }
+
+    public static int getSpeed()
+    {
+	return (128);
+    }
+
+}
+
+class Packet
+{
+    public static final int HEADER_LENGTH = 23;
+    public static final byte PING = 0;
+    public static final byte PONG = 1;
+    public static final byte QUERY = -128; // Twos complement for 128 -- could also try (byte)128
+    public static final byte QUERYHIT = -127; // Likewise for 129 -- could also try (byte)129
+    public static final byte TTL = 7; // Standard Time to Live for a new packet
+    public static final byte HOPS = 0; // All new packets start at zero hops
+
+    protected byte[] contents;
+
+    public Packet(byte payload, int length)
+    {
+	contents = new byte[length + HEADER_LENGTH]; // Length does _not_ include the length of the descriptor, so we have to put it in here.
+
+	for (int i = 0; i < 16; i++)
+	    {
+		contents[i] = (byte)((255 * Math.random()) - 128); // Unique Message ID, and more twos complement problems
+	    }
+	contents[16] = payload; //Payload descriptor
+	contents[17] = TTL; // Time to Live
+	contents[18] = HOPS; // Hops so far
+	contents[22] = (byte)(length >>> 24); // Extract the biggest byte of the integer
+	contents[21] = (byte)((length & 0xffffff) >>> 16); // Extract the 2nd byte
+	contents[20] = (byte)((length & 0xffff) >>> 8); // Ditto the third
+	contents[19] = (byte)(length & 0xff); // Last byte
+    }
+
+    public Packet(byte[] rawdata)
+    {
+	contents = rawdata;
+    }
+
+    public byte identify() // Identifies the type of packet.  Compare to Packet.PING, Packet.QUERYHIT, etc.
+    {
+	return (contents[16]);
+    }
+
+    public int length() // Upshift each byte while masking out the awful Java sign extension, then bitwise OR them all together.
+    {
+	int length = (((contents[22] & 0xff) << 24) | ((contents[21] & 0xff) << 16) | ((contents[20] & 0xff) << 8) | (contents[19] & 0xff));
+	return (length);
+    }
+
+  public int totalLength()
+  {
+    return (this.length() + HEADER_LENGTH);
+  }
+  
+
+    public int getTtl()
+    {
+	return ((int)contents[17]);
+    }
+
+    public int getHops()
+    {
+	return ((int)contents[18]);
+    }
+
+    public void decrementTtl()
+    {
+	(contents[17])--;
+    }
+
+    public void incrementHops()
+    {
+	(contents[18])++;
+    }
+    
+    public byte[] contents()
+    {
+	return (contents);
+    }
+
+    public boolean compare(Packet tocompare)
+    {
+	for (int i = 0; i < 16; i++)
+	    {
+		if (contents[i] != tocompare.contents[i])
+		    return (false);
+	    }
+	return(true);
+    }
+
+    //method to obtain messageID from packet
+    public byte[] getMessageID()
+    {
+	byte[] messageID = new byte[16];
+	for (int i = 0; i < 16; i++)
+	    {
+		messageID[i] = contents[i];
+	    }
+	return (messageID);
+    }
+    //	messageID = System.arraycopy(contents, 0, messageID, 0, 16);
+
+    public int hashcode()
+    {
+	int hashcode = 0;
+	for (int i = 0; i < 16; i++)
+	    {
+		hashcode += (int) contents[i];
+	    }
+	return (hashcode);
+    }
+
+    public boolean equals (Packet p)
+    {
+	for (int i = 0; i < 16; i++)
+	    {
+		if (contents[i] != p.contents[i])
+		    return (false);
+	    }
+	return(true);
+    }	
+}
+
+public class Ping extends Packet
+{
+    private IPAddress ip;  /**need to store ip address in order to properly
+			      route matching pong*/
+			      
+    public Ping()
+    {
+	super(Packet.PING, 0);
+    }
+
+    public Ping(byte[] rawdata)
+    {
+	super(rawdata);
+    }
+    
+    public IPAddress getIP()
+    {
+	return (ip);
+    }
+
+    public void setIP(IPAddress ip)
+    {
+	this.ip = ip;
+    }
+}
+public class Pong extends Packet
+{
+  private int index = HEADER_LENGTH;
+
+    public Pong(int port, IPAddress ip, int numberOfFiles, int kb, byte[] messageid)
+    {
+	super(Packet.PONG, 14);
+  
+	for (int i = 0; i < messageid.length; i++) // Pongs need the same Message IDs as the pings that generate them.
+	    contents[i] = messageid[i];
+
+	// convert port to two bytes
+	contents[index + 0] = (byte)(port >>> 8);
+	contents[index + 1] = (byte)(port & 0xff);
+	
+	// convert ip address to 4 bytes; need to check format of ip
+	// address -- Little Endian????
+	contents[index + 2] = (byte)ip.getFirst();
+	contents[index + 3] = (byte)ip.getSecond();;
+	contents[index + 4] = (byte)ip.getThird();
+	contents[index + 5] = (byte)ip.getFourth();
+	
+	// convert number of files  to 4 bytes
+	contents[index + 9] = (byte)(numberOfFiles >>> 24);
+	contents[index + 8] = (byte)((numberOfFiles & 0xffffff) >>> 16);
+	contents[index + 7] = (byte)((numberOfFiles & 0xffff) >>> 8);
+	contents[index + 6] = (byte)(numberOfFiles & 0xff);
+	
+	// convert total kilobytes to 4 bytes
+	contents[index + 13] = (byte)(kb >>> 24);
+	contents[index + 12] = (byte)((kb & 0xffffff) >>> 16);
+	contents[index + 11] = (byte)((kb & 0xffff) >>> 8);
+	contents[index + 10] = (byte)(kb & 0xff);
+    }
+
+    public Pong(byte[] rawdata)
+    {
+	super(rawdata);
+    }
+
+    public int getPort()
+    {
+	int port = (((contents[index + 1] & 0xff) << 8) | (contents[index + 0] & 0xff));
+	return (port);
+    }
+
+    public IPAddress getIP()
+    {
+	return (new IPAddress((contents[index + 2] & 0xff), (contents[index + 3] & 0xff), (contents[index + 4] & 0xff), (contents[index + 5] & 0xff), getPort()));
+    }
+
+    public int getNumFiles()
+    {
+	int numfiles = (((contents[index + 9] & 0xff) << 24) | ((contents[index + 8] & 0xff) << 16) | ((contents[index + 7] & 0xff) << 8) | (contents[index + 6] & 0xff));
+	return (numfiles);
+    }
+
+    public int getKb()
+    {
+	int kb = (((contents[index + 13] & 0xff) << 24) | ((contents[index + 12] & 0xff) << 16) | ((contents[index + 11] & 0xff) << 8) | (contents[index + 10] & 0xff));
+	return (kb);
+    }
+}
+
+
+
+public class Query extends Packet
+{
+    private IPAddress ip;
+
+    public Query(int speed, String search)
+    {
+	super(Packet.QUERY, (3 + (search.length())));
+	contents[24] = (byte)(speed >>> 8); // Convert minimum speed to 2 bytes
+	contents[23] = (byte)(speed & 0xff);
+	
+	byte[] temp = new byte[search.length()];
+	temp = search.getBytes();
+	
+	int i;
+	for(i = 0; i < search.length(); i++)
+	    {
+		contents[(i + 25)] = temp[i];
+	    }
+	contents[(i + 25)] = 0; // Search strings should be 0-terminated.
+	ip = null;  //initialize IPaddress to null.
+    }
+    
+    public Query(byte[] rawdata)
+    {
+	super(rawdata);
+    }
+    
+    public IPAddress getIP()
+    {
+	return (ip);
+    }
+
+    public int getSpeed()
+    {
+	return (((contents[24] & 0xff) << 8) | (contents[23] & 0xff));
+    }
+
+    public String getSearchString()
+    {
+	String answer = "";
+	for (int i = 25; contents[i] != 0; i++)
+	    {
+		answer = answer + (char)(contents[i]);
+	    }
+	return (answer);
+    }
+
+    public void setIP(IPAddress ip)
+    {
+	this.ip = ip;
+    }
+}
+
+
+
+
+public class QueryHit extends Packet // QueryHits are a little more complicated, because we'll need to generate a result set and use a ServentID.
+{
+    public QueryHit(int numHits, int port, IPAddress ip, int speed, ResultSet result, byte[] id, byte[] messageid)
+    {
+	super(Packet.QUERYHIT, (27 + (result.getNumBytes() + (2 * result.getSize())))); // We're supposed to stick in two 0 bytes after each filename string.
+
+	for (int i = 0; i < messageid.length; i++) // QueryHits need to have the same message ID as the generating Query, so we need to pass it to the constructor.
+	    contents[i] = messageid[i];
+
+	contents[23] = (byte)numHits;
+	contents[25] = (byte)(port >>> 8);
+	contents[24] = (byte)(port & 0xff);
+	contents[26] = (byte)ip.getFirst();
+	contents[27] = (byte)ip.getSecond();
+	contents[28] = (byte)ip.getThird();
+	contents[29] = (byte)ip.getFourth();
+	contents[33] = (byte)(speed >>> 24);
+	contents[32] = (byte)((speed & 0xffffff) >>> 16);
+	contents[31] = (byte)((speed & 0xffff) >>> 8);
+	contents[30] = (byte)(speed & 0xff);
+	
+	int i = 34;
+	while (result.more())
+	    {
+		int index = result.getIndex();  // Store the file index as four separate bytes.
+		contents[i] = (byte)(index & 0xff);
+		i++;
+		contents[i] = (byte)((index & 0xffff) >>> 8);
+		i++;
+		contents[i] = (byte)((index & 0xffffff) >>> 16);
+		i++;
+		contents[i] = (byte)(index >>> 24);
+		i++;
+
+		int size = result.getFilesize(); // Store the file size as four seperate bytes.
+		contents[i] = (byte)(size & 0xff);
+		i++;
+		contents[i] = (byte)((size & 0xffff) >>> 8);
+		i++;
+		contents[i] = (byte)((size & 0xffffff) >>> 16);
+		i++;
+		contents[i] = (byte)(size >>> 24);
+		i++;
+
+		String name = result.getName(); // Convert the name string into a byte array and store it at the right place in the overall contents.
+		byte[] temp = new byte[name.length()];
+		temp = name.getBytes();
+
+		for (int j = 0; j < name.length(); j++)
+		    {
+			contents[i + j] = temp[j];
+		    }
+
+		i = i + name.length();
+		contents[i] = 0;  // Result fields are double-zero delimited.
+		i++;
+		contents[i] = 0;
+		i++;
+	    }
+	
+	// Once we've figured out ServentID, we have to put it at the end of our byte array here.
+	// For now, we fill it with zeroes.
+
+	for (int j = 0; j < 16; j++)
+	    {
+		contents[(i + j)] = id[j];
+	    }
+    }
+
+    public QueryHit(byte[] rawdata)
+    {
+	super(rawdata);
+    }
+
+    public int getNumHits()
+    {
+	return (contents[23]);
+    }
+
+    public int getPort()
+    {
+	return (((contents[25] & 0xff)<< 8) | (contents[24] & 0xff));
+    }
+
+    public IPAddress getIP()
+    {
+	return (new IPAddress((contents[26] & 0xff), (contents[27] & 0xff), (contents[28] & 0xff), (contents[29] & 0xff), (getPort())));
+    }
+
+    public int getSpeed()
+    {
+	return (((contents[33] & 0xff) << 24) | ((contents[32] & 0xff) << 16) | ((contents[31] & 0xff) << 8) | (contents[30] & 0xff));
+    }
+
+    public ResultSet getResults()
+    {
+	ResultSet results = new ResultSet((int)contents[23]); // This byte holds the number of results in the set.
+
+	int i = 34;
+	int count = 0;
+
+	while ((count < contents[23]) && (i < (totalLength() - 26))) // The last test is to catch poorly-made query hits.
+	    {
+		int index = (((contents[(i + 3)] & 0xff) << 24) | ((contents[(i + 2)] & 0xff) << 16) | ((contents[(i + 1)] & 0xff) << 8) | (contents[i] & 0xff));
+		i = i + 4;
+		int size = (((contents[(i + 3)] & 0xff) << 24) | ((contents[(i + 2)] & 0xff) << 16) | ((contents[(i + 1)] & 0xff) << 8) | (contents[i] & 0xff));
+		i = i + 4;
+
+		String name = "";
+		while (!((contents[i] == 0) && (contents[(i + 1)] == 0)))
+		    {
+			name = name + (char)contents[i];
+			i++;
+		    }
+
+		results.addResult(index, size, name);
+
+		i = i + 2; // Account for the two zero bits.
+		count++;
+	    }
+
+	return (results);
+    }
+}
+
+public class ResultSet
+{
+    private int count = 0;
+    private int size; // The number of entries in the result set.
+    private int numbytes = 0; // So that the QueryHit constructor can know how much data it will get in total.
+    private int[] indices;
+    private int[] filesizes;
+    private String[] filenames;
+
+    public ResultSet(int numfiles) // Create a ResultSet of a given size
+    {
+	size = numfiles;
+	indices = new int[numfiles];
+	filesizes = new int[numfiles];
+	filenames = new String[numfiles];
+    }
+
+    public void addResult(int index, int filesize, String name)
+    {
+	indices[count] = index;
+	filesizes[count] = filesize;
+
+	byte[] test = name.getBytes(); // Test to make sure there aren't any weird characters that could screw up our system.
+	for (int i = 0; i < test.length; i++)
+	    if ((test[i] < 32) || (test[i] > 127))
+		{
+		    name = "---Invalid Filename---";
+		    break;
+		}
+	filenames[count] = name;
+	numbytes = (numbytes + 8 + name.length()); // 4 bytes for the file index, 4 bytes for the size, and as many bytes as necessary for the name.
+	count++;
+
+	if (count == size) // If we've finished adding results, we'll set count up for retrieval.
+	    count = 0;
+    }
+
+    public int getNumBytes()
+    {
+	return (numbytes);
+    }
+
+    public int getSize()
+    {
+	return (size);
+    }
+
+    public boolean more() /* More returns true as long as the QueryHit constructor still has information to parse, provided it calls the following operations in
+			     the right order. */
+    {
+	return (count < size);
+    }
+
+    /* This is a bit complicated, but it's the best idea I have at the moment.  Once the ResultSet is full, count will be set back to zero.  Our QueryHit
+       constructor will call the next three methods *in order* over and over again so that it can build the proper byte arrays. */
+
+    public int getIndex()
+    {
+	return (indices[count]);
+    }
+
+    public int getFilesize()
+    {
+	return (filesizes[count]);
+    }
+
+    public String getName()
+    {
+	count++; // Increment the counter for the next trip through the selectors.
+	return (filenames[(count - 1)]);
+    }
+}
+/**
+   Host has a string IP address and int port
+*/
+import java.net.*;
+
+public class Host
+{
+  private String hostName;
+  private int hostPort;
+    
+  public Host(String aHostName, int aHostPort)
+  {
+    hostName = aHostName;
+    hostPort = aHostPort;
+  }
+  
+  public String getName()
+  {
+    return hostName;
+  }
+  
+  public int getPort()
+  {
+    return hostPort;
+  }
+
+  public boolean equals(Host h)
+  {
+    return ((hostName.equals(h.hostName)) && (hostPort == h.hostPort));
+  }
+}

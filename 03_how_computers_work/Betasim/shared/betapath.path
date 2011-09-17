@@ -1,0 +1,142 @@
+BusBuild "BusBuild-14" 1 "a[25:21]" 144 78
+Controlbit "gizmo" 1 340 324
+BusBuild "BusBuild-113" 1 "a[31]" 81 363
+BusBuild "BusBuild-112" 1 "a[31]" 65 363
+Constant "Constant-434" 0x80000000 13 417
+Register "pc" 70 9 33 509
+Adder "Adder-431" 5 431
+Constant "Constant-18" 1 88 77
+Switch "wdsel" 0 2 0 243 428
+Controlbit "op" 6 443 116
+Controlbit "reset" 1 146 55
+Switch "trapadr" 0 3 0 5 373
+Controlbit "output" 1 479 428
+Controlbit "int" 1 471 500
+Zerotest "Zerotest-102" 166 203
+Switch "ra2sel" 0 1 0 183 113
+Gate "Gate-114" and 2 0 67 395
+Switch "bsel" 0 1 1 194 230
+BusBuild "BusBuild-43" 2 "b[0],a[30:0]" 59 445
+Switch "gizmocmd" 0 2 0 481 334
+Mux "Mux-6" 2 210 226
+Mux "Mux-5" 2 130 216
+Mux "Mux-4" 2 202 109
+Gizmos "Gizmos-180" 380 330
+Controlbit "sup" 1 109 389
+Zerotest "Zerotest-313" 113 51
+Switch "rfen" 0 2 1 134 508
+Adder "Adder-17" 88 95
+Switch "trapsel" 0 1 0 22 480
+RegFile "rf" 134 141 161 488
+Gate "Gate-436" or 3 0 424 447
+Switch "aluop" 0 15 0 116 268
+BusBuild "BusBuild-244" 1 "a[30]" 315 309
+Controlbit "input" 1 479 414
+Switch "wasel" 0 1 0 322 173
+Switch "clock" 0 1 84391 123 432
+BusBuild "BusBuild-28" 1 "a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20:5]" 257 77
+Mux "Mux-41" 2 26 321
+BusBuild "BusBuild-24" 1 "a[9:5]" 200 77
+BusBuild "BusBuild-22" 1 "a[4:0]" 216 77
+BusBuild "BusBuild-21" 1 "a[31:26]" 404 84
+Constant "Constant-108" 30 361 144
+Controlbit "alufault" 1 197 311
+Controlbit "zero?" 1 199 207
+Mux "Mux-106" 2 345 169
+Switch "asel" 0 1 0 111 220
+Switch "pcen" 0 1 1 11 513
+Switch "memcmd" 0 2 0 118 331
+Switch "pcsel" 0 1 1 6 325
+Mux "Mux-36" 2 51 476
+Alu "Alu-12" 149 256
+Memory "mem" "./shared/new.uasm" 171 4 140 327
+Mux "Mux-33" 4 278 424
+Controlbit "timer" 1 480 401
+# NOSHOW
+
+Wire "Wire-27" "BusBuild-22.out" "Mux-4.1" "Mux-106.0" - 222 107 349 107 - 
+Wire "Wire-109" "Constant-108.Q" "Mux-106.1" - 
+Wire "Wire-25" "BusBuild-24.out" "Mux-4.0" - 
+Wire "Wire-107" "Mux-106.out" "rf.wa" 357 496 - 
+Wire "Wire-20" "Adder-17.s" "Mux-5.0" "Mux-33.0" "Mux-41.0" "BusBuild-113.a" 96 198 134 198 - 96 408 282 408 - 96 287 30 287 - 96 352 87 352 - 
+Wire "Wire-386" "Gizmos-180.int2" "output.b" "Gate-436.2" 460 432 - - 
+Wire "Wire-442" "bsel.Q" "Mux-6.s" - 
+Wire "Wire-78" "clock.Q" "mem.clk" "rf.clk" "pc.clk" "Gizmos-180.clk" 127 467 336 467 336 335 - 127 496 - 127 517 - 127 467 336 467 336 338 - 
+Wire "Wire-385" "Gizmos-180.int1" "input.b" "Gate-436.1" 444 418 - - 
+Wire "Wire-384" "Gizmos-180.int0" "timer.b" "Gate-436.0" 428 405 - - 
+Wire "Wire-440" "Zerotest-102.out" "zero?.b" - 
+Wire "Wire-19" "Constant-18.Q" "Adder-17.a" - 
+Wire "Wire-16" "BusBuild-14.out" "rf.ra1" - 
+Wire "Wire-15" "mem.Id" "BusBuild-14.a" "BusBuild-22.a" "BusBuild-24.a" "BusBuild-28.a" "BusBuild-21.a" 187 71 150 71 - 187 71 222 71 - 187 71 206 71 - 187 71 263 71 - 187 71 410 71 - 
+Wire "Wire-13" "pc.Q" "mem.Ia" "Adder-17.b" "Zerotest-313.in" 100 44 - - 100 59 - 
+Wire "Wire-10" "rf.rd2" "Mux-6.0" "mem.wD" "Gizmos-180.wD" - 214 216 274 216 - 214 216 396 216 - 
+Wire "Wire-439" "rfen.Q" "rf.wren" - 
+Wire "Wire-437" "Gate-436.out" "int.b" 444 504 - 
+Wire "Wire-435" "Constant-434.Q" "Adder-431.b" - 
+Wire "Wire-433" "Adder-431.s" "Mux-36.0" 13 462 55 462 - 
+Wire "Wire-432" "trapadr.Q" "Adder-431.a" - 
+Wire "Wire-430" "Alu-12.fault" "alufault.b" 169 315 - 
+Wire "Wire-315" "Zerotest-313.out" "reset.b" - 
+Wire "Wire-429" "aluop.Q" "Alu-12.op" - 
+Wire "Wire-428" "BusBuild-244.out" "gizmo.b" 321 328 - 
+Wire "Wire-183" "gizmocmd.Q" "Gizmos-180.cmd" - 
+Wire "Wire-181" "Gizmos-180.rD" "Mux-33.3" 396 399 330 399 - 
+Wire "Wire-45" "Mux-36.out" "pc.D" - 
+Wire "Wire-44" "BusBuild-43.out" "Mux-36.1" - 
+Wire "Wire-99" "BusBuild-21.out" "op.b" 410 120 - 
+Wire "Wire-97" "ra2sel.Q" "Mux-4.s" - 
+Wire "Wire-93" "asel.Q" "Mux-5.s" - 
+Wire "Wire-91" "wdsel.Q" "Mux-33.s" - 
+Wire "Wire-35" "mem.Dd" "Mux-33.1" 274 397 298 397 - 
+Wire "Wire-34" "Mux-33.out" "rf.wd" 306 512 - 
+Wire "Wire-117" "BusBuild-112.out" "Gate-114.0" - 
+Wire "Wire-116" "BusBuild-113.out" "Gate-114.1" "sup.b" - 87 393 - 
+Wire "Wire-32" "Alu-12.out" "mem.Da" "Mux-33.2" "Mux-41.1" "Gizmos-180.addr" "BusBuild-244.a" 189 303 105 303 105 351 - 189 303 314 303 - 189 303 46 303 - 189 303 314 303 314 354 - 189 303 321 303 - 
+Wire "Wire-115" "Gate-114.out" "BusBuild-43.b" - 
+Wire "Wire-31" "Mux-5.out" "Alu-12.a" 142 248 165 248 - 
+Wire "Wire-30" "Mux-6.out" "Alu-12.b" 222 248 213 248 - 
+Wire "Wire-111" "wasel.Q" "Mux-106.s" - 
+Wire "Wire-9" "rf.rd1" "Mux-5.1" "Zerotest-102.in" - 150 211 166 211 - 
+Wire "Wire-7" "Mux-4.out" "rf.ra2" - 
+Wire "Wire-87" "memcmd.Q" "mem.cmd" - 
+Wire "Wire-85" "Mux-41.out" "BusBuild-43.a" "BusBuild-112.a" 38 401 63 401 - 38 354 71 354 - 
+Wire "Wire-84" "pcsel.Q" "Mux-41.s" - 
+Wire "Wire-82" "trapsel.Q" "Mux-36.s" - 
+Wire "Wire-80" "pcen.Q" "pc.en" - 
+Wire "Wire-29" "BusBuild-28.out" "Mux-6.1" 263 207 230 207 - 
+
+ControlRom "trap" "sup" "int" "reset" "timer" "input" "output" 435 59
+TRAP= int && sup==0
+trapadr= reset ? 0 : TRAP==0 ? 1 : timer ? 2 : input ? 3 : 4
+ROMEND
+
+ControlRom "rom" "op" "zero?" "alufault" "int" "gizmo" "sup" "reset" 24 157
+FIRST= 24
+LD= 24
+ST= 25
+JMP= 27
+BEQ= 29
+BNE= 30
+LDR= 31
+ALU= 32
+ALUC= 48
+
+IDLE= 0
+READ= 1
+WRITE= 2
+
+ra2sel= op==ST
+wasel= op<FIRST || op==26 || op==28 || alufault || (int && sup==0)
+asel= op>=ALU || op==LD || op==ST || op==JMP
+bsel= op>=ALUC || op<ALU
+aluop= op>=ALU ? op&0xF : 0
+pcsel= op==JMP || (op==BNE && "zero?"==0) || (op==BEQ && "zero?"!=0)
+memcmd= gizmo ? IDLE : op==LD || op==LDR ? READ : op==ST ? WRITE : IDLE
+gizmocmd= gizmo && sup ? op==LD ? READ : op==ST ? WRITE : IDLE : IDLE
+trapsel= reset==0 && wasel==0
+rfen= op!=ST
+pcen= op!=0
+wdsel= wasel ? 0 : gizmocmd==READ ? 3 : memcmd==READ ? 1 : op>=ALU ? 2 : 0
+ROMEND
+
+END

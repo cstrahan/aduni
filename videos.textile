@@ -1,0 +1,204 @@
+*The Structure and Interpretation of Computer Programs* [ "link":http://aduni.org/courses/sicp/ ]
+10-02-00: "More scheme intro, substitution model":http://video.google.com/videoplay?docid=2216910834715671151&hl=en 
+10-03-00: "Orders of growth, recursion/ iteration":http://video.google.com/videoplay?docid=-7586565302999883883&hl=en 
+10-04-00: "Higher-order procedures":http://video.google.com/videoplay?docid=-3179014484932111061&hl=en 
+10-05-00: "Compound data":http://video.google.com/videoplay?docid=2549648390079671614&hl=en 
+10-06-00: "Aggregate data":http://video.google.com/videoplay?docid=-3746746562080507970&hl=en 
+10-10-00: "Henderson picture language":http://video.google.com/videoplay?docid=-2603111327610180775&hl=en 
+10-11-00: "Symbolic data":http://video.google.com/videoplay?docid=3399284358145569745&hl=en 
+10-12-00: "Data structures":http://video.google.com/videoplay?docid=-6008732165729572263&hl=en 
+10-13-00: "Multiple representations of data":http://video.google.com/videoplay?docid=-2058432387162482647&hl=en 
+10-16-00: "Generic operators":http://video.google.com/videoplay?docid=-3817603732784115999&hl=en 
+10-17-00: "State":http://video.google.com/videoplay?docid=-3843543100375449781&hl=en 
+10-23-00: "Metacircular evaluator":http://video.google.com/videoplay?docid=-1631424709909056897&hl=en 
+10-23-00: "Recitation":http://video.google.com/videoplay?docid=-5773999067543341683&hl=en 
+10-24-00: "More on the metacircular evaluator":http://video.google.com/videoplay?docid=3679010993063670729&hl=en 
+10-24-00: "Recitation":http://video.google.com/videoplay?docid=6246276936364529924&hl=en 
+10-25-00: "Register Machines I":http://video.google.com/videoplay?docid=-2634007123278090216&hl=en 
+10-25-00: "Register Machines II":http://video.google.com/videoplay?docid=603224747767511659&hl=en 
+10-26-00: "EC eval":http://video.google.com/videoplay?docid=2451583290775368232&hl=en 
+10-27-00: "Compilation":http://video.google.com/videoplay?docid=9206274636226667215&hl=en 
+
+ *Discrete Mathematics* [ "link":http://aduni.org/courses/discrete/ ]
+11-01-00: "What kinds of problems are solved in discrete math?":http://video.google.com/videoplay?docid=-2965569821331370765 
+11-02-00: "Boolean Algebra and formal logic":http://video.google.com/videoplay?docid=8526001457977475662 
+11-03-00: "More logic: quantifiers and predicates":http://video.google.com/videoplay?docid=2182407840501617240 
+11-06-00: "Sets":http://video.google.com/videoplay?docid=-1523750071462683553 
+11-07-00: "Diagonalization, functions and sums review":http://video.google.com/videoplay?docid=-3916416363858422702 
+11-08-00: "Basic arithmetic and geometric sums, closed forms.":http://video.google.com/videoplay?docid=8858186090751068773 
+11-09-00: "Chinese rings puzzle":http://video.google.com/videoplay?docid=-3237169250837558175 
+11-10-00: "Solving recurrence equations":http://video.google.com/videoplay?docid=4395716647044621607 
+11-13-00: "Solving recurrence equations (cont.)":http://video.google.com/videoplay?docid=8439935501054952093 
+11-14-00: "Mathematical induction":http://video.google.com/videoplay?docid=-682261034383556882 
+11-15-00: "Combinations and permutations":http://video.google.com/videoplay?docid=7728096043140204784 
+11-16-00: "Counting Problems":http://video.google.com/videoplay?docid=-9137468281844150128 
+11-17-00: "Counting problems":http://video.google.com/videoplay?docid=6321504228780354246 
+11-20-00: "Counting problems using combinations, distributions":http://video.google.com/videoplay?docid=1670839326238267487 
+11-21-00: "Counting problems using combinations, distributions":http://video.google.com/videoplay?docid=1242728775856842273 
+11-22-00: "The pigeonhole principle and examples. The inclusion/exclusion theorem and advanced examples. A combinatorial card trick.":http://video.google.com/videoplay?docid=5712152876503384247 
+11-26-00: "Equivalence Relations and Partial Orders":http://video.google.com/videoplay?docid=-5909766540513920231 
+11-27-00: "Euclid's Algorithm":http://video.google.com/videoplay?docid=3474054284187154443 
+11-27-00: "Recitation -- a combinatorial card trick":http://video.google.com/videoplay?docid=-8964586203198867154 
+11-28-00: "Cryptography":http://video.google.com/videoplay?docid=-3374285419541336192 
+
+ *How Computers Work* [ "link":http://aduni.org/courses/hcw/ ]
+12-01-00: "Introduction to the BETA ISA":http://video.google.com/videoplay?docid=2836384009620978609&hl=en 
+12-03-00: "Storage Allocation, Stack Discipline, Calling Conventions":http://video.google.com/videoplay?docid=-1302976961915773307&hl=en 
+12-04-00: "Unpipelined Beta, Exceptions":http://video.google.com/videoplay?docid=1744607565902920287&hl=en 
+12-05-00: "Implementing the ALU":http://video.google.com/videoplay?docid=8174094658876733989&hl=en 
+12-05-00: "Recitation":http://video.google.com/videoplay?docid=-8847907431444085347&hl=en 
+12-06-00: "Implementation of Beta Memorie":http://video.google.com/videoplay?docid=8029090255616362753&hl=en 
+12-06-00: "Synchronous Finite State Machines (FSMs)":http://video.google.com/videoplay?docid=970475600998643883&hl=en'%3ERecitation%3C/a%3E%3Cbr%20/%3E%2012-07-00:%20%3Ca%20href= 
+12-08-00: "Flip flops, Asynchronous FSMs, Dynamic Discipline, Timing":http://video.google.com/videoplay?docid=-8575389409460504905&hl=en 
+12-11-00: "Arbitration and Metastability":http://video.google.com/videoplay?docid=720034703546762215&hl=en 
+12-12-00: "Static Discipline, Transistor-level design":http://video.google.com/videoplay?docid=-3252299477651560582&hl=en 
+12-13-00: "Physics of Communication and Computation":http://video.google.com/videoplay?docid=-5113375387458167271&hl=en 
+12-14-00: "Physics of Computation":http://video.google.com/videoplay?docid=1070190910133172739&hl=en 
+12-15-00: "Pipelining":http://video.google.com/videoplay?docid=-833543859791575860&hl=en 
+12-18-00: "Details of the Pipelined Beta":http://video.google.com/videoplay?docid=7936835218611376613&hl=en 
+12-19-00: "Caches":http://video.google.com/videoplay?docid=116858262740666784&hl=en 
+12-20-00: "Virtual Memory, Paging":http://video.google.com/videoplay?docid=1222279432256359989&hl=en 
+
+ *Object-oriented Program Design and Software Engineering* [ "link":http://aduni.org/courses/java/ ]
+01-02-01: "Intro to Java":http://video.google.com/videoplay?docid=7885201831984525756&hl=en 
+01-02-01: "lecture supplement":http://video.google.com/videoplay?docid=2108695710042797710&hl=en 
+01-03-01: "Classes":http://video.google.com/videoplay?docid=-2025953869573617717&hl=en 
+01-03-01: "lecture supplement":http://video.google.com/videoplay?docid=-2886110963528502318&hl=en 
+01-04-01: "Inheritance&Polymorphism":http://video.google.com/videoplay?docid=8377805594903117497&hl=en 
+01-04-01: "lecture supplement":http://video.google.com/videoplay?docid=2647637027959413763&hl=en 
+01-05-01: "Interfaces and interfaces":http://video.google.com/videoplay?docid=6126861795265126137&hl=en 
+01-05-01: "lecture supplement":http://video.google.com/videoplay?docid=-1103133662787327815&hl=en 
+01-08-01: "OOP Design&Design Process":http://video.google.com/videoplay?docid=-5564419958908862288&hl=en 
+01-09-01: "Exceptions&Error Handling":http://video.google.com/videoplay?docid=8911320526533367062&hl=en 
+01-10-01: "I/O":http://video.google.com/videoplay?docid=-7879185086633639262&hl=en 
+01-11-01: "Window Systems&Graphics":http://video.google.com/videoplay?docid=2193515835331514681&hl=en 
+01-12-01: "Event-based programming":http://video.google.com/videoplay?docid=8812969795641202694&hl=en 
+01-16-01: "GUI (widgets)":http://video.google.com/videoplay?docid=5277299335708292073&hl=en 
+01-17-01: "Threads":http://video.google.com/videoplay?docid=-4970617003979842337&hl=en 
+01-18-01: "Network Programming":http://video.google.com/videoplay?docid=-7492910546310534873&hl=en 
+01-19-01: "Software Design Cycle":http://video.google.com/videoplay?docid=1000910743747958542&hl=en 
+01-22-01: "OOP in C&C++":http://video.google.com/videoplay?docid=-5891845877297690865&hl=en 
+01-23-01: "Layouts, Packages,&Jar files":http://video.google.com/videoplay?docid=698387708987417850&hl=en 
+01-24-01: "Java on the web":http://video.google.com/videoplay?docid=-2109506389222016967&hl=en 
+01-25-01: "Component Object Models":http://video.google.com/videoplay?docid=3968115352440886346&hl=en 
+01-26-01: "Overview of Software Patterns":http://video.google.com/videoplay?docid=6179819561576068808&hl=en 
+01-29-01: "Persistence&Databases&etc.":http://video.google.com/videoplay?docid=8972482850436249630&hl=en 
+01-30-01: "I18N, L10N&Review":http://video.google.com/videoplay?docid=-491030326295815025&hl=en 
+
+ *Algorithms* [ "link":http://aduni.org/courses/algorithms/ ]
+02-01-01: "Algorithms -- overview":http://video.google.com/videoplay?docid=2905503151407952144&hl=en 
+02-02-01: "Sorting":http://video.google.com/videoplay?docid=1845361508654624726&hl=en 
+02-04-01: "Sorting II":http://video.google.com/videoplay?docid=8065627997004222103&hl=en 
+02-05-01: "Searching&Data Structures":http://video.google.com/videoplay?docid=-4399947741817682002&hl=en 
+02-06-01: "Red-Black Trees":http://video.google.com/videoplay?docid=6787296543123258092&hl=en 
+02-07-01: "Graph Algorithms I - Topological Sorting, Prim's Algorithm":http://video.google.com/videoplay?docid=2755333184412284530&hl=en 
+02-08-01: "Graph Algorithms II - DFS, BFS, Kruskal's Algorithm, Union Find Data Structure":http://video.google.com/videoplay?docid=6831765004639898161&hl=en 
+02-09-01: "Graph Alg. IV: Intro to geometric algorithms":http://video.google.com/videoplay?docid=-2874632867822037960&hl=en'%3EGraph%20Algorithms%20III:%20Shortest%20Path%3C/a%3E%3Cbr%20/%3E%2002-12-01:%20%3Ca%20href= 
+02-13-01: "Geometric Algorithms: Graham&Jarvis":http://video.google.com/videoplay?docid=-4104251527199498720&hl=en 
+02-14-01: "Dynamic Programming I":http://video.google.com/videoplay?docid=1607386732227802988&hl=en 
+02-15-01: "Dynamic programming II":http://video.google.com/videoplay?docid=-6640575368285112654&hl=en 
+02-16-01: "Parsing":http://video.google.com/videoplay?docid=-3909873077146969251&hl=en 
+02-20-01: "Knapsack, Bandwidth Min. Intro: Greedy Algs.":http://video.google.com/videoplay?docid=-8586312179390822765&hl=en 
+02-21-01: "Greedy Algs. II&Intro to NP Completeness":http://video.google.com/videoplay?docid=8550241930529333151&hl=en 
+02-22-01: "NP Completeness II&Reductions":http://video.google.com/videoplay?docid=-8534835263228710390&hl=en 
+02-23-01: "NP Completeness III - More Reductions":http://video.google.com/videoplay?docid=358147079359643960&hl=en 
+02-26-01: "NP Completeness IV":http://video.google.com/videoplay?docid=4304443041492378516&hl=en 
+02-27-01: "Approximation Algs.":http://video.google.com/videoplay?docid=1658810888057268611&hl=en 
+02-28-01: "Alternate Models of Computation":http://video.google.com/videoplay?docid=-386843024395328666&hl=en 
+
+ *Systems* [ "link":http://aduni.org/courses/systems/ ]
+03-01-01: "Intro to Systems":http://video.google.com/videoplay?docid=-7971912125069668186&hl=en 
+03-02-01: "System Design":http://video.google.com/videoplay?docid=5945030331100308931&hl=en 
+03-05-01: "Distributed Systems":http://video.google.com/videoplay?docid=-6519108575222683412&hl=en 
+03-06-01: "Networks, I":http://video.google.com/videoplay?docid=-1240823648672849925&hl=en 
+03-07-01: "Networks, II":http://video.google.com/videoplay?docid=232544437271801081&hl=en 
+03-08-01: "Naming":http://video.google.com/videoplay?docid=-7045224961296218205&hl=en 
+03-09-01: "Security":http://video.google.com/videoplay?docid=7537375942751947970&hl=en 
+03-12-01: "Distributed Storage":http://video.google.com/videoplay?docid=-321989661165806746&hl=en 
+03-13-01: "Time and Coordination":http://video.google.com/videoplay?docid=136801797537615438&hl=en 
+03-14-01: "Transactions":http://video.google.com/videoplay?docid=-7075892928557625168&hl=en 
+03-15-01: "Distributed Transactions, Part I":http://video.google.com/videoplay?docid=-4347074850136941025&hl=en 
+03-15-01: "Distributed Transactions, Part II":http://video.google.com/videoplay?docid=-3336404231380109034&hl=en 
+03-16-01: "Replication":http://video.google.com/videoplay?docid=7328262817109171530&hl=en 
+03-19-01: "Distributed Mulitmedia":http://video.google.com/videoplay?docid=-6689113207388874618&hl=en 
+03-20-01: Case Study Photo.net
+
+ *Software Engineering for Web Applications* [ "link":http://aduni.org/courses/web/ ]
+04-02-01 (Part I): "Introduction to Internet Applications, Online Communities":http://video.google.com/videoplay?docid=8174826903590281476&hl=en 
+04-02-01 (Part II): "TCP and HTTP, Web Session State, Databases, Web Development Enviornments":http://video.google.com/videoplay?docid=4689051543042099882&hl=en 
+04-03-01: "J2EE and Microsoft .NET, Planning Internet Applications and Online Communities":http://video.google.com/videoplay?docid=-4397764464833303057&hl=en 
+04-04-01: "Big Thoughts about the Internet and Online Communities":http://video.google.com/videoplay?docid=-3213616189457216872&hl=en 
+04-05-01: "Web Usability and Interface Best Practices":http://video.google.com/videoplay?docid=6263479824098187338&hl=en 
+04-11-01: "Student User Data Model and Login/Registration Code Review":http://video.google.com/videoplay?docid=1563244952795684549&hl=en 
+04-12-01: "Sample Data Model for Diet Tracking, Database Structure, Site Modules":http://video.google.com/videoplay?docid=-5005176494502712973&hl=en 
+04-17-01: "Student Project Status Presentation and Code Reviews":http://video.google.com/videoplay?docid=6445384758248834359&hl=en 
+04-18-01: "Implementing Threaded Discussion Forums":http://video.google.com/videoplay?docid=-5471619597410267747&hl=en 
+04-19-01: "Database Normal Form, Oracle Transaction Issues, Oracle Under the Hood":http://video.google.com/videoplay?docid=-3153419589220109767&hl=en 
+04-24-01: "VoiceXML":http://video.google.com/videoplay?docid=-4720728798455496719&hl=en 
+04-25-01: "Distributed Computing with Web Services, SOAP":http://video.google.com/videoplay?docid=-4773575614391167084&hl=en 
+04-26-01: "Final Student Project Presentation, Future of Databases":http://video.google.com/videoplay?docid=6811844932442442536&hl=en 
+
+ *Theory of Computation* [ "link":http://aduni.org/courses/theory/ ]
+05-03-01: "Finite State Machines":http://video.google.com/videoplay?docid=-5837841629284334824&hl=en 
+05-04-01: "Closure and Nondeterminism":http://video.google.com/videoplay?docid=4229213690869740136&hl=en 
+05-07-01: "The Pumping Lemma":http://video.google.com/videoplay?docid=-3110359325428416797&hl=en 
+05-08-01: "Minimizing FSMs":http://video.google.com/videoplay?docid=-3296768413484657664&hl=en 
+05-08-01: "Recitation":http://video.google.com/videoplay?docid=-5669143819027283172&hl=en 
+05-09-01: "Context Free Languages":http://video.google.com/videoplay?docid=-207666361602471996&hl=en 
+05-10-01: "CFLs and compilers":http://video.google.com/videoplay?docid=4868267174449745533&hl=en 
+05-10-01: "Recitation":http://video.google.com/videoplay?docid=-8437315982390469343&hl=en 
+05-11-01: "Pushdown Machines":http://video.google.com/videoplay?docid=6293254725393275204&hl=en 
+05-11-01: "Recitation":http://video.google.com/videoplay?docid=9035582916703844623&hl=en 
+05-14-01: "CFGs and NPDMs":http://video.google.com/videoplay?docid=2756642806976159465&hl=en 
+05-15-01: "More lemmas, CYK":http://video.google.com/videoplay?docid=-247208603995080811&hl=en 
+05-16-01: "Undecidability and CFLs":http://video.google.com/videoplay?docid=3494321318445546163&hl=en 
+05-16-01: "Recitation":http://video.google.com/videoplay?docid=3844308473087603963&hl=en 
+05-17-01: "The Bullseye":http://video.google.com/videoplay?docid=-5678263761170023002&hl=en 
+05-18-01: "Turing Machines":http://video.google.com/videoplay?docid=3041987403033257847&hl=en 
+05-18-01: "Recitation":http://video.google.com/videoplay?docid=-8974546801240966884&hl=en 
+05-20-01: "The Halting Problem":http://video.google.com/videoplay?docid=-7801360417999248844&hl=en 
+05-21-01: "Decidability":http://video.google.com/videoplay?docid=-5350568327215802527&hl=en 
+05-22-01: "Complexity Theory, Quantified Boolean Formula":http://video.google.com/videoplay?docid=-3529287102996844777&hl=en 
+05-23-01: "Savitch's Theorem, Space Hierarchy":http://video.google.com/videoplay?docid=-7201062786408798707&hl=en 
+05-24-01: "Decidability/Complexity Relationship, Recursion Theorem":http://video.google.com/videoplay?docid=2738461254300499197&hl=en 
+
+ *Artificial Intelligence* [ "link":http://aduni.org/courses/ai/ ]
+06-04-01: "Rule-based systems and Knowledge Engineering":http://video.google.com/videoplay?docid=7651216977566417007&hl=en 
+06-05-01: "Searching and Coloring":http://video.google.com/videoplay?docid=-5911586851152219761&hl=en 
+06-06-01: "Nearest Neighbors, Identification Trees":http://video.google.com/videoplay?docid=-2418249476035399151&hl=en 
+06-07-01: "Neural Nets, Back Propagation, Support Vector Machines":http://video.google.com/videoplay?docid=-4677773923428923202&hl=en 
+
+ *Database Management Systems* [ "link":http://aduni.org/courses/databases/ ]
+06-08-01: "Overview, Query Processing, Embedded SQL, Cursors, Triggers":http://video.google.com/videoplay?docid=5787572185410898128&hl=en 
+06-11-01: "Relational Algebra, Relational Calculus":http://video.google.com/videoplay?docid=-7583178378924355989&hl=en 
+06-12-01: "Entity Relationship Diagrams":http://video.google.com/videoplay?docid=-412094152810889513&hl=en 
+06-13-01: "RDBMS Memory and Disk Storage, RAID, Buffer Management":http://video.google.com/videoplay?docid=-5781885685436159517&hl=en 
+06-14-01: "Unordered/Sorted/Hashed Files, Indexes":http://video.google.com/videoplay?docid=-970177516931984053&hl=en 
+06-15-01: "Index Sequential Access Method, B+ Trees":http://video.google.com/videoplay?docid=1746112775200114150&hl=en 
+06-18-01: "Static and Dynamic Hash Indexing":http://video.google.com/videoplay?docid=-3743689119405474431&hl=en 
+06-19-01: "External Sorting, Merge Sort, Double Buffering, Replacement Sort":http://video.google.com/videoplay?docid=-978892635109400080&hl=en 
+06-21-01: "Query Optimizers, Query Evaluation":http://video.google.com/videoplay?docid=-7673835569945691329&hl=en 
+06-25-01: "Normal Forms":http://video.google.com/videoplay?docid=-5997534959968883401&hl=en 
+06-26-01: "Query Analysis and Optimizing in Oracle":http://video.google.com/videoplay?docid=-4978626772798566733&hl=en 
+
+ *Applied Probability* [ "link":http://aduni.org/courses/probability/ ]
+07-02-01: "Introduction, Algebra of Events, Conditional Probability":http://video.google.com/videoplay?docid=3395359234996932760&hl=en 
+07-03-01: "Independence, Bayes Theorem, Probability Mass Functions":http://video.google.com/videoplay?docid=7644726758589281254&hl=en 
+07-05-01: "Conditional PMFs, Probability Density Functions":http://video.google.com/videoplay?docid=-979461625154677159&hl=en 
+07-06-01: "PDFs and Image Guided Surgery":http://video.google.com/videoplay?docid=-427932099104494159&hl=en 
+07-09-01: "Bayesian Segmentation of MRI Images":http://video.google.com/videoplay?docid=1595803469256321200&hl=en 
+
+ *Colloquia* [ "link":http://aduni.org/colloquia/ ]
+
+|Philip Greenspun|| "Software Engineering Professionalism":http://video.google.com/videoplay?docid=-9022395074228591590&hl=en ||
+|Fred Martin|| "To Mindstorms and Beyond: Evolution of a Construction Kit for Magical Machines":http://video.google.com/videoplay?docid=3999964038607177190&hl=en ||
+|Richard Stallman||The Free Software Movement and the GNU/Linux Operating System||
+|Chip Hazard|| "Financing eBusinesses":http://video.google.com/videoplay?docid=3162109547156558904&hl=en ||
+|Marc Hamilton|| "Software Engineering at Internet Speeds":http://video.google.com/videoplay?docid=8571745785167795927&hl=en ||
+|Philip Greenspun||One-Day Internet Applications Course||
+|Allen Shaheen||Experience as one of the Founders of Cambridge Technology Partners||
+|David Parmenter|| "Part 1":Things%20I%20Learned%20the%20Hard%20Way:%20Engineering%20and%20Computer%20Science%20in%20the%20Real%20World%20%3Ca%20href=  "Part 2":http://video.google.com/videoplay?docid=940125013853876110&hl=en ||
+|Gerald Jay Sussman|| "The Legacy of Computer Science":http://video.google.com/videoplay?docid=1025144597945361811&hl=en ||
+|Michael Sipser|| "The History and Status of the P versus NP Question":http://video.google.com/videoplay?docid=2727170905577830475&hl=en ||
+|Robert Sloan|| "What to do when the Teacher is an Ignoramus or a Liar: Learning from Queries even when the Answers to the Queries are Wrong":http://video.google.com/videoplay?docid=-8145386396341770168&hl=en ||
+|Jothy Rosenberg|| "Basic Mechanics of Startup Financing, Equity and IPOs: What Engineers Should Know":http://video.google.com/videoplay?docid=-1773407407830393683&hl=en ||

@@ -1,0 +1,416 @@
+LAMBDA CALCULUS
+_________________________________________
+
+100.  What the following expression evaluates to:
+
+        (if 5 3 (/ 5 0))
+
+			Answer:  3
+
+-----------------------------------------
+
+200.  What the following code returns:
+
+      (let ((a 3))
+        (let ((a 4)
+              (b a))
+          (list a b)))
+
+			Answer: (4 3)
+
+----------------------------------------
+
+300.  The value returned by this expression:
+
+
+  ((lambda (x f) (f (f x))) 3 (lambda (y) (+ y y)))
+
+			Answer:  12
+
+----------------------------------------
+
+400.  Given the following definition of f:
+
+	(define f (lambda (x)
+		    (x (lambda (y) (* y 2)))))
+
+ It's the expression which, when f is applied to it, returns 6.
+
+
+		Answer: (lambda (z) (z 3))
+		     OR (lambda (z) 6)
+
+
+LISTS
+_________________________________________
+
+
+100.  The printed representation in Scheme of the following
+      box and pointer diagram:
+
+
+
+
+
+
+
+
+
+
+
+			Answer: ((b c d) a c d)
+
+
+----------------------------------------
+
+200.  The expression returned by the following code:
+
+ (list 1 2 (list 'three 'four '(five six)))
+
+	Answer: (1 2 three four (quote five six))
+
+----------------------------------------
+
+300.  The expression returned by the following code:
+
+        (define x '(a b x))
+        (define y (list x x (list 'x x)))
+        (set-cdr! (cdr y) (list (quote w)))
+        y
+
+			Answer: ((a b x) (a b x) w)
+
+-----------------------------------------
+
+400.  If we were to implement cons, car, and cdr as
+      procedures, by writing cons as a procedure of its two
+      arguments, like so:
+
+      (define (cons x y)
+                 (lambda (m) (m x y)))
+
+     then this is how "cdr" would be defined.
+
+			Answer: (define (cdr l)
+				  (l (lambda (x y) y)))
+
+ENVIRONMENT DIAGRAMS
+__________________________________________
+
+100.  The reason that the environment model is useful:
+
+(a) procedures may contain free variables
+(b) environments use frames
+(c) the substitution model is inadequate to deal with
+    procedural side effects
+(d) the staff likes to see you extremely confused
+(e) garbage collection takes a shorter amount of time for
+    environmental models
+
+			Answer: C
+
+----------------------------------------
+
+200.  The expression that should appear in place of the
+    asterisks in the environment diagram below, corresponding
+    to the following code:
+
+        (define (f x)
+          (let ((y 10))
+            (lambda (x) (+ x y))))
+
+	(define g (f 5))
+
+			Answer: ``y: 10''
+
+----------------------------------------
+
+300.  In a lexically scoped language like scheme, this is, by
+    definition, where free variables in procedures passed as
+    arguments are looked up:
+
+(a) in the environment where the procedure is called
+(b) in the environment where the procedure was evaluated
+(c) in the environment where the procedure was created
+(d) in the primitive list of the global environment
+
+			Answer: B
+
+----------------------------------------
+
+400.  These are the FOUR steps that result from applying a
+    procedure in the environment model.
+
+		Answer: 1) hang a frame, 2) bind formal
+		 paramaters, 3) evaluate body, 4) point back
+		 to where environment pointer of proc. obj.
+		 points
+
+MISCELLANEOUS
+___________________________________________
+
+100.  The founder of ADU.
+
+	Answer: Philip Greenspun
+
+ ----------------------------------------
+
+200.  The name of Philip's dog.
+
+	Answer: Alex
+
+----------------------------------------
+
+300.  It is the problem with the following fragment of code:
+
+	(define vector cons)
+	(define get-x car)
+	(define get-y cdr)
+	(define v1 (vector 2 3))
+	(define (magnitude vec)
+	  (let ((cars (* (car vec) (car vec)))
+		(cdrs (* (cdr vec) (cdr vec))))
+	    (sqrt (+ cars cdrs))))
+		
+	Answer: Abstraction violation!!
+
+----------------------------------------
+
+400.  He developed LISP.
+
+	Answer: John McCarthy
+
+ORDERS OF GROWTH
+_____________________________________________
+
+200.  How the following expression can be written in Theta
+    notation:
+
+        n^2 + n
+                         Answer: n^2
+
+----------------------------------------
+
+400.  The orders of growth in time and space of:
+
+
+        (define (f n)
+          (if (= n 0)
+              1
+              (f (- n 1))))
+
+      Answer: time = n, space = 1
+
+----------------------------------------
+
+600.  The orders of growth in time and space of:
+
+        (define (g n)
+          (if (= n 0)
+              1
+              (+ (g (- n 1))
+                 (g (- n 1)))))
+
+      Answer: time = 2^n, space = n
+
+----------------------------------------
+
+800.  The orders of growth in time and space of:
+
+        (define (h n)
+          (if (= n 0)
+              1
+              (+ (h (quotient n 3))
+                 (h (quotient n 3)))
+
+      Answer: time = n, space = lg n
+
+STREAMS
+_____________________________________________
+
+200.  It's the process streams use that prevent the need for
+    repetitive calculations.
+
+                        Answer: memoization
+
+----------------------------------------
+
+400.  The missing expressions in the definition below, which
+    produces the following stream:
+
+        2,1,4,3,6,5,8,7,10,...
+
+        (define s (cons-stream 2
+                    (cons-stream 1
+                      (stream-map-2  +  <exp1>  <exp2> ))))
+
+
+                        Answer: <exp1>: (scale-stream 2 ones)
+                                <exp2>: s
+
+----------------------------------------
+
+600. The definition of the infinite stream: 1, 2, 3, 4
+
+     Answer: (define integers (cons-stream 1 (add-streams ones integers)))
+
+----------------------------------------
+
+800.  What the following mystery stream calculates:
+
+      (define foo (cons-stream 1
+                    (cons-stream 2
+                      (stream-map-2 * (tail (tail integers))
+                                      (tail foo)))))
+
+                        Answer: factorial stream
+
+OBJECT-ORIENTED PROGRAMMING
+______________________________________________
+
+
+200.  In the following example, this class inherits from this
+    (other) class:
+
+    (define (make-dairy-product name temp)
+      (let ((container 'none)
+	    (bad false)
+	    (scent 'lemon)
+	    (food-obj (make-food name temp)))
+	  (lambda (message)
+	    (cond ((eq? message 'name) (lambda (self) name))
+		  ((eq? message 'scent) (lambda (self) scent))
+		  ((eq? message 'spoiled?)
+		   (lambda (self) (set! scent 'vile) true))
+		  (else (get-method food-obj message))))))
+
+
+                        Answer: dairy-product inherits its
+			         traits from food
+
+----------------------------------------
+400.  The value of inheritance in object oriented languages is
+    that it makes it convenient to define new kinds of
+    objects:
+
+(a) recursively
+(b) that send messages to other objects
+(c) as variants of previously defined objects
+(d) without using applicative order
+
+                        Answer: C
+
+----------------------------------------
+
+600.  By convention, we implement all methods in object-
+    oriented code to accept an argument named "self", which
+    is crucial in distinguishing this characteristic.
+
+	 Answer: it indicates from which class,
+		 if there are more than one, the
+		 method in question should be taken
+
+----------------------------------------
+
+800.  In an effort to better integrate the worlds of biology
+    and computer science, Ben Bitdiddle sets out to write a
+    Scheme program which could be used to determine the sex
+    of an unborn child, as an alternative to the
+    more invasive clinical procedures:
+
+	(define (make-kid)
+	  (lambda (self msg)
+	    (cond ((eq? msg 'male?)
+		   (not (ask self 'female?)))
+		  ((eq? msg 'female?)
+		   (not (ask self 'male?))) )))
+
+	(define (ask kid msg)
+	  (kid kid msg))
+
+	(define patients-kid (make-kid))
+
+	(ask patients-kid 'female?)
+
+   This would be the response:
+
+(a) true
+(b) false
+(c) no response (runs forever)
+(d) error response
+(e) none of the above
+
+			Answer: D  (stack overflow)
+
+
+MC-EVAL
+________________________________________________
+
+200.  This is how environments are represented in our
+      meta-circular evaluator.
+
+                        Answer: as lists
+
+----------------------------------------
+
+400.  The advantage of the analyze evaluator over mc-eval.
+
+			Answer: syntax is only analyzed once
+
+----------------------------------------
+
+600.  The number of times the eval procedure is invoked when
+      the following expression is entered into the evaluator:
+
+        ((lambda (x) (* x 2)) 3)
+
+			Answer: six [let f be the lambda
+			 expression]; 1--(f 3), 2--f, 3--3,
+			 4--(* x 2), 5--x, 6--2
+
+----------------------------------------
+
+800.  The one and only line needed to modify the evaluator to
+    handle define statements of the form:
+
+	(<variable> := <binding>)
+
+	Answer: ((eq? (cadr exp)) ':=)
+		 (eval-definition (list 'adu:define
+                                        (car exp)
+				        (caddr exp))
+		                  env))
+
+        (If we ignore some abstraction violations....)
+
+POTPOURRI
+__________________________________________________
+
+200.  What LISP stands for.
+
+                        Answer: LISt Processing
+
+----------------------------------------
+
+400.  What procedure objects could be made of.
+
+             Answer: munchkins [also acceptable: bagels]
+
+----------------------------------------
+
+600.  The inventors of Scheme.
+
+	Answer: Guy Steele and Gerry Sussman
+
+----------------------------------------
+
+800.  The person(s) to whom there is a seat dedicated in the
+    10-250 lecture hall at MIT (where 6.001 is taught).
+
+(a) Hal Abelson and Gerry Sussman
+(b) John Pezaris
+(c) John McCarthy
+(d) Ben and Alyssa P. (Hacker) Bitdiddle
+(e) Louis Reasoner
+
+                        Answer: D

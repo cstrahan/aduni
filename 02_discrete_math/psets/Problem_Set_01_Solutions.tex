@@ -1,0 +1,888 @@
+%LaTeX
+\documentclass[12pt]{amsart}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\newcommand{\tab}{\makebox[4em]{}}
+\newcommand{\ov}[1]{\overline{#1}}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\lra}{\leftrightarrow}
+
+
+
+
+% ----------------
+% PARAGRAPH INDENTATION
+\setlength{\parindent}{0in}
+
+% SPACE BETWEEN PARAGRAPHS
+\setlength{\parskip}{\medskipamount}
+
+% ----------------------------------------------------------------
+% LISP CODE DISPLAYS.
+% Lisp code displays are enclosed between \bid and \eid.
+% Most characters are taken verbatim, in typewriter font,
+% Except:
+%  Commands are still available (beginning with \)
+%  Math mode is still available (beginning with $)
+
+\outer\def\beginlisp{%
+  \begin{minipage}[t]{\linewidth}
+  \begin{list}{$\bullet$}{%
+    \setlength{\topsep}{0in}
+    \setlength{\partopsep}{0in}
+    \setlength{\itemsep}{0in}
+    \setlength{\parsep}{0in}
+    \setlength{\leftmargin}{1.5em}
+    \setlength{\rightmargin}{0in}
+    \setlength{\itemindent}{0in}
+  }\item[]
+  \obeyspaces
+  \obeylines \footnotesize\tt}
+
+\outer\def\endlisp{%
+  \end{list}
+  \end{minipage}
+  }
+
+{\obeyspaces\gdef {\ }}
+
+\begin{document}
+\begin{center}
+\textbf{ArsDigita University}
+
+\textbf{Month 2: Discrete Mathematics - Professor Shai Simonson}
+
+\textbf{Problem Set 1 -- ANSWERS}
+
+By: Dimitri Kountourogiannis
+
+\end{center}
+
+
+\begin{enumerate}
+\item { Logic Proofs }
+    \begin{enumerate}
+    \item   Prove that $a \rightarrow b$
+            is equivalent to $\neg b
+            \rightarrow \neg a$
+            using a truth table. \\
+    \noindent {\bf  ANSWER:}
+    We compute the truth table values and observe they are the same.
+    Note that $\neg b \rightarrow \neg a$ is called the contrapositive
+    of $a \rightarrow b$.
+    (Check out \\ http://logik.phl.univie.ac.at/$\sim$chris/formular-uk-zentral.html \\
+    for an automated truth-table generator)
+    \[
+    \begin{array}{c|c|c|c|c|c}
+        a&b&\neg a&\neg b&a\rightarrow b&(\neg b) \rightarrow (\neg a)\\\hline
+        T   &   T   &   F   &   F   &   T   &   T\\
+        T   &   F   &   F   &   T   &   F   &   F\\
+        F   &   T   &   T   &   F   &   T   &   T\\
+        F   &   F   &   T   &   T   &   T   &   T
+    \end{array}
+    \]
+    \item   Prove it using {\em algebraic} identities. \\
+    \noindent {\bf  ANSWER:}
+    Using the equivalence rules on pages 17-18 of Rosen,
+        \begin{align*}
+            a \rightarrow b & \Leftrightarrow \neg a \wedge b \\
+                            & \Leftrightarrow b \wedge \neg a \\
+                            & \Leftrightarrow (\neg \neg b) \wedge \neg a\\
+                            &\Leftrightarrow \neg b \rightarrow \neg a
+        \end{align*}
+    \item   Prove that $a \rightarrow b$ is not
+            equivalent to $ b \rightarrow a$.\\
+    \noindent {\bf  ANSWER:}
+    This is the sort of thing that is easy to show with a truth table (semantically)
+    and is extremely difficult to show using the algebraic identities (syntactically).
+    If $a \rightarrow b$ were equivalent to $b \rightarrow a$, then the two would have
+    to agree for all possible {\em true/false} assignments of $a$ and $b$. But this is not
+    the case: if we let $a$ be {\em true} and $b$ be {\em false}, then $a
+\rightarrow b$
+    evaluates to {\em false}, and $b \rightarrow a$ evaluates to {\em true}. So the two
+    formulas are not equivalent.
+    \end{enumerate}
+    \vskip 5pt
+\item {Aristotle's Proof that the Square Root of Two is Irrational.}\\
+    \begin{enumerate}
+    \item Prove the  {\em lemma,} used by Aristotle in his proof,
+        which says that if $n^{2}$ is even, so is
+        $n$. (Hint: Remember that $a \rightarrow  b$
+        is equivalent to $\neg b \rightarrow \neg a$.\\
+    \noindent {\bf  ANSWER:}
+    It is easiest to prove the contrapositive of the lemma, that if
+    $n$ is odd, then $n^2$ is odd. An odd number is one that can be
+    written in the form of $2k+1$ for some other whole number $k$.
+    So suppose that $n = 2k+1$. Then
+    \[
+    n^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1
+    \]
+    And so $n^2$ is odd. This proves the contrapositive and hence the lemma.
+    \item
+        Prove that the square root of 3 is irrational using Aristotle's
+        techniques. Make sure to prove the appropriate lemma.\\
+    \noindent {\bf  ANSWER:}
+    We need the following lemma: \\
+
+    Lemma: \\
+    {\em For any whole number $n$, $n^2$ is divisible by $3$ implies that
+    $n$ is divisible by $3$ } \\
+
+    Proof of Lemma: Again it is easier to prove the contrapositive:\\
+
+    {\em $n$ is not divisible by $3$ implies that $n^2$ is not divisible by 3.} \\
+
+    So assume that $n$ is not divisible by $3$ then $n$ is of the form
+    $n= 3k+1$, or $n=3k+2$ for some whole number $k$. Then in the first case
+    \[
+    n^2 = 9k^2 +6k + 1 = 3(3k^2 + 2k) + 1
+    \]
+    which is not divisible by $3$. The second case is similar. Q.E.D. Lemma. \\
+
+    Proof that the square root of $3$ is irrational: \\
+    Suppose not, and that we can write
+    \[
+    \sqrt{3} = \frac{p}{q}
+    \]
+    with $\frac{p}{q}$ in lowest terms. Then
+    \[
+    3q^2 = p^2
+    \]
+    And so $p^2$ is divisible by $3$. By the lemma it follows that $p$
+    is divisible by $3$, say $p = 3p_1$ for some whole number $p_1$.
+    Plugging back in to the formula, we get
+    \[
+    q^2 = 3 p_1^2
+    \]
+    Now the tables are turned! $q^2$ is divisible by $3$ and so
+    by the lemma $q$ is divisible by $3$, say $q = 3 q_1$ for some whole
+    number $q_1$. This implies that
+    \[
+    \frac{p}{q} = \frac{3p_1}{3q_1} = \frac{p_1}{q_1}
+    \]
+    This is the contradiction we were looking for: We assumed that
+    $\frac{p}{q}$ was in lowest terms, which we can always do with a fraction,
+    but the assumption that
+    $\frac{p}{q} = \sqrt{3}$ implies that $\frac{p}{q} $ is {\em not} in lowest
+    terms. Contradiction! Therefore $\sqrt{3}$ is not a rational number.
+    Which is quite a disturbing thing, if you're an ancient Greek.
+    \item
+        If we use Aristotle's technique to  {\em prove} the untrue assertion
+        that the square root of 4 is irrational, where  {\em exactly} is
+        the hole in the proof?\\
+\noindent {\bf  ANSWER:}
+    The problem is that when we reach the equation
+    \[
+    q^2 = 4 p_1^2
+    \]
+    We {\em cannot} use the fact that $4$ divides $q^2$ to conclude that
+    $4$ divides $q$. This is just false. For example: $2^2 = 4$, or $6^2 = 36$.
+    \item Using the fact that the square root of two is irrational, prove
+        that $\sin (\frac{\pi}{4})$ is irrational.\\
+    \noindent {\bf  ANSWER:}
+    There is no way that $\sin (\frac{\pi}{4}) = \frac{1}{\sqrt{2}}$ could be
+    equal to a rational number $\frac{p}{q}$ for then it would follow
+    that $\sqrt{2}$ would equal the inverse, $\frac{q}{p}$, which we have shown
+    to be impossible.
+    \end{enumerate}
+\item
+    In ADU-ball, you can score 11 points for a goal, and 7 for a
+    near miss.
+    \begin{enumerate}
+    \item
+    Write a Scheme program that prints out the number of goals and
+    the number of near misses to achieve a given total greater than
+    60.\\
+    \item Prove that you can achieve any score greater than 60. Think
+    inductively and experiment.\\
+    \end{enumerate}
+    \noindent {\bf  ANSWER:}
+    \begin{enumerate}
+    \item
+    ADU-BALL returns a list of all goal, near-miss  pairs that add up to the given number
+    The loop subtracts off multiples of $7$ from the given number,
+    and adds a solution to the list if the result is divisible by
+    11. Note the use of let*, which unlike let,
+    does perform each assignment before going to the next one.
+\beginlisp
+(define (adu-ball n)
+ (define (iter i result)
+  (let* ((a (- n (* 7 i))) (b (remainder a 11)))
+   (cond ((< a 0) result)
+         ((= b 0) (iter (inc i) (cons (cons (/ a 11) i) result)))
+         (else (iter (inc i) result)))))
+ (iter 0 nil))
+\endlisp \vskip 10pt
+
+\beginlisp
+(adu-ball 187)
+;Value: ((3 . 22) (10 . 11) (17 . 0))
+\endlisp \vskip 10pt
+    \item
+    Actually you can achieve any score greater than or equal to $60$.
+    We will prove this by induction. There will actually be seven base cases
+    here, since the induction will go down by steps of seven. Here is a formal
+    statement of what will prove:
+
+    For any $n \ge 60$ there are natural numbers $x,y$ such that
+    $ n = 11 x + 7 y$
+
+    Base Cases:
+    \begin{itemize}
+    \item $n=60$. We can let $x=1$, $y=7$ \\
+    \item $n=61$. We can let $x=3$, $y=4$ \\
+    \item $n=62$. We can let $x=5$, $y=1$ \\
+    \item $n=63$. We can let $x=0$, $y=9$ \\
+    \item $n=64$. We can let $x=2$, $y=6$ \\
+    \item $n=65$. We can let $x=4$, $y=3$ \\
+    \item $n=66$. We can let $x=6$, $y=0$ \\
+    \end{itemize}
+
+    Induction step. Suppose $67 \le n$ Suppose that we can express any number $k$
+    $60 \le k < n$. We would like to show that there is
+    a $u$ and a $v$ such that $n = 11 u + 7 v$.
+    This isn't so bad. We know that $60 \le n - 7 < n$, so by induction.
+    We can find an $x$ and a $y$ such that.
+    \[
+    11 x + 7 y = n - 7
+    \]
+    This implies that
+    \[
+    11 x + 7( y + 1) = n
+    \]
+    and so we can let $u = x$ and $v = y +1$ and our induction
+    step is proven.
+    Q.E.D.
+    \end{enumerate}
+\item Prove by induction that there are 2$^{\mathit{n}}$ possible
+      rows in a truth table with  $ n$ variables.\\
+    \noindent {\bf  ANSWER:}\\
+    Base Case: When $n= 1$, we have $2$ rows, which equals $2^1$\\
+    Induction Step: Assume that an $n$-variable truth table has
+    $2^n$ rows. We want to show that an $(n+1)$-variable truth
+    table has $2^{n+1}$ rows. Well the way we construct a $(n+1)$
+    variable truth-table from an $n$-variable truth table is we
+    take two copies of it and we set the new variable equal
+    to $1$ in the first copy and we set the new variable equal
+    to $0$ in the second copy. So the total number of rows
+    is
+    \begin{align*}
+    \text{number of rows in copy-1} + \text{number of rows in copy-2}
+    &= 2^n + 2^n \\
+    &= 2^{n+1}
+    \end{align*}
+    So our induction step is proven. Q.E.D.
+
+\item   In the restroom of a fancy Italian restaurant in Mansfield,
+        MA, there is a sign which reads:  {\em Please do not leave
+        valuables or laptop computers in your car.}\\
+        Assuming that a laptop computer is considered a valuable, prove
+        using formal logic, that the sentence  {\em Please do not leave
+        valuables in your car} is equivalent to the sign in the restroom.
+        Prove that  {\em Please do not leave laptops in your car} is not
+        equivalent. \\
+        \noindent {\bf  ANSWER:}
+
+        This is a bit confusing at first glance, since our logical
+        system isn't designed to deal with imperatives. If we
+        ignore that little difficulty, there are many ways to turn the above sentences
+        into formulas. Here is one:
+        Let $V$ be the statement there are valuables in the car.
+        Let $L$ be the statement there are laptops in the car.
+        We know that
+        \[
+        L \ra V
+        \]
+        We want to show that the above assumption
+        implies that
+        \[
+        L \vee V \Leftrightarrow V
+        \]
+        The easiest way is to compare the truth-table values of
+        $L \vee V$ and $V$ in the three cases where $L \ra V$ holds
+        \[
+        \begin{array}{c|c|c|c}
+        L   &   V   &   L \ra V &  L \vee V \\\hline
+        0   &   0   &   1       &   0       \\
+        0   &   1   &   1       &   1       \\
+        1   &   1   &   1       &   1
+    \end{array}
+    \]
+        We see that in the cases where $L \ra V$ holds,
+        $V$ and $L \vee V$ are equivalent to each other
+        and not equivalent to $L$
+\item   Prove that $a | b$, $a$
+        nand $b$, which is defined to be
+    $\neg (a \wedge b)$, is
+    complete. Write
+    $(~a~\rightarrow~b)~\rightarrow~b$
+    using just $|$ (nand), then using just
+    $\downarrow$ (nor).\\
+    \noindent {\bf  ANSWER:}
+    \begin{enumerate}
+    \item
+        We just need to construct not, and from nand.
+        Negation is very easy:
+        \[
+        a \vert a = \overline{ a \cdot a } \text{, which is equivalent to } \overline{a}
+        \]
+        Now $a \cdot b$ is equivalent to  $\overline{a \vert b}$,
+        which by the above is equivalent to
+        \[
+        (a \vert b) \vert (a \vert b)
+        \]
+        Therefore nand is complete, since or, and are complete.
+    \item
+        One way to do this is to simplify
+        \[
+        ( a \rightarrow b) \rightarrow b
+        \]
+        Plugging in the definition of implication, we get,
+        \[
+         \overline{ (\overline{a} + b)} + b
+        \]
+        Which is equivalent to
+        \[
+        a\cdot \overline{b} + b
+        \]
+        Distributing the or over the and, this is equivalent to
+        \[
+        (a+ b)(\overline{b} + b)
+        \]
+        Which is equivalent to
+        \[
+        (a+b)
+        \]
+        To express this in terms of nand, we first express it in terms
+        of not, and. The formula is equivalent to
+        \[
+        \ov{\ov{a} \ov{b}}
+        \]
+        In other words,
+        \[
+        \overline{a} \vert \overline{b}
+        \]
+        or
+        \[
+        \left( a \vert a \right) \vert \left(b \vert b \right)
+        \]
+    \item
+        We know that $\overline{a}$ is equivalent to $a \downarrow a$. As in the
+        previous case, we can work with the simplified form $a+b$. We know
+        that this is equivalent to
+        \[
+        \overline{ a \downarrow b}
+        \]
+        by the definition of $\downarrow$.
+        Therefore,  $a + b $ is equivalent to
+        \[
+        \left( a \downarrow b \right) \downarrow \left( a \downarrow b \right)
+        \]
+    \end{enumerate}
+\item
+    Show how to use a truth table in order to construct a conjunctive
+    normal form for any Boolean formula $W$. Hint: Consider the
+    disjunctive normal form for $\neg W$.\\
+    \noindent {\bf  ANSWER:}
+
+    The method is completely dual to the method shown for getting the
+    DNF  of a formula. Let's recall how we get a DNF from the truth
+    table values of an expression $W$: We pick all rows where $W$
+    is true. To get the DNF, we or together one term for each of those
+    rows. The term is constructed from the values of the variables
+    take on in that row. For example if in that row the variables
+    have values $x = 0$, $y= 1$, $z=1$, then the term from that row
+    will be $\overline{x} y z$.
+
+    To construct a CNF, we simply do the opposite at every stage
+    of the DNF construction: We pick all rows where $W$ is false.
+    To get the CNF, we and together one term for each of those rows.
+    The term is constructed from the values of the variables take on in
+    that row. For example if in that row the variables have values
+    $x= 0$ , $y= 1$ , $z =1$, then the term from that row will be
+    $( x + \overline{y} + \overline{z})$.
+
+\item
+    Euclid proved that there are an infinite number of primes, by
+    assuming that  $ n$ is the highest prime, and exhibiting a number
+    that he proved must either be prime itself, or else have a prime
+    factor greater than  $ n $. Write a scheme program to find
+    the smallest  $ n$ for which Euclid's proof does
+     {\em not} provide an actual prime number.\\
+    \noindent {\bf  ANSWER:}
+    There was some confusion as to whether the question wants
+    you i) to use all primes less than a given prime $n$,
+    {\em i.e.} to generate the primes in some other fashion
+    an then apply Euclid's proof to an initial sequence of primes
+    or ii) to use  {\em all primes generated by Euclid's proof}. These
+    are not the same since Euclid's proof skips over many primes.
+    For example, starting with $2$, Euclid's proof generates $3$, $7$ for
+    the next two primes, skipping over $5$. The program we include here
+    uses interpretation i).
+
+\vskip 10pt
+
+\beginlisp
+(define (prime? x)    ; tests whether x is prime
+ (define (iter count)
+  (cond   ((> (* count count) x) true)
+          ((= 0 (remainder x count)) false)
+          (else (iter (inc count)))))
+ (iter 2))
+\endlisp
+
+\vskip 10pt
+
+\beginlisp
+(define ones (cons-stream 1 ones))   ; 1,1,1,1,1,1,...
+\endlisp
+
+\vskip 10pt
+
+\beginlisp
+(define integers (cons-stream 1 (add-streams ones integers)))
+;1,2,3,4,....
+\endlisp
+
+\vskip 10pt
+
+\beginlisp
+(define primes (stream-filter prime? integers))  ; 2,3,5,7,11,...
+\endlisp
+
+\vskip 10pt
+
+\beginlisp
+(define (mul-first-n-primes n) ; returns the product of the first
+ (define (iter i answer)       ; n primes
+  (cond ((= i 0) answer)
+        (else (iter (dec i) (* (stream-ref primes i) answer)))))
+ (iter n 1))
+\endlisp
+
+\vskip 10pt 
+\beginlisp
+; returns first composite number of the form p1 p2 ... pi + 1
+\endlisp
+
+\beginlisp
+(define (find-first-composite)
+ (define (iter i)
+  (cond ((prime? (inc (mul-primes i)))
+         (iter (inc i)))
+        (else (display i)
+              (display "   ")
+              (inc (mul-first-n-primes i)))))
+ (iter 2))
+\endlisp
+
+\vskip 10pt
+
+\beginlisp
+(find-first-composite)
+6
+;Value: 30031
+\endlisp
+
+\vskip 10pt
+
+    \item
+    You have proved before that a truth table with $n$ variables
+    has $2^{n}$ rows.
+    \begin{enumerate}
+    \item
+    How many different Boolean functions with $n$ variables are
+    there? \\
+    \noindent {\bf  ANSWER:}
+    $2^{2^n}$
+    \item For $n = 2$, list all the functions and identify as many as
+    you can by name. \\
+    \noindent {\bf  ANSWER:}
+\[
+    \begin{array}{c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
+        a   &   b   &   0   &a \wedge b&\ov{a\ra b} &   a   &\ov{b\ra a} &   b  & a \oplus b &a \vee b &a\downarrow b& a \lra b& \ov{b}& b \ra a &\ov{a} & a\ra b&a \vert b&  1 \\\hline
+        0   &   0   &   0   &   0      &   0          &   0   &   0         &   0  &   0   &   0   &   1      &   1    &   1   &    1    &   1   &   1   &   1   &  1 \\
+        0   &   1   &   0   &   0      &   0          &   0   &   1         &   1  &   1   &   1   &   0      &   0    &   0   &    0    &   1   &   1   &   1   &  1 \\
+        1   &   0   &   0   &   0      &   1          &   1   &   0         &   0  &   1   &   1   &   0      &   0    &   1   &    1    &   0   &   0   &   1   &  1 \\
+        1   &   1   &   0   &   1      &   0          &   1   &   0         &   1  &   0   &   1   &   0      &   1    &   0   &    1    &   0   &   1   &   0   &  1
+    \end{array}
+    \]
+    (Aside: Note that $\oplus$ is just the negation of $\lra$. )
+    \end{enumerate}
+
+\item
+    Prove by induction that for $n > 5 $ , $2^{n} > n^{2}$. \\
+    \noindent {\bf  ANSWER:}
+    Actually, we can take $n \ge 5$.
+
+    Base Case: $n = 5$. Then $2^5 = 32$, which is greater than
+    $5^2$, which is $25$ \\
+
+    Inductive step: Suppose for a fixed $n$ that $ 2^n > n^2 $
+    We want to show that $2^{n+1} > (n+1)^2$.
+    Multiplying the n-th case by $2$, we get
+    \[
+    2 \cdot 2^n > 2n^2,
+    \]
+    or
+    \[
+    2^{n+1} > 2n^2.
+    \]
+    So all we have to show is that
+    \[
+    2n^2 > (n+1)^2
+    \]
+    for all $n \ge 5$. Expanding out, this is true if and only if
+    \[
+    n^2 -2n -1 > 0
+    \]
+    for all $n \ge 5$. This in turn could be proven by induction
+    or we could use the following trick. If we add 2 to the left hand side
+    it becomes a perfect square:
+    \[
+    n^2 - 2n + 1 > 2
+    \]
+    In other words,
+    \[
+    (n+1)^2 > 2
+    \]
+    But this is true if and only if
+    \[
+    (n+1) > \sqrt{2}
+    \]
+    or equivalently
+    \[
+    n > \sqrt{2} -1 \approx 0.4
+    \]
+    So it is certainly true that
+    \[
+    2n^2  > (n+1)^2
+    \]
+    for all $n \ge 5$ and so
+    \[
+    2^{n+1} > 2n^2 > (n+1)^2
+    \]
+    and we have proved the inductive step. Q.E.D.
+\item
+    Guess the number of different ways for $n$ people to arrange
+    themselves in a straight line, and prove your guess is correct
+    by induction.\\
+
+    \noindent {\bf  ANSWER:}  The number of ways for $n$ people to arrange themselves is $n!$.
+    We will see why a bit later, but all we have to do here is prove
+    the formula by induction.\\
+
+    Base Case: The number of ways one person can arrange themselves
+    in line is $1$, which agrees with $1!$ \\
+
+    Inductive Step: Assume that for a given $n$ the number of ways $n$ people
+    can arrange themselves in line is $n$. We would like to
+    show that the number of ways $n+1$ people can arrange themselves in line
+    is then necessarily $(n+1)!$. We can do this by breaking the
+    process in to two steps. First we line up the first $n$ people
+    and then we pick a spot for the last person to go to. By the
+    rule of independent outcomes (which we assume you just sort of know
+    about from common sense - we'll see it again when we do probability)
+    the number of ways to do both things in sequence is the product
+    of the number of ways to do each separate thing. Lining up $n$ people
+    can be done in $n!$ ways by the induction hypothesis. The $(n+1)^{\text{st}}$
+    has $n+1$ places to go - either before all the people, or after the
+    first person, or after the second person \ldots. (Technically, we should
+    also prove that there are $n+1$ places to go by another induction, but
+    we'll skip this for our sanity and since the claim is sufficiently
+    believable).  Therefore the number
+    of ways to arrange $n+1$ people is the product of the two numbers,
+    \[
+    (n+1)\cdot n! = (n+1)!
+    \]
+    And so the inductive step isproven. Q.E.D.
+\item
+    Use logic with quantifiers and predicates to model the following
+    three statements:
+    \begin{itemize}
+        \item All students are taking classes.
+        \item Some students are not motivated.
+        \item Some people taking classes are not motivated.
+    \end{itemize}
+    Prove, using resolution methods, that the third statement follows
+    logically from the first two. (Reminder: You must take the conjunction
+    of the first two statements and the negation of the third, and
+    derive a contradiction.)\\
+    \noindent {\bf  ANSWER:}
+    \begin{enumerate}
+    \item
+        The universe is the set of all people. We need the following
+        predicates
+        \[
+        S(x) \text{ if and only if $x$ is a student}
+        \]
+        \[
+        M(x) \text{ if and only if $x$ is motivated}
+        \]
+        \[
+        C(x) \text{ if and only if $x$ is taking classes}
+        \]
+    The sentences translate to
+        \[
+        \forall x S(x) \rightarrow C(x)
+        \]
+        \[
+        \exists x S(x) \wedge \neg M(x)
+        \]
+        \[
+        \exists x C(x) \wedge \neg M(x)
+        \]
+    \item
+    Let's prove that the third follows from the first two.
+    We'll go about it like the hint says, by assuming the
+    first two and the negation of the third (we don't really have to
+    take the conjunction of the first two statements, we'll just list them
+    separately in our proof)
+        \begin{align*}
+            1. \quad & \forall x S(x) \rightarrow C(x) \hfill &\\
+            2. \quad & \exists x S(x) \wedge \neg M(x)  \hfill &\\
+            3. \quad & \neg \exists x C(x) \wedge \neg M(x)
+                \hfill & \text{1.-3. are the assumptions we are making}\\
+            4. \quad & \forall x  \neg C(x) \vee M(x)
+                \hfill &\text{ by  3. and  the properties of quantifiers } \\
+            5. \quad & S(p) \wedge \neg M(p)
+               \hfill &\text{ for some $p$, by existential instantiation  of 2.} \\
+            6. \quad & S(p) \rightarrow C(p)
+               \hfill &\text{by universal instatiation of 1.} \\
+            7. \quad & \neg S(p) \vee C(p)
+                \hfill &\text{ by the definition of $\rightarrow$} \\
+            8. \quad & \neg C(p) \vee M(p)
+               \hfill &\text{ by universal instatiation of 4.} \\
+            9. \quad & \neg S(p) \vee M(p)
+                \hfill &\text{ by resolution of 7. and 8. } \\
+           10. \quad & \neg \left( \neg S(p) \vee M(p) \right)
+               \hfill &\text{ by 5. and Demorgan's Laws }
+        \end{align*}
+       This is a contradiction, since 9. and 10. are negations of each other.
+        Therefore if 1. and 2. hold, 3. cannot hold. Q.E.D.
+    \end{enumerate}
+
+\item  The following algebraic idea is central for Karnaugh maps.
+    Karnaugh maps are a method of minimizing the size of circuits for
+    digital logic design.
+    \begin{enumerate}
+    \item
+        Using algebraic manipulation, prove that the two Boolean formulae
+        below are equivalent. (Hint: $x(a+ \overline{a})$ is equivalent
+        to $x$.)
+        \[
+        x\overline{y} + y\overline{z} +  \overline{x}z \qquad \textrm{and} \qquad
+         \overline{x}y +  \overline{y}z + x\overline{z}
+        \]
+    \noindent {\bf  ANSWER:}
+    We'll show that the two formulas have the same canonical disjunctive normal form (CDNF).
+    The formulas are already in disjunctive normal form. The CDNF is the DNF
+    you would get using a truth table. What distinguishes it from DNF is that each
+    variable in the formula must appear in each of the terms being or'ed togther.
+    The formulas above do not include all of the variables $x$, $y$, $z$ in each term.
+    We can fix by using the trick suggested by the hint. The first formula expands to
+    \begin{align*}
+        x\overline{y} + y\overline{z} +  \overline{x}z
+            & \Leftrightarrow  x \overline{y}(z + \overline{z})
+                + (x + \overline{x}) y \overline{z}
+                + \overline{x}(y + \overline{y})z \\
+            & \Leftrightarrow x \overline{y} z +  x \overline{y} \overline{z}
+                + x y \overline{z} + \overline{x} y \overline{z}
+                + \overline{x} y z + \overline{x} \overline{y} z
+    \end{align*}
+    The second formula expands to
+    \begin{align*}
+         \ov{x}y +  \ov{y}z + x\ov{z}
+            & \Leftrightarrow \ov{x}y (z  +  \ov{z})
+                + ( x + \ov{x}) \ov{y}z + x(y + \ov{y})\overline{z}\\
+            & \Leftrightarrow \ov{x}y z + \ov{x} y \ov{z} + x \ov{y} z + \ov{x} \ov{y} z
+             + x y \ov{z} + x \ov{y} \ov{z}
+    \end{align*}
+    Now the two expanded formulas are the same up to permutation, so the original formulas are equivalent.
+    \item Verify your results using a truth table.\\
+    \noindent {\bf  ANSWER:}
+     \[
+    \begin{array}{c|c|c|c|c}
+        x   &   y   &   z   &   x\ov{y} + y\ov{z} +  \ov{x}z  & \ov{x}y +  \ov{y}z + x\ov{z} \\\hline
+        0   &   0   &   0   &   0   &  0 \\
+        0   &   0   &   1   &   1   &  1 \\
+        0   &   1   &   0   &   1   &  1 \\
+        1   &   0   &   0   &   1   &  1 \\
+        0   &   1   &   1   &   1   &  1 \\
+        1   &   0   &   1   &   1   &  1 \\
+        1   &   1   &   0   &   1   &  1 \\
+        1   &   1   &   0   &   0   &  0
+    \end{array}
+    \]
+    Yes!
+    \end{enumerate}
+\item
+    The exclusive-or operator $\oplus$, is defined by the rule that $a \oplus
+    b$
+    is true whenever $a$ or $b$ is true but not both.
+    \begin{enumerate}
+    \item Calculate $x \oplus x$ , $x \oplus \neg x$ ,
+    $x \oplus 1$ , $x \oplus 0$.\\
+    \noindent {\bf  ANSWER:}
+    $0$, $1$, $\neg x$ , $x$
+    \item Prove or disprove that $x + y \oplus z = (x+ y) \oplus (x+ z)$\\
+    \noindent {\bf  ANSWER:}
+    This is not true. If we let $x$ be true, the left-hand side will always
+    be true, whereas the right-hand side will always be false.
+    \item Prove or disprove that $x  \oplus (y +  z) = ( x  \oplus y) + ( x  \oplus z)$\\
+    \noindent {\bf  ANSWER:}
+    This is not true. If we let $x$ be true, the left-hand side is equivalent
+    to $\neg (y + z)$, {\em i.e.} nor of $y,z$,  and the right hand is equivalent
+    to $(\neg y ) \vee (\neg z)$, {\i.e} nand of $y,z$. And these are definitely
+    not equivalent.
+    \item
+    Write conjunctive normal form and disjunctive normal form formulae
+    for  $x  \oplus  y$\\
+    \noindent {\bf  ANSWER:}
+    \begin{align*}
+    & \text{CNF:} (a + b)( \ov{a} + \ov{b} ) \\
+    & \text{DNF:} \ov{a} b+ a \ov{b}
+    \end{align*}
+    \item The exclusive-or operator is not  {\em complete.} Which of the
+    three operators \{and, or, not\} can be combined with exclusive-or
+    to make a  {\em complete} set.\\
+    \noindent {\bf  ANSWER:}
+    \begin{itemize}
+        \item $\oplus$ and $\neg$ are not complete. This is not the
+        most straightforward thing in the world to show. If they
+        were complete, we would be able to generate any four-bit
+        sequence (column of a truth table) with the operators
+        just starting from $0011$, $0101$. The problem is that
+        both of the starting sequences have an even number of
+        ones, and $\oplus$, $\neg$ will keep the number of ones
+        even, so we will never be able to generate $1000$, for
+        example.
+        \item $\oplus$ and $\vee$ are not complete. If they
+        were complete, we would be able to generate any four-bit
+        sequence (column of a truth table) with the operators
+        just starting from $0011$, $0101$. However both $\oplus$
+        and $\vee$ cannot change the $0$ in the first positions of
+        $0011$, $0101$ to a
+        $1$, so we will never be able to generate any sequence
+        starting with a $1$.
+        \item $\oplus$ and $\wedge$ are not complete for the same
+        reason as the previous case.
+    \end{itemize}
+    \end{enumerate}
+\item
+    The  $n^{\mathrm{th}}$ triangle number  $T_{n}$ is defined to be the sum
+    of the first  $n$ integers. \\
+    \begin{enumerate}
+    \item
+    Prove by induction that  $T_{n} =  n( n + 1)/2.$ \\
+    \noindent {\bf  ANSWER:} \\
+    Base case: $T_1 = 1 = 1(1 + 1)/2$ \\
+    Inductive Step: Suppose that for a fixed $n$, it is true that  $T_n = \frac{n(n+1)}{2}$.
+    We need to show that it follows necessarily that $T_{n+1} = \frac{(n+1)(n+2)}{2}$.
+    We can do this by expressing $T_{n+1}$ in terms of $T_{n}$ and manipulating the result
+    \begin{align*}
+        T_{n+1} &= T_n + (n+1) = \frac{n(n+1)}{2} + (n+1) \\
+                &= (n+1)(\frac{n}{2} + 1) = \frac{(n+1)(n+2)}{2}.
+    \end{align*}
+    Therefore the inductive step holds and it follows
+    that $T(n) = \frac{n(n+1)}{2}$ for every $n$.
+    \item Prove algebraically using (a), that
+    \[
+        n^{3} + (1+2+\cdots +(n - 1))^{2}
+            = (1+2+\cdots (n-1) +  n)^{2}
+    \]
+    \noindent {\bf  ANSWER:}
+    We want to show that
+    \begin{align*}
+        n^3 &=(1+2+\cdots +n)^{2} - (1+2+\cdots +(n - 1))^{2} \\
+            & = T_n^2 - T_{n-1}^2
+    \end{align*}
+    Using the formula for $T_n$, the right hand-side becomes
+    \begin{align*}
+       \frac{n^2(n+1)^2}{4} - \frac{(n-1)^2n^2}{4} &= \frac{n^2}{4} ( (n+1)^2 - (n-1)^2) \\
+                                                   &= \frac{n^2}{4} ( 4n) \\
+                                                   &= n^3
+    \end{align*}
+    Q.E.D.
+    \item
+    Using (b) guess a formula for
+    \[
+    C_n = 1^{3} + 2^{3} + 3^{3} + \cdots  +  n^{3},
+    \]
+    and prove it by induction.\\
+    \noindent {\bf  ANSWER:}
+    This our first encounter with  a telescoping series ({\em c.f. } problem~set~2)
+   \begin{align*}
+        1^{3} + 2^{3} + 3^{3} + \cdots  +  n^{3} & =
+          (T_1^2 - T_0^2) + (T_2^2 -T_1^2)  + \cdots  + (T_n^2 - T_{n-1}^2) \\
+            &= ( -T_0^2 + T_n^2 )\\
+         &= T_n^2 = \frac{n^2(n+1)^2}{4}
+  \end{align*}
+    Even though it is fairly straightforward from the above, we'll prove that
+    \[
+     C_n = 1^{3} + 2^{3} + 3^{3} + \cdots  +  n^{3} = \frac{n^2(n+1)^2}{4}
+    \]
+    by induction, just for practice. \\
+    Base case: $C_1 = 1^3 =1$, and  $\frac{1^2 2^2}{4} = 1$ \\
+    Inductive Step: Suppose that for a fixed $n$, that $C_n = \frac{n^2(n+1)^2}{4}$.
+    We want to show that this necessarily implies $C_{n+1} = \frac{(n+1)^2(n+2)^2}{4}$. We start
+    by expressing $C_{n+1}$ in terms of $C_n$ and then manipulate the result:
+    \begin{align*}
+    C_{n+1} & = C_n + (n+1)^3\\
+            & = \frac{n^2(n+1)^2}{4} + (n+1)^3 \\
+            & = (n+1)^2 (\frac{n^2}{4} + (n+1) ) \\
+            & = (n+1)^2  \frac{n^2 + 4n +4}{4} \\
+            & = (n+1)^2 \frac{(n+2)^2}{4}.
+    \end{align*}
+    This is what we wanted to show, so the inductive step is proven.\\
+    Q.E.D.
+    \end{enumerate}
+\item Guess a formula for the sum below, and prove you are right by
+    induction.
+    \[
+    1 + 1(2) + 2(3) + 3(4) + \cdots  +  n(n + 1)
+    \]
+    \noindent {\bf  ANSWER:}
+    The $1$ at the beginning of the formula doesn't fit the pattern of the
+    tail of the sum, so we'll figure a formula for
+    \[
+    A_{n} := 1(2) + 2(3) + 3(4) + \cdots  +  n(n + 1)
+    \]
+    and then we can add 1 to it at the end. We can reduce this sum
+    into two more basic sums:
+    \begin{align*}
+    1(2) + 2(3) + 3(4) + \cdots  +  n(n + 1)
+        &= 1(1 + 1) + 2(2 + 1) + \cdots + n(n+1) \\
+        &= (1^2 + 2^2 + \cdots n^2) + (1 + 2 +  \cdots n)
+    \end{align*}
+    The second sum is one we already have a closed form for. I claim
+    that the formula for the first sum is
+    \[
+    (1^2 + 2^2 + \cdots n^2) = \frac{n(n+1)(2n+1)}{6},
+    \]
+    so the original sum is
+    \begin{align*}
+    A_n := 1 + 1(2) + 2(3) + 3(4) + \cdots  +  n(n + 1)
+        &= 1 + \frac{n(n+1)(2n+1)}{6} + \frac{n(n+1)}{2} \\
+        &= 1 + \frac{n(n+1)}{2}(\frac{2n+1}{3} +1) \\
+        &= 1 + \frac{n(n+1)(2n+4)}{6}.
+    \end{align*}
+    The beauty of proof-by-induction is you don't have to know at all how
+    I came up with the formula for the sum. You can still use
+    induction to prove that it is correct. Let's do that now: \\
+    Base Case: $A_0 = 1$,  $1 + \frac{0(0+1)(2 \cdot 0+4)}{6} = 1$ \\
+    Inductive Step: Suppose that for a fixed $n$, $A_n = 1 + \frac{n(n+1)(2n+4)}{6}$
+    we want to show that it follows necessarily that $A_{n+1} = 1 + \frac{(n+1)(n+2)(2n+6)}{6}$. We start
+    by expressing $A_{n+1}$ in terms of $A_n$ and then manipulate the result:
+    \begin{align*}
+    A_{n+1} & = A_n + (n+1)(n+2) \\
+            & = 1 + \frac{n(n+1)(2n+4)}{6} + (n+1)(n+2) \\
+            & = 1 + (n+1) (\frac{n(2n+4)}{6} + (n+2)) \\
+            & = 1 + (n+1) (\frac{ 2n^2 + 10n + 12}{6})  \\
+            & = 1 + (n+1) \frac{(n+2)(2n+6)}{6}.
+    \end{align*}
+    This is what we wanted to show, so the inductive step is proven.\\
+    Q.E.D.
+\end{enumerate}
+
+\end{document}

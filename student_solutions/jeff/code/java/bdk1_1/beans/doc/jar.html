@@ -1,0 +1,65 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>JAR files</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<center><a NAME="top"></a></center>
+
+<center>
+<h1>
+JAR files</h1></center>
+JAR files are a new feature in JDK 1.1. A JAR file is a convenient way
+of packaging together a set of class files and any associated GIF images,
+data files, or other resource files.
+<p>A JAR file consists of a normal ZIP format file, plus an optional
+<a href="#manifest">manifest
+file</a> describing the JAR contents.
+<p>You can use the Java 2 SDK version 1.2 <a href="#jar">jar</a> command
+to create and read JAR files.
+<h2>
+<a NAME="manifest"></a>Manifest file</h2>
+Each JAR file may contest a manifest file describing the contents of the
+JAR file. The manifest file must be named META-INF/MANIFEST.MF.
+<p>For the BDK 1.1, the JAR files containing beans should contain a META-INF/MANIFEST.MF
+manifest file giving the name of each bean class and specifying that it
+is a bean. So for example, the manifest file for the juggler.jar is initialized
+as:
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name: sunw/demo/juggler/Juggler.class
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Java-Bean: True</pre>
+See the
+<a href="http://java.sun.com/beans/related.html">manifest file
+specification</a> for more information on manifest files.
+<h2>
+<a NAME="jar"></a>The jar command</h2>
+The jar command is provided as part of Java 2 SDK version 1.2. It allows
+you to either create a JAR file or to extract the content of a jar file.
+<p>The jar command syntax is:
+<pre>&nbsp;&nbsp;&nbsp; jar [ctxvfm] [jar-file] [manifest-file] files ...
+&nbsp;&nbsp;&nbsp; Option flags are:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c&nbsp; create new archive
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t&nbsp; list table of contents for archive
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x&nbsp; extract named (or all) files from archive
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; v&nbsp; generate verbose output on standard error
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f&nbsp; specify JAR file name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m&nbsp; include manifest information from specified manifest file
+&nbsp;&nbsp;&nbsp; If any file is a directory then it is processed recursively.</pre>
+So for example, the command "jar xf foo.jar" would extract all the files
+from the foo.jar JAR file and put them in the current directory.
+<p>The command "jar cfm fred.jar manifest.tmp *.class" would create a new
+JAR file called fred.jar, containing the given set of .class files, and
+with a manifest file initialized from manifest.tmp.
+<p>
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

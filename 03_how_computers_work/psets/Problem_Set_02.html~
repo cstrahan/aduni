@@ -1,0 +1,971 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+   <TITLE>How Computers Work PS2</TITLE>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+   <META NAME="GENERATOR" CONTENT="Microsoft FrontPage 4.0">
+</HEAD>
+<BODY>
+
+<CENTER><P><FONT SIZE=+2>How Computers Work<BR>
+Problem Set 2</FONT></P></CENTER>
+
+<P><FONT SIZE=+2>Issued: December 7, 2000</FONT></P>
+
+<P><B>Problem 1<I>: </I>Warm up Exercises – to be done without collaboration.
+</B></P>
+
+<OL TYPE="A">
+<LI>Fill in the values of the given control signals for the for the following
+Beta instructions. Indicate a number, or mark with an X if the signal is
+irrelevant.&nbsp; <I>Yes, you'll have to print out this particular page
+to turn in your answer... </I><BR>
+</LI>
+
+<TABLE BORDER=1 CELLPADDING=7 >
+<TR>
+<TD WIDTH="15%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>PCSEL</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>RA2Sel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>ASel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>BSel</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>ALUFN</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>WDSel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>WR</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>WERF</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>WASel</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>MULC(R9,5,R11)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>DIV(R2,R3,R4)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>LD(BP,-3,R1)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>BRNZ(R1,QUIT,R31)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>ST(R2,0x2222R3)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="10%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="9%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="10%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="11%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P><FONT SIZE=-2>&nbsp;</FONT></P>
+
+<LI>Write out the 32-bit binary representations for the following instructions:<BR>
+<BR>
+MULC(R5, -10, R11) and</LI>
+
+<P>ST(R1, +2, BP)</P>
+
+<LI>The BRZ and BRNZ Beta instructions branch to a new location by adding
+an offset to the value of &lt;PC&gt;+1. What is the range of possible offsets
+from the PC (i.e., the line with the branch)?</LI>
+
+<LI>For which of the instruction(s) listed in the Beta ISA handout is RA2Sel=1?</LI>
+</OL>
+
+<P><B>Problem 2: </B><I>May be done collaboratively.</I></P>
+
+<OL TYPE="A">
+<LI>Why is <TT>PUSH(RA)</TT> implemented as a two instruction macro? (i.e.
+what about the beta prevents the <TT>PUSH</TT> operation from being implemented
+as a single instruction?)</LI>
+
+<LI>Suggest a change to the Beta hardware that would enable you to implement
+<TT>PUSH</TT> as a single instruction. (Hint: your can do it by modifying
+one of the muxes and adding another. If you find yourself drawing a hardware
+diagram that looks like a map of Boston, then you have missed the simplest
+solution.) </LI>
+
+<LI>Write out the new 32 bit binary rep for <TT>PUSH(R10)</TT>.</LI>
+
+<LI>As above define the necessary control logic for your new instruction:</LI>
+
+<TABLE BORDER=1 CELLPADDING=7>
+<TR>
+<TD WIDTH="15%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>PCSEL</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>RA2Sel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>ASel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>BSel</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>ALUFN</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>WDSel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>WR</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>WERF</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>WASel</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>PUSH(R10)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+
+<P><FONT SIZE=-2>&nbsp;</FONT></P>
+
+<LI>Why is <TT>POP(RA)</TT> implemented as a two instruction macro? (Hint:
+the answer is not exactly the same as above...)</LI>
+
+<LI>Suggest a change to the Beta hardware that would enable you to implement
+<TT>POP</TT> as a single instruction. (Hint: Some of the changes necessary
+for <TT>PUSH</TT> are useful for <TT>POP</TT>. But you will need additional
+changes.)</LI>
+
+<LI>Write out the new 32 bit binary rep for <TT>POP(R10)</TT>.</LI>
+
+<LI>As above define the necessary control logic for your new instruction:</LI>
+
+<TABLE BORDER=1 CELLPADDING=7 >
+<TR>
+<TD WIDTH="15%" VALIGN="TOP">&nbsp;</TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>PCSEL</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>RA2Sel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>ASel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>BSel</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>ALUFN</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>WDSel</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>WR</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>WERF</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>WASel</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="15%" VALIGN="TOP"><FONT SIZE=-2>POP(R10)</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="9%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="7%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="10%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+
+<TD WIDTH="11%" VALIGN="TOP"><FONT SIZE=-2>&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+</OL>
+
+<P><FONT SIZE=-2>&nbsp;</FONT></P>
+
+<P><B>Problem 3:</B> <I>To be done without collaboration.</I></P>
+
+<P>Ben Bitdiddle has been given the assignment of implementing the ALU
+for a new micro processor called the eta. He has just finished implementing
+addition, and now he is work on subtraction. One common approach for implementing
+subtraction is to reuse hardware for addition of signed &quot;2s complement&quot;
+numbers in combination with negation&nbsp;--&nbsp;5&nbsp;-&nbsp;3 is implemented
+as 5+(-3). Late one night after eating too many Doritos and drinking too
+many Cokes, Ben Bitdiddle convinces himself that it would be interesting
+if he directly implemented subtraction in the ALU. </P>
+
+<OL TYPE="A">
+<LI>Help Ben out by defining a simple 1 bit subtractor that takes two 1
+bit inputs and computes a signed (2s complement) 2 bit result. Please define
+your circuit both as a pair of Karnaugh maps and using discrete logic (e.g.
+AND, OR and NOT gates). </LI>
+
+<LI>Using this circuit Ben is convinced that an N bit subtractor can be
+built. Alyssa P. Hacker happens to be working nearby, and after overhearing
+your discussion with Ben, suggests that a simple &quot;2 input, 2 output&quot;
+subtractor will not suffice. She suggests that you add an input to your
+subtractor called BORROW. Redesign you circuit as a 3 input, 2 output device.
+You need only show the Karnaugh maps for this new device. (Let's call this
+a Full Subtractor, or FS for short.) </LI>
+
+<LI>Combine 4 FS units into a 4 bit subtractor unit. Like the 1 bit FS
+unit, your 4 bit unit should take two unsigned 4 bit numbers and return
+a 5 bit signed 2s complement result. </LI>
+
+<LI>After drinking a cup of coffee and staring at the maps for a few minutes,
+Ben falls off his chair and exclaims, &quot;Hey I think this thing could
+work for signed input also.&quot; Is Ben right? Explain. </LI>
+</OL>
+
+<P><B>Problem 4: Lab Assignment 2 - Programming the Control ROM</B></P>
+
+<H1><FONT FACE="Arial,Helvetica,Sans-serif"><FONT SIZE=+0>Lab 2, Part 1:
+The ROM</FONT></FONT></H1>
+
+<P><FONT SIZE=+0>In this part, you'll be given a working schematic of the
+Beta datapath.&nbsp; Your job is to program the Control ROM so that all
+the mux and enable switches get set properly.</FONT></P>
+
+<H3><FONT FACE="Arial,Helvetica,Sans-serif">The schematic</FONT></H3>
+
+<P>When you start Betasim, you'll see a single schematic window instead
+of all of the little windows you got before.&nbsp; Load the file <b>L2beta.path</b>
+into this window. This schematic is live, in the sense that you can change
+the values of the switches, </P>
+
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#A00000">DON'T PANIC!</FONT></FONT></B>&nbsp;
+The picture below is a lot less confusing than it seems at first.&nbsp;
+Ignore the fancy colors for now, and just find the boxes marked <B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FF5030"><FONT SIZE=-1>PC</FONT></FONT></FONT></B>,
+<B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FF5030"><FONT SIZE=-1>IMEM</FONT></FONT></FONT></B>,
+<B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FF5030"><FONT SIZE=-1>REG
+FILE</FONT></FONT></FONT></B>, <B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FF5030"><FONT SIZE=-1>ALU</FONT></FONT></FONT></B>,
+and <B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FF5030"><FONT SIZE=-1>DMEM</FONT></FONT></FONT></B>.&nbsp;
+These should give you a good starting reference to understand the datapath.&nbsp;
+For example, follow the line coming out of the bottom of the PC to the
++ box, then through a mux, back to the PC.&nbsp; That's the +1 loop for
+the PC.&nbsp; You should also be able to trace a path from the bottom of
+the PC, through the IMEM, then through the REG FILE, a few muxes, the ALU,
+the write data selection mux, and back into the REG FILE.&nbsp; That's
+the 2-register ALU path.</P>
+
+<P><IMG SRC="pset_02_html_files/lab1.gif" ALT="lab1.gif (21122 bytes)" HEIGHT=509 WIDTH=570></P>
+
+<P>Each of the <B><FONT COLOR="#5080FF">blue</FONT></B> rounded rectangles
+is a switch.&nbsp; You can left-click on a switch to change its value.&nbsp;
+Most of the switches are connected to muxes.&nbsp; By changing the value
+of the switch, you can watch the mux change its input connection.</P>
+
+<P>If you're playing with Betasim while you're reading this, you'll notice
+that almost the entire drawing is very light gray.&nbsp; Betasim draws
+things in light gray if they aren't in use.&nbsp; It uses dark red for
+the wires when data is travelling along them, and draws elements in black
+if they're supplying data.&nbsp; You can see this by clicking the <B><FONT FACE="Arial,Helvetica"><FONT COLOR="#5080FF"><FONT SIZE=-1>pcen</FONT></FONT></FONT></B>
+switch in the top left corner.&nbsp; This enables the PC register, and
+should highlight all the wires and elements that supply data to the PC
+register.&nbsp; Go ahead!&nbsp; Try it!</P>
+
+<P>Any time you want, you can hold down the &quot;CTRL&quot; key and roll
+the mouse over an element or an element's wire port to see what it's called.&nbsp;
+Try this for the PC register.&nbsp; You'll notice that the ports are &quot;pc.en&quot;
+(enable), &quot;pc.clk&quot; (clock), &quot;pc.D&quot; (data input), and
+&quot;pc.Q&quot; (output). &nbsp; This should help you to figure out how
+everything is connected.</P>
+
+<H3><FONT FACE="Arial,Helvetica,Sans-serif">Programming Control ROMs</FONT></H3>
+
+<P>The two boxes glowing in <B><FONT COLOR="#00C040">green</FONT></B> in
+the picture above are the control ROMs.&nbsp; (They don't glow green in
+the real Betasim.)&nbsp; These are the elements you'll need to program
+for this part of the lab. &nbsp; To edit an element, double-click it.&nbsp;
+Do this now for the <B>trap</B> control ROM.&nbsp; You'll get a window
+like this:</P>
+
+<P><IMG SRC="pset_02_html_files/romwin.gif" ALT="romwin.gif (3337 bytes)" HEIGHT=205 WIDTH=485></P>
+
+<P>The first line of the ROM edit window lists the inputs to the control
+ROM.&nbsp; In this case, the only input is <B>opbits</B>, which is the
+little <B><FONT COLOR="#FF00FF">mauve</FONT></B> triangle labeled <B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FF00FF"><FONT SIZE=-1>opbits</FONT></FONT></FONT></B>
+in the upper right corner of the schematic window.&nbsp; The value of opbits
+is the six bits of the opcode. &nbsp; Based on the value of opbits, you
+should be able to set the wasel switch. &nbsp; Look on the schematic to
+find the wasel switch.&nbsp; You'll notice that it feeds the mux that determines
+whether to write to register Rc, or to the XP, register 30. (30 is 1e in
+hexadecimal.)&nbsp; Remember the reason we need to write to the XP?&nbsp;
+If there is a bad opcode, the Beta jumps to instruction number 1 and writes
+the value of pc+1 into XP.&nbsp; This ROM handles that case.&nbsp; You
+need to write an expression for wasel that evaluates to 1 (true) if opbits
+represents a bad opcode, and to 0 (false) otherwise. &nbsp; Here's an example
+to get you started:</P>
+
+<PRE>   wasel = opbits &lt; FIRSTOP</PRE>
+
+<P>You should use C-style expressions.&nbsp; You could have said:</P>
+
+<PRE>   wasel = opbits==1 || opbits==2 || opbits==3 || opbits==4 || ...</PRE>
+
+<P>... but that would have been really messy.&nbsp; See the <A HREF="ps2.html#operators">useful
+operators</A> section for a list of the operators you can use, and the
+<A HREF="ps2.html#opcode">handy
+opcode chart</A> to help you find the bad opcodes.</P>
+
+<P>Once you're satisfied with the expression you've entered, hit the &quot;Parse&quot;
+button at the bottom left of the window.&nbsp; If you have any parse errors,
+the error message will appear in red, and the cursor will move to the location
+of the error. &nbsp; If you want to revert the ROM back to the state before
+you made all your changes, hit the &quot;Revert&quot; button.&nbsp; In
+both cases, the ROM edit window will go away. &nbsp; Double-click the ROM
+schematic to open the window again.</P>
+
+<H3><FONT FACE="Arial,Helvetica,Sans-serif">Programming the other switches</FONT></H3>
+
+<P>Double-click the other control ROM, labeld &quot;<B>rom</B>&quot;.&nbsp;
+This ROM takes inputs from <B><FONT COLOR="#FF00FF">opbits</FONT></B>,
+<B><FONT COLOR="#FF00FF">zero</FONT></B>, and <B><FONT COLOR="#FF00FF">trapbit</FONT></B>.
+&nbsp; The zero bit is high when Ra is zero, and low when it isn't.&nbsp;
+The trapbit bit comes directly from the wasel switch that we set using
+the trap ROM.&nbsp; This bit is high if the Beta is attempting to trap.</P>
+
+<P><I>Why do we use two ROMs?&nbsp; You'd think that we could set the wasel
+switch just like all the other switches in a single rom.&nbsp; The reason
+is that this schematic is missing a few parts: there is no way to cause
+an interrupt or a fault in this drawing. &nbsp; If we did have fault and
+interrupt bits, they would feed into the trap ROM. &nbsp; Currently, the
+trap ROM has 6 input bits (opbits), and the rom ROM has 8 (opbits, zero,
+and trapbit).&nbsp; This gives us a total of 2<SUP>8</SUP>+2<SUP>6</SUP>=
+320 rom lines.&nbsp; If we include the fault and interrupt bits in the
+trap ROM, the trap ROM would have 8 input bits for a total of 512 rom lines.&nbsp;&nbsp;
+If instead we did everything in a single ROM, that ROM would have 10 input
+bits (opbits, zero, fault, interrupt), or 1024 lines.&nbsp; By using two
+ROMs, we use half the space of having a single ROM!&nbsp; TANSTAAFL (There
+Ain't No Such Thing As A Free Lunch): what do we lose by using two ROMs
+with half the space?</I></P>
+
+<P>In this ROM, you'll use opbits, zero, and trapbit to define all the
+other switches in the schematic. In order to do this, you'll need to think
+<I>sideways</I>. &nbsp; Ordinarily, you'd think, &quot;Okay, what switches
+need to be set for the LD instruction?&quot;.&nbsp; You'd imagine a large
+table with a list of the opcodes down the side, and the names of the switches
+along the top.&nbsp; Unfortunately, the information for the control ROM
+is entered the other way around.&nbsp; The correct question to ask is:
+&quot;Okay, for which opcodes does pcen need to be true?&quot;.&nbsp; The
+answer is, &quot;pcen should be true for all opcodes except for HALT (opcode
+0)&quot;.&nbsp; This kind of reasoning allows you to type &quot;<B><TT><FONT SIZE=-1>pcen=
+opbits!=HALT</FONT></TT></B>&quot; in the rom ROM.</P>
+
+<P>If you'd like a place to write stuff down, we've built a <A HREF="pset_02_html_files/bigchart.html">handy
+ROM table</A> for you to use.</P>
+
+<P>Hint #1:&nbsp; you'll really need to feel comfortable with what each
+of the switches does, so it's probably a good idea to &quot;play ROM&quot;
+yourself and set the switches for a few instructions before tackling the
+ROM writing.</P>
+
+<P>Hint #2: Although you don't have interrupts in this particular schematic,
+you should definitely think about how interrupts affect various instructions.&nbsp;
+Remember, interrupts act just like traps, but they can happen at <I>any
+time</I>, not just when there's a bad opcode.&nbsp; Make sure that the
+switch settings for a particular instruction don't prevent the interrupt
+from happening properly: pc&lt;-xaddr, XP&lt;-pc+1.</P>
+
+<H3><FONT FACE="Arial,Helvetica,Sans-serif">Special switch values</FONT></H3>
+
+<UL>
+<LI>Mux inputs are always numbered from left to right, starting with 0.</LI>
+
+<LI>The ALU has an aluop input which selects the function for the ALU.&nbsp;
+We've carefully chosen the aluop function codes so that they match the
+bottom four bits of the ALU or ALU-constant opcode.&nbsp; Play with the
+switch while looking at the <A HREF="ps2.html#opcode">opcodes</A>
+and see for yourself.</LI>
+
+<LI>Memory has a memcmd input which has three states.&nbsp; If memcmd is
+0, then the memory is IDLE, and neither reads nor writes.&nbsp; If memcmd
+is 1, then the memory READs the data at the address specified and shoves
+it on the output.&nbsp; If memcmd is 2, then the memory WRITEs the data
+on the data input into the address specified when the clock edge rises.</LI>
+
+<LI>The xaddr switch should remain at 1.&nbsp; This is because this schematic
+only performs traps, and doesn't have any faults or interrupts.</LI>
+</UL>
+
+<H3>Saving and testing your work</H3>
+
+<P>If you are happy with the ROM you have created, you need to go to the
+Save or Save As command in the File menu on the <B>schematic</B> window.&nbsp;
+The ROM is saved along with the schematic.&nbsp; This is unlike the Instruction
+Memory.&nbsp; The Instruction memory has <I>its own</I> Save command that
+saves <I>only </I>the Instruction memory.</P>
+
+<P>We will soon have some more programs you can load into instruction memory
+to test your ROM.&nbsp; A staff member will ask you to load one or more
+of these.&nbsp; For now, here are some programs with known behaviors...
+load them with File-&gt;Open in the code window: </P>
+
+<UL>
+<LI><B>optest.uasm</B> tests all of the opcodes, as well as the trap mechanism.
+&nbsp; Unfortunately, it doesn't really do anything interesting.&nbsp;
+You should step through this code and check the paths displayed in red
+on the schematic against what you expect the instruction to do.&nbsp; It
+might be useful to have a friend spot-check your datapaths.</LI>
+
+<LI><B>traptest.uasm</B> creates a <B>trap-based</B> multiplication operation
+and uses it to multiply 10 x -5 in two different ways.&nbsp; When finished,
+r0=0xA, r5=0xFFFB, r7=0xFFCE, and r8=0xFFCE.&nbsp; r0 and r5 are the operands;
+r7 and r8 are the results.</LI>
+
+<LI>There are several other files in the shared directory which can be used to
+test your program. Note that fractal.uasm cannot be used because the
+visible-schematic version of the Beta you just built does not support the
+Terminal window you were using in Part 1.</LI>
+
+</UL>
+
+<P>
+<HR>
+
+<H3><A NAME="operators"></A><FONT FACE="Arial,Helvetica,Sans-serif">C-style
+expressions you can use to program the ROMs</FONT></H3>
+
+<TABLE BORDER=1 WIDTH="100%" >
+<TR>
+<TD><B>Operation</B></TD>
+
+<TD><B>Example</B></TD>
+</TR>
+
+<TR>
+<TD>Addition, subtraction, multiplication, division</TD>
+
+<TD><TT>a+b, a-b, a*b, a/b</TT></TD>
+</TR>
+
+<TR>
+<TD>Modulo (remainder when divided by)</TD>
+
+<TD><TT>a%16</TT></TD>
+</TR>
+
+<TR>
+<TD>Logical And, Logical Or</TD>
+
+<TD><TT>a&amp;&amp;b, a||b</TT></TD>
+</TR>
+
+<TR>
+<TD>Bitwise And, Bitwise Or</TD>
+
+<TD><TT>a&amp;b, a|b</TT></TD>
+</TR>
+
+<TR>
+<TD>Equal to, not equal to</TD>
+
+<TD><TT>a==0, a!=0</TT></TD>
+</TR>
+
+<TR>
+<TD>Greater than, less than, greater or equal, less or equal</TD>
+
+<TD><TT>a&gt;b, a&lt;b, a&gt;=b, a&lt;=b</TT></TD>
+</TR>
+
+<TR>
+<TD>If-then-else (the ? : operator from C)</TD>
+
+<TD><TT>opbits&lt;24 ? 0 : 1</TT></TD>
+</TR>
+</TABLE>
+
+<P>Use parentheses to override the normal order of operations, for example,
+(2+3)*4 is 20, while 2+3*4 is 14.</P>
+
+<P>
+<HR>
+
+<H3><A NAME="opcode"></A><FONT FACE="Arial,Helvetica,Sans-serif">Handy
+opcode chart</FONT></H3>
+
+<TABLE BORDER=1 WIDTH="100%" HEIGHT="224" >
+<TR>
+<TD width="12%" height="18"><FONT COLOR="#800000">hi bits</FONT>/<FONT COLOR="#400080">lo
+bits</FONT></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">000
+(0)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">001
+(1)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">010
+(2)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">011
+(3)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">100
+(4)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">101
+(5)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">110
+(6)</FONT></B></TD>
+
+<TD width="11%" align="center" height="18"><B><FONT COLOR="#400080">111
+(7)</FONT></B></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">000 (0)</FONT></B></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">001 (8)</FONT></B></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">010 (16)</FONT></B></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">011 (24)</FONT></B></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#004080">LD</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#004080">ST</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#004080">JMP</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#004080">BRZ</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#004080">BRNZ</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#004080">LDR</FONT></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">100 (32)</FONT></B></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">ADD</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">SUB</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">MUL</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">DIV</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">CMPEQ</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">CMPLT</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">CMPLE</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">101 (40)</FONT></B></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">AND</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">OR</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">XOR</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">SHL</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">SHR</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#008040">SRA</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">110 (48)</FONT></B></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">ADDC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">SUBC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">MULC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">DIVC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">CMPEQC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">CMPLTC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">CMPLEC</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+
+<TR>
+<TD width="12%" height="19"><B><FONT COLOR="#800000">111 (56)</FONT></B></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">ANDC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">ORC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">XORC</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">SHLC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">SHRC</FONT></TD>
+
+<TD width="11%" align="center" height="19"><FONT COLOR="#800040">SRAC</FONT></TD>
+
+<TD width="11%" bgcolor="#C0C0C0" align="center" height="19"></TD>
+</TR>
+</TABLE>
+
+<H1><FONT FACE="Arial,Helvetica,Sans-serif"><FONT SIZE=+0>Lab 2, Part 2:
+More Coding</FONT></FONT></H1>
+
+<P><FONT SIZE=+0>In this part, you'll take your working Beta schematic
+and write code for it.&nbsp; In particular, we're going to exercise the
+trap mechanism (that being one of the more interesting parts of the Beta).</FONT></P>
+
+<H3><FONT FACE="Arial,Helvetica,Sans-serif">SUPing up your computer</FONT></H3>
+
+<P>The instruction we'll add is SUP.&nbsp; This instruction puts a 1 (true)
+into the destination register if the supervisor bit of the PC is true,
+and it puts a 0 (false) into the destination register if the supervisor
+bit is not true.&nbsp; The supervisor bit is the high bit of the PC.&nbsp;
+In a real operating system, the supervisor bit is used to enforce security.&nbsp;
+Certain parts of memory, the disk, and the input/output ports of a computer
+can't be read or written to unles the supervisor bit is set, and the only
+way to set the supervisor bit is to take a trap or interrupt.&nbsp; The
+trap address, of course, is secure operating system code, not user or application
+code.&nbsp; Once the operating system handles the trap, it makes sure to
+clear the supervisor bit before going back to user or application code.</P>
+
+<P>In your schematic, there are some vital gates missing that allow a malicious
+programmer to set the supervisor bit.&nbsp; <I>For your own amusement:&nbsp;
+</I>See if you can figure out how you might set it.&nbsp; The Beta simulation
+from part 1 includes the necessary hardware to prevent supervisor bit hacking,
+so your stunt won't work.</P>
+
+<P>Also note that the IMEM totally ignores the supervisor bit. 0x8000001A
+is the same address as 0x1A as far as the IMEM is concerned.</P>
+
+<P>Where were we?&nbsp; Oh, right.&nbsp; The new SUP instruction:</P>
+
+<TABLE CELLPADDING=10 >
+<TR>
+<TD width="50%">
+<DL>
+<DT>SUP(rc)</DT>
+
+<DD>pc &lt;- pc + 1</DD>
+
+<DD>rc &lt;- 1 if supervisor bit set,</DD>
+
+<DD>rc &lt;- 0 if not.</DD>
+</DL>
+</TD>
+
+<TD width="50%">
+<TABLE BORDER=1 >
+<TR>
+<TD>OP: 011010</TD>
+
+<TD>r31</TD>
+
+<TD>Constant (0)</TD>
+
+<TD>Rc</TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+</TABLE>
+
+<P>To include the SUP instruction in your code, you have to make a macro
+for it:</P>
+
+<PRE>   .macro SUP(rc)      betaopc(0b011010, 31, 0, rc)</PRE>
+
+<P><B><FONT COLOR="#800000">You <I>must use</I> this macro definition.&nbsp;
+You're not allowed to substitute anything else for Ra or the constant.</FONT></B></P>
+
+<P>When the beta hits this instruction (and if you've correctly implemented
+your trap mechanism), the old PC+1 will get written into R30 (XP), and
+the PC will be set to 0x80000001 (note that the supervisor bit has been
+set!).&nbsp; Your supervisor code should load the bad instruction, check
+the opcode, and branch to a SUP handler, where the real work gets done.</P>
+
+<H3><FONT FACE="Arial,Helvetica,Sans-serif">Framework code</FONT></H3>
+
+<P>Double-click the IMEM to open the code window.&nbsp; You can use the
+File&gt;Open menu item from the code window to open <b>traptest.uasm</b>.&nbsp;
+This code demonstrates the software multiplication we talked about in lecture
+and recitation.&nbsp; Step through it slowly until you understand what's
+going on here.&nbsp; Even better, sit with somebody in the lab and discuss
+and explain it to each other until you both understand.&nbsp; We'll be
+using the same mechanism to implement the SUP instruction.&nbsp; The only
+tricky part of the actual function body is getting access to the PC.&nbsp;
+We won't tell you how to do this. &nbsp; You figure it out.</P>
+
+<P>You can leave the multiply functions in the code and just add your SUP
+handler. &nbsp; (Isn't the trap mechanism cool?)&nbsp; You'll also want
+to replace the MyMUL and MyMULC calls with a call to your SUP instruction.</P>
+
+<H3>Testing your results and getting checked off</H3>
+
+<P>Now that you think you have a SUP instruction in your code, how do you
+test it?&nbsp; If you call the SUP function from your main code, you'd
+expect the answer to be zero.&nbsp; The supervisor bit is not normally
+set when your code is called.&nbsp; You have to somehow force the supervisor
+bit to be on when you call your SUP instruction. &nbsp; Since Betasim is
+a simulator, we can hack it and poke a supervisor bit into the pc manually.&nbsp;
+Here's how: </P>
+
+<TABLE CELLSPACING=6 >
+<TR>
+<TD><A HREF="pset_02_html_files/lab1-p5.jpg"><IMG SRC="pset_02_html_files/lab1-p5.jpg" ALT="wpe1.jpg (7052 bytes)" BORDER=0 HEIGHT=117 WIDTH=308></A></TD>
+
+<TD>Select the Control Panel; click Stop and Reset if necessary.</TD>
+</TR>
+
+<TR>
+<TD><IMG SRC="pset_02_html_files/lab1-p6.jpg" ALT="wpe2.jpg (7287 bytes)" HEIGHT=117 WIDTH=308></TD>
+
+<TD>Click the line that says &quot;<B><FONT FACE="Arial,Helvetica"><FONT COLOR="#808080"><FONT SIZE=-1>Click
+here to enter an expression</FONT></FONT></FONT></B>&quot;.&nbsp; This
+opens a text entry box.&nbsp; Type &quot;pc&quot; (without the quotes)
+and hit return to find out the value of the pc. 
+<P>Note that the pc is 0.&nbsp; (The supervisor bit isn't set.)&nbsp; If
+you run the code, your SUP instruction should return 0.</P>
+</TD>
+</TR>
+
+<TR>
+<TD><IMG SRC="pset_02_html_files/lab1-p7.jpg" ALT="wpe3.jpg (8473 bytes)" HEIGHT=138 WIDTH=308></TD>
+
+<TD>Hit the reset button again to reset your Beta. 
+<P>Click the &quot;<B><FONT FACE="Arial,Helvetica"><FONT COLOR="#808080"><FONT SIZE=-1>Click
+here to enter an expression</FONT></FONT></FONT></B>&quot; line again and
+enter the expression &quot;pc=0x80000000&quot;.&nbsp; When you hit return,
+this sets the pc to location 0x80000000.&nbsp; </P>
+</TD>
+</TR>
+
+<TR>
+<TD><IMG SRC="pset_02_html_files/lab1-p8.jpg" ALT="wpe4.jpg (8215 bytes)" HEIGHT=138 WIDTH=308></TD>
+
+<TD>Location 0x80000000 is really location 0x0, the start of the code,
+but with the supervisor bit set. 
+<P>Hit the go button (don't hit reset first!) to exectue your code with
+the supervisor bit set.&nbsp; Your SUP instruction should now return 1.&nbsp;
+</P>
+</TD>
+</TR>
+</TABLE>
+
+<P>If the SUP instruction returns 1 when the supervisor bit is set, then
+go fetch a friendly lab assistant and get checked off.</P>
+
+<P>
+<HR>
+
+<H1><FONT FACE="Arial,Helvetica,Sans-serif"><FONT SIZE=+0>Lab 2, Part 3:
+More ROMming</FONT></FONT></H1>
+
+<P>In this part, you'll change the control ROMs to implement the SUP instruction
+in hardware.&nbsp; We think you're at the point now where you can handle
+this all by yourself, so we won't give you any help in the instructions.</P>
+
+<P>Okay, just one hint.&nbsp; You already have all the hardware you need
+in the schematic -- you just need to find the correct settings for the
+switches.</P>
+
+<P>Good luck!</P>
+
+<H3>Testing your results and getting checked off</H3>
+
+<P>Use the same procedure as Part 2 to test your hardware-based SUP instruction.</P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+</BODY>
+</HTML>

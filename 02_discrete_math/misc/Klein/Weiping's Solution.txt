@@ -1,0 +1,81 @@
+Subject: Re: A new puzzle
+Date: Sun, 11 Jun 2000 15:22:12 -0500 (CDT)
+From: Weiping Shi <wshi@silo.csci.unt.edu>
+To: Shai Simonson <shai@stonehill.edu>
+CC: Weiping Shi <wshi@silo.csci.unt.edu>,
+     Michael Greenwald <mbgreen@central.cis.upenn.edu>
+
+I guess your student thinks an error correction
+code (e.g., Hamming code, so for n=16, it's 4+3)
+is enough.  But that's non-adaptive queries,
+The same set of membership
+questions are asked without considering the answers.
+That's probably optimal for non-adpative queries.
+
+Here is what I have in mind.  Needs more thought:
+
+At each step i, we keep sets S0, S1,..., Si,
+where if he lies at the ith answer, then
+Si contains the solution.
+S0 is for all truth so far.
+
+So the first query asks "is x in {1,...,8}?"
+and if the answer is yes (no is symmetric),
+then S0={1,...,8} and S1={9,...,16}.
+
+At the (i+1)th step, we ask
+"if you never lied and x in S0/2, or
+if you lied at 1st answer and x in S1/2, or ..."
+If he never lied before, and he does not lie now,
+then we'll have S0=S0/2.
+If he lies this time, we will have Si+1=(S0 - S0/2).
+If he lied before then he can't lie again, so
+all the remaining Sj = Sj/2.
+Combine all the cases, we have
+S0=S0/2, S1=S1/2, ..., Si+1=(S-S0/2).
+
+Example (assume all yes answer. no is symmetric)
+S0={1,...,8}, S1={9,...,16} ->
+S0={1,...,4}, S1={9,...,12}, S2={5,...,8} ->
+S0={1,2}, S1={9,10}, S2={5,6}, S3={3,4} ->
+S0={1}, S1={9}, S2={5}, S3={3}, S4={2}
+
+Now a recursive version of the problem.
+Q(n) = logn + Q(logn).
+So I guess there is nothing gained using
+adaptive here.
+
+> > I think Michael is  right that logn+1 questions are sufficient.
+> > After the first question "is x in [1,...n/2]",
+> > you ask " (is x in [1,...,n/4] U [n/2+1,..., n/2+n/4]) XOR
+> > (did u tell truth in the last question)?"
+> > and keep attaching the XOR (did u tell truth in last question)
+> > to every question you ask, and finally just the
+> > question "did u tell the truth in the last question",
+> > you'll be able to identify the number.
+>
+> >
+>
+> I dont get it.  Can you give me more details for the argument that logn +1
+> suffice?
+>
+> My puzzle giver, seems to think that to determine 16 requires 7 questions, and
+> you claim just 5.
+>
+>
+> --
+> ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+> Shai Simonson, Professor
+> ArsDigita University
+> 80 Prospect St.
+> Cambridge, MA
+>
+> Department of Mathematics and Computer Science
+> Stonehill College, North Easton, MA 02357
+> Voice: (508) 565-1008 Fax: (508) 565-1444
+> Email: shai@stonehill.edu
+> Home Page: http://academics.stonehill.edu/compsci/SHAI.HTM
+> нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-
+>
+>
+>

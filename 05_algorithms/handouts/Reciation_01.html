@@ -1,0 +1,890 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Trees</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>Mathematical Foundations of Algorithm Analysis</title>
+</head>
+<body>
+<h2>Mathematical Foundations of Algorithm Analysis</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#24475">Mathematical Foundations of Algorithm Analysis</a>
+    <li><a href="#24494">Asymptotic Running Time of an Algorithm</a>
+    <li><a href="#24531">Asymptotic Running Times - Example</a>
+    <li><a href="#24511">Asymptotic Notations</a>
+    <li><a href="#24536">O-notation</a>
+    <li><a href="#24544">Omega-notation</a>
+    <li><a href="#24545">Theta-notation</a>
+    <li><a href="#24528">Examples</a>
+    <li><a href="#24655">Exercise</a>
+    <li><a href="#24476">Recurrences</a>
+    <li><a href="#24484">Solving Recurrences</a>
+    <li><a href="#24552">Guess the solution and then prove it.</a>
+    <li><a href="#24533">Expanding a Recurrence</a>
+    <li><a href="#24559">Visualize the Recursion Tree</a>
+    <li><a href="#24534">The Master Theorem</a>
+    <li><a href="#24703">Multiplication revisited</a>
+    <li><a href="#24535">Elements of Discrete Mathematics</a>
+    <li><a href="#24652">Sets, Relations, Functions</a>
+    <li><a href="#24568">Graphs</a>
+    <li><a href="#24706">Example Graph Problem: The Party Problem</a>
+    <li><a href="#24587">Graphs - Paths and Cycles</a>
+    <li><a href="#24653">Graph Problems</a>
+    <li><a href="#24565">Trees</a>
+</ul><hr>
+    <a name="24475">
+    <h2>Mathematical Foundations of Algorithm Analysis</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Asymptotic Running Times<li>
+Solving Recurrences<li>
+Elements of Discrete Mathematics
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24494">
+    <h2>Asymptotic Running Time of an Algorithm</h2>
+    <hr>
+    
+    
+    
+    
+    
+    When we analyze the running time of an algorithm, it's usually 
+not worth to compute the <em>exact</em> running time. 
+For large input sizes only the <em>order of growth</em> of the running time - the <em>asymptotic running time</em> - is relevant.
+
+    
+    
+    
+    
+    <ul>
+<li>Sorting a billion numbers with the <i>Bubblesort</i> algorithm (running time O(n<sup>2</sup>)) on <a href=http://www.top500.org/list/2000/11/>ASCI White</a>,
+the world's fastest computer, takes about a week.
+<li>
+Sorting a billion numbers with <i>Heapsort</i> (running time O(n log n)) on a 100 MHz Pentium PC takes about 10 minutes.
+
+    
+    </ul>
+    
+    
+    
+    Most times it does not matter if an algorithm is 2, 3 or 10 times faster than an other algorithm. Constant factors are dwarfed by the effect of the input size.
+<p>   
+The real question to ask when we analzye an algorithm's efficieny is:
+If we double the input size, how does this affect the running time of the program? Does it run twice as long? Or four times as long? 
+Or even longer?
+
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24531">
+    <h2>Asymptotic Running Times - Example</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Which one is the more tedious job? (You will be told the value of <i>n</i> after accepting the assignment.)
+    
+    
+    
+    
+    <ul>
+<li>Add two <i>n</i>-digit numbers. (With pencil and paper, of course.)<li>
+Multiply two <i>n</i>-digit numbers. (Also with pencil and paper.)
+
+    
+    </ul>
+    
+    
+    
+    Adding two <i>n</i>-digit numbers takes time proportional to <i>n</i>. <br>
+Multiplying two <i>n</i>-digit numbers takes time proportional to <i>n<sup>2</sup></i>.
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24511">
+    <h2>Asymptotic Notations</h2>
+    <hr>
+    
+    
+    
+    
+    
+    When we talk about the running time of an algorithm, we use three different notations to give upper, lower or tight bounds of the asymptotic running time. 
+    
+    
+    
+    
+    <ul>
+<li>O-notation: for asymptotic upper bounds<li>
+Omega-notation: for asymptotic lower bounds<li>
+Theta-notation: for asymptotically tight bounds
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24536">
+    <h2>O-notation</h2>
+    <hr>
+    
+    
+    
+    
+    
+    For asymptotic upper bounds.
+    
+    
+    
+    
+    <ul>
+<li>O(g(n)) = { f(n): there exist positive constants c and n<sub>0</sub> such that 0 &lt;= f(n) &lt;= c*g(n) for all n&gt;=n<sub>0</sub> }<li>
+O(g(n)) = { functions that grow asymptotically slower than g(n) }<li>
+100n<sup>3</sup> + 50n<sup>2</sup> + 60n = O(n<sup>3</sup>)<li>
+100n<sup>3</sup> + 50n<sup>2</sup> + 60n = O(2<sup>n</sup>)<li>
+100n<sup>3</sup> + 50n<sup>2</sup> + 60n != O(n<sup>2</sup>)<li>
+2<sup>n</sup> = O(3<sup>n</sup>)
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24544">
+    <h2>Omega-notation</h2>
+    <hr>
+    
+    
+    
+    
+    
+    For asymptotic lower bounds.
+    
+    
+    
+    
+    <ul>
+<li>Omega(g(n)) = { f(n): there exist positive constants c and n<sub>0</sub> such that 0 &lt;= c*g(n) &lt;= f(n) for all n&gt;=n<sub>0</sub> }<li>
+Omega(g(n)) = { functions that grow asymptotically faster than g(n) }<li>
+n<sup>2</sup> log n = Omega(n<sup>2</sup>)
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24545">
+    <h2>Theta-notation</h2>
+    <hr>
+    
+    
+    
+    
+    
+    For asymptotically tight bounds.
+    
+    
+    
+    
+    <ul>
+<li>Theta(g(n)) = { f(n): there exist positive constants c<sub>1</sub>, c<sub>2</sub>, n<sub>0</sub> such that 0 &lt;= c<sub>1</sub>*g(n) &lt;= f(n) &lt;= c<sub>2</sub>*g(n) for all n&gt;=n<sub>0</sub> }<li>
+Theta(g(n)) = { functions that grow asymptotically as fast as g(n)) }<li>
+(4n + sin n)*(5n - cos n) = 20n<sup>2</sup> + O(n) = Theta(n<sup>2</sup>)
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24528">
+    <h2>Examples</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>3n<sup>2</sup> + 6n + 17 = Theta(n<sup>2</sup>)= O(n<sup>2</sup>) = Omega(n<sup>2</sup>)<li>
+3n<sup>2</sup> + 6n + 17 = O(n<sup>9</sup>)<li>
+3n<sup>2</sup> + 6n + 17 = Omega(n log n)<li>
+2<sup>n+1</sup> = Theta(2<sup>n</sup>)<li>
+2<sup>2n</sup> = Omega(2<sup>n</sup>)
+
+    
+    </ul>
+    
+    
+    
+    Quiz question: Why doesn't it make sense to say: <i>"The running time of this algorithm is at least O(n<sup>2</sup>)"</i>
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24655">
+    <h2>Exercise</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Rank the following functions by order of growth.
+    
+    
+    
+    
+    <ul>
+<li>(sqrt(2))<sup>log n</sup><li>
+n<sup>2</sup><li>
+n!<li>
+2<sup>2<sup>n+1</sup></sup><li>
+1.5<sup>n</sup><li>
+n<sup>3</sup><li>
+log<sup>2</sup>n<li>
+log (n!)<li>
+2<sup>2<sup>n</sup></sup><li>
+n<sup>1/(log n)</sup><li>
+ln ln n<li>
+n * 2<sup>n</sup><li>
+n<sup>log log n</sup><li>
+ln n<li>
+1<li>
+2<sup>log n</sup><li>
+(log n)<sup>log n</sup><li>
+e<sup>n</sup><li>
+4<sup>log n</sup><li>
+(n+1)!<li>
+sqrt(log n)<li>
+n log n<li>
+n<li>
+2<sup>n</sup>
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24476">
+    <h2>Recurrences</h2>
+    <hr>
+    
+    
+    
+    
+    
+    When an algorithm contains a recursive call, its running time can
+often be described by a recurrence.
+
+<h4>Examples</h4>
+    
+    
+    
+    
+    <ul>
+<li>T(n) = n + T(n-1) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>(Maxsort)</i><li>
+T(n) = 2 T(n/2) + O(n) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>(Mergesort)</i><li>
+T(n) = T(n/2) + O(n) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>(Finding the kth-largest element in a list)</i><li>
+T(n) = 20 T(n/5) + O(n<sup>2</sup>)  &nbsp;&nbsp;<i>(Is this still O(n<sup>2</sup>)?)</i>
+
+    
+    </ul>
+    
+    
+    
+    How do you solve such a recurrence equation?
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24484">
+    <h2>Solving Recurrences</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Four common ways to solve a recurrence are:
+    
+    
+    
+    
+    <ul>
+<li>Guess the solution, then use induction to prove it.<li>
+Expand the recurrence and convert it into a summation.<li>
+Visualize the recursion tree.<li>
+Use the master theorem.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24552">
+    <h2>Guess the solution and then prove it.</h2>
+    <hr>
+    
+    
+    
+    
+    
+    T(n) = 2 T(n/2) + n
+    
+    
+    
+    
+    <ul>
+<li>We guess the solution is T(n) = Theta(n log n)<li>
+Prove that T(n) &lt;= cn log n for some constant c>0.<li>
+T(n) &lt;= 2 (c n/2 log n/2) + n<li>
+= cn log n/2 + n<li>
+= cn (log n - log 2) + n<li>
+= cn log n - cn + n<li>
+&lt;= cn log n<li>
+QED
+
+    
+    </ul>
+    
+    
+    
+    The last step holds for c&gt;=1.
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24533">
+    <h2>Expanding a Recurrence</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Doesn't require you to guess the solution, but it may require more algebra than guessing and then proving it by induction.
+    
+    
+    
+    
+    <ul>
+<li>T(n) = n + 2 T(n/3)<li>
+T(n) = n + 2 (n/3 + 2 T(n/9))<li>
+T(n) = n + 2 (n/3 + 2 (n/9 + 2 T(n/27)))<li>
+T(n) = n + 2/3 n + 4/9 n + 8/27 n + 16/81 n + ...<li>
+T(n) = n (1 + 2/3 + 4/9 + 8/27 + 16/81 + ...)<li>
+T(n) = n * (Sum (2/3)<sup>i</sup> from 0 to oo)<li>
+T(n) = 3n<li>
+T(n) = Theta(n)
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24559">
+    <h2>Visualize the Recursion Tree</h2>
+    <hr>
+    
+    
+    
+    
+    
+    T(n) = 2 T(n/2) + n<sup>2</sup>
+    
+    
+    
+    
+    <ul>
+<li>Draw the recursion tree.<li>
+Label each node with its cost.<li>
+Compute the cost of each level of the tree.<li>
+Compute the total cost of all levels.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24534">
+    <h2>The Master Theorem</h2>
+    <hr>
+    
+    
+    
+    
+    
+    To solve the recurrence T(n) = a T(n/b) + f(n),
+compare f(n) with n<sup>log<sub>b</sub>a</sup>.
+
+    
+    
+    
+    
+    <ul>
+<li>If f(n) is smaller than n<sup>log<sub>b</sub>a</sup>, then T(n) = Theta(n<sup>log<sub>b</sub>a</sup>).<li>
+If f(n) and n<sup>log<sub>b</sub>a</sup> are the same, then T(n) = Theta(n<sup>log<sub>b</sub>a</sup> log n).<li>
+If f(n) is larger than n<sup>log<sub>b</sub>a</sup>, then T(n) = Theta(f(n)).
+
+    
+    </ul>
+    
+    
+    
+    This is a rather sloppy definition, but it is good enough for most functions that we will encounter. There are some more technical formalities that should be understood, however. They are explained in "Cormen, Leiserson, Rivest: Introduction to Algorithms", pages 62-63. 
+
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24703">
+    <h2>Multiplication revisited</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Multiplying two n-digit numbers takes O(n<sup>2</sup>) time.<li>
+At least if you use the algorithm that is taught in elementary school.<li>
+But is there a better way?
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24535">
+    <h2>Elements of Discrete Mathematics</h2>
+    <hr>
+    
+    
+    
+    
+    
+    We review the notations, definitions and elementary properties of the elements of discrete mathematics that are most relevant for the Algorithms course.
+    
+    
+    
+    
+    <ul>
+<li>Sets<li>
+Relations<li>
+Functions<li>
+Graphs<li>
+Trees
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24652">
+    <h2>Sets, Relations, Functions</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>A set is a collection of distinguishable objects.<li>
+A binary relation on two sets A and B is a subset of the Cartesian product A x B.<br>Example: the "less than" relation on natural numbers is the set { (1,2), (1,3), (2,3), (1,4), (2,4),...) }<li>
+Formally, a function f is a binary relation on A x B such that for all elements of A there is exactly one element of B such that (a,b) is in f.<li>
+Intuitively, a function is a mapping that assigns an element of B to each element of A.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24568">
+    <h2>Graphs</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Formally, a graph is a pair (V,E) where V is a finite set and E is a binary relation on V.<li>
+Intuitively, a graph is a network consisting of <i>vertices</i> (V) and <i>edges</i> (E) that connect the vertices.<li>
+The edges can be <i>directed</i> or <i>undirected</i>. Dependent on that, the resulting graph is called a <i>directed graph</i> or an <i>undirected graph</i>.<li>
+By convention, edges from a vertex to itself - <i>self-loops</i> - are allowed in directed graphs, but forbidden in undirected graphs..<li>
+A directed graph without self-loops is called <i>simple</i>.
+<li>
+If (u,v) is an edge of a directed graph, we say that (u,v) <i>leaves</i> u and <i>enters</i> v.<li>
+If (u,v) is an edge of a graph, we say that u and v are <i>adjacent</i> to each other.<li>
+The <i>degree</i> of a vertex is the number of edges incident on it.<li>
+In case of a directed graph, the <i>in-degree</i> of a vertex is the number of edges entering it, the <i>out-degree</i> is the number of edges leaving it, and its degree is the sum of its in-degree and out-degree.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24706">
+    <h2>Example Graph Problem: The Party Problem</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Is it possible that at a party with at least 6 people the following two conditions can both guaranteed?
+
+    
+    
+    
+    
+    <ul>
+<li>If you select 3 people randomly, at least two of them should already know each other.<li>
+If you select 3 people randomly, at least two of them should not know each other.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24587">
+    <h2>Graphs - Paths and Cycles</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>A sequence of vertices (v<sub>0</sub>,v<sub>1</sub>,..., v<sub>k-1</sub>,v<sub>k</sub>) where all (v<sub>i</sub>,v<sub>i+1</sub> are edges of the graph is called a <i>path</i> of length k that connects the vertices v<sub>0</sub> and v<sub>k</sub>. <li>
+If there is a path p from u to v, we say that v is <i>reachable</i> from u via p.<li>
+A path is <i>simple</i>, if all vertices in the path are distinct.<li>
+A path (v<sub>0</sub>,v<sub>1</sub>,..., v<sub>k-1</sub>,v<sub>k</sub>) forms a <i>cycle</i>, if v<sub>0</sub> = v<sub>k</sub> and the path contains at least one edge.<li>
+An undirected graph is <i>connected</i>, if every pair of vertices is connected by a path.<li>
+A directed graph is <i>strongly connected</i>, if every two vertices are reachable from each other.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24653">
+    <h2>Graph Problems</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Euler Circuit: find a cycle in a graph that visits each edge exactly once.<li>
+Hamiltonian Circuit: find a cycle in a graph that visits each vertex exactly once.<li>
+Determine the strongly connected components in a directed graph.<li>
+Test if two graphs are isomorphic.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24565">
+    <h2>Trees</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>An undirected, acyclic, connected graph is called a <i>tree</i>.<li>
+An undirected, acyclic, but possibly disconnected graph is called a <i>forest</i>.<li>
+Any two vertices in a tree are connected by a unique simple path.<li>
+A tree with n nodes has n-1 edges.<li>
+If any edge is removed from a tree, the resulting graph is a forest of two trees.<li>
+If any edge is added to a tree, the resulting graph contains a cycle.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+<p><i>Last modified 2001-01-29</i>
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left>Mark Dettinger (<a href=mailto:mdettinger@arsdigita.com>mdettinger@arsdigita.com</a>)</td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

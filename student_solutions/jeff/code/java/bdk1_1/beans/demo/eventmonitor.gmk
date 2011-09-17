@@ -1,0 +1,37 @@
+
+SRCDIR = sunw/demo/encapsulatedEvents
+
+CLASSFILES= \
+		$(SRCDIR)/EventMonitor.class				\
+		$(SRCDIR)/EventMonitorBeanInfo.class			\
+		$(SRCDIR)/EncapsulatedEvent.class			\
+		$(SRCDIR)/EncapsulatedEventException.class		\
+		$(SRCDIR)/EncapsulatedEventListener.class		\
+		$(SRCDIR)/EncapsulatedEventManager.class		\
+		$(SRCDIR)/EncapsulatedEventAdaptorGenerator.class
+
+JARFILE= ../jars/eventmonitor.jar
+
+all: sunw.demo.classfile $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): sunw/demo/classfile $(CLASSFILES)
+	echo "Name: sunw/demo/encapsulatedEvents/EventMonitor.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp $(SRCDIR)/*.class sunw/demo/classfile/*.class
+	@/bin/rm manifest.tmp
+
+# make the (shared) sunw.demo.classfile classes.
+sunw.demo.classfile:
+	$(MAKE) -f classfile.gmk all
+
+# Rule for compiling a normal .java file
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+clean:
+	$(MAKE) -f classfile.gmk clean
+	/bin/rm -f $(SRCDIR)/*.class
+	/bin/rm -f $(JARFILE)

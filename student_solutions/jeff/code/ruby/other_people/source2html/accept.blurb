@@ -1,0 +1,8 @@
+The following files comprise the acceptance test for <b>source2html</b>.
+Ruby files beginning with <em>test</em> are the test cases.
+<em>acceptlib.rb</em> contains some shared classes and functions used
+by the test cases.  All other source files are examples used as input
+to the test cases.
+
+<p>Source for the <b>source2html</b> and its unit tests can be found <a
+href="../source.html">here</a>.

@@ -1,0 +1,367 @@
+
+\documentclass{article}
+
+\setlength{\textwidth}{6.0in}
+\setlength{\textheight}{9.0in}
+\setlength{\headheight}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\parskip}{1.5ex plus 0.5ex minus 0.5ex}
+\setlength{\topmargin}{0.5in}
+\setlength{\topskip}{0.0in}
+\setlength{\evensidemargin}{0.5in}
+\setlength{\oddsidemargin}{0.5in}
+\newcounter{exercise}
+\newcounter{problem}
+\newcounter{question}[problem]
+\newcommand{\exercise}[1]{\bigskip\noindent{\large\bf Exercise \stepcounter{exercise} \arabic{exercise}: {#1}}}
+\newcommand{\problem}[1]{\bigskip\noindent{\large\bf Problem \stepcounter{problem} \arabic{problem}: {#1}}}
+\newcommand{\question}[1]{\pagebreak[3]\bigskip\indent{\bf Question} \stepcounter{question} \arabic{question}: {#1}? }
+
+
+\begin{document}
+
+\newcommand{\answertab}[4]{ 
+\par
+\begin{tabular}{l l}
+A. {#1} & B. {#2} \\
+C. {#3} & D. {#4}
+\end{tabular}
+\par
+\medskip
+Your Answer: 
+\medskip
+}
+
+\begin{center}
+\LARGE
+Object-Oriented Programming in Java
+\end{center}
+\bigskip
+{\noindent\Large\bf Quiz 2 \hfill  Jan 24, 2001}
+\hrule
+
+\problem{Multiple Choice}
+(Write letter corresponding to your choice in space provided.)
+
+Fill in your answer in the space provided.
+
+\question
+{In Java, Color, JButton, and Exception are all what}
+
+\answertab{widgets}{frames}{events}{objects}
+
+\question
+{Menus, buttons, and text fields are all what}
+
+\answertab{handlers}{streams}{events}{widgets}
+
+\question
+{Which of the following classes is not commonly used in File Processing}
+
+\answertab{OutputStream}{StringTokenizer}{ActionAdapter}{PrintWriter}
+
+\question
+{Which of the following classes must be extended to be used}
+
+\answertab{AbstractAction}{InputStream}{Math}{StringTokenizer}
+
+\question
+{Which of the following method types cannot return an error code}
+
+\answertab{accessor}{private}{constructor}{synchronized}
+
+\question
+{Which of the following keywords is NOT used in exception handling}
+
+\answertab{try}{catch}{throw}{final}
+
+\question
+{Which of the following would most likely be used in a program that
+download from the URL {\tt ftp://104.200.34.0:8080/SameGame.jar}}
+
+\answertab
+{{\tt new Socket(8080,"104.200.34.0")}}
+{{\tt new ServerSocket(8080)}}
+{{\tt new BufferedReader("104.200.34.0",8080)}}
+{{\tt new Socket("104.200.34.0",8080)}}
+
+
+
+\question
+{In Program 1 (page 3 of quiz), the line {\tt super.paintComponent()} does
+what}
+\answertab
+{Calls the {\tt paintComponent()} of JPanel }
+{Calls the {\tt paintComponent()} of MyFrame }
+{Calls the {\tt paintComponent()} of contentpane }
+{Draws the window nicer than usual}
+
+\question{In Program 1, what color is the rectangle after the 
+button is clicked}
+\answertab
+{red}
+{blue}
+{green}
+{black}
+
+\question{In Program 1, what color is the rectangle initially}
+\answertab
+{red}
+{blue}
+{green}
+{black}
+
+\question{In Program 1, which of following MUST be an inner class
+as implemented in the code below} (In other words, which if the following
+would not work if moved verbatim outside of MyPanel?)
+\answertab
+{{\tt ButtonHandler}}
+{{\tt MouseHandler}}
+{Both A. and B.}
+{Neither A. nor B.}
+
+\question{In Program 1, what is {\tt Color.red}}
+\answertab
+{a public static variable}
+{a public instance variable}
+{a public static method}
+{a public instance method}
+
+
+\question{In Program 1, what is {\tt paintComponent} (in MyPanel)}
+\answertab
+{an inner class}
+{a public static method}
+{an event listener}
+{a public instance method}
+
+\question{Can event-based programming be implemented without multi-threading}
+\answertab
+{Yes}
+{No}
+
+
+\newpage
+{\large\bf Program 1}
+{\small
+\begin{verbatim}
+
+class MyFrame extends JFrame{
+    public MyFrame(){
+        setTitle("WidgetTest");
+        setSize(300,300);        // size in pixels
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}
+
+class MyPanel extends JPanel{
+    Color current = Color.red;
+    JButton button = new JButton("Button");
+
+    class ButtonHandler implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            current = Color.green;
+            System.out.println("Mike");
+            repaint();
+        }
+        
+    }
+
+    class MouseHandler extends MouseAdapter{
+        public void mouseClicked(MouseEvent ev){
+            if(ev.getX() <= 100) System.out.println("Rusty");
+            if(ev.getY() >= 100) current = Color.blue;
+            System.out.println("Dimitri");
+            repaint();
+        }
+    }
+
+    MyPanel(){
+        button.addActionListener(new ButtonHandler());
+        addMouseListener(new MouseHandler());
+        add(button);
+       System.out.println("Alan");
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g.setColor(current);
+        g2.fill(new Rectangle2D.Float(0,100,100,100));
+    }
+
+}
+
+public class WidgetTest{
+    public static void main(String[] args){
+        MyFrame myframe = new MyFrame();
+        Container contentpane = myframe.getContentPane();
+        contentpane.add(new MyPanel());
+        myframe.show();
+    }
+}
+\end{verbatim}
+}
+\newpage
+
+
+{\large\bf Program 2}
+{\small
+\begin{verbatim}
+
+import java.io.*;
+
+class MyException extends Exception{
+    int value;
+    MyException(int val){
+       value = val;
+    }
+    
+    public int getValue(){
+       return(value);
+    }
+}
+
+class TestClass2{
+
+    public static void foo(int x) throws MyException,IOException{
+       if(x < 0){
+           System.out.println("X too low");
+           throw(new MyException(x));
+       }
+       if(x > 100){
+           System.out.println("X too high");
+           throw(new IOException("Mike"));
+       }
+       System.out.println("X OK");
+    }
+
+    // Test main, convert argument to int can call test.
+    public static void main(String[] args){
+       int x = Integer.parseInt(args[0]); // convert first argument to int
+       // 
+       try{
+           foo(x);
+           System.out.println("Mike");
+       }
+       catch(IOException e){
+           System.out.println("Rusty");
+       }
+       catch(MyException e){
+           System.out.println("Dimitri");
+           System.out.println(e.getValue());
+       }
+    }
+}
+\end{verbatim}
+}
+\newpage
+
+\problem{Program Analysis: Short Answer}
+
+\question{What does Program 1 print when it starts up}
+\par
+Answer:
+\bigskip
+
+\question{What does Program 1 print when the mouse is clicked
+inside the filled rectangle}
+\par
+Answer:
+\bigskip
+
+\question{What does color is the filled rectangle drawn by Program 1
+after the mouse is clicked inside it}
+\par
+Answer:
+\bigskip
+
+\question{If the line {\tt button.addActionListener(new ButtonHandler());}
+is deleted from Program 1 (and the program is recompiled) what will
+it print when the button is clicked}
+\par
+Answer:
+\bigskip
+
+\question{What does Program 2 (see previous page) print out when called as 
+{\tt java TestClass2 2}}
+\par
+Answer:
+\vspace{2.0in}
+
+\question{What does Program 2 print out when called as 
+{\tt java TestClass2 200}}
+\par
+Answer:
+\vspace{2.0in}
+
+\question{What does Program 2 print out when called as 
+{\tt java TestClass2 -200}}
+\par
+Answer:
+\vspace{2.0in}
+
+The next questions refer to the Account class in an imaginary
+banking application shown below.
+When answering the questions, consider the following
+scenario. There are two Account instances, {\tt savings} and
+{\tt checking}. There are several threads sharing these
+instance, some threads transferring from {\tt savings} to
+{\t checking}, some transferring from {\tt checking} to {\tt savings}.
+\begin{verbatim}
+class Account{
+    int amount = 1000;  // always start with 1000
+    
+    public void deposit(int x){
+       amount = amount + x;
+    }
+    public void withdraw(int x){
+       amount = amount - x;
+    }
+
+    public int balance(){
+       return(amount);
+    }
+    public void transfer(int x, Account dest){
+       withdraw(x);    // withdraw x from this account
+       dest.deposit(x); // deposit in transfer account
+    }
+
+}
+\end{verbatim}
+
+\question{Is the class implementation as written thread-safe} Meaning,
+can any number of threads call any sequence of methods on shared instances
+and produce a deterministic predictable result regardless of scheduling policy.
+\par
+Answer:
+\vspace{1.5in}
+
+\question{If the {\tt deposit()} and {\tt withdraw} methods
+are {\tt synchronized}, is the class implementation thread-safe}
+\par
+Answer:
+\vspace{1.0in}
+
+\question{If the {\tt transfer()} method ONLY
+is {\tt synchronized}, is the class implementation thread-safe}
+\par
+Answer:
+\vspace{1.0in}
+
+\question{If ALL methods in the class are synchronized will this
+class work properly? If not, why not}
+\par
+Answer:
+\vspace{3.0in}
+
+
+
+\end{document}
+
+
+
+
+
+
+

@@ -1,0 +1,416 @@
+\documentclass[12pt]{amsart}
+
+\setlength{\parsep}{3pc}
+\setlength{\itemsep}{0.2in}
+
+
+\usepackage{fullpage}
+\usepackage{psfig}
+
+\title[Problem Set 5 Solutions]{ArsDigita University\\Month 2:  Discrete Mathematics\\Professor Shai Simonson\\Problem Set 5 Solutions --- Combinatorics And Counting}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+\item {\bf Given ten points in the plane with no three colinear,}
+\begin{enumerate}
+\item {\bf How many different segments joining two points are there?}
+$$
+{10 \choose 2} = 45
+$$
+\item {\bf How many ways are there to choose a directed path of length two through three distinct points?}
+
+We can choose a directed path of length two uniquely by choosing the
+starting point, the middle point, and the end point.  There are $10
+\cdot 9 \cdot 8 = 720$ such paths.
+
+\item {\bf How many different triangles are there?}
+
+There are ${10 \choose 3} = 120$ triangles.  Note that each triangle corresponds to six directed paths of length two --- we can choose which two edges and the direction.
+\item {\bf How many ways are there to choose 4 segments?}
+$${45 \choose 4} = 148,995$$
+\item {\bf If you choose 4 segments at random, what is the chance that some three form a triangle?}
+
+The number of ways to choose four segments that include a triangle is
+$$
+{10 \choose 3} \cdot 42 = 5,040
+$$
+We first pick the three vertices that will form the triangle, then choose any one of the 42 remaining segments.  The probability that we have picked such ana rrangement when picking four segments at random is therefore $\frac{5,040}{148,995} \approx 3.38\%$.
+\end{enumerate}
+
+\medskip
+
+\item {\bf Forty equally skilled teams play a tournament in which every team plays every other team exactly once, and there are not ties.}
+
+\begin{enumerate}
+\item {\bf How many different games were played?}
+$$
+{40 \choose 2} = 780
+$$
+\item {\bf How many different possible outcomes for these games are
+there?}
+
+Each of the 780 games has two possible outcomes, so the total
+number of different outcomes is
+$$2^{780}$$.
+\item {\bf How many different ways are there for each team to win a different number of games?}
+
+If each team wins a different number of games, this corresponds to a unique ordering of the teams.  There are $40!$ such orderings.
+\end{enumerate}
+
+\medskip
+
+\item {\bf Let $C(n,k)$ be the number of ways to choose $k$ objects from a set of $n$.  Prove by a combinatorial argument:}
+\begin{enumerate}
+\item {\bf $C(n,0)+C(n,1)+\ldots+C(n,n)=2^n$}
+
+On the left hand side, we have the total number of subsets of a set of
+size $n$, which is the sum of the number of possible subsets of each
+size.  On the right hand side, we have the size of the power set of a
+set of $n$ elements.  These are equal.
+
+\item {\bf $C(n,m)C(m,k) = C(n,k)C(n-k,m-k)$}
+
+To choose a subset $S_m$ of size $m$ and an ``inner'' subset $S_k
+\subset S_m$ of size $k$ from an original set $S_n$ of $n$ members, we
+may proceed by first choosing $S_m$, then choosing members of the
+``inner'' subset $S_k$ from among $S_m$ (the left hand side).
+Equivalently, we can first choose the ``inner'' subset $S_k$ from the
+original set $S_n$, then forming $S_m$ by starting with $S_k$ and
+choosing an additional $m-k$ members from $S_n \backslash S_k$ (the right hand
+side).
+
+\item {\bf $C(n,n-k) = C(n,k)$}
+
+Given a set of $n$ elements, every subset $S_k$ of size $k$ induces a
+complementary subset of size $n-k$, obtained by taking the $n-k$
+elements not in $S_k: S_{n-k} = S \backslash S_k$.  Since these subsets are in
+one-to-one correspondance, the number of such subsets must be equal.
+
+\item {\bf $C^2(n,0)+C^2(n,1)+\ldots+C^2(n,n) = C(2n,n)$ (Hint: Use \em{c})}
+
+Using {\em c}, The left hand side can be rewritten as:
+$$
+C(n,0)C(n,n)+C(n,1)C(n,n-1)+C(n,2)C(n,n-2)+C(n,n)C(n,0)
+$$
+
+The right hand side is the number of ways to choose a subset of size
+$n$ from a set of $2$ elements.  The left hand side breaks this sum up
+by the number of elements chose from the first $n$ elements: if we
+want to choose a total of $n$ elements out of $2n$, with $k$ from the
+first $n$ and $n-k$ from the second $n$, the number of ways to do this
+is
+$$
+{n \choose k}{n \choose n-k}
+$$
+Summing this expression over all values of $k$ between 0 and $n$ gives
+the left hand side.
+
+\end {enumerate}
+
+
+\medskip
+
+\item {\bf Prove the following combinatorial identities by mathematical induction or by formulas:}
+\begin{enumerate}
+\item {\bf $C(n+1,k+1) = C(n,k+1)+C(n,k)$}
+
+Convert each to it's formula, and simple algebra will yield an
+answer.
+
+\item {\bf $C(r,r)+C(r+1,r)+C(r+2,r)+\ldots+C(n,r) = C(n+1,r+1)$}
+
+Base case: $n=1$.  The equation reduces to $C(1,1) = C(2,2)$.  Both
+sides of this equation equal 1.
+
+Inductive step: Assume the relation holds for $n$.  We need to show that
+$$
+{r \choose r} + {r+1 \choose r} + {r+2 \choose r} + \ldots + {n \choose r} + {n+1 \choose r} = {n+2 \choose r+1}
+$$
+
+Using our inductive hypothesis on the first $n$ terms on the left-hand
+side, we are actually trying to prove that
+$$
+{n+1 \choose r+1} + {n+1 \choose r} = {n+2 \choose r=1}
+$$
+
+But this follows directly from part (a) above.
+
+\item Using the identity in part {\em b} above, derive a formula for the sum $(1)(2)(3) + (2)(3)(4) + \ldots + (n-2)(n-1)(n)$.
+
+Begin by noting that $(k)(k-1)(k-2) = C(k,3)\cdot 3!$ (check this if
+it's not obvious to you).  Using this, and the relation in part(b)
+with $r=3$, we can derive our identity:
+
+\begin{eqnarray*}
+(1)(2)(3) + (2)(3)(4) + \ldots +(n-2)(n-1)(n) & = & \frac{{3 \choose 3} + {4 \choose 3} + \ldots + {n \choose 3}}{3!} \\
+& = & \frac{{n+1 \choose 3}}{3!}
+\end{eqnarray*}
+
+\end{enumerate}
+
+\medskip
+
+\item {\bf If you have $2n$ socks in a drawer, $n$ white and $n$ black, and you reach in to choose 2 socks at random,}
+\begin{enumerate}
+\item {\bf How many ways are there to choose?}
+$$
+{2n \choose 2} = n(2n-1) = 2n^2 - n
+$$
+\item {\bf How many of these ways result in getting a pair of the same color?}
+For each color, there are $n \choose 2$ pairs of the color.  The total number of matching pairs is:
+$$
+2{n \choose 2} = n(n-1) = n^2 - n
+$$
+
+\item {\bf Write a simple closed form formula in terms of $n$ for the chance of choosing a matching pair of socks from a drawer with $n$ white and $n$ black socks.}
+$$
+\frac{n^2 - n}{2n^2 - n}
+$$
+The chance is approximately $\frac{1}{2}$ is $n$ is large: if $n$ is 20, it is .4872, if $n$ is 100, it is .4975.
+
+\end{enumerate}
+
+\medskip
+
+\item {\bf A few short problems:}
+\begin{enumerate}
+\item {\bf How many ways are there to choose a president, vice-president, secretary and treasurer from 9 people?}
+$$9*8*7*6 = 3,024$$
+
+\item {\bf How many ways can 13 identical balls be distributed into 3 distinct boxes?}
+$$
+{15 \choose 13} = 105
+$$
+\item {\bf How many numbers greater than 3,000,000 can be formed from permutations of 1,2,2,4,6,6,6?}
+$$
+\frac{7!\cdot \frac{4}{7}}{2!3!} = 240
+$$
+\item {\bf How many nine-digit numbers with twice as many odd digits as even digits? (leading zeros are allowed)}
+$$
+{9 \choose 6}5^9 = 164,062,500
+$$
+\item {\bf How many passwords can be created in the form $[A-Z][a-z]^9[0,1]^6$? (A capital letter followed by 9 lowercase letters followed by 9 bits)}
+$$
+26 \cdot 26^9 \cdot 2^6 \approx 9.0347 \cdot 10^15
+$$
+\end{enumerate}
+
+\medskip
+
+\item {\bf Poker:}
+\begin{enumerate}
+\item {\bf How many different 5-card Poker hands are there?}
+$$
+{52 \choose 5} = 2,598,960
+$$
+\item {\bf How many of these are 1 pair?}
+
+We form a pair by choosing the number of the pair, then choosing the
+three other numbers (to assure there are no more pairs), choose the
+two suits for the pair, and choosing the suit for each of the three
+other numbers.  The number of pairs is therefore:
+$$
+{13 \choose 1}{4 \choose 2}{12 \choose 3}{4 \choose 1}{4 \choose
+1}{4 \choose 1} = 1,098,240$$
+
+\item {\bf How many of these are a flush (all one suit)?}
+
+We form a flush by choosing a suit, and choosing the numbers for the
+five cards.  The number of flushes is:
+$$
+{4 \choose 1}{13 \choose 5} = 5,148
+$$
+
+\item {\bf How many of these are a full house (3 of a kind and a pair)?}
+We choose the number for the three of a kind, then the number for a
+pair, then the three suits for the 3 of a kind, then the two suits for
+the pair.  The number of full houses is:
+
+$$
+{13 \choose 1}{4 \choose 3}{12 \choose 1}{4 \choose 2} = 3744
+$$
+
+\end{enumerate}
+
+\medskip
+
+\item {\bf How many ways are there to distribute eight balls into six distinct boxes with at least one ball in each box if:}
+\begin{enumerate}
+\item {\bf The balls are identical?}
+
+Because the balls are identical, we can begin by putting one ball in
+each box.  Then, we can distribute the remaining two balls into the
+six boxes arbitrarily.  There are ${6 - 1 + 2 \choose 2} = {7 \choose
+2} = 21$ ways to do this.
+
+\item {\bf The balls are distinct?}
+
+Since we must have at least one ball in each box, there are only two
+possibilities: either there are two boxes with two balls and four
+boxes with one ball, or there is one box with three balls and five
+boxes with two balls.  In the former case, we must choose which two
+boxes have two balls ($6 \choose 2$ ways), we must choose which balls
+go in each of these boxes (${8 \choose 2}{6 \choose 2}$ ways), and we
+must arrange the remaining four balls into the other four boxes ($4!$
+ways).  In the latter case, we must choose which box has three balls
+($6 \choose 1$), choose which three balls go into this box ($8 \choose
+3$), and arrange the remaining five balls into the remaining five
+boxes ($5!$).  The total number of arrangements is therefore:
+$$
+{6 \choose 2}{8 \choose 2}{6 \choose 2}4! + {6 \choose 1}{8 \choose 3}5! = 191,520
+$$
+
+
+\end{enumerate}
+
+\medskip
+
+\item {\bf How many ways are there to distribute eight balls into six distinct boxes with at most four balls in the first two boxes if:}
+\begin{enumerate}
+\item {\bf The balls are identical?}
+
+We condition on the number of balls we place in the first two boxes.
+The number of ways to place eight balls into six boxes with exactly
+$k$ balls in the first two boxes ($0 \leq k \leq 8$) is:
+$$
+{k + 1 \choose k}{8 - k + 3 \choose 8-k}
+$$
+
+This is simply the number of ways to put $k$ identical balls into
+two boxes, multiplied by the number of ways to put 8 - k balls
+into four boxes.  The total number of ways to place eight
+identical balls into six boxes with no more than 4 balls in the
+first two boxes is therefore:
+$$
+\sum_{k=0}^4 {k+1 \choose k}{8 - k + 3 \choose 8-k} = 1,056.
+$$
+\item {\bf The balls are distinct?}
+
+We again condition on $k$, the number of balls in the first two
+boxes.  In this case, we must choose which $k$ balls go in the
+first two boxes, then distribute the distinguishable balls.  The
+number of ways to put eight distinguishable balls into six boxes
+with $k$ balls in the first two boxes is therefore:
+$$
+{8 \choose k}2^k 4^{8-k}
+$$
+Summing over $k$, the total is now:
+$$
+\sum_{k=0}^4 {8 \choose k}2^k 4^{8-k} = 1,531,904.
+$$
+
+\end{enumerate}
+
+\medskip
+
+\item {\bf Fibonacci in Pascal's Triangle.  Prove by induction that the $n$th Fibonacci number $F_n$ equals $C(n,0) + C(n-1,1) + C(n-2,2) + \ldots + C(\lceil n/2 \rceil, \lfloor n/2 \rfloor)$.  You should assume that $F_0 = F_1 = 1$.}
+
+We begin by noting that because $C(a,b) = 0$ for $b > a$, we can
+rewrite the desired result as:
+
+$$
+F_n = {n \choose 0} + {n-1 \choose 1} + {n-2 \choose 2} + \ldots + {1 \choose n-1} + {0 \choose n}
+$$
+
+This version will be simpler to work with, and avoid considerations of
+whether $n$ is even or odd.
+
+We now proceed with our proof.  We check our base cases, $F_0$ and $F_1$:
+\begin{eqnarray*}
+F_0 & = & {0 \choose 0} = 1 \\
+F_1 & = & {1 \choose 0} + {0 \choose 1} = 1 \\
+\end{eqnarray*}
+
+We need both $F_0$ and $F_1$ as base cases because our inductive step
+will use the known fact that $F_{n+1} = F_n + F_{n-1}$:
+
+\begin{eqnarray*}
+F_{n+1} & = & F_n + F_{n-1} \\
+& = & ({n \choose 0} + {n-1 \choose 1} + \ldots + {0 \choose n}) + ({n-1 \choose 0} + {n-2 \choose 2} + \ldots + {0 \choose n-1}) \\
+& = & {n \choose 0} + ({n-1 \choose 1} + {n-1 \choose 0}) + ({n-2 \choose 2} + {n-2 \choose 1}) + \ldots + ({0 \choose n-1} + {0 \choose n-2}) \\
+& = & {n \choose 0} + {n \choose 1} + {n-1 \choose 2} + \ldots + {1 \choose n-1} \\
+& = & {n+1 \choose 0} + {n \choose 1} + {n-1 \choose 2} + \ldots + {1 \choose n-1} + {0 \choose n} \\
+\end{eqnarray*}
+
+To combine the terms, we used the fact that $C(n,k) =
+C(n-1,k)+C(n-1,k-1)$.  Note that this holds for all nonnegative $n$
+and $k$, even if $n \leq k$.  In the last step, we used the facts that
+${n \choose 0} = {n+1 \choose 0} (=1)$ and ${0 \choose n} = 0$.
+
+\medskip
+
+\item {\bf Given a deck of 52 cards, how many ways are there to choose a set of four cards in order followed by one additional card?  Three in order followed by two additional unordered cards?  Two?  One?}
+
+We solve a more general problem.  Suppose we have a deck of $n$
+cards, and we want to choose a set of $m$ cards, of which we care
+about the order $k$.  We can do this by first choosing the set of
+$m$ cards, then choosing a subset of $k$ cards from this subset,
+and taking all possible orderings of our subset.  The number of
+ways to do this is:
+$$
+{n \choose m}{m \choose k}k!
+$$
+
+Fixing $n=52, m=5$, we get values of 311,875,200 for $k=1$,
+155,937,600 for $k=2$, 51,979,200 for $k=3$, and $12,994,800$ for $k=4$.
+
+
+
+
+\medskip
+
+\item {\bf There's a new screensaver that displays a random rectangular piece of an $n$ by $n$ checkerboard.}
+\begin{enumerate}
+\item {\bf How many rectangles are there in a checkerboard of size 1? 2? 3? 4?}
+
+Size 1?  1.  Size 2?  9.  Size 3?  36.  Size 4? 100.
+
+\item {\bf How many squares are there in a checkerboard of size 1? 2? 3? 4?}
+
+Size 1?  1.  Size 2?  5.  Size 3? 14.  Size 4?  30.
+
+\item {\bf Guess a general formula for the number of squares and rectangles.  Put each in closed form in terms of $n$.}
+
+Number of squares in a checkerboard of size $n$:
+$$1^2 + 2^2 + 3^2 + \ldots + n^2 = \sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}$$
+
+Number of rectangles in a checkerboard of size $n$:
+$$
+{n+1 \choose 2}^2 = \frac{(n+1)^2 n^2}{4}
+$$
+
+\item {\bf Prove your formulas are true either by induction of using a combinatorial argument.}
+
+Squares: If we are trying to place an $i$ by $i$ square on an $n$ by
+$n$ checkerboard, we must place the upperleftmost square in the first
+$n-i+1$ rows and columns.  Therefore, are $n-i+1$ squares of size $i$
+on an $n$ by $n$ checkerboard.  This gives the desired sum.
+
+Rectangles: A rectangle is uniquely determined by its starting and
+ending row and colummn.  Because the starting and ending row or column
+could be the same (i.e., a rectangle that starts and ends in the first
+column), we use as our starting and ending points the lines {\em
+between} the squares of the checkerboard.  In this view, our grid is
+now $n+1$ by $n+1$, and choosing a pair of rows and columns in this
+grid uniquely specifies a rectangle.  The result follows.
+
+\item {\bf What's the chance the the rectangle displayed is a square?  Give a simplified closed form in terms of $n$.}
+
+Dividing the number of squares by the number of rectangles (every
+square is of course a rectangle, we get:
+$$
+\frac{4n+2}{3n^2+3n}
+$$
+\item {\bf Although the number of squares and rectangles increase without bound as $n$ increases, what happens to the ratio of squares to triangles?}
+
+The ratio of squares to rectangles goes to zero.  This is because the
+number of squares is $\Theta(n^3)$, and the number of rectangles is
+$\Theta(n^4)$.
+
+\end{enumerate}
+
+\end{enumerate}
+\end{document}

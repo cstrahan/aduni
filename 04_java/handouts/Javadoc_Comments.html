@@ -1,0 +1,3546 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+
+<head>
+
+    <title>How to Write Doc Comments for Javadoc</title>
+
+</head>
+
+
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#000077" ALINK="#FF0000">
+
+
+
+<TABLE BORDER="0" WIDTH="100%">
+
+<TR>
+
+<TD WIDTH="60">
+
+   <IMG SRC="/images/logos/javalogo52x88.gif" ALT="Java" BORDER=0 WIDTH=52 HEIGHT=88>
+
+</TD>
+
+
+
+<TD>
+
+<center>
+
+                   <h1>How to Write<br>
+
+                Doc Comments for Javadoc</h1>
+
+                             <p>
+
+<font size="-1">Maintained by <a href="mailto:doug.kramer@sun.com">doug.kramer@sun.com</a></font>
+
+</center>
+
+</TD>
+
+
+
+<TD ALIGN=RIGHT VALIGN=TOP>
+
+   <font size="-1"><a href="../index.html">Javadoc<br> Home Page</a></font>
+
+</TD>
+
+</TR>
+
+</TABLE>
+
+
+
+<!-- Body text begins here -->
+
+
+
+<p>
+
+
+
+This document describes the style guide, tag and image conventions we use in 
+
+documentation comments for Java programs written at Java Software, 
+
+Sun Microsystems.  It does not rehash related material covered elsewhere:
+
+<ul>
+
+  <li>For reference material on Javadoc tags, see the 
+
+      <a href="../index.html#javadoc1.3documents">Javadoc reference pages</a>.
+
+  <li>For the required <i>semantic content</i> of documentation comments, see 
+
+      <a href="http://java.sun.com/products/jdk/javadoc/writingapispecs.html">Requirements 
+
+      for Writing Java API Specifications</a>.  
+
+</ul>
+
+
+
+
+
+<p>
+
+
+
+<h3>Contents</h3>
+
+<ul>
+
+<li><a href="#principles">Principles</a>
+
+<li><a href="#terminology">Terminology</a>
+
+<li><a href="#sourcefiles">Source Files</a>
+
+<li><a href="#generalform">General Form of a Doc Comment</a>
+
+<li><a href="#descriptions">Descriptions</a>
+
+<li><a href="#styleguide">A Style Guide</a>
+
+<li><a href="#tag">Tag Conventions</a>
+
+<li><a href="#defaultconstructors">Documenting Default Constructors</a>
+
+<li><a href="#throwstag">Documenting Exceptions with @throws Tag</a>
+
+<li><a href="#packagecomments">Package-Level Comments</a>
+
+<li><a href="#images">Including Images</a>
+
+<li><a href="#examples">Examples of Doc Comments</a>
+
+<li><a href="#curly">Troubleshooting Curly Quotes (Microsoft Word)</a>
+
+</ul>
+
+
+
+<p>
+
+<br>
+
+<!-- =================================================== -->
+
+<a name="principles"><a>
+
+<h3>Principles</h3>
+
+<blockquote>
+
+At Java Software, we have several guidelines that might make our documentation
+
+comments different than those of third party developers.  Our documentation
+
+comments define the official <i>Java Platform API Specification</i>.  To this 
+
+end, our target audience is those who write Java compatibility tests or 
+
+re-implement the Java Platform, in addition to developers.  We spend 
+
+time and effort focused on specifying boundary conditions, argument ranges 
+
+and corner cases rather than defining common programming terms, writing
+
+conceptual overviews, and including examples for developers. 
+
+<p>
+
+
+
+Thus, there are commonly two different ways to write doc comments --
+
+as API specifications, or as programming guide documentation.  
+
+These two targets are described in the following sections. A staff
+
+with generous resources can afford to blend both into the same
+
+documentation (properly "chunked"); however, our priorities dictate
+
+that we give prime focus to writing API specifications in doc
+
+comments.  This is why developers often need to turn to other
+
+documents, such as the
+
+<a href="http://java.sun.com/products/jdk/1.2/docs/">JDK Documentation</a>, 
+
+<a href="http://java.sun.com/docs/books/tutorial">Java Tutorial</a> or the 
+
+<a href="http://java.sun.com/docs/books/chanlee">Java Class Libraries</a> 
+
+(in hardback only) for programming guides.
+
+<p>
+
+
+
+<h4>Writing API Specifications</h4>
+
+
+
+Ideally, the Java API Specification comprises all assertions required to 
+
+do a clean-room implementation of the Java Platform for "write once, 
+
+run anywhere" -- such that any Java applet or application will 
+
+run the same on any implementation. This may include assertions 
+
+in the doc comments plus those in any architectural and 
+
+functional specifications (usually written in FrameMaker) or in any other
+
+document. This definition is a lofty goal and there is some practical 
+
+limitation to how fully we can specify the API. The following are 
+
+guiding principles we try to follow:
+
+
+
+<ul>
+
+
+
+  <li> <b>The Java Platform API Specification    
+
+       is defined by the documentation comments in the     
+
+       source code and any documents marked as specifications
+
+       reachable from those comments. </b>
+
+<p>
+
+       Notice that the specification does not need to be
+
+       entirely contained in doc comments.  In particular, 
+
+       specifications that are lengthy are sometimes best
+
+       formatted in a separate file and linked to from
+
+       a doc comment.
+
+<p>
+
+
+
+  <li> <b>The Java Platform API Specification is a contract between 
+
+       callers and implementions.</b>
+
+<p>
+
+       The Specification describes all aspects of the
+
+       behavior of each method on which a caller can rely.
+
+       It does not describe implementation details, such as
+
+       whether the method is native or synchronized.
+
+       The specification should describe (textually) the thread-safety
+
+       guarantees provided by a given object.  In the absence of explicit
+
+       indication to the contrary, all objects are assumed to be
+
+       "thread-safe" (i.e., it is permissible for multiple threads to
+
+       access them concurrently).  It is recognized that current 
+
+       specifications don't always live up to this ideal.
+
+<p>
+
+
+
+  <li> <b>Unless otherwise noted, the Java API Specification
+
+       assertions need to be implementation-independent.  
+
+       Exceptions must be set apart and prominently marked as such. </b>
+
+<p>
+
+       We have guidelines for <a href="#implementationspecific">how 
+
+       to prominently document implementation differences</a>.
+
+<p>
+
+
+
+  <li> <b>The Java API Specification should contain assertions 
+
+       sufficient to enable Software Quality Assurance to write complete 
+
+       Java Compatibility Kit (JCK) tests. </b>
+
+<p>
+
+       This means that the doc comments must satisfy the 
+
+       needs of the conformance testing by SQA.  The comments 
+
+       should not document bugs or how an implementation 
+
+       that is currently out of spec happens to work. 
+
+</ul>
+
+
+
+<h4>Writing Programming Guide Documentation</h4>
+
+
+
+What separates API specifications from a programming guide are
+
+examples, definitions of common programming terms, certain conceptual
+
+overviews (such as metaphors), and descriptions of implementation bugs
+
+and workarounds.  There is no dispute that these contribute to a
+
+developer's understanding and help a developer write reliable
+
+applications more quickly.  However, because these do not contain API
+
+"assertions", they are not necessary in an API specification.  You can
+
+include any or all of this information in documentation comments (and
+
+can include
+
+<a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/javadoc/overview.html#custom">custom 
+
+tags</a>, handled by a custom doclet, to facilitate it).
+
+At Java Software, we consciously do not include this level of 
+
+documentation in doc comments, and instead include either links to 
+
+this information (links to the Java Tutorial and list of changes) 
+
+or include this information in the same documentation download bundle 
+
+as the API spec -- the JDK documentation bundle includes the API specs 
+
+as well as demos, examples, and programming guides.
+
+<p>
+
+
+
+It's useful to go into further detail about how to document bugs and
+
+workarounds.  There is sometimes a discrepancy between how code
+
+<i>should</i> work and how it actually works.  This can take two
+
+different forms: API spec bugs and code bugs.  It's useful to decide
+
+up front whether you want to document these in the doc comments.  
+
+At Java Software we have decided to document both of these outside
+
+of doc comments, though we do make exceptions.  
+
+<p>
+
+
+
+<b>API spec bugs</b> are bugs that are present in the method signature
+
+or in the doc comment that affects the syntax or semantics.  An example 
+
+of such a spec bug is a method that is specified to throw a NullPointerException 
+
+when <code>null</code> is passed in, but <code>null</code> is actually 
+
+a useful parameter that should be
+
+accepted (and was even implemented that way).  If a decision is made
+
+to correct the API specification, it would be useful to state that
+
+either in the API specification itself, or in a list of changes to the
+
+spec, or both.  Documenting an API difference like this in a doc
+
+comment, along with its workaround, alerts a developer to the change
+
+where they are most likely to see it.  Note that an API specification
+
+with this correction would still maintain its
+
+implementation-independence.  
+
+<p>
+
+
+
+<b>Code bugs</b> are bugs in the implementation rather than in the API
+
+specification.  Code bugs and their workarounds are often likewise 
+
+distributed separately in a bug report.  However, if Javadoc is being
+
+used to generate documentation for a particular implementation, it
+
+would be quite useful to include this information in the doc comments,
+
+suitably separated as a note or by a custom tag (say <code>@bug</code>).
+
+ 
+
+<h4>Who "Owns" the Doc Comments - Writers or Programmers</h4>
+
+Here at Java Software, the doc comments are not owned exclusively by writers
+
+or programmers, but their ownership is shared between them.
+
+It is a basic premise that writers and programmers honor each other's
+
+capabilities and both contribute to the best doc comments possible.
+
+Often it is a matter of negotiation to determine who writes which
+
+parts of the documentation, based on knowledge, time, resources, interest,
+
+API complexity, and on the state of the implementation itself.
+
+<p>
+
+
+
+Ideally, the person designing the API would write the API specification
+
+in skeleton source files, with only signatures and doc comments,
+
+filling in the implementation only to satisfy the written API contract.
+
+The purpose of an API writer is to relieve the designer from 
+
+some of this work.  In this case, the API designer would write the 
+
+initial doc comments using sparse language, and then the writer 
+
+would review the comments, refine the content, and add tags.  
+
+<p>
+
+
+
+If the doc comments are an API specification for re-implementors, 
+
+and not simply a guide for developers, they should be written either 
+
+by the programmer who designed and implemented the API, or by a API 
+
+writer who is or has become a subject matter expert.  If the 
+
+implementation is written to spec but the doc comments are unfinished, 
+
+a writer can complete the doc comments by inspecting the source code 
+
+or writing programs that test the API.  A writer might inspect
+
+or test for exceptions thrown, parameter boundary conditions, and 
+
+for acceptance of null arguments. However, a much more difficult 
+
+situation arises if the implementation is <i>not</i> written to spec.
+
+Then a writer can proceed to write an API specification only
+
+if they either know the intent of the designer (either through
+
+design meetings or through a separately-written design specification) 
+
+or have ready access to the designer with their questions.  Thus, 
+
+it may be more difficult for a writer to write the documentation 
+
+for interfaces and abstract classes that have no implementors.
+
+<p>
+
+
+
+With that in mind, these guidelines are intended to describe the
+
+finished documentation comments.  They are intended as <em>suggestions</em> 
+
+rather than requirements to be slavishly followed if they seem overly
+
+burdensome, or if creative alternatives can be found.  When a complex
+
+system such as Java (which contains about 60 packages) is being
+
+developed, often a group of engineers contributing to a particular 
+
+set of packages, such as <code>javax.swing</code> may develop guidelines
+
+that are different from other groups.  This may be due to the
+
+differing requirements of those packages, or because of resource
+
+constraints.
+
+
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="terminology"></a>
+
+<h3>Terminology</h3>
+
+<blockquote>
+
+
+
+
+
+<dl>
+
+<dt><b>API documentation</b> (API docs) or <b>API specifications</b> (API specs)
+
+<dd>On-line or hardcopy descriptions of the API, 
+
+    intended primarily for programmers writing in Java. These can be 
+
+    generated using the javadoc tool or created some other way.  
+
+    Examples would be the on-line 
+
+    <a href="http://java.sun.com/products/jdk/1.1/docs/api/packages.html">JDK 
+
+    API docs</a> and the Chan/Lee <em>Java Class Libraries</em> book.
+
+
+
+<dt><b>Documentation comments</b> (doc comments)
+
+   <dd>The special comments in the Java source code that are delimited by 
+
+       the <code>/** ... */</code> delimiters. These comments are processed by 
+
+       the Javadoc tool to generate the API docs.
+
+
+
+<dt><b>javadoc</b>
+
+   <dd>The JDK tool that generates API documentation from documentation comments.
+
+</dl>
+
+</blockquote>
+
+
+
+
+
+<!-- =================================================== -->
+
+<a name="sourcefiles"></a>
+
+<h3>Source Files</h3>
+
+<blockquote>
+
+Javadoc can generate output originating from four different types 
+
+of "source" files: 
+
+
+
+<UL>
+
+   <LI>Source code files for Java classes (.java) - these contain
+
+       class, interface, field, constructor and method comments.
+
+   <LI>Package comment files - these contain package comments
+
+   <LI>Overview comment files - these contain comments about the 
+
+       set of packages
+
+   <LI>Miscellaneous unprocessed files - these include images, sample
+
+       source code, class files, applets, HTML files, and whatever
+
+       else you might want to referenced from the previous files.
+
+</UL>
+
+
+
+For more details, see: 
+
+<a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/solaris/javadoc.html#sourcefiles">Source Files</a>.
+
+
+
+</blockquote>
+
+
+
+
+
+<!-- =================================================== -->
+
+<a name="generalform"></a>
+
+<h3>General Form of a Doc Comment</h3> 
+
+<blockquote>
+
+
+
+A doc comment is made up of two parts -- a description followed 
+
+by zero or more tags, with a blank line (containing a single asterisk "*")
+
+between these two sections:
+
+<pre>
+
+    /** 
+
+     * This is the description part of a doc comment
+
+     *
+
+     * @tag    Comment for the tag
+
+     */
+
+</pre>
+
+<ul>
+
+   <li>The first line is indented to line up with the code below the comment,
+
+       and starts with the begin-comment symbol (<code>/**</code>)
+
+       followed by a return.
+
+   <p>
+
+   <li>Subsequent lines start with an asterisk <code>*</code>. They are indented 
+
+       an additional space so the asterisks line up. A space separates the
+
+       asterisk from the descriptive text or tag that follows it.
+
+   <p>
+
+   <li>Insert a blank comment line between the description and the list of tags,
+
+       as shown.
+
+   <p>
+
+   <li>Insert additional blank lines to create "blocks" of related tags (discussed
+
+       in greater detail below).
+
+   <p>
+
+   <li>The last line begins with the end-comment symbol (<code>*/</code>) 
+
+       indented so the asterisks line up and followed by a return. Note that the 
+
+       end-comment symbol contains only a single asterisk (<code>*</code>).
+
+</ul>
+
+
+
+<p>
+
+Break any doc-comment lines exceeding 80 characters in length, if possible. 
+
+If you have more than one paragraph in the doc comment, separate the paragraphs
+
+with a <code>&lt;p&gt;</code> paragraph tag.
+
+
+
+
+
+Also see <a href="#curly">Troubleshooting Curly Quotes (Microsoft Word)</a> 
+
+at the end of this document.
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="descriptions"></a>
+
+<h3>Descriptions</h3>
+
+<blockquote>
+
+
+
+<a name="firstsentence"></a>
+
+<b>First Sentence</b><br>
+
+The first sentence of each doc comment should be a summary
+
+sentence, containing a concise but complete description of the
+
+API item. This means the first sentence of each member, class, 
+
+interface or package description.  The Javadoc tool copies this 
+
+first sentence to the appropriate member, class/interface or package 
+
+summary.  This makes it important to write crisp and informative 
+
+initial sentences that can stand on their own.
+
+
+
+<p>
+
+This sentence ends at the first period that is
+
+followed by a blank, tab, or line terminator, or at the first tag (as
+
+defined below).  For example, this first sentence ends at "Prof.":
+
+<pre>
+
+   /**
+
+    * This is a simulation of Prof. Knuth's MIX computer.
+
+    */
+
+</pre>
+
+However, you can work around this by typing an HTML meta-character such 
+
+as "&amp;" or "&lt;" immediately after the period, such as:
+
+<pre>
+
+   /**
+
+    * This is a simulation of Prof.&amp;nbsp;Knuth's MIX computer.
+
+    */
+
+</pre>
+
+or
+
+<pre>
+
+   /**
+
+    * This is a simulation of Prof.&lt;!-- --&gt; Knuth's MIX computer.
+
+    */
+
+</pre>
+
+
+
+
+
+<p>
+
+In particular, write summary sentences that distinguish overloaded methods 
+
+from each other. For example:
+
+<pre>
+
+   /** 
+
+    * Class constructor.
+
+    */
+
+   foo() {
+
+     ...
+
+    
+
+   /**
+
+    * Class constructor specifying number of objects to create.
+
+    */
+
+   foo(int n) {
+
+     ...
+
+</pre>
+
+<p>
+
+
+
+<a name="implementationindependence"></a>
+
+<b>Implementation-Independence</b><br>
+
+
+
+Write the description to be implementation-independent, but specifying 
+
+such dependencies where necessary.  This helps engineers write code to be 
+
+"write once, run anywhere."
+
+<ul>
+
+   <li> As much as possible, write doc comments as an implementation-independent 
+
+        API specification.
+
+<p>
+
+
+
+   <li> Define clearly what is required and what is allowed to vary across 
+
+        platforms/implementations.
+
+<p>
+
+
+
+   <li> Ideally, make it complete enough for conforming implementors.
+
+        Realistically, include enough description so that someone reading
+
+        the source code can write a substantial suite of conformance
+
+        tests.  Basically, the spec should be complete, including boundary 
+
+        conditions, parameter ranges and corner cases.  
+
+<p>
+
+
+
+   <li> Where appropriate, mention what the specification leaves
+
+        unspecified or allows to vary among implementations.
+
+<p>
+
+<a name="implementationspecific"></a>
+
+   <li> If you must document implementation-specific behavior, please 
+
+        document it in a separate paragraph with a lead-in phrase 
+
+        that makes it clear it is implementation-specific. 
+
+        If the implementation varies according to platform,
+
+        then specify "On &lt;platform&gt;" at the start of the paragraph.
+
+        In other cases that might vary with implementations on a platform
+
+        you might use the lead-in phrase "Implementation-Specific:".  
+
+        Here is an example of an implementation-dependent part of the
+
+        specification for <code>java.lang.Runtime</code>:
+
+<blockquote>
+
+        On Win32 systems, the path search behavior of the 
+
+        <code>loadLibrary</code> method is identical to that 
+
+        of the Win32 API's <code>LoadLibrary</code> procedure.
+
+</blockquote>
+
+        The use of "On Win32" at the beginning of the sentence makes 
+
+        it clear up front that this is an implementation note.  
+
+</ul>
+
+
+
+  
+
+<a name="reusingcomments"></a>
+
+<b>Automatic re-use of method comments</b><br>
+
+
+
+You can avoid re-typing doc comments by being aware of how
+
+Javadoc duplicates (inherits) comments for methods that override
+
+or implement other methods.  This occurs in three cases:
+
+<ul>
+
+  <li>When a method in a class overrides a method in a superclass
+
+  <li>When a method in an interface overrides a method in a superinterface
+
+  <li>When a method in a class implements a method in an interface
+
+</ul>
+
+<p>
+
+
+
+In the first two cases, if a method <code>m()</code> overrides another method,
+
+Javadoc will generate a subheading "Overrides" in the documentation
+
+for <code>m()</code>, with a link to the method it is overriding.  
+
+<p>
+
+
+
+In the third case, if a method <code>m()</code> in a given class 
+
+implements a method in an interface, Javadoc will generate a 
+
+subheading "Specified by" in the documentation for <code>m()</code>, 
+
+with a link to the method it is implementing.  
+
+<p>
+
+
+
+In all three of these cases, if the method <code>m()</code> contains 
+
+no doc comments or tags, Javadoc will also copy the text of the method 
+
+it is overriding or implementing to the generated documentation for 
+
+<code>m()</code>.  So if the documentation of the overridden or 
+
+implemented method is sufficient, you do not need to add documentation
+
+for <code>m()</code>.  If you add any documentation comment or tag to
+
+<code>m()</code>, the "Overrides" or "Specified by" subheading and
+
+link will still appear, but no text will be copied.
+
+
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="styleguide"></a>
+
+<h3>A Style Guide</h3>
+
+<blockquote>
+
+The following are useful tips and conventions for writing descriptions in doc comments.
+
+</blockquote>
+
+<ul>
+
+<a name="codestyle"></a>
+
+<li><b>Use &lt;code&gt; style for keywords and names.</b><br>
+
+Keywords and names are offset by &lt;code&gt;...&lt;/code&gt; when 
+
+mentioned in a description.   This includes:
+
+<ul>
+
+    <li>Java keywords
+
+    <li>package names
+
+    <li>class names
+
+    <li>method names
+
+    <li>interface names
+
+    <li>field names
+
+    <li>argument names
+
+    <li>code examples
+
+</ul>
+
+<p>
+
+
+
+<a name="inlinelinks"></a>
+
+<li><b>Use in-line links economically</b><br>
+
+You are encouraged to add links for API names (listed immediately above) using the 
+
+<a href="#{@link}"><code>{@link}</code></a> tag.  It is not necessary to add links for 
+
+<i>all</i> API names
+
+in a doc comment. Because links call attention to themselves (by their color and 
+
+underline in HTML, and by their length in source code doc comments), it can make 
+
+the comments more difficult to read if used profusely.  We therefore recommend 
+
+adding a link to an API name if:
+
+
+
+<ul>
+
+  <li>The user might actually want to click on it for more information (in your judgment), and
+
+  <li>Only for the first occurrence of each API name in the doc comment (don't bother repeating a link)
+
+</ul>
+
+<p>
+
+
+
+Our audience is advanced (not novice) programmers, so it is generally not
+
+necessary to link to API in the java.lang package (such as String), or other API
+
+you feel would be well-known.
+
+<p>
+
+
+
+<li><b>Omit parentheses for the general form of methods and constructors</b><br>
+
+When referring to a method or constructor that has multiple forms,
+
+and you mean to refer to a specific form, use parentheses and argument types.
+
+For example, ArrayList has two add methods:  add(Object) and add(int, Object).
+
+
+
+<table>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; The <code>add(int, Object)</code> method adds an item at a specified position in this arraylist.
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+However, if referring to both forms of the method, omit the parentheses altogether.
+
+It is misleading to include empty parentheses, because that would imply a particular
+
+form of the method.  The intent here is to distinguish the general method from any of
+
+its particular forms.  Include the word "method" to distinguish it as a method and 
+
+not a field.
+
+
+
+<table>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; The <code>add</code> method enables you to insert items.
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (preferred)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; The <code>add()</code> method enables you to insert items.
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (avoid when you mean "all forms" of the add method)
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+
+
+<!--
+
+NOTE: The convention in the <i>Java Language Specification</i> is to put the word "method" 
+
+<i>ahead</i> of the method name, as in:  "The method <code>add</code> enables you to insert 
+
+items."
+
+-->
+
+<p>
+
+
+
+<li><b>Okay to use phrases instead of complete sentences, in the 
+
+  interests of brevity.</b> This holds especially in the initial 
+
+  summary and in @param tag descriptions.
+
+<p>
+
+
+
+
+
+<li><b>Use 3rd person (descriptive) not 2nd person (prescriptive).</b><br>
+
+  The description is in 3rd person declarative rather than 2nd person 
+
+  imperative.
+
+
+
+<table>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; Gets the label.
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (preferred)
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; Get the label. 
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (avoid)
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+<p>
+
+
+
+<li><b>Method descriptions begin with a verb phrase.</b><br>
+
+  A method implements an operation, so it usually starts with a verb phrase:
+
+
+
+<table>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; Gets the label of this button.
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (preferred)
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; This method gets the label of this button. 
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (avoid)
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+<p>
+
+
+
+<li><b>Class/interface/field descriptions can omit the subject and simply 
+
+  state the object.</b> These API often describe things rather than 
+
+  actions or behaviors:
+
+
+
+<table>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; A button label.
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (preferred)
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; This field is a button label. 
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (avoid)
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+<p>
+
+
+
+<li><b>Use "this" instead of "the" when referring to an
+
+  object created from the current class.</b> For example, the description
+
+  of the <code>getToolkit</code> method should read as follows:
+
+
+
+<table>
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; Gets the toolkit for this component.
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (preferred)
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; Gets the toolkit for the component. 
+
+</td>
+
+<td>
+
+  &nbsp; &nbsp; &nbsp; (avoid)
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+<p>
+
+
+
+<li><b>Add description beyond the API name.</b>  The best API names 
+
+  are "self-documenting", meaning they tell you basically what the 
+
+  API does.  If the doc comment merely repeats the API name in
+
+  sentence form, it is not providing more information.  For 
+
+  example, if  method description uses only the words that appear 
+
+  in the method name, then it is adding nothing at all to what 
+
+  you could infer.  The ideal comment goes beyond those words 
+
+  and should always reward you with some bit of 
+
+  information that was not immediately obvious from the API name. 
+
+<p>
+
+
+
+<blockquote>
+
+<b>Avoid</b> - The description below says nothing beyond what you know from 
+
+reading the method name. The words "set", "tool", "tip", and "text" 
+
+are simply repeated in a sentence. 
+
+<pre>
+
+    /**
+
+     * Sets the tool tip text.
+
+     *
+
+     * @param text  The text of the tool tip.
+
+     */
+
+    public void setToolTipText(String text) {
+
+</pre>
+
+<b>Preferred</b> - This description more completely defines what a 
+
+tool tip is, in the larger context of registering and being displayed
+
+in response to the cursor. 
+
+<pre>
+
+    /**
+
+     * Registers the text to display in a tool tip.   The text 
+
+     * displays when the cursor lingers over the component.
+
+     *
+
+     * @param text  The string to display.  If the text is null, 
+
+     *              the tool tip is turned off for this component.
+
+     */
+
+    public void setToolTipText(String text) {
+
+</pre>
+
+<p>
+
+</blockquote>
+
+
+
+<li><b>Be clear when using the term "field".</b>
+
+Be aware that the word "field" has two meanings:
+
+<ul>
+
+<li>static field, which is another term for "class variable"
+
+<li>text field, as in the TextField class.  Note that this
+
+kind of field might be restricted to holding dates, numbers
+
+or any text.  Alternate names might be "date field" or "number field",
+
+as appropriate.
+
+</ul>
+
+<p>
+
+
+
+<li><b>Avoid Latin</b> -- use "also known as" instead of "aka", use "that is" 
+
+  or "to be specific" instead of "i.e.", use "for example" instead of "e.g.", 
+
+  and use "in other words" or "namely" instead of "viz."
+
+</ul>
+
+
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="tag"></a>
+
+<h3>Tag Conventions</h3>
+
+<blockquote>
+
+
+
+<p>Most of the following tags are specified in the  
+
+<a href="http://java.sun.com/docs/books/jls/html/18.doc.html#25995">Java 
+
+Language Specification</a>.  Also see the 
+
+<a href="http://java.sun.com/products/jdk/1.1/docs/tooldocs/win32/javadoc.html#tags">javadoc 
+
+reference page</a>. 
+
+
+
+<p>
+
+<b>Order of Tags</b><br>
+
+Include tags in the following order:<br>
+
+<blockquote>
+
+<pre>
+
+<code>* @author       </code>(classes and interfaces only, required)
+
+<code>* @version      </code>(classes and interfaces only, required) (see <a href="#footnote1">footnote 1</a>)
+
+<code>*               </code>
+
+<code>* @param        </code>(methods and constructors only)
+
+<code>* @return       </code>(methods only)
+
+<code>* @exception    </code>(@throws is a synonym added in Javadoc 1.2)
+
+<code>* @see          </code>
+
+<code>* @since        </code>
+
+<code>* @serial       </code>(or @serialField or @serialData)
+
+<code>* @deprecated   </code>(see <a href="http://java.sun.com/products/jdk/1.1/docs/guide/misc/deprecation/deprecation.html">How and When To Deprecate APIs</a>)
+
+</pre>
+
+</blockquote>
+
+
+
+<p>
+
+<b>Tag Blocks</b><br>
+
+For readability, divide the tags into blocks of related tags.
+
+The blocks shown above are an example.
+
+
+
+<p>   
+
+<b>Ordering Multiple Tags</b><br>
+
+We employ the following conventions when a tag appears more than once
+
+in a documentation comment.  If desired, groups of tags, such as 
+
+multiple @see tags, can be separated from the other tags by a blank 
+
+line with a single asterisk.
+
+
+
+<p>
+
+Multiple @author tags should be listed in chronological order. 
+
+The creator of the class should be listed at the top.
+
+
+
+<p>
+
+Multiple @param tags should be listed in argument-declaration order.
+
+This makes it easier to match the list to the signature with 
+
+your eyes.
+
+
+
+<p>
+
+Multiple @exception tags (also known as @throws) should be listed 
+
+alphabetically by the exception names.
+
+
+
+<!--
+
+Multiple @exception tags should generally be listed alphabetically by
+
+the exception names. However, there may be times when it may be
+
+more sensible to group them first by inheritance and second
+
+alphabetically.  For example, a method for reading a serialized 
+
+object from a file can throw a host of exceptions, including:
+
+<pre>
+
+   EOFException
+
+   FileNotFoundException
+
+   IOException
+
+   StreamCorruptedException
+
+</pre>
+
+
+
+A client object interested merely in a simple success/failure of 
+
+such a method call can try/catch IOException alone. All the other 
+
+exceptions are subclasses of IOException.
+
+-->
+
+
+
+<p>
+
+
+
+<a name="multiple@seetags"></a>
+
+Multiple @see tags should be ordered as follows, which is 
+
+roughly the same order as their arguments are 
+
+<a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#seesearchorder">searched for by javadoc</a>, basically from nearest to farthest access, 
+
+from least-qualified to fully-qualified,
+
+The following list shows this progression.  Notice the methods 
+
+and constructors are in "telescoping" order, which means 
+
+the "no arg" form first, then the "1 arg" form, then the "2 arg" 
+
+form, and so forth.  Where a second sorting key is needed, 
+
+they could be listed either alphabetically or grouped logically.
+
+
+
+<pre>
+
+   @see #field
+
+   @see #Constructor(Type, Type...)
+
+   @see #Constructor(Type id, Type id...)
+
+   @see #method(Type, Type,...)
+
+   @see #method(Type id, Type, id...)
+
+   @see Class
+
+   @see Class#field
+
+   @see Class#Constructor(Type, Type...)
+
+   @see Class#Constructor(Type id, Type id)
+
+   @see Class#method(Type, Type,...)
+
+   @see Class#method(Type id, Type id,...)
+
+   @see package.Class
+
+   @see package.Class#field
+
+   @see package.Class#Constructor(Type, Type...)
+
+   @see package.Class#Constructor(Type id, Type id)
+
+   @see package.Class#method(Type, Type,...)
+
+   @see package.Class#method(Type id, Type, id)
+
+   @see package
+
+</pre>
+
+
+
+<p>
+
+
+
+<b>Required Tags</b><br>
+
+An @param tag is required for every parameter, even when the description is
+
+obvious. The @return tag is required for every method that returns something 
+
+other than void, even if it is redundant with the method description. (Whenever
+
+possible, find something non-redundant (ideally, more specific) to use for the
+
+tag comment.)
+
+<p>
+
+
+
+These principles expedite automated searches and automated processing. 
+
+Frequently, too, the effort to avoid redundancy pays off in extra clarity.
+
+<p>
+
+
+
+<b>Tag Comments</b><br>
+
+As a reminder, the fundamental use of these tags is described 
+
+on the <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#tags">Javadoc 
+
+Reference page</a>.  Java Software generally uses the following additional 
+
+guidelines to create comments for each tag:
+
+<blockquote>
+
+<dl>
+
+<a name="@author"></a>
+
+<dt><b>@author</b>
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@author">(reference page)</a>
+
+<dd>If the author is unknown, use "unascribed" as the argument to
+
+@author. 
+
+<p>
+
+
+
+<a name="@version"></a>
+
+<dt><b>@version</b>
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@version">(reference page)</a>
+
+<dd>The Java Software convention for the argument to the @version tag is the
+
+SCCS string "%I%, %G%", which converts to something like "<code>1.39, 02/28/97</code>"
+
+when the file is checked out of SCCS.
+
+<p>
+
+
+
+<a name="@param"></a>
+
+<dt><b>@param</b>
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@param">(reference page)</a>
+
+<dd>The @param tag is followed by the name (not data type) of the parameter, 
+
+followed by a description of the parameter. By convention, the first noun 
+
+in the description is the data type of the parameter. (Articles like 
+
+"a", "an", and "the" can precede the noun.)  An exception is made
+
+for the primitive <code>int</code>, where the data type is usually omitted. 
+
+Additional spaces can be inserted between the name and description 
+
+so that the descriptions line up in a block. Dashes or other punctuation 
+
+should not be inserted before the description, as Javadoc inserts one dash.
+
+<p>  
+
+
+
+Parameter names are lowercase by convention.
+
+The data type starts with a lowercase letter to indicate
+
+an object rather than a class.  The description is most usually a phrase, 
+
+starting with a lowercase letter and ending without a period, unless it 
+
+contains a complete sentence or is followed by another sentence (as 
+
+described further below).
+
+<p>
+
+
+
+Example:<pre>
+
+  * @param ch        the character to be tested
+
+  * @param observer  the image observer to be notified 
+
+</pre>
+
+Do not bracket the name of the parameter after the @param tag with 
+
+&lt;code&gt;...&lt;/code&gt; since Javadoc 1.2 automatically does
+
+this.  (Javadoc will do the right thing and will not  insert
+
+code tags around the parameter name if they are already present.)
+
+<p>
+
+
+
+When writing the comments themselves:
+
+<ul>
+
+<li>Prefer a phrase to a sentence.
+
+<p>     
+
+<li>Giving a phrase, do not capitalize, do not end with a period.<br>
+
+  <code>&nbsp; @param x a phrase goes here
+
+  </code>
+
+<p>     
+
+<li>Giving a sentence, capitalize it and end it with a period.<br>
+
+  <code>&nbsp; @param x This is a sentence.
+
+  </code>
+
+<p>     
+
+<li>When giving multiple sentences, follow all sentence rules.<br>
+
+  <code>&nbsp; @param x This is sentence #1. This is sentence #2.
+
+  </code>
+
+<p>     
+
+<li>Giving multiple phrases, separate with a semi-colon and a space.<br>
+
+  <code>&nbsp; @param x phrase #1 here; phrase #2 here
+
+  </code>
+
+<p>     
+
+<li>Giving a phrase followed by a sentence, do not capitalize the
+
+  phrase. However, end it with a period to distinguish the start
+
+  of the next sentence.<br>
+
+  <code>&nbsp; @param x a phrase goes here. This is a sentence.
+
+  </code>
+
+</ul>
+
+<p>
+
+
+
+<a name="@return"></a>
+
+<dt><b>@return</b>
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@return">(reference page)</a>
+
+<dd>Omit @return for methods that return void and for constructors; include it 
+
+for all other methods, even if its content is entirely redundant with the 
+
+method description.  Having an explicit @return tag makes it easier for 
+
+someone to find the return value quickly.   Whenever possible, supply return
+
+values for special cases (such as specifying the value returned when an 
+
+out-of-bounds argument is supplied).
+
+<p>
+
+
+
+<a name="@deprecated"></a>
+
+<dt><b>@deprecated</b>
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@deprecated">(reference page)</a>
+
+<dd>The @deprecated description in the first sentence should at least tell the 
+
+user when the API was deprecated and what to use as a replacement.  
+
+Only the first sentence will appear in the summary section and index.
+
+Subsequent sentences can also explain why it has been deprecated. 
+
+When generating the description for a deprecated API, Javadoc moves the 
+
+@deprecated text ahead of the description, placing it in italics and preceding it 
+
+with a bold warning: "Deprecated". 
+
+An <code>@see</code> tag (for Javadoc 1.1) or <code>{@link}</code> tag (for Javadoc 
+
+1.2 or later) should be included that points to the replacement method:
+
+<p>
+
+<ul type=disc>
+
+  <li>For Javadoc 1.1, the standard format is to create a pair of <code>@deprecated</code>
+
+      and <code>@see</code> tags.  For example: 
+
+<pre>
+
+/**
+
+ * @deprecated  As of JDK 1.1, replaced by <code>setBounds</code>
+
+ * @see #setBounds(int,int,int,int)
+
+ */
+
+</pre>
+
+
+
+<li>For Javadoc 1.2, the standard format is to use <code>@deprecated</code> tag 
+
+    and the in-line <code>{@link}</code> tag.  This creates the link in-line, 
+
+    where you want it. For example: 
+
+<pre>
+
+/**
+
+ * @deprecated  As of JDK 1.1, replaced by {@link #setBounds(int,int,int,int)}
+
+ */
+
+</pre>
+
+</ul>
+
+
+
+If the member has no replacement, the argument to @deprecated should be 
+
+"No replacement".
+
+<p>
+
+
+
+<p>
+
+Do not add @deprecated tags without first checking with the appropriate 
+
+engineer. Substantive modifications should likewise be checked first. 
+
+<p>
+
+
+
+<a name="@since"></a>
+
+<dt><b>@since</b>
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@since">(reference page)</a>
+
+
+
+<dd>Specify the product version when the Java name was added to the API.
+
+For example, if a package, class, interface or member was added to the
+
+Java 2 Platform, Standard Edition at version 1.2, use:
+
+<pre>
+
+/**
+
+ * @since 1.2
+
+ */
+
+</pre>
+
+
+
+The Javadoc standard doclet displays a "Since" subheading with the 
+
+string argument as its text.  This subheading appears in the 
+
+generated text only in the place corresponding to where the 
+
+<code>@since</code> tag appears in the source doc comments 
+
+(Javadoc does not proliferate it down the hierarchy).
+
+<p>
+
+
+
+(The convention once was "<code>@since JDK1.2</code>" but 
+
+because this is a specification of the Java Platform, 
+
+not particular to the Sun JDK or SDK, we have dropped "JDK".)
+
+<p>
+
+
+
+When a package is introduced, specify an <code>@since</code> tag in its 
+
+package description and each of its classes.  (Adding <code>@since</code> 
+
+tags to each class is technically not needed, but is our convention, 
+
+as enables greater visibility in the source code.)  In the absence 
+
+of overriding tags, the value of the <code>@since</code> tag 
+
+applies to each of the package's classes and members.
+
+<p>
+
+
+
+When a class (or interface) is introduced, specify one 
+
+<code>@since</code> tag in its class description and no 
+
+<code>@since</code> tags in the members.  Add an 
+
+<code>@since</code> tag only to members added in a later version 
+
+than the class.  This minimizes the number of 
+
+<code>@since</code> tags. 
+
+<p>
+
+
+
+If a member changes from protected to public in a later release, the 
+
+<code>@since</code> tag would not change, even though it is now usable by 
+
+any caller, not just subclassers.
+
+<p>
+
+
+
+<a name="@exception"></a>
+
+<dt><b>@exception</b> (<b>@throws</b> is a synonym added in Javadoc 1.2)
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@throws">(reference page)</a>
+
+<dd>An @exception tag should be included for any checked
+
+exceptions (declared in the throws clause), as illustrated below, 
+
+and also for any unchecked exceptions that the caller might
+
+reasonably want to catch, with the exception of 
+
+<code>NullPointerException</code>.  Errors should not be documented 
+
+as they are unpredictable. <!-- Josh's words --> For more details, 
+
+please see
+
+<a href="#throwstag">Documenting Exceptions with the @throws Tag</a>.
+
+ 
+
+<pre>
+
+  /**
+
+   * @exception IOException  If an input or output exception occurred
+
+   */
+
+  public void f() throws IOException {
+
+      // body
+
+  }
+
+</pre>
+
+
+
+See the <a href="http://java.sun.com/docs/books/jls/html/11.doc.html">Exception chapter</a>
+
+of the <i>Java Language Specification</i> for more on exceptions.
+
+<p>
+
+
+
+<a name="@serial"></a>
+
+<dt><b>@serial</b> 
+
+<dt><b>@serialField</b> 
+
+<dt><b>@serialData</b> &nbsp;
+
+<dt>(All added in Javadoc 1.2)
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#@serial">(reference page)</a>
+
+   <dd>For information about how to use these tags, along with an example, 
+
+see "Documenting Serializable Fields and Data for a Class," 
+
+<a href="http://java.sun.com/products/jdk/1.2/docs/guide/serialization/spec/serial-arch.doc6.html">Section 
+
+1.6 of the Java Object Serialization Specification</a>.  Also see Sun's 
+
+<a href="../writingapispecs/serialized-criteria.html">criteria</a> for 
+
+including classes in the serialized form specification.   
+
+<p>
+
+
+
+<a name="{@link}"></a>
+
+<dt><b>{@link}</b> &nbsp; (Added in Javadoc 1.2)
+
+&nbsp; &nbsp; <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/javadoc.html#{@link}">(reference page)</a>
+
+   <dd>For conventions, see <a href="#inlinelinks">Use In-Line Links Economically</a>.
+
+
+
+</dl>
+
+</blockquote>
+
+</blockquote>
+
+
+
+
+
+<!-- =================================================== -->
+
+<a name="defaultconstructors"></a>
+
+<h3>Documenting Default Constructors</h3>
+
+<blockquote>
+
+
+
+<a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#16823">Section 
+
+8.8.7 of the Java Language Specification</a> describes a 
+
+default constructor: If a class contains no constructor declarations, 
+
+then a default constructor that takes no parameters is automatically
+
+provided.  It invokes the superclass constructor with no arguments.
+
+The constructor has the same access as its class.
+
+<p>
+
+  
+
+Javadoc generates documentation for default constructors.  When it documents 
+
+such a constructor, Javadoc leaves its description blank, because a default 
+
+constructor can have no doc comment.  The question then arises: How do you add 
+
+a doc comment for a default constructor?  The simple answer is that it is
+
+not possible -- and, conveniently, our programming convention is to avoid 
+
+default constructors.  (We considered but rejected the idea that Javadoc 
+
+should generate a default comment for default constructors.)
+
+<p>
+
+
+
+Good programming practice dictates that code should never make 
+
+use of default constructors in public APIs:
+
+<b>All constructors should be explicit.</b>  That is, all default
+
+constructors in public and protected classes should be turned into explicit 
+
+constructor declarations with the appropriate access modifier.  This explicit
+
+declaration also gives you a place to write documentation comments.
+
+<p>
+
+
+
+The reason this is good programming practice is that an explicit declaration 
+
+helps prevents a class from inadvertently being made instantiable, as the design
+
+engineer has to actually make a decision about the constructor's access.
+
+We have had several cases where we did not want a public class to be instantiable,
+
+but the programmer overlooked the fact that its default constructor was public.
+
+If a class is inadvertently allowed to be instantiable in a released version 
+
+of a product, upward compatibility dictates that the unintentional constructor 
+
+be retained in future versions.  Under these unfortunate circumstances, 
+
+the constructor should be made explicit and deprecated (using 
+
+<code>@deprecated</code>).
+
+<p>
+
+
+
+Note that when creating an explicit constructor, it must match 
+
+<em>precisely</em> the signature of the automatically generated constructor;
+
+even if the constructor should logically be protected, it must be made public 
+
+to match the signature of the automatically generated constructor, for
+
+compatibility.  An appropriate doc comment should then be provided.  Often, the comment
+
+      should be something as simple as:
+
+<pre>
+
+    /**
+
+     * Sole constructor.  (For invocation by subclass constructors, typically
+
+     * implicit.)
+
+     */
+
+    protected AbstractMap() {
+
+    }
+
+</pre>
+
+</ul>
+
+
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="throwstag"></a>
+
+<h3>Documenting Exceptions with @throws Tag</h3>
+
+<blockquote>
+
+
+
+<blockquote>
+
+NOTE - The tags <code>@throws</code> and <code>@exception</code> are 
+
+synonyms.  
+
+</blockquote>
+
+
+
+<b>Documenting Exceptions in API Specs</b><br>
+
+The API specification for methods is a contract between a caller and
+
+an implementor.  Javadoc-generated API documentation contains two ways 
+
+of specifying this contract for exceptions -- the "throws" clause 
+
+in the signature, and the <code>@throws</code> javadoc tag.  
+
+These guidelines describe how to document exceptions with the 
+
+<code>@throws</code> tag.
+
+<p>
+
+
+
+
+
+<b>Throws Tag</b><br>
+
+The purpose of the <code>@throws</code> tag is to indicate which exceptions 
+
+the programmer must catch (for checked exceptions) or might want to catch
+
+(for unchecked exceptions).  <!-- The exception documented might be a 
+
+superclass of the actual exception being thrown. -->
+
+<p>
+
+
+
+<b>Guidelines - Which Exceptions to Document</b><br>
+
+
+
+Document the following exceptions with the <code>@throws</code> tag:
+
+<ul>
+
+  <li><b>All checked exceptions.</b><br>
+
+         (These must be declared in the throws clause.)
+
+  <li><b>Those unchecked exceptions that the caller might reasonably
+
+         want to catch.</b><br> 
+
+         (It is considered poor programming practice to include 
+
+         unchecked exceptions in the throws clause.)<br>
+
+         Documenting these in the <code>@throws</code> tag is up to the judgment 
+
+         of the API designer, as described below.
+
+</ul>
+
+<p>
+
+
+
+<b>Documenting Unchecked Exceptions</b><br>
+
+It is generally desirable to document the unchecked exceptions that a
+
+method can throw: this allows (but does not require) the caller to handle
+
+these exceptions.  For example, it allows the caller to "translate" an
+
+implementation-dependent unchecked exception to some other exception that is
+
+more appropriate to the caller's exported abstraction.
+
+<p>
+
+
+
+Since there is no way to guarantee that a call has documented all of the
+
+unchecked exceptions that it may throw, the programmer must not depend on 
+
+the presumption that a method cannot throw any unchecked exceptions other 
+
+than those that it is documented to throw.  In other words, you should
+
+always assume that a method can throw unchecked exceptions 
+
+that are undocumented.
+
+<p>
+
+
+
+Note that it is always inappropriate to document that a method throws an
+
+unchecked exception that is tied to the current implementation of that 
+
+method.  In other words, document exceptions that are independent of the 
+
+underlying implementation.  For example, a method that takes an index and 
+
+uses an array internally should <i>not</i> be documented to throw an 
+
+<code>ArrayIndexOutOfBoundsException</code>, as another
+
+implementation could use a data structure other than an array internally.  
+
+It is, however, generally appropriate to document that such a method 
+
+throws an <code>IndexOutOfBoundsException</code>.
+
+<p>
+
+
+
+Keep in mind that if you do not document an unchecked exception,
+
+other implementations are free to not throw that exception.  
+
+Documenting exceptions properly is an important part of write-once,
+
+run-anywhere.
+
+<p>
+
+
+
+<!--
+
+The exception should be documented at the appropriate level of abtraction --
+
+not so low as to reveal implementation-specific details.
+
+If the actual exception being thrown reveals an implementation, 
+
+it would be appropriate to document a higher-level exception (a superclass).
+
+For example, if the method uses an Array internally (an implementation 
+
+detail) and throws <code>ArrayIndexOutOfBoundsException</code>, 
+
+you might instead document:
+
+
+
+<pre>
+
+    @throws IndexOutOfBoundsException
+
+</pre>
+
+
+
+This satisfies the contract, since the caller's catch block will catch the
+
+specified exception or any of its subclasses.
+
+<p>
+
+-->
+
+
+
+<hr>
+
+
+
+<b>Background on Checked and Unchecked Exceptions</b><br>
+
+The idea behind <i>checking</i> an exception is that the compiler
+
+checks at compile-time that the exception is properly being caught in a 
+
+try-catch block.  
+
+<p>
+
+
+
+You can identify checked and unchecked exceptions as follows.
+
+
+
+<ul>
+
+  <li>Unchecked exceptions are the classes <code>RuntimeException</code>, 
+
+      <code>Error</code> and their subclasses.
+
+  <li>All other exception subclasses are checked exceptions.
+
+</ul>
+
+
+
+Note that whether an exception is checked or unchecked is not defined 
+
+by whether it is included in a throws clause.
+
+<p>
+
+
+
+
+
+<b>Background on the Throws Clause</b><br>
+
+Checked exceptions must be included in a throws clause of the method.
+
+This is necessary for the compiler to know which exceptions to check.
+
+For example (in java.lang.Class):
+
+
+
+<pre>
+
+    public static Class forName(String className) throws ClassNotFoundException
+
+</pre>
+
+
+
+By convention, unchecked exceptions should not be included in a throws clause.
+
+(Including them is considered to be poor programming practice. The compiler
+
+treats them as comments, and does no checking on them.)  The following is poor
+
+code -- since the exception is a RuntimeException, it should be documented
+
+in the <code>@throws</code> tag instead.
+
+<p>
+
+
+
+java.lang.Byte source code:
+
+<pre>
+
+    public static Byte valueOf(String s, int radix) throws NumberFormatException
+
+</pre>
+
+<p>
+
+
+
+Note that the <i>Java Language Specification</i> also shows unchecked 
+
+exceptions in throws clauses (as follows).  Using the throws clause for 
+
+unchecked exceptions in the spec is merely a device meant to indicate this 
+
+exception is part of the contract between the caller and implementor.  
+
+The following is an example of this (where "final" and "synchronization" 
+
+are removed to make the comparison simpler).
+
+<p>
+
+
+
+<code>java.util.Vector</code> source code:
+
+<pre>
+
+    public Object elementAt(int index) 
+
+</pre>
+
+
+
+<code>java.util.Vector</code> spec in the Java Language Specification, 1st Ed. (p. 656):
+
+<pre>
+
+    public Object elementAt(int index) throws IndexOutOfBoundsException 
+
+</pre>
+
+
+
+
+
+
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="packagecomments"></a>
+
+<h3>Package-Level Comments</h3>
+
+<blockquote>
+
+
+
+With Javadoc 1.2, package-level doc comments are available.
+
+Each package can have its own package-level doc comment source file that
+
+Javadoc will merge into the documentation that it produces.
+
+This file is named <code>package.html</code> (and is same name for 
+
+all packages).  This file is kept in the source directory along with all 
+
+the <code>*.java</code> files.  (Do not put the <code>packages.html</code> 
+
+file in the new doc-files source directory, because those files are only 
+
+copied to the destination and are not processed.)
+
+
+
+<p>
+
+
+
+Here's an example of a package-level source file for java.text and 
+
+the file that javadoc generates:
+
+<pre>
+
+      <b><a href="package.html-example">package.html</a> --------------> <a href="package-summary.html">package-summary.html</a></b>
+
+      (source file)    javadoc     (destination file)
+
+</pre>
+
+
+
+
+
+<p>
+
+
+
+Javadoc processes <code>package.html</code> by doing three things:
+
+<ol>
+
+  <li>Copies its contents (everything between <code>&lt;body&gt;</code>
+
+      and <code>&lt;/body&gt;</code>) below the summary tables in the
+
+      destination file <code>package-summary.html</code>. 
+
+<p>
+
+
+
+  <li>Processes any <code>@see</code>, <code>@since</code> or 
+
+      <code>{@link}</code> javadoc tags that are present.
+
+<p>
+
+
+
+  <li>Copies the first sentence to the right-hand column of the
+
+      <a href="http://java.sun.com/products/jdk/1.2/docs/api/overview-summary.html"><b>Overview&nbsp;Summary</b></a>.
+
+</ol>
+
+
+
+
+
+<p>
+
+<b>Template for package.html source file</b>
+
+<p>
+
+At Sun Microsystems, we use the following template when creating a new 
+
+package doc comment file.  This contains a copyright statement.
+
+Obviously, if you are from a different company, you would supply 
+
+your own copyright statement.  An engineer would copy this whole file, 
+
+rename it to <code>package.html</code>, and delete the lines set off 
+
+with hash marks: <code>#####</code>.  One such file should go into
+
+each package directory of the source tree.
+
+
+
+<ul>
+
+  <li><a href="package-template">Empty Template for Package-Level Doc Comment File</a>
+
+</ul>
+
+
+
+<p>
+
+<b>Contents of package.html source file</b>
+
+<p>
+
+
+
+The package doc comment should provide (directly or via links) 
+
+everything necessary to allow programmers to use the package.  
+
+It is a very important piece of documentation: 
+
+for many facilities (those that reside in a single package but not in a single 
+
+class) it is the first place where programmers will go for documentation.  It 
+
+should contain a short, readable description of the facilities provided by the 
+
+package (in the introduction, below) followed by pointers to detailed 
+
+documentation, or the detailed documentation itself, whichever is appropriate. 
+
+Which is appropriate will depend on the package: a pointer is appropriate 
+
+if it's part of a larger system (such as, one of the 37 packages in Corba), 
+
+or if a Framemaker document already exists for the package; 
+
+the detailed documentation should be contained in the package doc comment 
+
+file itself if the package is self-contained and doesn't require extensive 
+
+documentation (such as <code>java.math</code>).
+
+<p>
+
+   
+
+To sum up, the primary purpose of the package doc comment is to describe the 
+
+purpose of the package, the conceptual framework necessary to understand and to 
+
+use it, and the relationships among the classes that comprise it.  For large, 
+
+complex packages (and those that are part of large, complex APIs) a pointer to 
+
+an external architecture document is warranted.
+
+<p>
+
+
+
+The following are the sections and headings you should use when writing 
+
+a package-level comment file.  There should be no heading before the 
+
+first sentence, because the Javadoc tool picks up the first text as the 
+
+summary statement.
+
+<p>
+
+
+
+<TABLE BORDER=1 WIDTH=90% CELLPADDING=10><TR><TD>
+
+   <b></b>
+
+     <ul>
+
+       <li> Make the first sentence a summary of the package.  For example:  
+
+            "Provides classes and interfaces for handling text, dates,
+
+            numbers and messages in a manner independent of natural languages."
+
+<p>
+
+       <li> Describe what the package contains and state its purpose.
+
+     </ul>
+
+
+
+   <b>Package Specification</b>
+
+     <ul>
+
+       <li> <b>Include a description of or links to any package-wide 
+
+            specifications for this package that are not included 
+
+            in the rest of the 
+
+            javadoc-generated documentation.</b>  For example, the java.awt
+
+            package might describe how the general behavior in that
+
+            package is allowed to vary from one operating system
+
+            to another (Windows, Solaris, Mac).
+
+<p>
+
+       <li> <b>Include links to any specifications 
+
+            written outside of doc comments (such as in FrameMaker or whatever)
+
+            if they contain <i>assertions</i> not present in
+
+            the javadoc-generated files.</b>
+
+<p>
+
+            An <i>assertion</i> is a statement a conforming implementor would 
+
+            have to know in order to implement the Java platform.  
+
+<p>
+
+            On that basis, at Sun, references in this section are 
+
+            critical to the Java Compatibility Kit (JCK).  
+
+            The Java Compatibility Kit includes a test to verify
+
+            each assertion,  to determine what passes as Java 
+
+            Compatible<sup><font size="-2">TM</font></sup>. 
+
+            The statement "Returns an int" is an assertion. 
+
+            An example is not an assertion.  
+
+<p>
+
+            Some "specifications" that engineers have written contain no 
+
+            assertions not already stated in the API specs (javadoc) -- 
+
+            they just elaborate on the API specs.  In this respect, 
+
+            such a document should not be referred to in this section, 
+
+            but rather should be referred to in the next section.
+
+<p>
+
+       <li> <b>Include specific references.</b>  If only a section of a
+
+            referenced document should be considered part of the API spec,
+
+            then you should link or refer to only that section and
+
+            refer to the rest of the document in the next section.
+
+            The idea is to clearly delineate what is part of the 
+
+            API spec and what is not, so the JCK team 
+
+            can write tests with the proper breadth.  This might even
+
+            encourage some writers to break documents apart so specs are 
+
+            separate.
+
+
+
+
+
+    </ul>
+
+
+
+   <b>Related Documentation</b>
+
+    <ul>
+
+       <li> Include references to any documents that do <i>not</i> contain
+
+            specification assertions, such as overviews, tutorials, 
+
+            examples, demos, and guides.
+
+    </ul>
+
+
+
+   <b>Class and Interface Summary</b><br>
+
+      &nbsp; &nbsp; &nbsp; &nbsp; <i><font size="-1">[Omit this section until we implement 
+
+              @category tag]</font></i>   
+
+    <ul>
+
+       <li> Describe logical groupings of classes and interfaces
+
+       <li> <CODE>@see</CODE> other packages, classes and interfaces
+
+    </ul>
+
+
+
+</TD></TR></TABLE>
+
+
+
+</blockquote>
+
+
+
+
+
+<!-- =================================================== -->
+
+<a name="images"></a>
+
+<h3>Including Images</h3>
+
+<blockquote>
+
+
+
+This section covers images used in the doc comments, not images directly used
+
+by the source code.
+
+<p>
+
+
+
+NOTE: The bullet and heading images required with Javadoc version 1.0 and 1.1
+
+are located in the images directory of the JDK download bundle: 
+
+<code>jdk1.1/docs/api/images/</code>.  Those images are no longer needed 
+
+starting with 1.2.
+
+<p>
+
+
+
+Prior to Javadoc 1.2, Javadoc would not copy images to the destination
+
+directory -- you had to do it in a separate operation, either manually
+
+or with a separate script.  Javadoc 1.2 looks for and copies to
+
+the destination directory a directory named "doc-files" in the source tree
+
+(one for each package).  Thus, you can put into this directory
+
+any images (GIF, JPEG, etc) or other files not otherwise processed
+
+by Javadoc.
+
+<p>
+
+
+
+The following are the Java Software proposals for conventions for including 
+
+images in doc comments.  The master images would be located in the 
+
+source tree; when javadoc is run with the standard
+
+doclet, it would copy those files to the destination HTML directory. 
+
+
+
+<h4>Images in Source Tree</h4>
+
+
+
+<ul>
+
+<li><b>Naming of doc images in source tree</b> - Name GIF images 
+
+<CODE>&lt;class&gt;-1.gif</CODE>,
+
+incrementing the integer for subsequent images in the same class.  
+
+Example:  <code>Button-1.gif</code>
+
+<p>
+
+
+
+<li><b>Location of doc images in source tree</b> - Put doc images in a 
+
+directory called "doc-files".  This directory should reside in the same package 
+
+directory where the source files reside.  (The name "doc-files" distinguishes 
+
+it as documentation separate from images used by the source code itself, such as 
+
+bitmaps displayed in the GUI.)
+
+Example:  A screen shot of a button, <code>Button-1.gif</code>, might be included 
+
+in the class comment for the Button class.  The Button source file and the image
+
+would be located at:<br>
+
+<table>
+
+<tr>
+
+ <td>
+
+   <code>java/awt/Button.java</code> 
+
+ </td>
+
+ <td>
+
+   (source file)
+
+ </td>
+
+</tr>
+
+<tr>
+
+ <td>
+
+   <code>java/awt/doc-files/Button-1.gif</code> 
+
+ </td>
+
+ <td>
+
+   (image file)
+
+ </td>
+
+</tr>
+
+</table>
+
+<p>
+
+</ul>
+
+
+
+<h4>Images in HTML Destination</h4>
+
+
+
+<ul>
+
+<li><b>Naming of doc images in HTML destination</b> - Images would have the
+
+same name as they have in the source tree.  
+
+Example:  <code>Button-1.gif</code>
+
+<p>
+
+
+
+<li><b>Location of doc images in HTML destination</b> - 
+
+  <ul>
+
+   <li>With hierarchical file output, such as Javadoc 1.2, 
+
+       directories would be located in 
+
+       the package directory named "doc-files".
+
+       For example:
+
+<pre>  api/java/awt/doc-files/Button-1.gif
+
+</pre
+
+   <li>With flat file output, such as Javadoc 1.1, 
+
+       directories would be located in the package 
+
+       directory and named "images-&lt;package&gt;".
+
+       For example:
+
+<pre>  api/images-java.awt/
+
+  api/images-java.awt.swing/
+
+</pre>
+
+
+
+  </ul>
+
+</ul>
+
+
+
+<p>
+
+
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="examples"></a>
+
+<h3>Examples of Doc Comments</h3>
+
+<blockquote>
+
+
+
+<pre>
+
+/**
+
+ * Graphics is the abstract base class for all graphics contexts
+
+ * which allow an application to draw onto components realized on
+
+ * various devices or onto off-screen images.
+
+ * A Graphics object encapsulates the state information needed
+
+ * for the various rendering operations that Java supports.  This
+
+ * state information includes:
+
+ * &lt;ul&gt;
+
+ * &lt;li&gt;The Component to draw on
+
+ * &lt;li&gt;A translation origin for rendering and clipping coordinates
+
+ * &lt;li&gt;The current clip
+
+ * &lt;li&gt;The current color
+
+ * &lt;li&gt;The current font
+
+ * &lt;li&gt;The current logical pixel operation function (XOR or Paint)
+
+ * &lt;li&gt;The current XOR alternation color
+
+ *     (see &lt;a href="#setXORMode"&gt;setXORMode&lt;/a&gt;)
+
+ * &lt;/ul&gt;
+
+ * &lt;p&gt;
+
+ * Coordinates are infinitely thin and lie between the pixels of the
+
+ * output device.
+
+ * Operations which draw the outline of a figure operate by traversing
+
+ * along the infinitely thin path with a pixel-sized pen that hangs
+
+ * down and to the right of the anchor point on the path.
+
+ * Operations which fill a figure operate by filling the interior
+
+ * of the infinitely thin path.
+
+ * Operations which render horizontal text render the ascending
+
+ * portion of the characters entirely above the baseline coordinate.
+
+ * &lt;p&gt;
+
+ * Some important points to consider are that drawing a figure that
+
+ * covers a given rectangle will occupy one extra row of pixels on
+
+ * the right and bottom edges compared to filling a figure that is
+
+ * bounded by that same rectangle.
+
+ * Also, drawing a horizontal line along the same y coordinate as
+
+ * the baseline of a line of text will draw the line entirely below
+
+ * the text except for any descenders.
+
+ * Both of these properties are due to the pen hanging down and to
+
+ * the right from the path that it traverses.
+
+ * &lt;p&gt;
+
+ * All coordinates which appear as arguments to the methods of this
+
+ * Graphics object are considered relative to the translation origin
+
+ * of this Graphics object prior to the invocation of the method.
+
+ * All rendering operations modify only pixels which lie within the
+
+ * area bounded by both the current clip of the graphics context
+
+ * and the extents of the Component used to create the Graphics object.
+
+ * 
+
+ * @author 	Sami Shaio
+
+ * @author 	Arthur van Hoff
+
+ * @version 	%I%, %G%
+
+ * @since       JDK1.0
+
+ */
+
+public abstract class Graphics {
+
+
+
+    /** 
+
+     * Draws as much of the specified image as is currently available
+
+     * with its northwest corner at the specified coordinate (x, y).
+
+     * This method will return immediately in all cases, even if the
+
+     * entire image has not yet been scaled, dithered and converted
+
+     * for the current output device.
+
+     * &lt;p&gt;
+
+     * If the current output representation is not yet complete then
+
+     * the method will return false and the indicated {@link ImageObserver}
+
+     * object will be notified as the conversion process progresses.
+
+     *
+
+     * @param img       the image to be drawn
+
+     * @param x         the x-coordinate of the northwest corner of the 
+
+     *                  destination rectangle in pixels
+
+     * @param y         the y-coordinate of the northwest corner of the 
+
+     *                  destination rectangle in pixels
+
+     * @param observer  the image observer to be notified as more of the 
+
+     *                  image is converted.  May be &lt;code&gt;null&lt;/code&gt;
+
+     * @return          &lt;code&gt;true&lt;/code&gt; if the image is completely 
+
+     *                  loaded and was painted successfully; 
+
+     *                  &lt;code&gt;false&lt;/code&gt; otherwise.
+
+     * @see             Image
+
+     * @see             ImageObserver
+
+     * @since           JDK1.0
+
+     */
+
+    public abstract boolean drawImage(Image img, int x, int y, 
+
+				      ImageObserver observer);
+
+
+
+
+
+    /**
+
+     * Dispose of the system resources used by this graphics context.
+
+     * The Graphics context cannot be used after being disposed of.
+
+     * While the finalization process of the garbage collector will
+
+     * also dispose of the same system resources, due to the number
+
+     * of Graphics objects that can be created in short time frames
+
+     * it is preferable to manually free the associated resources
+
+     * using this method rather than to rely on a finalization
+
+     * process which may not happen for a long period of time.
+
+     * &lt;p&gt;
+
+     * Graphics objects which are provided as arguments to the paint
+
+     * and update methods of Components are automatically disposed
+
+     * by the system when those methods return.  Programmers should,
+
+     * for efficiency, call the dispose method when finished using
+
+     * a Graphics object only if it was created directly from a
+
+     * Component or another Graphics object.
+
+     *
+
+     * @see       #create
+
+     * @see       #finalize
+
+     * @see       Component#getGraphics
+
+     * @see       Component#paint
+
+     * @see       Component#update
+
+     * @since     JDK1.0
+
+     */
+
+    public abstract void dispose();
+
+
+
+    /**
+
+     * Disposes of this graphics context once it is no longer referenced.
+
+     * @see       #dispose
+
+     * @since     JDK1.0
+
+     */
+
+    public void finalize() {
+
+	dispose();
+
+    }
+
+}
+
+</pre>
+
+</blockquote>
+
+
+
+<!-- =================================================== -->
+
+<a name="curly"></a>
+
+<h3>Troubleshooting Curly Quotes (Microsoft Word)</h3>
+
+<blockquote>
+
+
+
+<b>Problem</b> - A problem occurs if you are working in an editor that defaults to curly 
+
+(rather than straight) single and double quotes, such as Microsoft Word on a PC --
+
+the quotes disappear when displayed in some browers (such as Unix Netscape).
+
+So a phrase like "the display's characteristics" becomes "the displays characteristics."
+
+<p>
+
+The illegal characters are the following:
+
+<ul>
+
+  <li>146 - right single quote
+
+  <li>147 - left double quote
+
+  <li>148 - right double quote
+
+</ul>
+
+<p>
+
+What should be used instead is:
+
+<ul>
+
+   <li>39 - straight single quote
+
+   <li>34 - straight quote
+
+</ul>
+
+<p>
+
+<b>Preventive Solution</b> - The reason the "illegal" quotes occurred was 
+
+that a default Word option is "Change 'Straight Quotes' to 'Smart Quotes'". 
+
+If you turn this off, you get the appropriate straight quotes when you type. 
+
+<p>
+
+<b>Fixing the Curly Quotes</b> - Microsoft Word has several save options -- use
+
+"Save As Text Only" to change the quotes back to straight quotes.  Be sure to
+
+use the correct option:
+
+<ul>
+
+   <li>"Save As Text Only With Line Breaks" - inserts a space at the end
+
+of each line, and keeps curly quotes.
+
+   <li>"Save As Text Only" - does not insert a space at the end of each lines,
+
+and changes curly quotes to straight quotes. 
+
+</ul>
+
+
+
+</blockquote>
+
+
+
+
+
+<hr>
+
+<a name="footnote1"></a>
+
+<p><b>Footnotes</b>
+
+<p>[1] At Java Software, we use @version for the SCCS version. See "man sccs-get" 
+
+for details. The concensus seems to be:
+
+
+
+<p><code.@version &nbsp; &nbsp;  %I% %G%<code>
+
+<ul>
+
+  %I% gets incremented each time you edit and delget a file<br>
+
+  %G% is the date mm/dd/yy
+
+</ul>
+
+
+
+<p>When you create a file, %I% is set to 1.1.  
+
+When you edit and delget it, it increments to 1.2.
+
+
+
+<p>Some developers omit the date %G% (and have been doing so) if they find 
+
+it too confusing (3/4/96 is ambiguous to Europeans), and include the time %U% if they want more resolution 
+
+(due to multiple check-ins in a day).
+
+
+
+
+
+<p>The real solution would be to have the date formatted as 
+
+text (10 Oct 1996 or Oct 10 1996), but that enhancement would
+
+need to come from SCCS.
+
+
+
+<p>
+
+
+
+<font size="-2" color="white"><em>
+
+[Author's comment:  Include more comments from step 5 of: 
+
+ ~dkramer/javadocdir/moving-frame-into-src.html#revisproc<BR>
+
+"Manual edit the HTML files produced by WebWorks"]
+
+</em></font>
+
+<p>
+
+
+
+</body>
+
+</html>
+

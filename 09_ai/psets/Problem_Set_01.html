@@ -1,0 +1,127 @@
+<HTML> 
+<HEAD> 
+</HEAD> 
+<BODY>
+
+<CENTER><H1>Project 1 Specification <br>22 May 2001
+</H1></CENTER>
+
+<H1>Goals 
+</H1>
+
+<P>
+The goal of this project is to develop&#151;through experience&#151;your 
+ability to:
+
+<UL>
+<LI>Make technical choices. 
+<LI>Bring multiple ideas together to solve a problem. 
+<LI>See how one problem can serve as a precedent for the solution of another. 
+<LI>Deal with problems that have less specification than that typical of a problem set. 
+<LI>Organize and perform work with a partner. 
+<LI>Write about your work. 
+</UL>
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+<H1>The Resource&#045;Allocation Problem 
+</H1>
+
+<P>
+Resource allocation is an often&#045;difficult, real&#045;world problem.  One version 
+of the problem is the personnel allocation problem: you have people with 
+various qualifications and preferences, jobs with various requirements and 
+preferences, and a need to assign the people to the jobs intelligently.
+
+<P>
+One such problem is the assignment of TAs to subjects.  In its simplest 
+form, you can imagine a set of subjects, each of which requires one TA, and 
+a set of potential TAs, each of which can be assigned to zero or one 
+subject.
+
+<P>
+You could think of this as a search problem, with depth <I>s</I> and 
+branching factor <I>t</I>.  You could think of solving the search problem 
+by doing a British Museum search; that is, you could generate all possible 
+paths and then evaluate each.  Alas, even with just 10 subjects and 15 TA 
+candidates, a British&#045;Museum enumeration of assignments unthinkable, which 
+you should show yourself, if in doubt, on the back of an envelope.
+
+<H1>What you start with 
+</H1>
+
+<P>
+Accordingly, you will need to do some other sort of search.  We provide you 
+with a <a href="./">starting point</a> in the 
+form of a program cum data set and rule set with the following 
+characteristics:
+
+<UL>
+<LI>The search done is depth&#045;first search. 
+<LI>Node expansion is done by a rule&#045;based system. 
+<LI>There is sample database of a few assertions and one sample rule. 
+<LI>The assumption is that no subject requires more than one TA. 
+</UL>
+
+<H1>Your job 
+</H1>
+
+<P>
+We provide you with a set of <a href="Problem_Set_01_Files/descriptions.html">subject and TA descriptions</a>. 
+In particular, you are to do the following:
+
+<UL>
+<LI>Develop a set of assertions from the subject and TA descriptions.  You 
+   must decide what to make use of in the descriptions and what to ignore: 
+   we expect you to capture some details of description only approximately 
+   or not at all. 
+<LI>Develop a set of rules using commonsense and the subject and TA 
+   descriptions. 
+<LI>Choose and implement a search strategy. 
+<LI>Choose and implement a mechanism for determining the quality of a 
+   particular TA assignment. 
+</UL>
+
+<P>
+You may be able to find a solution for the sample data by hand.  Keep in 
+mind that the goal is not only to find a solution for the sample data, but 
+also to write a program that can handle similar problems, of approximately 
+the same number of TAs and subjects, with, for example, other, more, or 
+fewer preferences and requirements.
+
+<P>
+Also, your program is to scale, for example, to ten times more TAs and 
+subjects.
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+<H1>Important Notes 
+</H1>
+
+<UL>
+<LI>Your program is to distinguish between <B>requirements</B> and 
+   <B>preferences</B>:  requirements cannot be violated; preferences can 
+   be, but the quality of a set of TA assignments declines in proportion to 
+   the number and sign of violated preferences. 
+<LI>Your program is to do the best it can with more TAs than TA assignments, 
+   just the right number, or not enough TAs for the available TA assignments. 
+<LI>You are to assume each subject has a requirement for just one TA.  We 
+   will ask you to comment on what you would need to do to generalize to 
+   multiple TAs per subject. 
+</UL>
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+</BODY></HTML>
+
+
+

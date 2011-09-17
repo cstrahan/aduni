@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-indent:0.0000in">Date: 15 March 2001</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:center; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Log-Structured File System for implementing transactions</c></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in">The Log-Structured File System (LFS) writes to the disk sequentially in a log-like structure and provides superior performance for writes (especially if a large number of small files are written) and crash recovery as compared to the traditional Unix file system. Recovery from a system crash is implemented with 2 mechanisms: <c props="font-style:italic">checkpoints</c> (which define consistent states of the file system) and <c props="font-style:italic">roll-forward</c> (which is used to recover information written since the last checkpoint).</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in">A checkpoint is a position in the log up to which the file system is complete and consistent and a special fixed position on the disk called the checkpoint region maintains information about the checkpoint. LFS performs checkpoints at periodic intervals (say every 30 seconds) and updates the checkpoint region. Without supplementary mechanisms, any information that was written before a system crash and after the last checkpoint region update would be lost. Thus, a long interval between checkpoints would increase the amount of possible information loss. In a transaction system for a bank any committed transaction has to be written reliably to the disk and cannot be lost if the system crashes immediately after the commit. In a LFS system this can be achieved by performing a checkpoint at every commit. This would probably hobble the LFS system pretty badly since most of the transaction writes would be small - a typical situation where the LFS gains performance by deferring writes for a specified interval or data size.</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in">There are actually 2 checkpoint regions in the LFS with the checkpoint regions alternating between them. This guarantees that if a crash occurs during a checkpoint operation, only 1 checkpoint region will be invalid on system boot and the other checkpoint region can be used for initializing the filesystem. </p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in">Data up to the latest checkpoint is easily recovered on system boot by reading the latest checkpoint region. To recover information that was written after that, LFS uses an operation called roll-forward that scans through log segments, using information in the segment summary blocks to update the checkpoint. Potentially, the very last segment written to the log would be unrecoverable if the system crashed at the time the segment summary was being written. Also, any information in volatile buffer that has not yet been written to the log would be lost. It is unclear from the paper when data is written to the log from the buffer in between checkpoints. In any case, roll-forward is not as robust as checkpoints since data in the buffer and in an incomplete segment (more specifically a segment with an incomplete segment summary) will be unrecoverable.</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in">Making roll-forward completely reliable would require using a non-volatile buffer so that transactions in the buffer that have been committed but not yet written to the disk can be recovered. Also, to have the ability to recover the very last segment in the log (with an incomplete segment summary) would require maintaining 2 copies of the segments written after the latest checkpoint. Then, we can guarantee that at least one of the copies will have a recoverable segment.</p>
+</section>
+</abiword>

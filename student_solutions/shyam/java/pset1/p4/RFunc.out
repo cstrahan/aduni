@@ -1,0 +1,25 @@
+Output from my driver RFuncdriver
+
+Root of sin(x) between 3.0 and 4.0 is 3.141592651605606
+Integral of sin(x) between 0 and pi is 1.9999999998320008
+Integral of sin(x) between 0 and 2*pi is 1.408806868686728E-11
+
+Root of cos(x) between 3.0 and 4.0 is 1.570796325802803
+Integral of cos(x) between 0 and pi/2 is 0.9999999999785677
+Integral of cos(x) between 0 and pi is 2.653589790895883E-6
+
+
+Output from FuncTest
+
+3.1415927
+3.1415927
+0.6931472
+0.6931472
+2.7182817
+2.7182817
+1.0
+1.0
+2.3890562
+2.3890562
+-0.61370564
+-0.61370564

@@ -1,0 +1,504 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Employee SpeechWorks">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+   <title>lecture9</title>
+</head>
+<body>
+<h3>Event-based Programming</h3>
+<ul>
+   <li> Up to now, our control flow model has been pretty straight-forward.
+       <ul>
+       <li> Execution starts at main() and executes statment sequentially
+         branching with if,for,and while statement, and occasional
+	 method calls.
+
+       <li> When we need user input we call read() on the console stream
+         which waits (blocks) until the user types something, then returns.
+       </ul>
+
+   <li> One problem with this model is: How do we wait for and respond to
+     input from more than one source (eg keyboard and mouse). If we
+     block on either waiting for input, we may miss input from the other.
+
+   <li>Event-based programming addresses the two problems:
+       <ul>
+       <li> How to wait on multiple input sources (input events)
+       <li> How to decide what to do on each type of input event
+       </ul>
+
+   <li> Event-based programming is central to modern GUI programming, but
+     as a general paradigm is useful to keep in mind in other circumstances.
+
+   <li> There are many implementations of event-based frameworks: Windows C,
+     Windows C++, Windows VB, X/Motif, X/GDK, Java
+
+   <li> Basic idea of all of these are the same
+       <ul>
+      <li> The operating system and window system process input event
+       from devices (mouse movement, mouse clicks, key presses etc)
+       <li> The window system decides which window, and hence which frame
+       and program, each input event beloings to.
+      <li> A data structure decribing the event is produced and placed
+        on an 'event queue'. An event queue keeps the list of pending events
+	(as data structure in the queue). Events are added to one end
+	of the queue by the window system (don't worry about how). Events
+	are removed from the queue and processed by the program.
+	In general, each program has its own event queue, and only
+	events relevent to that program's windows are added to its queue.
+      <li> These event data structures hold information including:
+        <ul>
+        <li> Which of the program's windows this event belongs to.
+        <li> The type of event (mouse click, key press, etc.)
+        <li> Any event-specific data (mouse position, key code, etc.)
+	</ul>
+      </ul>
+
+</ul>
+<h3>Event loop</h3>
+
+The basic structure of event based programs is shown below in
+pseudo-code.
+<pre>
+
+     main(){
+
+        ...set up application data structures...
+
+        ...set up GUI....
+
+	// enter  event loop
+	while(1){
+	   Event e = get_event();
+	   process_event(e);    // event dispatch routine
+        }
+   
+     }
+</pre>
+<ul>
+<li> Unlike purely sequential applications, after the initial setup and
+initialization, this program enters event loop and stays there.
+<li> The remainder of program execution is successive execution
+     of process_event()
+<li> Typically what process_event consists of is a very large switch
+statement, or set of if-elseifs, that branches first on the event's window,
+then on the event's type, the calls the appropriate handling routine.
+(for example, if the event occurs in the main window  and the event is a 
+mouse click, it calls the main_window_mouse_click() routine ).
+<li> Since all event loops look alike and most event dispatchers (our
+process_event() look alike. Many environments hide the event_loop 
+and some level of dispatch. All that programmer has to do is supply event 
+handlers for the cases of interest.
+<li>For examples, in the Windows Win32 C API, the event dispatching the event
+loop is hidden and the first level of dispatching (on window) is hidden. 
+Hoever, the dispatching on event type is left to the programmer. The way this
+works is:
+<ul>
+<li> The programmer must register an event handling routine (usually
+         called win_proc() with each window as it is created.
+<li> The win_proc is called from the Windows event_loop (hidden)
+         when an event is sent to its window (eg a mouse click happens
+	 when the cursor is in its window).
+<li> The winproc must determine which type of event it is and respond
+         appropriately. Usually winprocs are based around large switch 
+	 statements
+<li> The winproc branches to code that handles the event
+</ul></ul></ul>
+<h4>Notes on event handlers</h4>
+<ul>
+<li> The main programming taks in event-based programming is to write
+      handler routines for significant events.
+<li> Typically handlers update data structures, modify GUI display, and
+      return. Not difficult to program. The chaallange is thinking in
+      terms of the basic operations of the application and then in terms
+      of the events that trigger them. (Very similar to Web programming).
+
+<li> Event handlers shouldn't block or perform long computation or future
+      events will build up in the queue and user responsiveness will suffer.
+<li> Since all handler routines end with control returning to the event loop,
+      all program state information must be kept explicitly in instance vars
+      or data bases.
+</ul>
+<h3>Java 2 Event Model</h3>
+<ul>
+<li> Java hides somewhat more of the event mechanism. Basically Java does the
+first two levels of event dispatching, source window and event type, 
+internally. What the programmer has to supply are handler routines for
+each type of event type , source window pair that the program cares
+about.
+<p>
+[Note: Many of these window,event pairs, such as a mouse click on a button,
+are handled by pre-packed components with their own handlers. These are
+the GUI componenents or <em>widgets</em>. They process local level
+events automatically, and can also issue their own higher level events.
+We will see more of these next week.]
+<li> Java implements what is sometimes called a subscriber model: The program
+never needs to know about or deal with events unless it want to provide
+a specific handler routine. This saves the programmer from having
+to write a lot of code that does nothing but placate the event system.
+<li> To understand the Java event system, keep in mind the issue: supplying
+handler methods for specific event types from specific source windows.
+We will discuss the three players
+<ul>
+<li> Event type
+<li> Specifying Handler methods
+<li> source window (where the event came from).
+</ul>
+</ul>
+<h4>Events</h4>
+<ul>
+<li> Events is Java are, of course, objects of class Event. In fact there
+is a hierarchy of Event classes depending on the general type of event.
+These subclasses include:
+<ul>
+<il>MouseEvent
+<il>MouseMotionEvent
+<il>KeyEvent
+<il>WindowEvent
+<il>ActionEvent
+<il>...and several more
+</ul>
+</ul>
+<h4>Event Handlers</h4>
+<ul>
+<li>The goal of our mechanism is to provide handler methods for events.
+However in Java, methods cannot exist on their own; they must be members of
+a class. The Java window system defines the handler methods it will manage
+as a set of interfaces.
+<li>Each Event subclass has associated with it an interface
+(called the Listener interface) which specifies the handler methods for
+that subclass of events. For example we have the interfaces
+<ul>
+<il>MouseListener
+<il>MouseMotionListenr
+<il>KeyListener
+<il>WindowListener
+<il>ActionListener
+</ul>
+<li>Each of these interfaces species one or more methods to be implemented.
+For example: the MouseListener interface has the following methods:
+<ul>
+<il>mousePressed()
+<il>mouseReleased()
+<il>mouseEntered()
+<il>mouseExited()
+<il>mouseClicked()
+</ul>
+Each of these represents a subtype of mouse event. [You might ask why
+some distinctions were considered worthy of a subclass (mouse vs key), 
+while others are only distinguished by method (click vs press). This
+was simply the engineering judgment of the Java designers.]
+<li> The Java window system expects the programmer to create
+a class that implements the appropiate interface for any Event subclass
+of interest.
+<li> Since many Listener interfaces have several routines, Java provides
+a convenient set of Adapter classes which implement each Listener
+interface with empty methods. So we have MouseAdapter, WindowAdapter, etc.
+We can subclass these and only override them methods we care about.
+<li> An example of a Mouse event handler that overrides the mousePressed,
+and mouseClicked methods (and hence handles mouse clicks and mouse presses).
+<pre>
+    // Handler for Mouse presses and clicks
+    //  Extends MouseAdapator 
+    //      (which implements MouseListener with empty methods)
+
+    class MouseHandler extends MouseAdapter{
+	
+	// call on  mouse button down
+	public void mousePressed(MouseEvent ev){
+	    int x = ev.getX();
+	    int y = ev.getY();
+	    System.out.println("Pressed at " + x + "," + y);
+	}
+
+	// call on  mouse click (mouse down, mouse up)
+	public void mouseClicked(MouseEvent ev){
+	    int x = ev.getX();
+	    int y = ev.getY();
+	    System.out.println("Clicked at " + x + "," + y);
+	}
+
+    }
+</pre>
+<li> The last thing we have to worry about is connecting our handler to
+the source window for the events. This is simply done by calling
+an addListener method on the window we want to process events on.
+The argument to the addListener routines is our handler class that
+implements the Listener interface
+Actually, there is a separate addListener for each Listener type, so
+one would actually use addMouseListener(new MouseHandler())
+<li> The addMouseListener should be called on the window that we
+want to catch events from. In our example, this is our drawing panel.
+We can add the listener in the constructor.
+<pre>
+class MyPanel extends JPanel{
+
+    // Constructor
+   MyPanel(){
+       // add Mouse Listener to catch mouse events from MyPanel
+       addMouseListener(new MouseHandler());
+    }
+
+    public void paintComponent(Graphics g){
+	super.paintComponent(g);
+
+	//	    System.out.println("paintComponent");
+	g.drawString("Hello World",50,50);
+
+    }
+
+}
+</pre>
+We could have also instantiated the MyPanel and added the listener
+from main() as
+<pre>
+   MyPanel mypanel = new MyPanel();
+   mypanel.addMouseListener(new MouseHandler());
+
+</pre>
+<li> Lt's put it together and try it. When combined into our
+FrameTest program from yesterday, we should print out the mouse
+location (x,y) on mouse presses and clicks. Note that every click of the
+mouse generates two events. One for the mouse press (when forms the first
+half of the click), one for the click.
+</ul>
+<h4>Event loops and Java</h4>
+<ul>
+<li> Now that we have seen how to handle events in Java, let's try to
+relate this back to the event loop discussed about. Our main() method
+(show below) now matches the structure of the typical event-based program
+discussed earlier. In Java, the call to <code>myframe.show()</code> sends
+the program into the event loop (which is implemented behind the scenes in
+the Java libraries).
+<pre>
+public class FrameTest{
+
+    // OK let's have our main() create a frame.
+    public static void main(String[] args){
+        // Initialize application
+
+        // Initialize GUI
+	MyFrame myframe = new MyFrame();
+	MyPanel mypanel = new MyPanel();
+	// Random stuff we just have to do (the book explains, kind of)
+	Container contentPane = myframe.getContentPane();
+	// add panel
+	contentPane.add(mypanel);
+	// Enter event loop
+	myframe.show();
+    }
+}
+</pre>
+<li> When we get a mouse press in our frame, the Java window system creates
+an event and places it on our programs event queue. The Java event loop, then
+removes the event, creates (if it hasn't already) the property MouseEvent
+object, find the window associated with this event (our MyPanel), and looks
+for any registered MouseListeners. If it finds one (which it does), the
+proper method (mousePress, mouseClick,etc) for the event is called with
+the MouseEvent object passed as an argument.
+<li> This mechanism mow explains how the paintComponent method on
+our JPanel get called when the window need updating. The window system
+send an update event to the window, which eventually triggers the
+paintComponent routine. (There is a little more system magic here that comes
+up with the Graphics object for us).
+
+[A detail: Although the myframe.show(); method starts up the event loop,
+program execution actually continues after the method call. In this
+case it exits the main routine and stops. The event loop in Java
+is actually run in a separate thread (we discuss threads later).
+As long as the GUI thread is alive, the program keeps running. The
+System.exit() of course kills all threads.]
+</ul>
+</ul>
+
+<h4>Handler Programming and Inner Classes</h4>
+<ul>
+<li> In most cases we want to do something more interesting that
+print mouse coordinates on a mouse click. But in order to do more,
+we would need to access application data. The question is how? Our
+mouseClick method is called from the event loop with only the MouseEvent
+object as an argument, so there is no way to send in data. We could have
+public static data that the handler could access, but that would be poor
+form.
+<li> The answer is to make the MouseHandler class an <em>inner class</em>
+of MyPanel. The significant feature of inner class instances and methods
+is that they have access to the instance variables of the instance
+of their containing class. In fact, this is probably the most important
+use of inner classes in Java.
+<pre>
+class MyPanel extends JPanel{
+
+    // Handler for Mouse presses and clicks
+    //  Extends MouseAdapator 
+    //      (which implements MouseListener with empty methods)
+    // We use an inner class so we can access to data on JPanel
+    Color current = Color.red;
+
+    class MouseHandler extends MouseAdapter{
+	
+	// call on  mouse button down
+	public void mousePressed(MouseEvent ev){
+	    int x = ev.getX();
+	    int y = ev.getY();
+	    System.out.println("Pressed at " + x + "," + y);
+	}
+
+	public void mouseClicked(MouseEvent ev){
+	    int x = ev.getX();
+	    int y = ev.getY();
+	    System.out.println("Clicked at " + x + "," + y);
+	    // access instance vars in MyPanel instance that created us.
+	    // Can also use keyword 'outer' analogously to 'this' and 'super'
+	    //  to refer to enclosing class (in this case an instance of MyPanel)
+	    if(current.equals(Color.red))
+		current = Color.blue;    // if red switch to blue
+	    else
+		current = Color.red; // else to red
+	    repaint();
+	}
+
+    }
+
+    MyPanel(){
+	addMouseListener(new MouseHandler());
+    }
+
+    public void paintComponent(Graphics g){
+	super.paintComponent(g);
+
+	//	    System.out.println("paintComponent");
+	g.setColor(current);
+	g.drawString("Hello World",50,50);
+    }
+
+}
+</pre>
+<li> In the code about we have made MouseHandler an inner class
+of MyPanel so it has access to the <em>instance variables</em> 
+of <code>mypanel</code. Inner class instances get access to
+the variables of the instance <em>from which they were created</em>.
+</ul>
+</ul>
+<h4>Final Word (almost)</h4>
+We have covered the basic paradigm of the event-based programming and seen
+on overview of how Java implements it in it's WIndow system. While we
+have covered the essence, there are many more details about the
+Event subclasses and Listener interfaces for Keyboard, WindowEvents,
+etc. The book is a good start for more information. After that, the
+online doc and experimentation, as always.
+<p>
+In the next lecture we will talk out GUI components that provide higher-level
+functionality, such as buttons, scrollbars, etc. These are windows that
+internally process mouse and window events behind the curtains and issue
+other types of event to communicate with the larger application.
+
+<h4>PostScript</h4>
+<ul>
+<li> The general paradigm of designing a control flow by providing
+       a set of handlers for events, or requests, or conditions is
+       both general and useful. Beyond the event-queue based schemes we
+       discussed here, it is applicable to Web programming, where URL
+       requests take the place of events. It is also used in AI style
+       application known as blackboard or daemon systems. In these systems
+       there is a global database of 'facts' or 'propositions'. The handlers
+       triiger not off of events, but off of certain conditions on the
+       set of propositions. When the database is updated, the system
+       checks to see if any of the handler conditions are true. If so
+       the handler executes.
+
+<li> Final note: You don;t have to rely on the language or environment
+       to support your event queue. If event-based programming is a natural
+       fit to your application, you can build your own event queue and 
+       event loop.
+</ul>
+<h3>Appendex: COmplex text of FrameTest.java from class</h3>
+
+<pre>
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.event.*;
+
+/**
+ * Main class for game. Does window stuff and display
+ */
+
+class MyFrame extends JFrame{
+
+    public MyFrame(){
+	setTitle("MyFrame");
+	setSize(200,200);        // size in pixels
+	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+}
+
+
+
+class MyPanel extends JPanel{
+
+    Color current = Color.red;
+
+    // Handler for Mouse presses and clicks
+    //  Extends MouseAdapator 
+    //      (which implements MouseListener with empty methods)
+    // We use an inner class so we can access to data on JPanel
+    class MouseHandler extends MouseAdapter{
+	
+	// call on  mouse button down
+	public void mousePressed(MouseEvent ev){
+	    int x = ev.getX();
+	    int y = ev.getY();
+	    System.out.println("Pressed at " + x + "," + y);
+	}
+
+	public void mouseClicked(MouseEvent ev){
+	    int x = ev.getX();
+	    int y = ev.getY();
+	    System.out.println("Clicked at " + x + "," + y);
+	    if(current.equals(Color.red))
+		current = Color.blue;
+	    else
+		current = Color.red;
+	    repaint();
+	}
+
+    }
+
+    MyPanel(){
+	addMouseListener(new MouseHandler());
+    }
+
+    public void paintComponent(Graphics g){
+	super.paintComponent(g);
+
+	//	    System.out.println("paintComponent");
+	g.setColor(current);
+	g.drawString("Hello World",50,50);
+    }
+
+}
+
+
+public class FrameTest{
+
+    // OK let's have our main() create a frame.
+    public static void main(String[] args){
+	MyFrame myframe = new MyFrame();
+	MyPanel mypanel = new MyPanel();
+	// Random stuff we just have to do (the book explains, kind of)
+	Container contentPane = myframe.getContentPane();
+	// add panel
+	contentPane.add(mypanel);
+
+	myframe.show();
+    }
+}
+
+</pre>
+</body>
+</html>
+
+

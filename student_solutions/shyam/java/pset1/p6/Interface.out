@@ -1,0 +1,36 @@
+Output from my InterfaceDriver test file
+
+Root of Poly[x^2 - 3] is 1.7320508090779185
+Root of Poly[x^2 - x - 1] is 1.618033992126584
+defIntegral of Poly[x^2 - 4] is -5.333333333331829
+Both f(a) and f(b) have the same sign; hence cannot compute root
+
+Root of sin(x) between 3.0 and 4.0 is 3.141592651605606
+Integral of sin(x) between 0 and pi is 1.9999999998320008
+Integral of sin(x) between 0 and 2*pi is 1.408806868686728E-11
+
+Root of cos(x) between 3.0 and 4.0 is 1.570796325802803
+Integral of cos(x) between 0 and pi/2 is 0.9999999999785677
+Integral of cos(x) between 0 and pi is 2.653589790895883E-6
+
+
+Output from FuncTest3
+
+3.1415927
+0.6931472
+2.7182817
+1.0
+2.3890562
+-0.61370564
+3.0
+9
+1.7320508
+3.0
+2.236068
+5.0
+5.0
+1.618034
+0.618034
+0.618034
+5.3333335
+5.3333335

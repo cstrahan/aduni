@@ -1,0 +1,292 @@
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ../../..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AS = @AS@
+BUILD_GUILE = @BUILD_GUILE@
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+CURSES_INCLUDEDIR = @CURSES_INCLUDEDIR@
+CURSES_LIBS = @CURSES_LIBS@
+CXX = @CXX@
+DATADIRNAME = @DATADIRNAME@
+DLLTOOL = @DLLTOOL@
+GENCAT = @GENCAT@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GNOMEGNORBA_LIBS = @GNOMEGNORBA_LIBS@
+GNOMEUI_LIBS = @GNOMEUI_LIBS@
+GNOME_APPLETS_LIBS = @GNOME_APPLETS_LIBS@
+GNOME_CAPPLET_LIBS = @GNOME_CAPPLET_LIBS@
+GNOME_CONFIG = @GNOME_CONFIG@
+GNOME_DOCKLETS_LIBS = @GNOME_DOCKLETS_LIBS@
+GNOME_INCLUDEDIR = @GNOME_INCLUDEDIR@
+GNOME_LIBDIR = @GNOME_LIBDIR@
+GNOME_LIBS = @GNOME_LIBS@
+GNORBA_CFLAGS = @GNORBA_CFLAGS@
+GNORBA_LIBS = @GNORBA_LIBS@
+GTKXMHTML_LIBS = @GTKXMHTML_LIBS@
+GTK_CFLAGS = @GTK_CFLAGS@
+GTK_CONFIG = @GTK_CONFIG@
+GTK_LIBS = @GTK_LIBS@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+GUILE_INCS = @GUILE_INCS@
+GUILE_LIBS = @GUILE_LIBS@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
+LD = @LD@
+LDFLAGS = @LDFLAGS@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+MAINT = @MAINT@
+MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+NM = @NM@
+OBJDUMP = @OBJDUMP@
+ORBIT_CFLAGS = @ORBIT_CFLAGS@
+ORBIT_CONFIG = @ORBIT_CONFIG@
+ORBIT_IDL = @ORBIT_IDL@
+ORBIT_LIBS = @ORBIT_LIBS@
+PACKAGE = @PACKAGE@
+POFILES = @POFILES@
+POSUB = @POSUB@
+PTHREAD_LIB = @PTHREAD_LIB@
+QTTHREADS_LIB = @QTTHREADS_LIB@
+RANLIB = @RANLIB@
+READLINE_LIB = @READLINE_LIB@
+TERMCAP_LIB = @TERMCAP_LIB@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
+VERSION = @VERSION@
+XPM_LIBS = @XPM_LIBS@
+ZVT_LIBS = @ZVT_LIBS@
+l = @l@
+
+same_gnome_helpdir = $(datadir)/gnome/help/samegnome/C
+
+same_gnome_help_DATA =  	index.html			topic.dat
+
+
+EXTRA_DIST = same-gnome.sgml $(same_gnome_help_DATA)
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ../../../config.h
+CONFIG_CLEAN_FILES = 
+DATA =  $(same_gnome_help_DATA)
+
+DIST_COMMON =  Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = gtar
+GZIP_ENV = --best
+all: all-redirect
+.SUFFIXES:
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps same-gnome/help/C/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+install-same_gnome_helpDATA: $(same_gnome_help_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(same_gnome_helpdir)
+	@list='$(same_gnome_help_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(same_gnome_helpdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(same_gnome_helpdir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(same_gnome_helpdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(same_gnome_helpdir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-same_gnome_helpDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(same_gnome_help_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(same_gnome_helpdir)/$$p; \
+	done
+tags: TAGS
+TAGS:
+
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = same-gnome/help/C
+
+distdir: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am:
+install-exec: install-exec-am
+
+install-data-am: install-same_gnome_helpDATA install-data-local
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-same_gnome_helpDATA
+uninstall: uninstall-am
+all-am: Makefile $(DATA)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(same_gnome_helpdir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-generic mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-generic clean-am
+	-rm -f libtool
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: uninstall-same_gnome_helpDATA install-same_gnome_helpDATA tags \
+distdir info-am info dvi-am dvi check check-am installcheck-am \
+installcheck install-exec-am install-exec install-data-local \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+all: index.html
+
+# No-op if db2html failed
+index.html: same-gnome/book1.html
+	-cd $(srcdir) && cp same-gnome/book1.html index.html
+
+same-gnome/book1.html: same-gnome.sgml
+	-cd $(srcdir) && db2html same-gnome.sgml
+
+dist-hook:
+	-mkdir $(distdir)/same-gnome
+	cp $(srcdir)/same-gnome/*.html $(distdir)/same-gnome
+	cp $(srcdir)/same-gnome/*.css $(distdir)/same-gnome
+
+# No-op if db2html failed
+install-data-local: index.html
+	-$(mkinstalldirs) $(DESTDIR)$(same_gnome_helpdir)
+	files=`echo $(srcdir)/same-gnome/*.html $(srcdir)/same-gnome/*.css`; \
+	if test "$$files" != '$(srcdir)/same-gnome/*.html $(srcdir)/same-gnome/*.css'; then \
+	  for file in $$files; do \
+	    basefile=`echo $$file | sed -e 's,^.*/,,'`; \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(same_gnome_helpdir)/$$basefile; \
+	  done; \
+	fi
+
+same-gnome.ps: same-gnome.sgml
+	db2ps $<
+
+same-gnome.rtf: same-gnome.sgml
+	db2rtf $<
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

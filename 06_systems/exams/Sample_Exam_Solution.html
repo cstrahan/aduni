@@ -1,0 +1,158 @@
+<html><head>
+<title>Sample Quiz Questions/Answers
+</title>
+</head>
+<body >
+<h2>Sample Quiz 1 Questions/Answers</h2>
+<ul>
+
+<h4>For the quiz, you may bring the class notes, the papers that were
+assigned, your writing assignments, the presentation you prepared, and
+the text book (assuming it arrives...)</h4>
+
+In <i>Ethernet: Distributed Packet Switching for Local Computer
+Networks</i>, the author describes a link-layer protocol used to send
+packets around a local computer network.  The physical medium for this
+network is a coax cable (like the kind you get cable TV from).  The
+communicating computers are connected to the same cable at the same
+time.<br><br>
+
+<b>Q1:</b> When two computers try to inject a message into the cable
+at the same time, the messages <i>collide</i>.  What does the Ethernet
+Protocol say the computers should do to try to get their respective
+packets out? <br>
+<blockquote>
+Each computer waits before trying again, using a Binary Exponential
+Backoff algorithm.  The wait time is determined by computing a random
+number then multiplying it by an estimate of the network load.
+Subseqent collisions lead the algorithm to exponentially increase the
+waiting time.
+</blockquote>
+
+<b>Q2:</b> You are getting bad performance on your local
+Ethernet network.  A little investigation shows that your nemesis, Net
+Vader, is watching lots of videos - and he's sharing the same Ethernet
+cable as you!  To retaliate, you decide to create a rogue Ethernet
+card that gives preference to your packets over NV's during a
+collision.  What will your card do different when a collision is
+detected? Be concrete.<br><br>
+
+<blockquote>
+<b>Any of the following gets full credit - this isn't a complete set
+of answers</b><br><br>
+For a collision that results when trying to send data, the rogue
+ethernet card sets its waiting time to zero.  This gives the rogue
+card's data a higher probability of making it out.  
+<br><br>
+Before sending a request, the rogue card can be used to disrupt any
+video streams by creating collisions that cause NV's card to back off
+exponentially.
+<br><br>
+The rogue card can create collisions
+whenever it sees packets addressed to Net Vader's machine.  Hopefully,
+this will cause NV to give up watching videos altogether.
+</blockquote>
+
+<b>Q3:</b> The paper describes the use of a packet
+transceiver for connecting two coax cables into what looks like a
+single cable.  Describe how such a system should handle
+collisions.  (Hint: Consider two cases: A collision on one cable but
+not the other, a collision on both cables at the same time)<br><br>
+
+<blockquote>
+Collisions on any point in an Ethernet cable need to incapacitate the
+whole cable.  To act as a single cable, a collision on one of the two
+cables must be propagated to the other cable.  Collisions on both
+cables at the same time need not be propagated.
+</blockquote>
+
+<b>Q4:</b> Do you think the tranceiver setup described in Q3 would
+scale out to hundreds of cable segments connected together?  Briefly
+describe why you think it would or would not.<br><br>
+
+<blockquote>
+<b>Either of the following two gets full credit (there are other
+potential answers).</b><br><br>
+
+1> No. As more hosts are added to a single "virtual" cable, the steady-state
+load on the cable will likely grow.  If the steady-state load
+surpasses the optimal load (as described in the paper), the
+performance will be severely degraded.<br><br>
+
+2> No. Even if there are few hosts, the following can occur:<br><br>
+
+As more and more physical cables are connected into a virtual cable,
+the propagation of collisions to the entire network can have a
+devistating effect on performance.<br><br>
+
+Consider a simple example - two computers (C1, C2) at the end of one physical
+cable, connected to two computers (C3, C4) at the other end of a connected
+physical cable.  These cables are joined into one virutal cable.<br><br>
+C1-C2----------------------| packet tranceiver/repeater |----------------------C3--C4
+<br><br>
+
+Suppose C1 and C2 are communicating, and have a collision.  That
+collision must be propagated to C3 and C4.  Suppose C3 and C4
+subsequently have a collision. That collision must be propagated back
+to C1 and C2.  Thus, even hosts that are physically far away can break
+down local communication.  Better to install packet filters and treat
+the two cables as two separate subnets instead of one virtual cable.
+
+</blockquote>
+
+
+
+In <i>Disk System Architectures for High-Performance Computing</i>,
+you learned about the 5 RAID levels.  Suppose you are configuring a
+service like photo.net with three RAIDs.  In the questions below, make
+sure you explain your choice and list the key assumptions you used to
+choose the RAID you think is most appropriate.<br><br>
+
+<b>Q5:</b> You must first configure a RAID for photo.net's swap file.
+Given your knowledge of virtual memory, what RAID level is most
+appropriate?  (assume photo.net has enough main memory to prevent
+thrashing)<br><br>
+<blockquote>
+We're assuming there's no thrashing.  Let's also assume that, as
+stated in lecture, the virtual memory manager wants to read/write in
+large blocks.  Let's also assume that we want to minimize read errors,
+as corrupted memory could bring the server down.  Finally, as we heard
+in lecture, let's assume there's only one virtual memory manager
+(i.e., we need to do only one I/O at a time).  Thus, we choose RAID
+Level III.  This gives us lots of bandwidth for reads and writes, plus good
+error correction.  While Level II would have been a good choice, Level
+III will give us better performance (especially if we replace the
+check disk with a solid-state device)
+</blockquote>
+
+<b>Q6</b> Now, you must configure a RAID for photo.net's JPG files.
+These are the photo files that Philip or users upload.  Assume there
+are 50,000 JPG files on photo.net and that 250 jpg files are uploaded
+each day.  Also assume that photo.net must serve several requests for
+distinct JPG files at any one time, all day long.  What RAID level is
+most appropriate?<br><br>
+<blockquote>
+We're assuming that we want to access different files at the same
+time, and that writes are not common (e.g., ~10/hour).  We're
+also not concerned if a few bit errors are not detected or corrected.
+Who's going to notice?  Thus, Level I would give us good performance.
+</blockquote>
+
+<b>Q7</b> Finally, you must configure the RAID for the Oracle database
+files.  Like the JPG case, there are many more reads than writes.
+Unlike the JPG case, Oracle uses only a handful of very large files.
+Most of the time, the same file is being read or written.  What RAID
+level is most appropriate?<br><br>
+
+<blockquote>
+Let's assume that even though there are more reads than writes, that
+there will be lots more reads and writes in total than in the JPG
+case.  This makes sense - every time users input data to the website,
+that's another database write.  As we get more users, we'll get more
+interaction, leading to more writes.  We also need data integrity, and
+improved read/write bandwidth over a single disk.  Thus, Level V is
+most appropriate.
+</blockquote>
+
+</body>
+</html>

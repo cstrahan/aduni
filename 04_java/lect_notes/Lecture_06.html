@@ -1,0 +1,249 @@
+<html>
+<head>
+  <title>
+   Lecture 5
+  </title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Error and Exception Handling</h2>
+<h3>Lecture</h3>
+Error handling is a major aspect of serious software development. It is 
+represents a significant part of the total development effort, (and not
+the fun part either). Today we are going to discuss error handling 
+techniques in general, and their specific incarnations in Java.
+<ul>
+<li>What could go wrong?
+  <ul>
+  <li>unexpected or inconsistant input
+    <ul>
+    <li>syntacticly incorrect - wrong types or values</li>
+    <li>semanticly incorrect 
+    <p> for example, our old friend
+     <code>bracketRoot(double a, double b)</code>, if f(a) and f(b) are
+     the same sign, we are not guaranteed a root and trouble will follow.
+    </ul>
+  </li>
+  <li>I/O errors</li>
+    <ul>
+    <li>Ex: Attempt to open non-existant file</li>
+    </ul>
+  <li>Processing errors</li>
+    <ul>
+    <li>Ex: divide by zero; array access out of bounds; null Object access</li>
+    </ul>
+  <li>External conditions</li>
+    <ul>
+    <li>Network host unreachable; network connection disconnected</li>
+    <li>External device conditions; audio, cameras, etc.</li>
+    </ul>
+  <li>System errors (usually fatal)</li>
+    <ul>
+    <li>Out of memory; disk errors; hardware errors</li>
+    </ul>
+</ul>
+</li>
+<li> Three issues:
+    <ul>
+    <li>Detecting: testing for error conditions</li>
+    <li>Signaling: communicating error to handling code</li>
+    <li>Handling: attempt to recover, or at least die gracefully</li>
+    </ul>
+</li>
+<li>Testing
+  <ul>
+  <li>Choices:
+    <ul>
+    <li>High level: Test arguments before calling library methods.
+     <p> For example, in the case of bracketRoot, check signs before
+     call.
+    <li>Low level: Detect error in called method and pass them up.
+     <p> If you are implementing both the caller and callee, one can check
+        for consistancy in the caller and assume all is well in the callee.
+     <p> If you are implementing a library or class to be used by others,
+         you probably have to check all inputs for error in your 
+         library methods.
+    </ul>
+  </li>
+  <li>Choice should be based on program structure, probabilities of error, and cost of testing. At any rate, policy should be clear, explicit and consistant. It should be clear at each level what conditions on input and data values 
+have been check and enforced.
+  </li>
+  </ul>
+</li>
+<li>Signalling
+  <ul>
+  <li>Two methods: Error return codes, and Throwing Exceptions
+  <li>Error codes
+    <ul>
+    <li>Have all library methods return an error code: 
+     usually 0 for success, and a non-zero code specifying type of error.</li>
+    <li>Advantages: low overhead, conceptually simple</li>
+    <li>Disadvantages: 
+     <ul>
+      <li>uses up return value, 
+      <li>caller must test codes after each call, multi-level system must pass errors up the call chain.
+     </ul>
+    <li>For example, in our bracketRoot method, we are returning a double so
+it's hard to return an error code. You can select an unlikely value or return
+NaN, or null (for Object types)
+    <li> If we really, wanted to (cleanly) use the return value to signal
+   error conditions, we could use it solely for this purpose, and use a shared
+   data structure to return a value. For example we would specify 
+   bracketRoot as 
+
+<pre>
+public ErrorCode bracketRoot(double a, double b, double e, double[] val);
+</pre>
+    and return our answer in val[0]; (In some language (like C on UNIX), this is really the only choice, and many C libraries are specified this way).
+    and many
+    </ul>
+  </li>
+  <li>Exceptions
+    <ul>
+    <li>Higher overhead, but can lead to cleaner code</li>
+    </ul>
+  </li>
+  </ul>
+</li>
+</ul>
+ </ul>
+<h4>Exceptions: General</h4>
+<p> The basic problems Exception mechanisms are trying to solve are:
+<ul> 
+<li>Indicating an error without using up the return value
+<li>Getting the exception to the code that deals with it, with have to
+constantly check return values.
+ <ul>
+The basic process of the exception mechanism is as follows:
+<ul>
+  <li>When error condition is detected an exception is thrown</li>
+  <li>"throw" is a system/language specific mechanism that unwinds the call
+ stack until a handler for the specific exception is found</li>
+  <li>Exception handlers defined in "catch" blocks</li>
+  <li>After processing catch handler code, execution resumes after catch
+block</li>
+  <li>Many languages/systems have catch/throw exception systems: Java, C++,
+Windows C (no raw C catch/throw available in UNIX). All of these systems
+are more or less the same as the Java version</li>
+  </ul>
+</li>
+  </ul>
+  </ul>
+<h4>Exceptions: Java</h4>
+  <ul>
+  <li>Errors and Exceptions are Objects (of course). Inherit from Throwable
+class. Can be subclasses for application specific errors (and are by various
+libraries). Java actually has a class hierarchy of exceptions (draw it)
+  <li> Error represents system error: bugs in the run-time, out-of-memory,
+etc. These things you can generally do little about.
+  <li> The Exception class represents all other condition and has two 
+      subclasses
+  <li> RuntimeException class represent, essentally, programming errors:
+      arrayAccessOutOfBounds, bad dowencast, NullObject access, etc.
+  <li> IOException class represent exceptions from the IO system, such as
+       attempting to open a non-existing file. But can also be subclassed
+       to represent any semantic type of error (for example the inconsistant
+input condition on bracketRoot())
+  <li> In the case of bracketRoot, we might want our own exception class
+to indicate the type or error. We do this by subclassing:
+<pre>
+public class BracketException extends IOException{
+    public BracketException(){};  // empty constructor
+    public BracketException(String msg){ super(msg)} //allows error msg
+}
+</pre>
+</ul>
+</ul>
+
+<h4>Throwing Exceptions</h4>
+<ul>
+  <li>When it detects an error, a method can throw an exception using
+the keyword <code>throw</code> which takes an instance of an exception
+type. For example, in bracketRoot we might have:
+<pre>
+   // init fa, fb
+   if((fa > 0) && (fb > 0)) || (fa < 0) && (fb < 0)){  // same sign, error!
+      throw new BracketException();   // must use new to get instance
+   ...
+   // code to do stuff
+   }
+</pre>
+  <li>In Java, methods must specify any exceptions they throw, using
+the keyword <code>throws</code> in the method definition.
+<pre>
+public bracketRoot(double a, double b, double e) throws BracketException{
+   // init fa, fb
+   if((fa > 0) && (fb > 0)) || (fa < 0) && (fb < 0)){  // same sign, error!
+      throw new BracketException();   // must use new to get instance
+   ...
+   // code to do stuff
+   }
+</pre>
+  <li>Methods are also responsible for dealing with exceptions thrown by
+any method they call. They can deal in one of two ways:
+<ul>
+<li> Punt! Let a method higher in the calling chain deal. In this case our
+punting method must also specify that its <code>throws</code> the error.
+<li> Actually handle the exception: Our next topic
+</ul>
+</ul>
+<h4>Exception handling: catch</h4>
+<ul>
+<li>The syntax for handling exceptions in Java (and most other systems)
+is the <code>try,catch>/code> pair.
+<li> Any code that might throw an exception we want to handle is 
+wrapped in a <code>try</code> block. This is followed by one or more 
+<code>catch</code> blocks (one for each Exception type we
+want to handle) which contains code that handle the error.
+<pre>
+try{
+  // Code that can throw an exception
+  bracketRoot(a,b,e);
+}
+catch(BracketException e){
+  ..Code to handle exception e...
+}
+..Execution resumes here...
+</pre>
+<li> The code in the catch block is ONLY executed when the exception is
+thrown.
+<li> In either case, execution continues immediate after the
+last catch block (unless the catch block does a throw).
+<li>Finally blocks are useful for factoring out code that should be executed
+no matter what: normal execution, caught exception, exception to be passed to
+higher level (re-thrown).
+<pre>
+try{
+  ..Code that can throw an exception..
+}
+catch(Exception e){
+  ..Code to handle exception e...
+}
+finally{
+  ..Code here always executes. Good place to clean up...
+}
+..Normal execution resumes here...
+</pre>
+<li>Warning: Throw/try/catch mechanism is high overhead. Use sparingly.
+A little error checking at high level goes a long way.
+</ul>
+
+<li>Error Recovery</li>
+  <ul>
+  <li>Attempt to recover. Put system in known good state on continue</li>
+  <li>Call operator, send email, signal alarm, if appropriate</li>
+  <li>If recovery impossible, give user a chance to save data.</li>
+  <li>Last resort: print error message and Exit. This is Java's default
+behavior!</li>
+  </ul>
+</ul>
+
+<h3>Recitation: Debugging in Java</h3>
+<ul>
+<li>Examples and exercises on error handling.
+<li> Debugging with println
+<li> Getting a stack trace. Methods on Throwable.
+</ul>
+
+</body>
+
+

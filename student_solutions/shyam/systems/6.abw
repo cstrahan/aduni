@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in">Date: 8 March 2001</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Scalable Transport for Transparent Mobile Internetworking</c></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"><c props="font-style:normal; font-weight:normal">The Mobile IP protocol is a proposed solution to the problem of having a mobile host remain transparently connected to the the Internet as it moves between subnets at different locations. The protocol requires a </c><c props="font-style:italic; font-weight:normal">home agent</c><c props="font-style:normal; font-weight:normal"> which is an agent process running on the home network of the mobile host and is responsible for intercepting packets addressed to the mobile host and forwarding them to the mobile host's current location. When the mobile host is connected at its home network, packets are routed to it in the usual way. When the mobile host moves to a different network it can connect to the subnet in 2 ways: it may acquire a new IP address via DHCP (Dynamic Host Configuration Protocol) or via a </c><c props="font-style:italic; font-weight:normal">foreign agent</c><c props="font-style:normal; font-weight:normal"> - if one is running on the foreign network - which as an agent process similar to the home agent and is responsible for providing a 'care-of address' and other services to a mobile host.</c></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">Communicating with a mobile host involves sending packets over 2 kinds of networks - the wired Internet and the wireless network. The Internet protocols were originally developed for applications like email and file transfer with relatively high latencies over geographically dispersed computers. Also, the bandwidth of the wired network is higher generally than that of a wireless network. Thus, the characteristics of the wireless part of the network are sufficiently different from those of the wired network in that the currently used Internet protocols may be less efficient in transmitting streaming video or large files over wireless. Without a foreign agent, information from the sender to the mobile host has to be sent using the regular Internet protocols like TCP/IP all the way through. With deployment of foreign agents a different and more efficient protocol like WAP can be used for the wireless portion of the network; thus the foreign agent would translate the packets using the regular Internet protocol to a wireless protocol while forwarding them to the mobile host.</c></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">Additionally, using DHCP for making a new connection in a foreign network by a mobile host, may not be the fastest way of transferring connection from one network to the next; since DHCP is probably not optimized for speedy negotiation with a host asking for an IP address. Foreign agents could provide faster transfer of connection to a mobile host moving from one network to the next, possibly by having them inform neighboring foreign agents in advance that a mobile host is about to switch networks, who would then ready themselves to make a fast connection with the mobile host. This would provide for a more seamless network connection to the mobile host which would be important when the mobile host is receiving streaming data or large files.</p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1875in; margin-right:0.5000in; text-align:left; text-indent:0.0000in">Mobile IP is not in widespread use today probably because efficient functioning of such a system requires that multiple network organizations install foreign agents. Unless a majority of these organizations have the software installed, the availability of Internet connection to a mobile host anywhere may not be good enough for consumers to pay for a mobile service.</p>
+</section>
+</abiword>

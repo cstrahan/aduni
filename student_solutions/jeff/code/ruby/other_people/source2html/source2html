@@ -1,0 +1,1241 @@
+#!/usr/bin/env ruby
+# -*- ruby -*-
+
+# source2html -- Generate HTML from source code
+# Usage:  See RD below    
+
+# Copyright 1900, 2000 by Jim Weirich (jweirich@one.net).
+# All rights reserved.
+# Permission is granted for use, modification and distribution as
+# long as the above copyright notice is included.
+
+require 'getoptlong'
+
+$VERSION = "0.9.3"
+
+# ====================================================================
+class LanguageInfo
+
+  # LanguageInfo collects all the language specific information needed
+  # when parsing a particular code file.  It contains token parsing
+  # regular expresions, keyword and comment identifying logic, as well
+  # as special handling instructions.
+
+  def is_unknown
+    false
+  end
+
+  def special_processing (tok)
+  end
+
+  def token_re
+    %r!^([A-Za-z0-9_]+|'[^']*'|"[^"]*"|#.*$|[^A-Za-z0-9_"']+)(.*)$!
+  end
+
+  def make_reference_target(tok)
+    tok
+  end
+end
+
+
+# ====================================================================
+class UnknownInfo < LanguageInfo
+
+  # Used when the language of the current code file is unknown.  
+
+  def is_unknown
+    true
+  end
+
+  def choose (line)
+    case line
+    when /ruby/i
+      result = RubyInfo.new
+    when /sh|ksh|bash/
+      result = ShellInfo.new
+    when /perl/
+      result = PerlInfo.new
+    when /\/*/
+      result = JavaInfo.new
+    else
+      result = self
+    end
+    result
+  end
+
+  def is_keyword (w)
+    false
+  end
+
+  def comment_start
+    "#"
+  end
+
+  def comment_re
+    /^$/
+  end
+
+  def suffixes
+    []
+  end
+
+  def special_processing (tok)
+  end
+end
+
+
+# ====================================================================
+class JavaInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+      abstract
+      default
+      if
+      private
+      throw
+      boolean
+      do
+      implements
+      protected
+      throws
+      break
+      double
+      import
+      public
+      transient
+      byte
+      else
+      instanceof
+      return
+      try
+      case
+      extends
+      int
+      short
+      void
+      catch
+      final
+      interface
+      static
+      volatile
+      char
+      finally
+      long
+      super
+      while
+      class
+      float
+      native
+      switch
+      const
+      for
+      new
+      synchronized
+      continue
+      goto
+      package
+      this
+    ).each { |key| @keywords[key] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok] != nil
+  end
+
+  def comment_start
+    "//"
+  end
+
+  def comment_re
+    /\/\//
+  end
+
+  def suffixes
+    ["java"]
+  end
+
+  def special_processing (tok)
+    # Handle C Style comments
+    tok.gsub!(/\/\*/, "<em>/*")
+    tok.gsub!(/\*\//, "*/</em>")
+  end
+end
+
+
+# ====================================================================
+class RubyInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+      BEGIN
+      END
+      alias
+      and
+      attr
+      attr_reader
+      attr_writer
+      attr_accessor
+      begin
+      break
+      case
+      class
+      def
+      do
+      else
+      elsif
+      end
+      ensure
+      for
+      if
+      include
+      load
+      module
+      next
+      nil
+      not
+      or
+      private
+      protected
+      public
+      raise
+      redo
+      require
+      rescue
+      retry
+      return
+      self
+      super
+      then
+      undef
+      unless
+      until
+      when
+      while
+      yield
+     ).each {|w| @keywords[w] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok] != nil
+  end
+
+  def comment_start
+    "#"
+  end
+
+  def comment_re
+    /(#)(?=[^{@$]|$)/
+  end
+
+  def suffixes
+    ["rb"]
+  end
+
+  def token_re
+    /^([A-Za-z0-9_]+|#.*$|[^A-Za-z0-9_]+)(.*)$/
+  end
+end
+
+
+# ====================================================================
+class PythonInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+      and
+      assert
+      break
+      class
+      continue
+      def
+      del
+      elif
+      else
+      except
+      exec
+      finally
+      for
+      from
+      global
+      if
+      import
+      in
+      is
+      lambda
+      not
+      or
+      pass               
+      print
+      raise
+      return
+      try
+      while    
+     ).each {|w| @keywords[w] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok] != nil
+  end
+
+  def comment_start
+    "#"
+  end
+
+  def comment_re
+    /#/
+  end
+
+  def suffixes
+    ["py"]
+  end
+end
+
+
+# ====================================================================
+class PerlInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+        break
+        continue
+        do
+        else
+        elsif
+        for
+        foreach
+        goto
+        if
+        last
+        my
+        redo
+        sub
+        unless
+        until
+        use
+     ).each {|w| @keywords[w] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok] != nil
+  end
+
+  def comment_start
+    "#"
+  end
+
+  def comment_re
+    /#/
+  end
+
+  def suffixes
+    %w(pm pl)
+  end
+
+end
+
+
+# ====================================================================
+class ElispInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+      defun
+      setq
+      if
+      cond
+      while
+      let
+      progn
+      nil
+    ).each {|w| @keywords[w] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok] != nil
+  end
+
+  def comment_start
+    ";"
+  end
+
+  def comment_re
+    /;/
+  end
+
+  def token_re
+    %r!^([A-Za-z0-9_]+|"[^"]*"|#.*$|[^A-Za-z0-9_"]+)(.*)$!
+  end
+
+  def suffixes
+    ["el"]
+  end
+end
+
+
+# ====================================================================
+class EiffelInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+      alias
+      all
+      and
+      as
+      bit
+      check
+      class
+      creation
+      current
+      debug
+      deferred
+      do
+      else
+      elseif
+      end
+      ensure
+      expanded
+      export
+      external
+      false
+      feature
+      from
+      frozen
+      if
+      implies
+      indexing
+      infix
+      inherit
+      inspect
+      invariant
+      is
+      like
+      local
+      loop
+      not
+      obsolete
+      old
+      once
+      or
+      precursor
+      prefix
+      redefine
+      rename
+      require
+      rescue
+      result
+      retry
+      select
+      separate
+      strip
+      then
+      true
+      undefine
+      unique
+      until
+      variant
+      when
+      xor
+    ).each {|w| @keywords[w] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok.downcase] != nil
+  end
+
+  def comment_start
+    "--"
+  end
+
+  def comment_re
+    /--/
+  end
+
+  def suffixes
+    ["e"]
+  end
+
+  def make_reference_target(tok)
+    tok.upcase
+  end
+end
+
+
+# ====================================================================
+class ShellInfo < LanguageInfo
+
+  def initialize
+    @keywords = {}
+    %w(
+      alias
+      case 
+      declare
+      do
+      done
+      elif
+      else
+      export
+      fi
+      for
+      function
+      if
+      in
+      local
+      return
+      select
+      then
+      typeset
+      unalias 
+      until
+      while
+    ).each {|w| @keywords[w] = 1 }
+  end
+
+  def is_keyword (tok)
+    @keywords[tok] != nil
+  end
+
+  def comment_start
+    "#"
+  end
+
+  def comment_re
+    /#/
+  end
+
+  def suffixes
+    %w(sh ksh bash)
+  end
+end
+
+
+# ====================================================================
+class SourceFile
+
+  # Represent a source file handled by source2html.
+
+  attr_reader :suffix		# "ext"
+  attr_reader :basename		# "base"
+  attr_reader :pathname		# "parent/dir/base.ext"
+  attr_reader :filename		# "base.ext"
+  attr_reader :packagename	# "parent.dir" if in a package
+  attr_reader :reference_target # "base"/"Base"/"BASE" as appropriate
+
+  def initialize (aPathname)
+    @pathname = aPathname
+    @suffix = (aPathname =~ /\.([^.]*)$/) ? $1 : ""
+    @filename = (aPathname =~ /([^\/]*)$/) ? $1 : ""
+    @basename = aPathname.clone
+    @basename.gsub!(/\.[A-Za-z0-9_]+$/, "")
+    @basename.gsub!(/^.*\//, "")
+    @reference_target = language.make_reference_target(@basename)
+    @packagename = ""
+    @@sources << self
+    @@lookup[@basename] = self
+    @@lookup[@filename] = self
+  end
+
+  def language
+    if not defined? @lang or @lang.nil? then
+      @lang = $languages[suffix]
+      select_language if !@lang
+    end
+    @lang
+  end
+
+  def htmlname
+    result = basename
+    result += "_" + suffix if suffix != ""
+    result += ".html"
+    result
+  end
+
+  def set_packagename(packagename)
+    @packagename = packagename
+  end
+
+  def <=> (other)
+    @basename <=> other.basename
+  end
+
+  def SourceFile.by_name (name)
+    @@lookup[name]
+  end
+
+  def SourceFile.list
+    @@sources.sort { |a,b| a.filename <=> b.filename }
+  end
+
+  def SourceFile.clear_list
+    @@sources = []
+    @@lookup  = {}
+  end
+
+  def select_language
+    open (pathname) { |file|
+      select_language_from_line(file.gets)
+    }
+  rescue
+    @lang = UnknownInfo.new
+  end
+
+  def select_language_from_line(line)
+    case line
+    when /sh|ksh|bash/i
+      @lang = $languages['sh']
+    when /perl/i
+      @lang = $languages['pm']
+    when /python/i
+      @lang = $languages['py']
+    when /ruby/i
+      @lang = $languages['rb']
+    else
+      @lang = UnknownInfo.new
+    end
+  end
+
+  private
+
+  @@sources = []
+  @@lookup  = {}
+end
+
+
+# ====================================================================
+# Global Functions
+
+# usage --------------------------------------------------------------
+# Display the usage message
+
+def usage
+  DATA.each do |line|
+    if (line =~ /\{source2html\}/) then
+      line.gsub! (/\(\(\{([^}]*)\}\)\)/) { $1 }
+      line.gsub! (/\(\(\|([^|]*)\|\)\)/) { $1 }
+      print "Usage: #{line}";
+      exit
+    end
+  end
+end
+
+
+# man_page -----------------------------------------------------------
+# Display the man page.
+
+def man_page
+  if defined? (ENV['PAGER']) then
+    pager = ENV['PAGER']
+  else
+    pager = 'more'
+  end
+  if ENV['TERM'] =~ /^(dumb|emacs)$/ then
+    system "rd2 -rrd/rd2man-lib.rb #{$0} | nroff -man | #{pager}"
+#    system "pod2text #{$0}"
+  else
+    system "rd2 -rrd/rd2man-lib.rb #{$0} | nroff -man | #{pager}"
+  end
+  exit
+end
+  
+
+# read_rc_file -------------------------------------------------------
+
+def read_rc_file
+
+  $rc = {
+    'PROJECT'   => "&lt;unamed&gt;",
+    'C2HREF'    => "http://w3.one.net/~jweirich/tools/source2html",
+    'BGCOLOR'   => "#ffffff",
+    'CODECOLOR' => "#ffeeee",
+    'INDEX'     => "index"
+  }
+    
+  begin
+    open ($rcfilename) do |file|
+      file.each do |line|
+	line =~ /(^[A-Z\/]+)\s+(.*)$/
+	if defined?($2) then
+	  $rc[$1] = $2
+	end
+      end
+    end
+  rescue
+    puts ("Could not find rc file '#{$rcfilename}'")
+  end
+end
+  
+
+# ====================================================================
+class ReferenceAnalyzer
+
+  # Responsible for analyzing the source file for cross references.
+  # ReferenceAnalyzer works closely with a References object to record
+  # the cross references.
+
+  def initialize(references)
+    @refs = references
+  end
+
+  def analyze(source)
+    open (source.pathname) { |file|
+      analyze_file(source, file)
+    }
+  end
+
+  def analyze_file(source, file)
+    file.each { |line|
+      analyze_line(source, line)
+    }    
+  end
+
+  def analyze_line(source, line)
+    line.chomp!
+    while line =~ source.language.token_re do
+      tok, line = [$1, $2]
+      check_for_references(source, tok)
+      if tok == "package" && source.packagename == "" then
+	if line =~ /([A-Za-z0-9_.]*)\s*;/ then
+	  source.set_packagename($1)
+	end
+      end
+    end
+  end
+
+  private
+
+  def check_for_references(source, tok)
+    src = @refs.get_source_for_reference(tok)
+    if src != nil and tok != source.reference_target then
+      @refs.add_reference(tok, source.basename)
+    end
+  end
+end
+
+
+# ====================================================================
+class References
+
+  # Record a cross reference.  Possible cross reference targets are
+  # registered for later recognition.
+
+  def initialize
+    @xref = {}
+    @targets = {}
+  end
+
+  def each_key_pair
+    @xref.keys.sort.each { |k|
+      yield(k, @xref[k].keys.sort)
+    }
+  end
+
+  def referers_of(referenced_name)
+    refs = @xref[referenced_name]
+    refs ? refs.keys.sort : nil
+  end
+
+  def add_reference(tok, srcname)
+    if not @xref[tok] then
+      @xref[tok] = {}
+    end
+    if not @xref[tok][srcname] then
+      @xref[tok][srcname] = 0
+    end
+    @xref[tok][srcname] += 1
+  end
+
+  def add_reference_target(target, source)
+    @targets[target] = source
+  end
+
+  def get_source_for_reference(tok)
+    @targets[tok]
+  end
+
+end
+
+
+# ====================================================================
+class Formatter
+
+  # Formatter provides a logical interface to the details of
+  # formatting code.  This particular version of formatter will
+  # generate HTML markup as requested.
+
+  def initialize(io)
+    @io = io
+    set_keyword_style ("<b>", "</b>")
+    set_comment_style ("<em>", "</em>")
+  end
+
+  def configure(config)
+    configure_item(config['HTML/KEYWORD']) { |a,b| set_keyword_style(a,b) }
+    configure_item(config['HTML/COMMENT']) { |a,b| set_comment_style(a,b) }
+  end
+
+  def emit_plain(text)
+    emit_text(text)
+  end
+
+  def emit_comment(text)
+    emit(@comment_pre)
+    emit_text(text)
+    emit(@comment_post)
+  end
+
+  def emit_keyword(text)
+    emit(@keyword_pre)
+    emit_text(text)
+    emit(@keyword_post)
+  end
+
+  def emit_reference(ref, text)
+    emit("<a href=\"")
+    emit(ref)
+    emit("\">")
+    emit_text(text)
+    emit("</a>")
+  end
+
+  def set_keyword_style (pre, post)
+    @keyword_pre = pre
+    @keyword_post = post
+  end
+
+  def set_comment_style (pre, post)
+    @comment_pre = pre
+    @comment_post = post
+  end
+
+  private
+
+  def configure_item(value)
+    if defined?(value) and /\s*(.*)%%%(.*)\s*/ =~ value then
+      yield ($1, $2)
+    end
+  end
+
+  def emit(text)
+    @io.write(text)
+  end
+  alias :emit_raw :emit
+  public :emit_raw
+
+  def emit_text(text)
+    emit(escape(text))
+  end
+
+  def escape(text)
+    result = text.dup
+    result.gsub!(/&/, "&amp;")
+    result.gsub!(/</, "&lt;")
+    result.gsub!(/>/, "&gt;")
+    result
+  end
+end
+
+
+# generate_link ------------------------------------------------------
+
+def generate_link (formatter, ref, text)
+  formatter.emit_plain ("[ ")
+  formatter.emit_reference (ref, text)
+  formatter.emit_plain (" ]")
+end
+
+
+# generate_references ------------------------------------------------
+
+def generate_references(formatter)
+  formatter.emit_raw %Q!<hr>\n!
+  formatter.emit_raw %Q!<table width="100%"><tr><td align=left>\n!
+  generate_link (formatter, $rc['INDEX']+".html", "Index")
+  if $rc['HOMEREF'] then
+    generate_link (formatter, $rc['HOMEREF'], $rc['HOME'])
+    formatter.emit_raw "<br>\n"
+  end
+  if $rc['ADDRESS'] then
+    formatter.emit_raw "<address>#{$rc['ADDRESS']}</address>\n"
+  end
+  formatter.emit_raw "</td><td align=\"right\" valign=\"top\">"
+  formatter.emit_raw "<em>Generated by "
+  generate_link (formatter, $rc['C2HREF'], "source2html")
+  formatter.emit_raw ("</em>\n")
+  formatter.emit_raw %Q!</td></tr></table>\n!
+end
+
+
+# print_header -------------------------------------------------------
+
+def print_header (formatter, source)
+  fn = source.filename
+  lang_name = source.language.type.to_s[0..-5]
+  formatter.emit_raw "<!-- Generated by source2html "
+  formatter.emit_raw "(language: #{lang_name}) -->\n"
+  formatter.emit_raw %Q!<html>\n!
+  formatter.emit_raw %Q!<head><title>Project: #{$rc['PROJECT']}, File: #{fn}</title></head>\n!
+  formatter.emit_raw %Q!<body bgcolor="#{$rc['BGCOLOR']}">\n!
+  formatter.emit_raw %Q!<h1>File: #{fn}</h1>\n!
+  formatter.emit_raw %Q!<em>Project: #{$rc['PROJECT']}</em>\n!
+  formatter.emit_raw %Q!<p><table border="1" cellpadding="6" bgcolor="#{$rc['CODECOLOR']}"><tr><td><pre>!
+end
+
+
+# print_footer -------------------------------------------------------
+
+def print_footer (formatter, reference_target, fn)
+  formatter.emit_raw %Q!</pre></td></tr></table>\n!
+
+  referers = $references.referers_of(reference_target)
+  if referers then
+    formatter.emit_raw(%Q!<p><b>Used by:</b> !)
+    referers.each do |n|
+      src = SourceFile.by_name(n)
+      formatter.emit_raw(%Q!<a href="! + src.htmlname + %Q!">#{n}</a> !);
+    end
+    formatter.emit_plain("\n")		  
+  end
+    
+  generate_references(formatter)
+  formatter.emit_raw("</body>\n")
+  formatter.emit_raw("</html>\n")
+end
+
+
+# generate_html_for --------------------------------------------------
+
+def generate_html_for(source)
+  print "Generating HTML for #{source.pathname}\n" if $verbose
+
+  open(source.pathname) do |inf|
+    open($destination + "/" + source.htmlname, "w") do |html|
+      formatter = Formatter.new(html)
+      formatter.configure($rc)
+      print_header(formatter, source)
+
+      closing = ''
+      nokeyword = false
+      inf.each do |line|
+	line.chomp!
+
+	while(line =~ source.language.token_re) do
+	  tok, line = [$1, $2]
+	  if src = $references.get_source_for_reference(tok) then
+	    formatter.emit_reference(src.htmlname, tok)
+	  elsif !nokeyword && source.language.is_keyword(tok) then
+	    formatter.emit_keyword(tok)
+	  elsif tok =~ source.language.comment_re then
+	    nokeyword = true
+	    formatter.emit_comment(tok + line)
+	    line = ''
+	  else
+	    source.language.special_processing(tok)
+	    formatter.emit_plain(tok)
+	  end
+	end
+
+	formatter.emit_plain(closing)
+	formatter.emit_plain("\n")
+	closing = ''
+	nokeyword = false
+      end
+
+      print_footer(formatter, source.reference_target, source.pathname)
+    end
+  end
+end
+      
+
+# generate_index_file --------------------------------------------------
+
+def generate_index_file
+  open("#{$destination}/#{$rc['INDEX']}.html", "w") do |html|
+    formatter = Formatter.new(html)
+    formatter.configure($rc)
+    formatter.emit_raw "<!-- Generated by source2html -->\n"
+    formatter.emit_raw "<html>\n"
+    formatter.emit_raw "<head><title>Project #{$rc['PROJECT']} Index</title></head>\n"
+    formatter.emit_raw "<body bgcolor=\"#{$rc['BGCOLOR']}\">\n"
+    formatter.emit_raw "<h1>Project #{$rc['PROJECT']} Index</h1>\n"
+    if $rc['BLURB'] then
+      generate_blurb(formatter, $rc['BLURB'])
+    end
+    formatter.emit_raw "<ul>\n"
+    SourceFile.list.each do |src|
+      formatter.emit_raw "<li><a href=\"#{src.htmlname}\">#{src.filename}</a>\n"
+      if src.packagename != ""
+	formatter.emit_raw "(#{src.packagename})\n"
+      end
+    end
+
+    formatter.emit_raw "</ul>\n"
+    generate_references(formatter)
+    formatter.emit_raw "</body>\n</html>\n"
+  end
+end
+
+
+# generate_blurb -----------------------------------------------------
+
+def generate_blurb(formatter, blurb_file)
+  open(blurb_file) { |file|
+    while line = file.gets
+      formatter.emit_raw(line)
+    end
+  }
+end
+
+# handle_options -----------------------------------------------------
+
+def handle_options
+  parser = GetoptLong.new *[
+    ['--dir',       '-d', GetoptLong::REQUIRED_ARGUMENT],
+    ['--init',      '-i', GetoptLong::REQUIRED_ARGUMENT],
+    ['--lang',      '-l', GetoptLong::REQUIRED_ARGUMENT],
+    ['--usage',     '-h', GetoptLong::NO_ARGUMENT],
+    ['--help',      '-H', GetoptLong::NO_ARGUMENT],
+    ['--verbose',   '-v', GetoptLong::NO_ARGUMENT],
+    ['--version',   '-V', GetoptLong::NO_ARGUMENT]
+  ]
+
+  if test(?r,"source2html.rc") then
+    $rcfilename = "source2html.rc"
+  elsif test(?r,"code2html.rc") then
+    # use old RC file name
+    $rcfilename = "code2html.rc"
+  elsif test(?r,"java2html.rc") then
+    # use even older RC file name
+    $rcfilename = "java2html.rc"
+  else
+    $rcfilename = "source2html.rc"
+  end
+
+  $destination = "."
+  $verbose = false
+  $default_lang = UnknownInfo.new
+  
+  parser.each do |arg, value|
+    case arg
+    when '--dir'
+      $destination = value
+      puts "Destination is #{$destination}" if $verbose
+    when '--init'
+      $rcfilename = value
+    when '--lang'
+      fail "Alternate Languages not yet supported"
+    when '--verbose'
+      $verbose = true
+    when '--usage'
+      usage
+      exit
+    when '--help'
+      man_page
+      exit
+    when '--version'
+      $0 =~ /([^\/]+)$/;
+      pgm = $1
+      print "#{pgm}, Version #{$VERSION}\n";
+      exit
+    end
+  end
+end
+
+
+# Language lookup table.  Used when determining the language from the
+# file extension.
+
+$languages = {}
+[
+  EiffelInfo.new,
+  ElispInfo.new,
+  JavaInfo.new,
+  PerlInfo.new,
+  PythonInfo.new,
+  RubyInfo.new,
+  ShellInfo.new
+].each { |lang|
+  lang.suffixes.each {|sfx|
+    $languages[sfx] = lang
+  }
+}
+
+
+# ====================================================================
+# Main Program
+
+def main
+  handle_options
+  read_rc_file
+  
+  $references = References.new
+  $analyzer   = ReferenceAnalyzer.new($references)
+
+  # Save all the source code filenames ...
+  
+  ARGV.sort.each do |fn|
+    s = SourceFile.new(fn)
+    $references.add_reference_target(s.reference_target, s)
+  end
+  
+  # Generate the cross links
+  
+  SourceFile.list.each do |src|
+    $analyzer.analyze(src)
+  end
+  
+  if $verbose then
+    $references.each_key_pair { |k, v|
+      print "#{k}: ", v.join(" "), "\n"
+    }
+  end
+  
+  # Generate the HTML for each source file.
+  
+  SourceFile.list.each { |src|
+    generate_html_for(src)
+  }
+  
+  # Generate an Index File
+  
+  generate_index_file
+end
+
+if __FILE__ == $0 then
+  main
+end
+
+__END__
+
+=begin
+= source2html - Source Code to HTML Formatting
+
+== Synopsis
+
+(({source2html})) [(({-hHvV}))] [((|options|))] ((|files|))...
+
+== Description
+
+(({source2html})) generates a set of HTML files for the list of source
+files given on the command line.
+
+== Options
+
+: (({--dir=}))((|directory|)) ((({-d}))((|dir|)))
+
+  Put the HTML output in ((|directory|)).  The default output
+  directory is (({.})).
+
+: (({--init=}))((|initfile|)) ((({-i}))((|initfile|)))
+
+  Use ((|initfile|)) as the initialization file.  If no initialization
+  file is provided, a file named (({source2html.rc})) will be used as
+  the default.
+
+: (({--lang=}))((|language|)) ((({-l}))((|lang|)))
+
+  Use ((|language|)) as the default language.
+  
+: (({--usage})) ((({-h})))
+
+  Display a usage message.
+
+: (({--help})) ((({-H})))
+
+  Display the man page.
+
+: (({--verbose})) ((({-v})))
+
+  Display verbose output.
+
+: (({--version})) ((({-V})))
+
+  Display the program version.
+
+: ((|files|)) ...
+
+  List of files to convert to HTML.
+
+== Initialization File Options
+
+Options in the initialization file should be formated as an option
+name followed on the same line as the option value.
+
+: (({ADDRESS})) ((|address_text|))
+  If defined, will display a contact address on each generated web page.
+
+: (({BGCOLOR})) ((|color|))
+  The color to use for the background of each generated web page.
+
+: (({BLURB})) ((|filename|))
+  The file containing option HTML that will be inserted into the index
+  page before the list of source files.  If omitted, then no extra
+  HTML is inserted.
+
+
+: (({C2HREF})) ((|source2html_url|))
+  URL for the web page describing (({source2html})).
+
+: (({CODECOLOR})) ((|color|))
+  The color to use for the background of the displayed code.
+
+: (({HTML/KEYWORD})) ((|prefix_string|))%%%((|postfix_string|))
+
+  Defines the HTML string to be used to emphasize keywords.  The
+  string "%%%" will be replaced by the actual keyword on output.  The
+  default is "(({<b>%%%</b>}))".
+
+: (({HTML/COMMENT})) ((|prefix_string|))%%%((|postfix_string|))
+
+  Defines the HTML string to be used to emphasize comments.  The
+  string "%%%" will be replaced by the actual comment on output.  The
+  default is "(({<em>%%%</em>}))".
+
+: (({HOME})) ((|home_page_text|))
+
+  Text to be used in the Home page link.  Home page links are only
+  generated if the (({HOMEREF})) option is defined.
+
+: (({HOMEREF})) ((|home_page_url|))
+
+  URL to be used in the Home page link.  Home page links are only
+  generated if the (({HOMEREF})) option is defined.
+
+: (({INDEX})) ((|index_file_name|))
+
+  Name of the index file that that will contain the table of contents.
+  The ".html" suffix will automatically be appended.  The default
+  value is "index".
+
+: (({PROJECT})) ((|project_name|))
+  Name of the project.
+
+== Author
+
+Jim Weirich <jweirich@one.net>
+
+== Links
+
+ * Documentation: ((<URL:http://w3.one.net/~jweirich/tools/source2html/index.html>))
+ * Download: ((<URL:ftp://ftp.one.net/pub/users/jweirich/tools/source2html>))
+ * Browse Source: ((<URL:http://w3.one.net/~jweirich/tools/source2html/source.html>))
+
+== Limitations
+
+Supported languages are:
+(({Eiffel})),
+(({Emacs Lisp})),
+(({Java})),
+(({Perl})),
+(({Python})),
+(({Ruby})), and
+(({Shell})).
+(({source2html})) could be used with other languages, you just won't get
+keyword highlighting.
+
+=end

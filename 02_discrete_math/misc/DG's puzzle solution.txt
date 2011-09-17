@@ -1,0 +1,82 @@
+Subject: Re: If you like coding puzzles...
+Date: Wed, 29 Nov 2000 21:17:10 -0500
+From: Shai Simonson <shai@stonehill.edu>
+To: dg <dgoddeau@speechworks.com>, "Tara S. Holm" <tsh@math.mit.edu>,
+     Shai Simonson <shai@stonehill.edu>
+
+dg wrote:
+>
+> Shai Simonson wrote:
+> >
+> > SO the 3 pairs of balls...BB WW RR
+> >
+> > Weigh BW versus BR
+> >
+> > If balanced weigh B versus W.
+> >
+> > If unbalanced, weigh R versus R.
+> >
+> Close, but no cigar ;-)
+>
+> I don't think that does it in the unbalanced case. No information
+> about W. For example, say (wolog) that the R side is heavier. There
+> are three possibilities:
+>
+>    B W    B R
+> --------------
+>    L H    H H
+>    L L    H L
+>    L L    H H
+>
+> If we find that R is heaver then R' (the other red)
+> in the second weighing (ie R => H , R' => L), we can't
+> distinguish cases 1 and 3.
+
+        Whoops -- U are right of course....
+
+        Here we go....
+
+        Start with BW versus RW.  If balanced, then compare the W's.  This
+works because the BW must be the inverse of the original W's paired with
+each respectively.
+
+        If unbalanced,  assume WLOG that the balance is right heavy, then the
+situation is one of the following three...
+
+        B W1    R W2
+_________________________
+
+        L L     H H
+        H L     H H
+        L L     L H
+
+        Now exchange W1 with R and weigh again.  If balanced then it's case 1
+above.  If unbalanced right, then it's case 3, and if unblanced left
+then it's case 2.
+
+
+
+        If unbalanced,
+>
+> As for coin prob 1)
+>
+> 1) Number sacks from 1 to 10
+> 2) Create a collection consisting of i coins from sack i
+>         (ie. 1 from sack 1, 2 from sack 2, etc).
+> 3) Weigh this collection => W
+> 4) 550-W should be index of light sack
+>
+>                 -dg
+
+--
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн----
+        Shai Simonson, Professor
+        ArsDigita University
+        141 Portland St. (Use 80 Prospect St. for mailing)
+        Cambridge, MA 02139
+
+Voice Mail:     (617) 386-4236
+Fax:            (617) 494-8174
+Email:          shai@stonehill.edu
+Home Page:      http://academics.stonehill.edu/compsci/SHAI.HTM
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-----

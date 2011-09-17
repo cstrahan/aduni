@@ -1,0 +1,36 @@
+
+CLASSFILES= \
+	sunw/demo/sort/BidirBubbleSortAlgorithm.class \
+	sunw/demo/sort/QSortAlgorithm.class \
+	sunw/demo/sort/SortItem.class \
+	sunw/demo/sort/BubbleSortAlgorithm.class \
+	sunw/demo/sort/SortAlgorithm.class
+
+DATAFILES= \
+	sunw/demo/sort/SorterBean.ser
+
+JARFILE= ../jars/sort.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/sort/SorterBean.ser" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/sort/*.class $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+# Rule for running a program to create a serialized SorterBean.
+sunw/demo/sort/SorterBean.ser: $(CLASSFILES) sunw/demo/sort/SorterBeanWriter.class
+	export CLASSPATH; CLASSPATH=. ; \
+	java sunw.demo.sort.SorterBeanWriter $@
+
+clean:
+	/bin/rm -f sunw/demo/sort/*.class sunw/demo/sort/*.ser
+	/bin/rm -f $(JARFILE)
+

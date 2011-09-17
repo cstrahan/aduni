@@ -1,0 +1,89 @@
+
+import Ns, sys
+
+quo_fmt = '''<tr><td>%s</td><td>%s</td><td>%s</td></tr>'''
+
+quo_head = '''<table>
+<tr><td><i>Topic</i></td><td><i>Quote</i></td><td><i>Author</i></td></tr>'''
+
+quo_end = '''</table>
+<br>
+<br>
+<form action=quotation2.py>Enter a new quote:
+<input name=quote type=text size=40>
+<br>
+Who is the author? <input name=author type=text size=20>
+<select name=category>
+<option value=None selected>Pick a category'''
+
+opt_item = '''<option value=%s>%s'''
+
+form_end = '''</select><br>
+Make your own category: <input name=new_cat type=text size=20>
+<input type=submit value=Enter>
+</form><br>'''
+
+html_st = '''<html><head><title>Quotation exercise</title></head>
+<body bgcolor=white>
+<h2>Quotations aplenty!</h2>
+<form action=simple-search.py>Search quotes here:
+<input name=sear type=text size=25>
+<input type=submit value=Search>
+</form>
+<br>
+<hr>'''
+
+html_end = '''<hr><address>
+<a href="tom_hickerson@hotmail.com">tom_hickerson@hotmail.com</a>
+</address></body></html>'''
+
+conn = Ns.GetConn()
+
+failstr='''<tr><td><i>FAIL</i></td><td><i>FAIL</i></td><td><i>FAIL
+</i></td></tr>'''
+
+#begin building the web page here
+
+print 'Content-type: text/html\n'
+print html_st
+
+try:
+   dbase = Ns.DbHandle(Ns.DbPoolDefault(conn.Server()))
+except:
+   print 'can\'t get handle -- do you have a database installed??'
+
+sql = 'SELECT category,quote,author_name FROM quotations;'
+
+print quo_head
+
+def quoteprn(cat,quo,auth):
+    print quo_fmt % (cat,quo,auth,)
+
+try:
+   results = dbase.Select(sql)
+   while dbase.GetRow(results) == Ns.OK:
+      quoteprn(results[0],results[1],results[2],)
+except:
+   print failstr
+
+print quo_end
+
+# a while loop with all the categories
+
+sql2 = 'SELECT DISTINCT category FROM quotations;'
+
+try: 
+   results2 = dbase.Select(sql2)
+   while dbase.GetRow(results2) == Ns.OK:
+      print opt_item % (results2[0],results2[0],)
+except:
+   print opt_item % ('Test','Test',)
+
+print form_end
+print html_end
+
+del dbase
+
+
+
+

@@ -1,0 +1,24 @@
+Output from my PolyDriver2
+
+my1 is Poly[6x^3 + 5x^2 - 4x + 1]
+my2 is Poly[-2x^6 - 8x^4 + 32x^2 + 54x + 21]
+Adding my1 and my2 gives Poly[-2x^6 - 8x^4 + 6x^3 + 37x^2 + 50x + 22]
+Multiplying my1 and my2 gives  Poly[-12x^9 - 10x^8 - 40x^7 - 42x^6 + 224x^5 + 476x^4 + 268x^3 - 79x^2 - 30x + 21]
+Subtracting my2 and my2 gives Poly[0]
+
+Root of Poly[x^2 - 3] is 1.7320508090779185
+Root of Poly[x^2 - x - 1] is 1.618033992126584
+defIntegral of Poly[x^2 - 4] is -5.333333333333334
+
+
+Output from FuncTest2
+
+3.0
+1.7320508
+3.0
+2.236068
+5.0
+1.618034
+0.618034
+0.618034
+5.3333335

@@ -1,0 +1,187 @@
+<HTML> 
+<HEAD> 
+ 
+ 
+ 
+ 
+ 
+</HEAD> 
+<BODY>
+
+<CENTER><H1>Project 2 Specification <br>22 May 2001
+</H1></CENTER>
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+<P>
+<!&#150;_diked_paragraph_&#150;>
+
+<H1>Goals 
+</H1>
+
+<P>
+The goal of this project is to develop&#151;through experience&#151;your 
+ability to:
+
+<UL>
+<LI>Make technical choices. 
+<LI>Predict system performance. 
+</UL>
+
+<H1>The General Message Sorting Problem 
+</H1>
+
+<P>
+We all have too much to read: We are overwhelmed by material, both relevant 
+and irrelevant. One version of the problem is the difficulty of even 
+sorting articles into appropriate categories. We want you to develop 
+software that will assist with this problem.
+
+<P>
+In its simplest form, you can imagine a training set of news articles, each 
+of which is identified by its category. You are to devise a program that 
+uses the training set to learn how to identify the category of subsequent 
+articles.
+
+<H1>The Specific Problem 
+</H1>
+
+<P>
+International Conglomerates, Inc., is a huge multinational corporation that 
+has virtual monopoly on a wide range of industries.
+
+<P>
+Presently, International Conglomerates has a central news center that 
+receives news wires from all over the world.  A human editor reviews each 
+incoming article and classifies it, so that it can be routed to the 
+appropriate division.  Naturally, this is a very labor&#045;intensive and 
+error&#045;prone task.  CEO Ima &#036;avage wonders if it is it possible to build a 
+computer system to do the classification job automatically.
+
+<P>
+You have been hired as a high&#045;powered consultant to look into the problem. 
+You soon determine that there are four divisions within International 
+Conglomerates, each of which is interested in a particular category of 
+news:
+
+<TABLE CELLPADDING=5 BORDER=1><TR><TD> 
+<B>Division</B> </TD><TD><B>Category of interest</B> </TD><TD><B>Typical subjects</B> </TD></TR><TR><TD>
+Conglomo&#045;Organic Division </TD><TD>organic </TD><TD>livestock, sugar, 
+wheat, grain, tea, vegetable oil</TD></TR><TR><TD>
+Conglomo&#045;Petrochemical Division </TD><TD>petrochemicals </TD><TD>crude oil, 
+oil, natural gas, plastics, etc.</TD></TR><TR><TD>
+Conglomo&#045;Metals Division </TD><TD>metals </TD><TD>gold, silver, 
+copper, tin, steel, etc.</TD></TR><TR><TD>
+Conglomo&#045;Finance Division </TD><TD>financial </TD><TD>bond/interest 
+rates, stock market, money supply, etc. 
+</TD></TR></TABLE>
+
+<P>
+In order to help with your task, the Ms. &#036;avage has provided you with a 
+corpus of old news articles and the divisions to which they were routed.
+
+<P>
+The corpus contains articles in the form suggested by the following samples. 
+Evidently, the raw text has been prepared for digestion by a Scheme 
+program:
+
+<UL>
+<LI>Each article is represented as a Scheme expression. 
+<LI>The first element is a unique identification number. 
+<LI>The second element contains the category determined by a human being. 
+<LI>The third element contains a title. 
+<LI>The fourth element contains a place followed by a month and a day. 
+<LI>The fifth element contains the news. 
+<LI>All punctuation has been replaced by special symbols, such as 
+   <CODE>*comma*</CODE>, <CODE>*period*</CODE>, and <CODE>*dash*</CODE>. 
+</UL>
+
+<pre>
+(0000 (financial) 
+     (BANK OF JAPAN INTERVENES IN EARLY TOKYO AFTERNOON) 
+     (TOKYO *comma* April 1) 
+(The Bank of Japan intervened in the market in the early afternoon *comma* 
+ buying dollars around 147 *period* 30 yen and continuing to buy them as 
+ high as 147 *period* 50 yen *comma* dealers said *period* The Bank 
+ intervened just after the dollar started rising on buying by securities 
+ houses at around 147 *period* 05 yen *comma* and hoped to accelerate the 
+ dollar *apostrophe* s advance *comma* they said *period* The dollar rose as 
+ high as 147 *period* 50 yen *period* REUTER)) 
+</pre>
+
+<pre>
+(0001 (organic) 
+     (MALAYSIA CUTS GAZETTED RUBBER PRICE) 
+     (KUALA LUMPUR *comma* April 1) 
+(Malaysian government said it cut the gazetted price of rubber to 202 *dash* 7/8 cents 
+ per kg from 213 *dash* 1/2 cents in March *comma* effective immediately 
+ *period* No export duty is applicable at this level *comma* against 3/8 
+ cent per kg last month *comma* because the government raised the export 
+ duty threshold price to 210 cents per kg in early 1985 *period* The cess 
+ for rubber research and replanting remained unchanged at 3 *period* 85 and 
+ 9 *period* 92 cents per kg respectively *period* REUTER)) 
+</pre>
+
+<H1>Your job 
+</H1>
+
+<P>
+After discussion with Ms. &#036;avage, you agree to write a program that learns 
+to classify such articles on the basis of their content.  That is, you are 
+to write a program that uses the given corpus of human&#045;categorized articles 
+to learn to recognize articles that are not categorized.
+
+<P>
+In particular, given a test file containing articles with empty category 
+expressions, your program will write a file in which each articles is 
+represented as a two&#045;element list containing an identification number and 
+one of four categories, <CODE>ORGANIC</CODE>, <CODE>PETRO</CODE>, <CODE>METAL</CODE>, or 
+<CODE>FINANCIAL</CODE>.  Thus, if the articles in the sample set were 
+provided as a test set, with empty category expressions, your program is to 
+write a file containing the following:
+
+<pre>
+(0000 FINANCIAL) 
+(0001 ORGANIC) 
+</pre>
+
+<P>
+More precisely, you agree to:
+
+<UL>
+<LI>Select a learning approach. 
+<LI>Implement a program based on that approach. 
+<LI>Test your implemented program. 
+<LI>Forecast how well your impementated program will work on subsequent articles. 
+</UL>
+
+<P>
+Your approach and implementation should handle categories, training  
+   data, and test sets in general, not just those of interest to  
+   International Conglomerates.  If we were to change the categories,  
+   training data, and test sets, your approach and implementation should  
+   still work.  Thus, you are not to manually tune your program to the  
+   particular categories provided.
+
+<H1>What you start with 
+</H1>
+
+<P>
+We provide you with a set of  <a 
+href="./">useful utility functions.</a>
+
+<H1>Key Files 
+</H1>
+
+<UL>
+<LI><a href="Problem_Set_02_Files/project.corpus"> A corpus of 
+   old news articles.</a> 
+<LI><a href="Problem_Set_02_Files/test.corpus"> A test file 
+   of the sort used to test your program.</a> 
+</UL>
+
+</BODY></HTML>
+
+
+

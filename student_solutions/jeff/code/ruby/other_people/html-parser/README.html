@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>README.rd</TITLE>
+</HEAD>
+<BODY>
+<H1><A NAME="label:0">html-parser-19990912p1
+</A></H1><!-- RDLabel: "html-parser-19990912p1" -->
+<H2><A NAME="label:1">What is html-parser
+</A></H2><!-- RDLabel: "What is html-parser" -->
+<P>
+The html-parser package is a variant language implementation
+of the Python's SGML parser (sgmllib.py), HTML parser (htmllib.py)
+and Formatter (formatter.py).
+</P>
+<H2><A NAME="label:2">Files
+</A></H2><!-- RDLabel: "Files" -->
+<UL>
+<LI><P>
+README.rd - RD document
+</P>
+<LI><P>
+README.html - HTML document ganerated from README.rd by the rd2.
+</P>
+<LI><P>
+install.rb - Installer
+</P>
+<LI><P>
+sgml-parser.rb - SGML Parser Class
+</P>
+<LI><P>
+html-parser.rb - HTML Parser Class
+</P>
+<LI><P>
+formatter.rb - Formatter Class
+</P>
+<LI><P>
+htmltest.rb - HTML Parser Test Script
+</P>
+</UL>
+<H3><A NAME="label:3">sgml-parser.rb - SGML Parser Class
+</A></H3><!-- RDLabel: "sgml-parser.rb - SGML Parser Class" -->
+<P>
+The sgml-parser.rb defines a class SGMLParser which serves as the basis
+for parsing text files formatted in SGML (Standard Generalized Mark-up
+Language).  In fact, it does not provide a full SGML parser -- it only
+parses SGML insofar as it is used by HTML, and the module only exists
+as a base for the HTMLParser class.
+</P>
+<P>
+Please see
+<A HREF="http://www.python.org/doc/current/lib/module-sgmllib.html">&lt;URL:http://www.python.org/doc/current/lib/module-sgmllib.html&gt;</A>
+for detail.
+</P>
+<H3><A NAME="label:4">html-parser.rb - HTML Parser Class
+</A></H3><!-- RDLabel: "html-parser.rb - HTML Parser Class" -->
+<P>
+The html-parser.rb defines a class HTMLParser which is a parser for
+HTML documents.
+</P>
+<P>
+Please see
+<A HREF="http://www.python.org/doc/current/lib/module-htmllib.html">&lt;URL:http://www.python.org/doc/current/lib/module-htmllib.html&gt;</A>
+for detail.
+</P>
+<H3><A NAME="label:5">formatter.rb - Formatter Class
+</A></H3><!-- RDLabel: "formatter.rb - Formatter Class" -->
+<P>
+The formatter.rb defines 4 classes -- NullFormatter, AbstractFormatter,
+NullWriter and DumbWriter -- which is a generic output formatter and
+device interface.
+</P>
+<P>
+Please see
+<A HREF="http://www.python.org/doc/current/lib/module-formatter.html">&lt;URL:http://www.python.org/doc/current/lib/module-formatter.html&gt;</A>
+for detail.
+</P>
+<H3><A NAME="label:6">htmltest.rb - HTML Parser Test Script
+</A></H3><!-- RDLabel: "htmltest.rb - HTML Parser Test Script" -->
+<P>
+The htmltest.rb is a sample script using html-parser package.
+</P>
+<P>
+Usage: htmltest.rb [HTML_FILE]
+</P>
+<P>
+ex.) <CODE>htmltest.rb index.html</CODE>
+</P>
+<H2><A NAME="label:7">How to install
+</A></H2><!-- RDLabel: "How to install" -->
+<P>
+<CODE>ruby install.rb</CODE>
+</P>
+<PRE>
+or
+</PRE>
+<P>
+<CODE>cp -p formatter.rb html-parser.rb sgml-parser.rb <EM>SOMEWHERE</EM></CODE>
+</P>
+<H2><A NAME="label:8">Author
+</A></H2><!-- RDLabel: "Author" -->
+<P>
+Takahiro Maebashi &lt;maebashi@iij.ad.jp&gt;
+</P>
+<H2><A NAME="label:9">Packager
+</A></H2><!-- RDLabel: "Packager" -->
+<P>
+Katsuyuki Komatsu &lt;komatsu@sarion.co.jp&gt;
+</P>
+<H2><A NAME="label:10">History
+</A></H2><!-- RDLabel: "History" -->
+<DL>
+<DT><A NAME="label:11">  2000-04-28
+</A><!-- RDLabel: "2000-04-28" -->
+<DD>
+<P>
+[ruby-list:22188] Incorporated html-parser.rb and sgml-parser.rb patch
+contributed by Ryunosuke Ohshima &lt;ryu@jaist.ac.jp&gt;.
+Add README.rd and install.rb by the packager.
+</P>
+</DD>
+<DT><A NAME="label:12">  1999-11-10
+</A><!-- RDLabel: "1999-11-10" -->
+<DD>
+<P>
+[ruby-dev:8302] Avoid arity check error of NullFormatter#push_font
+in formatter.rb by the packager.
+</P>
+</DD>
+<DT><A NAME="label:13">  1999-09-12
+</A><!-- RDLabel: "1999-09-12" -->
+<DD>
+<P>
+html-parser-19990912.tar.gz released by the author.
+</P>
+</DD>
+<DT><A NAME="label:14">  1999-04-06
+</A><!-- RDLabel: "1999-04-06" -->
+<DD>
+<P>
+[ruby-list:13345] html-parser-19990406.tar.gz released by the author.
+</P>
+</DD>
+<DT><A NAME="label:15">  1999-03-03
+</A><!-- RDLabel: "1999-03-03" -->
+<DD>
+<P>
+[ruby-list:12521] html-parser-19990303.tar.gz released by the author.
+</P>
+</DD>
+<DT><A NAME="label:16">  1998-01-22
+</A><!-- RDLabel: "1998-01-22" -->
+<DD>
+<P>
+[ruby-list:5974] html-parser.tar.gz (first release) released by the author.
+</P>
+</DD>
+</DL>
+
+</BODY>
+</HTML>

@@ -1,0 +1,382 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>BDK changes</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<h3>
+Changes between BDK 1.0 - July '98 and BDK 1.1</h3>
+
+<ol>
+<li>
+Made beanbox a BeanContext and added associated support for adding Beans
+that are BeanContextChild implementors.</li>
+
+<li>
+Added a method tracing service (MethodTracer) to beanbox's BeanContext.</li>
+
+<li>
+Made Juggler a BeanContextChild and a requestor of the MethodTracer service.</li>
+
+<li>
+Added a menu item toggle for switching beanbox and it's beans between runtime
+and design mode.</li>
+
+<li>
+Fixed bug 4162975 "Getting java.lang.ClassCircularityError while trying
+to load rt.jar into BeanBox".</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - March '98 and BDK 1.0 - July '98</h3>
+
+<ol>
+<li>
+Added support for InfoBus aware Beans in IBSupport.java.</li>
+
+<li>
+Text fields on the property sheet now wait for either focus to be lost
+or a return key entered before setting the text property on the target
+bean.</li>
+
+<li>
+EventTargetDialog and HookupManager now correctly treat checked exceptions
+as an important part of a methods' signature.</li>
+
+<li>
+Added isJuggling() to Juggler.java.</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - February '98 and BDK 1.0 - March '98</h3>
+
+<ol>
+<li>
+Changed SimpleClassLoader.getLocalResource() to be public. It now compiles
+under 1.2.</li>
+
+<li>
+ToolBox.getJarNames() now sorts the names of the returned jars. This allows
+for UI consistency of items displayed in the ToolBox across JDK1.1 implementations.</li>
+
+<li>
+Added a scrollbar to the ToolBox palette! In ToolBox.java, the ToolBoxPanel
+is now contained inside a ScrollPane. More than 16 beans are supported
+and up to 28 are simultaneously visible.</li>
+
+<li>
+Exposed the hidden-state attribute from Report.java. If a bean sets the
+hidden-state attribute in its BeanInfo BeanDescriptor, you can now use
+the "Report..." menu to find out.</li>
+
+<li>
+We only place beans in the Toolbox palette that can be located through
+a JAR manifest entry. In JarLoader.java, createJarInfo() now creates JarInfo
+only for beans that can be located through a manifest entry as per section
+11.6.1 of the 1.0.1 JavaBeans(tm) API Specification.</li>
+
+<li>
+In Wrapper.java, we now warn that tranistional beans may not be supported
+in all bean containers.</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - November '97 and BDK 1.0 - February '98</h3>
+
+<ol>
+<li>
+File|MakeApplet now generates source code to explicitly reinitialize nested
+beans. Only beans with hidden-state are now serialized.</li>
+
+<li>
+ExplicitButtonBeanInfo now sets the "hidden-state" attribute for its BeanInfo.</li>
+
+<li>
+The class names MakeAppletDialog and ObjectInputStreamWithLoader, along
+with their corresponding .java filenames, were shortend to MakeAppDlg and
+ObjectInputStreamLoader ,repectively, to accomodate building the BeanBox
+on platforms with 32 character filename limitations.</li>
+
+<li>
+Made class BeanBoxFrame public.</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - September '97 and BDK 1.0 - November '97</h3>
+
+<ol>
+<li>
+File|MakeApplet now correctly implements the JavaBeans1.01 architecture
+regarding Externalizable and Serializable components.</li>
+
+<li>
+File|MakeApplet now uses EditorProperties to restore global properties
+of BeanBox.</li>
+
+<li>
+Workaround to build BDK on JDK1.1.4.</li>
+
+<li>
+BeanBox now generates meaningful error messages when a class is missing
+in a JAR file on JDK1.1.4.</li>
+
+<li>
+Properties with null values are now reported (and ignored) at startup time.</li>
+
+<li>
+Restored cut/paste, which broke in Sep97.</li>
+
+<li>
+We now provide a plain ZIP packaging of the BDK.</li>
+
+<li>
+Various minor bug fixes, including not clearing BeanBox if a File|Load
+is cancelled, and not deleting a Bean if serialization fails during an
+Edit|Cut.</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - June '97 and BDK 1.0 - September '97</h3>
+
+<ol>
+<li>
+Added a File|MakeApplet menu to create an Applet from the BeanBox.</li>
+
+<li>
+Removed support for nested BeanBoxes, as it was buggy and incomplete.</li>
+
+<li>
+Instantion of classes from a JAR is as needed, not up-front.</li>
+
+<li>
+Fixed major resource leak in SimpleClassLoader that affected large JARs</li>
+
+<li>
+Fixed problems with deserialization of arrays in SimpleClassLoader. The
+corresponding problems in JDK are fixed in JDK1.1.4.</li>
+
+<li>
+Various minor bug fixes, including: parsing of Manifests using continuation
+lines; images from URL's obtained via getResource(); problems with application/x-java-*
+types in some JDKs.</li>
+
+<li>
+Directly depend on java.util.zip.* classes, rather than via sun.tools.jar.</li>
+
+<li>
+Provide feedback when loading via Edit|LoadJar...</li>
+
+<li>
+Improved catching and reporting of exceptional conditions.</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - April '97 and BDK 1.0 - June '97</h3>
+
+<ol>
+<li>
+Various minor bug fixes.</li>
+
+<li>
+Provide better diagnostics when BeanBox can't load a bean</li>
+
+<li>
+Improved BeanBox cursor management on windows.</li>
+
+<li>
+Added support for beans that are in the default package.</li>
+
+<li>
+Added support for lightweight components.</li>
+
+<li>
+Made JellyBean and OurButton into lightweight components.</li>
+
+<li>
+Added the name of the current bean to the PropertySheet title bar.</li>
+</ol>
+
+<h3>
+Changes between BDK 1.0 - February '97 and BDK 1.0 - April '97</h3>
+
+<ol>
+<li>
+Added the revised JavaBeans tutorial.</li>
+
+<li>
+Removed all uses of deprecated AWT APIs from the BeanBox and the sample
+beans.</li>
+
+<li>
+Converted the BeanBox and the sample beans to use the new AWT event model
+throughout. Also made sure that the BeanBox still works correctly with
+beans using the old JDK 1.0 AWT event model.</li>
+
+<li>
+Improved the management of event connections and bound property connections
+inside the BeanBox. Now the BeanBox's Wrapper objects keep track of the
+event listeners associated with each bean and handle the saving and restoring
+of the event "wiring" during serialization. This is consistent with the
+Beans 1.00 spec.</li>
+
+<li>
+Added startup frame to announce when we are loading and analyzing jars.</li>
+
+<li>
+Changed the JAR loader to provide better diagnostics when it has trouble
+loading a bean from a JAR.</li>
+
+<li>
+Added scrollbar support to the PropertySheet. If the PropertySheet tries
+to exceed its current allowed maximum size, we wrap it in a ScrollPane.
+The current maximum size can be changed by stretching the PropertySheet
+frame.</li>
+
+<li>
+Added a new example bean, the BlueBean, that uses Java externalization
+to save and restore its persistent state.</li>
+
+<li>
+Added an item under Edit for serializing out an instantiated Bean. This
+may be useful to define new beans by creating serialized prototypes of
+them.</li>
+
+<li>
+A number of scattered minor bug fixes.</li>
+</ol>
+
+<h1>
+Changes between BDK 1.0 beta-3 and BDK 1.0</h1>
+
+<ol>
+<li>
+The BDK 1.0 depends on the final version of JDK 1.1, which includes the
+java.beans.* API classes.</li>
+
+<li>
+Fully integrated JAR support, so various BDK beta-3 problems around unjarring
+things and getting conflicting class loaders will go away.</li>
+
+<li>
+Added support for invisible beans. These are represented via a small visible
+box. This can be turned on or off using the "view" menu. Added an example
+invisible bean in demo/sunw/demo/misc/TickTock.java</li>
+
+<li>
+Added support for loading serialized beans into the BeanBox. JAR files
+can now name a serialized object as a bean. As part of the buttons.jar
+we now create a serialized bean called "OrangeButton".</li>
+
+<li>
+Added support for turning on and off "design mode" so you can see how your
+beans will look at runtime, using the "view" menu.</li>
+
+<li>
+Added support for beans that are applets. In beans.instantiate if the new
+bean is an applet it will get inited and given a simple AppletStub and
+AppletContext. However note that it is the containing application's responsibility
+to check if a bean is an applet and call "start" after adding the applet
+to an AWT container. The juggler is now an applet as well as a bean.</li>
+
+<li>
+Added sample code in demo/sunw/wrapper for running beans inside a wrapping
+applet.</li>
+
+<li>
+Sample code in demo/sunw/demo/encapsulatedEvents for writing a generic
+event handler that can sink arbitrary kinds of events.</li>
+
+<li>
+Added a tutorial document on using the BDK.</li>
+
+<li>
+Improved the installation for Windows 95 and Windows NT.</li>
+
+<li>
+Various assorted bug fixes, notably around our handling of nested beanboxes
+and rebuilding the menubar.</li>
+</ol>
+
+<h1>
+Changes between BDK 1.0 beta-2 and beta-3</h1>
+
+<ol>
+<li>
+The BDK beta-3 depends on JDK 1.1 beta-3.</li>
+
+<li>
+The java.beans.* API classes are now bundled in JDK 1.1 beta-3. These .class
+files are therefore no longer supplied with the BDK. We still provide reference
+source for these classes in the BDK.</li>
+
+<li>
+The syntax of the String argument to Beans.instantiate has changed. For
+serialized objects this should now be a dot separated string such as "a.b.c",
+which will be converted to a resource name such as "a/b/c.ser". See the
+javadoc for more details.</li>
+
+<li>
+The BeanBox now support JAR files more directly. For example, it reads
+bean classes directly from the JAR files, using a special class loader.
+The JAR file still needs to be unjar-ed by the build mechanism to enable
+adaptor class construction.</li>
+
+<li>
+The BeanBox now runs customizers as modal dialogs. This avoids conflicts
+between property sheet edits and customizer updates.</li>
+
+<li>
+BeanBox method hookups are now more flexible so you can connect event deliveries
+to either methods with the "right" type signature or to methods that take
+no arguments.</li>
+</ol>
+
+<h1>
+Changes between BDK 1.0 beta-1 and beta-2</h1>
+
+<ol>
+<li>
+Fixes for several minor bugs, including:</li>
+
+<ul>
+<li>
+The QuoteMonitor base server dialog would sometimes hang.</li>
+
+<li>
+The VetoableChangeSupport class didn't revert vetoed events correctly.</li>
+
+<li>
+The PropertyChangeEvent constructor didn't save the oldValue correctly.</li>
+
+<li>
+There were problems with IndexedPropertyDescriptor construction.</li>
+</ul>
+
+<li>
+We've moved the default property editor classes from java.beans.editors
+to sun.beans.editors. There had been some confusion over the role of these
+classes. They aren't intended to be API classes in their own right, and
+beans developers shouldn't use them directly. Instead they only exist to
+allow the PropertyEditorManager to provide default property editors for
+the most common Java types. Hopefully moving them to sun.beans.editors
+will clarify that these classes are merely part of the beans implementation,
+that they may be overridden by ISVs, and aren't by themselves public APIs.</li>
+
+<li>
+Promoted java.beans.editors.PropertyEditorSupport to java.beans.PropertyEditorSupport,
+as this class <b>is</b> intended to be a public API.</li>
+</ol>
+
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

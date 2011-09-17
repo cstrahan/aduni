@@ -1,0 +1,201 @@
+\documentclass[10pt]{amsart}
+ 
+\setlength{\parsep}{3pc}
+\setlength{\itemsep}{0.2in}
+
+
+\usepackage{fullpage}
+\usepackage{psfig}
+
+
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\to}{\rightarrow}
+
+\newtheorem{thm}{Theorem}[section] 
+\newtheorem{theorem}[thm]{Theorem} 
+\newtheorem{corollary}[thm]{Corollary} 
+\newtheorem{lemma}[thm]{Lemma} 
+\newtheorem{prop}[thm]{Proposition} 
+\newtheorem{definition}[thm]{Definition} 
+\newtheorem{remark}[thm]{Remark}  
+\newtheorem{fact}{Fact}[section]
+
+\newenvironment{EG}[1]{{\vspace{1 ex}}\noindent {\sc Example.}{#1}{\hfill{$\diamondsuit$}}\\{\vspace{1 ex}}}
+
+
+
+\title[\hskip 0.2inExam 2\hfill Name:\hskip 2in]{Exam 2:  Integral calculus}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{2}
+
+\begin{figure}[h]
+\centerline{
+\psfig{figure=logo.ps}
+}
+\end{figure}
+
+\centerline{\Large{\sc{Month 0: Mathematics for Computer Science}}}
+\medskip
+
+\maketitle
+
+\vfill
+
+
+\centerline{\LARGE{September 17, 2000}}
+
+\vskip 1in
+
+\hskip 2in\Large{Name:}
+
+\vskip 1in
+
+\noindent You may consult your paper containing trigonometric
+identities, but you may not consult any other books or papers.  You
+may use a calculator (or the calculator on your computer), but you may
+not use any other computing or graphing device other than your own
+head! 
+
+\vfill\pagebreak
+
+
+\centerline{\sc Identities that you may need}
+
+\vskip 0.3in
+
+
+$$
+\begin{array}{|c|c|}
+\hline
+1=\cos^2(\theta)+\sin^2(\theta) & \cos^2(\theta)=1-\sin^2(\theta)\\
+\hline
+\cot^2(\theta)=\csc^2(\theta)-1 & \sec^2(\theta)=1+\tan^2(\theta) \\
+\hline
+\end{array}
+$$
+
+If $S_r$ is a sphere of radius $r$, then the volume of $S$ is
+$$
+V(S_r)=\frac{4}{3}\pi r^3.
+$$
+If $C_{r,h}$ is a cylinder of radius $r$ and height $h$ with no lids, then
+the surface area of $C_{r,h}$ is
+$$
+S.A.(C_{r,h})=2\pi rh,
+$$
+and the volume is
+$$
+V(C_{r,h})=\pi r^2h.
+$$
+
+\vfill\pagebreak
+
+
+
+\begin{enumerate}
+
+\item Take the following integrals.
+\begin{enumerate}
+\item $\int_0^2 4x^3-2x+1\  dx$
+\vfill
+\item $\int \tan(\theta)\ d\theta$
+\vfill
+\item $\int 3x^2\ln(x)\ dx$
+\vfill\pagebreak
+\item $\int \frac{4\sin(\theta)-5}{(\sin(\theta)-2)(\sin(\theta)-1)}
+\cdot\cos(\theta)\ d\theta$
+\vfill
+\item $\int_0^{\frac{1}{2}} \frac{1}{1-x}\ dx$
+\end{enumerate}
+
+\vfill\pagebreak
+
+\item Consider the functions $f(x)=x^2$ and $g(x)=x^3$.
+
+\begin{enumerate}
+\item Rotate the region between $f$ and $g$ from $x=0$ to
+$x=1$ around the $y$-axis, and compute the volume of that solid of
+revolution. 
+\vfill 
+\item  Rotate the region between $f$ and $g$ from $x=0$ to
+$x=1$ around the $x$-axis, and compute the volume of that solid of
+revolution. 
+\end{enumerate}
+\vfill\pagebreak
+
+\item A horn shaped solid is formed by a moving circle perpendicular
+to the $y$-axis whose diameter lies in the $xy$-plane and extends from 
+$y=25x^2$ to $y=x^2$.  (See figure below for a rough sketch.)    Find
+the volume of this solid between $y=0$ and $y=5$.
+
+
+\begin{figure}[h]
+\hfill\psfig{figure=horn.ps,width=3in}
+\end{figure}
+
+\vfill\pagebreak
+
+\item ({\sc Short Answer})  Please answer the following questions in
+full English sentences.  (Mathematicians have to write too!)
+
+\begin{enumerate}
+\item If you are given a function $f(x)$ as in the figure below, and
+$a$ and $b$ are numbers between $A$ and $B$, what 
+does $\int_a^b f(x)\ dx$ compute?
+\begin{figure}[h]
+\hfill\psfig{figure=function2.ps,width=2in}
+\end{figure}
+\vfill
+\item Describe when and why $\int_a^b f(x)\ dx$ might be a negative number.
+\end{enumerate}
+
+
+\vfill\pagebreak
+
+\noindent {\sc{Extra problems -- Some logic puzzles.}} Only do these
+problems if you have completed and checked over your exam, and feel like
+taking a look at these!  They will not count
+towards your exam grade, but are meant to be fun problems to think
+about!
+
+\begin{enumerate}
+\item ({\sc Pirates of the Caribbean}) There is a pirate ship of $10$
+pirates, and they have found $100$ gold coins.  Their algorithm for
+dividing up gold coins is the following.  They rank themselves from
+strongest to weakest ($10$ being the strongest), and then the
+strongest pirate (number $10$) suggests a plan for dividing up the
+coins.  The pirates then vote on the plan, and if the plan gets aproved
+by $50\%$ of the group, then that is how the coins are divided.  If
+the plan is not approved, Pirate $10$ is thrown overboard (and
+therefore drowns, since pirates cannot swim), and Pirate $9$ must now
+propose a plan.  You are Pirate $10$.  What do you propose?  (You may
+assume that you do not want to drown, and that the pirates will vote
+for a plan that they feel will maximize their gold coin intake.)
+\vfill\pagebreak
+\item ({\sc Whistling in the dark}) You enter a house, and next to the 
+door, there is a light switch with $3$ switches, all in the off
+position.  You know that one of the switches controls a $60$ watt 
+lightbulb in a closet on the $3^{\mathrm rd}$ floor, and you want to
+determine which one.  You may flip the switches in any way you like,
+and then you must go up to the closet, open the door, and immediately
+deduce which switch controlled the light.  (No running up and down the 
+stairs, and you may assume that the other two switches do not connect
+to anything.)  What do you do?
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+
+
+
+\end{document}

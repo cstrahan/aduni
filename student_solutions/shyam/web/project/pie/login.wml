@@ -1,0 +1,31 @@
+<wml> 		
+	<card id="login" title="PIE"> 
+            <do type="accept" label="Next">
+              <go method="post" href="http://10.11.0.122:8080/test/login-wap.tcl">
+                <postfield name="wml_email" value="$(email)"/>
+                <postfield name="wml_pwd" value="$(pwd)"/>
+              </go>
+            </do>                       
+            <p>
+              Email: 
+              <input type="text" name="email"/><br/>
+	      Password:
+	      <input type="password" name="pwd"/>
+            </p> 
+           </card> 
+</wml>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

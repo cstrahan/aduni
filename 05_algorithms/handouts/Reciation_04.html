@@ -1,0 +1,226 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Breadth-First Search</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>ADU Recitations (Feb 7-8)</title>
+</head>
+<body>
+<h2>ADU Recitations (Feb 7-8)</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#25067">Turning Real-World Problems into CS Problems</a>
+    <li><a href="#25139">Topics for Feb 8</a>
+    <li><a href="#25142">Depth-First Search</a>
+    <li><a href="#25143">Breadth-First Search</a>
+</ul><hr>
+    <a name="25067">
+    <h2>Turning Real-World Problems into CS Problems</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Solving "real-world" problems consists of two parts. On the one hand, you need to know how to solve the common algorithmic problems like sorting arrays or finding a minimum spanning tree in a graph. On the other hand, you have to recognize which CS problem is hiding beneath its camouflage.
+<p>
+So today let's talk about some "serious" problems that occur in real life:
+    
+    
+    
+    
+    <ul>
+<li>Ordering Train Wagons<li>
+Crossing Rivers<li>
+Navigating Boats<li>
+Building the Tower of Babel
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25139">
+    <h2>Topics for Feb 8</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Depth-First Search<li>
+Breadth-First Search<li>
+Median of 5 in 6 comparisons<li>
+Maintaining the median of n dynamically<li>
+Order-Statistic Trees (augmented red-black trees)<li>
+Review of Problem Set 1
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25142">
+    <h2>Depth-First Search</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <h4>DFS in a Binary Tree</h4>
+
+<pre>
+void dfs (TreeElement t) {
+  print(t);
+  if (t.left!=null)  dfs(t.left);
+  if (t.right!=null) dfs(t.right);
+}
+</pre>
+
+<h4>DFS in a Graph</h4>
+
+<pre>
+void dfs (Vertex u) {
+  if (u has been visited before) return;
+  print(u);
+  mark u as visited;
+  for (each vertex v adjacent to u) {
+    dfs(v);
+}
+</pre>
+ 
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25143">
+    <h2>Breadth-First Search</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <h4>BFS in a Binary Tree</h4>
+
+We use a queue to store the nodes of the tree.
+At the start the queue is empty.
+
+<pre>
+void bfs (TreeElement t) {
+  enqueue(t);
+  while (queue is not empty) {
+    x = dequeue();
+    print(x);
+    if (x.left!=null) enqueue(x.left);
+    if (x.right!=null) enqueue(x.right);
+  }
+}
+</pre>
+
+<h4>BFS in a Graph</h4>
+
+We use a queue to store vertices.
+At the start the queue is empty.
+
+<pre>
+void bfs (Vertex u) {
+  enqueue(u);
+  while (queue is not empty) {
+    u = dequeue();
+    print(u);
+    mark u as visited; 
+    for (each vertex v adjacent to u) {
+      if (v has not been visited before) enqueue(v);
+    }
+  } 
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+<p><i>Last modified 2001-02-08</i>
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left>mdettinger@arsdigita.com</td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

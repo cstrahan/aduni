@@ -1,0 +1,335 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>The BeanBox</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<center><a NAME="top"></a></center>
+
+<center>
+<h1>
+The BeanBox</h1></center>
+The BeanBox is a very simple test container. It allows you to try out both
+the BDK
+<a href="examples.html">example beans</a> and your own newly created
+beans.&nbsp; It also contains some <a href="services.html">example services</a>
+for BeanContext aware beans.&nbsp; There is also <a href="javadoc/index.html">BDK
+1.1 javadoc documentation</a> available.
+<p>The BeanBox allows you to:
+<ul>
+<li>
+<a href="#drop">drop beans onto a composition window</a></li>
+
+<li>
+<a href="#resize">resize and move beans around</a></li>
+
+<li>
+<a href="#property">edit the exported properties of a bean</a></li>
+
+<li>
+<a href="#customizer">run a customizer to configure a bean</a></li>
+
+<li>
+<a href="#event">connect a bean event source to an event handler method</a></li>
+
+<li>
+<a href="#bound">connect together bound properties on different beans</a></li>
+
+<li>
+<a href="#save">save and restore sets of beans</a></li>
+
+<li>
+<a href="#applet">make applets from beans</a></li>
+
+<li>
+<a href="#report">get an introspection report on a bean</a></li>
+
+<li>
+<a href="#add">add new beans from JAR files</a></li>
+
+<li>
+<a href="#designMode">toggle execution environment between runtime and
+design&nbsp; mode</a></li>
+
+<li>
+<a href="#methodtrace">write beans which utilize method tracing service</a></li>
+</ul>
+Note that the BeanBox is intended as a test container and as a reference
+base, but it is <b>not</b> intended as a serious application development
+tool.
+<p><i>It must be emphasized that the BeanBox is merely one rather simplistic
+way of representing beans to humans. We expect all bean-based tools to
+use the same standard JavaBeans APIs, but to provide very different ways
+of visually representing beans and different styles for manipulating and
+connecting beans.</i>
+<h1>
+<a NAME="run"></a>Running the BeanBox</h1>
+To start the BeanBox first cd to the beanbox directory and then either
+(on Windows) type "run" or (on Unix) type "run.sh". Note that you need
+to have the Java 2 SDK "bin" directory on your path and you should be using
+Java 2 SDK version 1.2 or later.
+<p>The BeanBox comes up as three separate windows.
+<ul>
+<li>
+The middle window is the main beanbox composition window.</li>
+
+<li>
+The left-hand window is the ToolBox palette displaying available beans
+that can be <a href="#drop">dropped</a> onto the composition window.</li>
+
+<li>
+The right-hand window is a PropertySheet showing the properties for the
+currently <a href="#select">selected</a> bean.</li>
+</ul>
+
+<h2>
+<a NAME="drop"></a>Dropping beans onto the composition window</h2>
+To add a bean to the composition window:
+<ul>&nbsp;
+<li>
+First click on the bean's name or icon in the left-hand ToolBox window.</li>
+
+<li>
+Then click on the location in the center composition window where you want
+the new bean to appear.</li>
+</ul>
+The chosen bean will appear centered at the new location and will become
+the current <a href="#select">selected bean</a> for editing.&nbsp;<a NAME="select"></a>
+<h2>
+Selecting a bean in the composition window</h2>
+The currently selected bean is marked with a black-and-white hashed boundary.
+The right-hand PropertySheet window shows its properties and the "edit"
+menu provides access to its events, bound properties, etc.
+<p>To select a bean you must click the mouse <b>just outside of the bean</b>
+in the boundary area where the black-and-white hashed boundary will appear.
+<p>Some beans (such as the
+<a href="examples.html#ExplicitButton">ExplicitButton</a>
+or the
+<a href="examples.html#Juggler">Juggler</a>) will allow you to select
+the bean by clicking anywhere in the bean, but some other beans (such as
+the
+<a href="examples.html#Molecule">Molecule</a> or the
+<a href="examples.html#ChangeReporter">ChangeReporter</a>)
+won't notice a click on the bean itself, and require you to click in the
+surrounding border area. This behaviour reflects problems with mouse event
+processing which we hope to fix for the final version of the BDK.&nbsp;<a NAME="resize"></a>
+<h2>
+Moving or resizing a bean</h2>
+You can move the currently <a href="#select">selected</a> bean by clicking
+the mouse on one of the black-and-white hashed borders and the holding
+the mouse down and dragging the bean.
+<p>Some beans, such as the
+<a href="examples.html#BeanBox">BeanBox bean</a>
+or the
+<a href="examples.html#ExplicitButton">ExplicitButton</a>, also
+allow themselves to be resized. You can try to resize the currently selected
+bean by clicking on one of the corners of the black-and-white boundary
+and holding the mouse down and stretching the corner out.&nbsp;<a NAME="property"></a>
+<h2>
+Editing a bean's properties</h2>
+You can edit the public properties of the currently
+<a href="#select">selected</a>
+bean using the right-hand PropertySheet window.
+<p>For each editable property the PropertySheet window shows the name of
+the property and its current value. The current value may be shown as:
+<ul>&nbsp;
+<li>
+an editable text field</li>
+
+<li>
+or a selection in a choice menu</li>
+
+<li>
+or a painted value, where you can click on the painted value to bring up
+a small modal dialog for that property.</li>
+</ul>
+So for example, if you select an
+<a href="examples.html#OurButton">OurButton</a>
+bean you can see eight different property values. You can edit the "label"
+property by simply typing in its associated text field. You can edit the
+"debug" property by clicking on the associated choice menu and selecting
+"True" instead of "False". You can edit the "font" property by clicking
+on the displayed sample text, which brings up a small dialog window that
+lets you use choice menus to select the font name, font style, and point
+size. Note that this is a modal dialog and you must click on "done" before
+you can continue.&nbsp;<a NAME="customizer"></a>
+<h2>
+Using a bean Customizer</h2>
+For those beans that have <i>customizers</i>, the BeanBox allows you to
+run the customizer to configure your bean.
+<p>If the currently selected bean has a customizer, then the "edit" menu
+on the central window will include a "Customize..." entry. If you select
+that entry, then a dialog window will come up with the bean's customizer.
+<p>Two of the example beans have a customizer. The
+<a href="examples.html#ExplicitButton">ExplicitButton</a>
+has a trivial customizer that simply lets you set the button's label. The
+<a href="examples.html#SELECT">JDBC
+SELECT</a> bean has a much more interesting customizer that will try to
+connect through JDBC to a local database to help you create a SQL query.
+<p><a NAME="event"></a>
+<h2>
+Connecting an event handler</h2>
+The BeanBox allows you to connect an event from the currently selected
+bean to a target event handling method on any other bean.
+<p>The "edit" menu on the central composition window has an "events" menu
+that has a sub-menu for all the different kinds of events that the currently
+selected bean fires. These events are grouped and named according to their
+EventListener interfaces. So for example, if you select an
+<a href="examples.html#ExplicitButton">ExplicitButton</a>
+bean you will see that it has two EventListener interfaces "button push"
+and "bound property change", each of which contain a single event.
+<p>If you select one of the events from this menu, the BeanBox will start
+drawing a "rubber band" line from the source bean. You can then click on
+the border of the target bean to which you want the event delivered. (Note
+that as for
+<a href="#select">selection</a>, you may need to click on the
+target bean's border rather than on the bean itself.)
+<p>The BeanBox will then check for methods in the target bean that accept
+the same EventObject argument that is fired by the source event. You will
+then be offered a dialog box to chose which matching method you would like
+to have called when the source event is fired. After you select a method,
+the BeanBox will generate, compile, and load an event adaptor class to
+connect the source bean's event to the target event handler method.
+<p>Try this out by connecting an
+<a href="examples.html#ExplicitButton">ExplicitButton's</a>
+button push event to a
+<a href="examples.html#Juggler">Juggler's</a>) start
+method. Now when you push the button the Juggler will start juggling.
+<p><i>Note that this particular visual style for connecting up events isn't
+part of the beans architecture, nor is the associated search for a handler
+method with a particular method signature. Professional application development
+environments may do things like providing users with a handler method template
+and allowing the user to type in Java code for an event handler.</i>
+<p><a NAME="bound"></a>
+<h2>
+Connecting a bound property</h2>
+The BeanBox allows you to connect a bound property from a source bean to
+a target property on some other bean. Then when the bound property on the
+source bean is changed, the associated target property is also automatically
+updated.
+<p>If the currently selected bean supports bound properties, then the "edit"
+menu will include a "Bind property..." item. If you chose this menu item,
+then the BeanBox will bring up a dialog showing the bound properties available
+on the source bean. You can then select a source property and press "OK".
+The beanbox will then draw a "rubber band" line. You can then click on
+the border of the target bean to which you want the property bound. (Note
+that as for
+<a href="#select">selection</a>, you may need to click on the
+target bean's border rather than on the bean itself.)
+<p>The BeanBox will then bring up a dialog listing the target properties
+on the target bean that match the the of the source property. You can select
+a target property and press "OK".
+<p>Now when you change the source property on the source bean then the
+target property on the target bean will also be updated.
+<p>Try this out by connecting up the background colors on two
+<a href="examples.html#ExplicitButton">ExplicitButtons</a>
+and then use the PropertySheet to change the background color of the source
+bean.
+<p><a NAME="save"></a>
+<h2>
+Saving and restoring beans</h2>
+Once you have set up some beans in the BeanBox, you can use the "File"
+menu's "Save.." sub-menu to save away the current state of the BeanBox.
+<p>This uses
+<a href="http://java.sun.com/beans/related.html">Java Object
+Serialization</a> to automagically store away all the state of the beans
+into a named file.
+<p>You can then use the "File" menu's "Clear" item to discard the current
+set of beans and use the "Load..." item to read in and recreate all the
+serialized beans.
+<p>This provides a simple way to test the use of serialization with your
+beans.
+<p><a NAME="applet"></a>
+<h2>
+Making applets from beans</h2>
+You can also set up some beans in the BeanBox and then use "File" menu's
+"MakeApplet" item to create an Applet that behaves like this set of beans.
+The resulting Applet uses
+<a href="http://java.sun.com/beans/related.html">Java
+Object Serialization</a> to record the state of any beans effectively containing
+hidden-state, otherwise, it calls Beans.instantiate() to create a new bean.
+Only bean properties that have changed during the BeanBox session in which
+the applet was generated are restored.
+<p>Invoking the MakeApplet item will create a JAR file that contains the
+serialized data (if any) plus hookup and other classes. The action will
+also create a test HTML file that uses that JAR file (plus any other JAR
+files containing the buttons used in the Applet), a subdirectory with Java
+source files plus makefiles, and a "readme" file with more details.
+<p>The generated applet can be used in any fully compliant Java 2 SDK version
+1.2 browser. A simple test platform is the appletviewer from the
+<a href="http://java.sun.com/products/jdk/1.2/index.html">Java
+2 SDK distributions</a>. Another fully compliant browser is the
+<a href="http://java.sun.com/products/hotjava">HotJava
+Browser</a>.
+<p>The preview2 release of Internet Explorer 4.0 has a couple of problems:
+<ul>
+<li>
+JAR files are not yet working; you will need to expand the JAR files and
+modify the generated HTML files. There are more explicit directions in
+the generated readme file.</li>
+
+<li>
+There is a problem with deserialization which causes deserialized components
+not to listen to mouse events.</li>
+</ul>
+The generated applet will not work in the 4.0 and 4.01 versions of Netscape
+Communicator.
+<p><a NAME="report"></a>
+<h2>
+Getting an introspection report on a bean</h2>
+If you want to see all the properties, methods, and events that the Beans
+introspector has found on a
+<a href="#select">selected</a> bean, you can
+use the BeanBox's "report" menu item under the "edit" menu.
+<p>This generates a summary report to the standard output of the introspection
+information for the selected bean.
+<h1>
+<a NAME="add"></a>Adding your bean to the BeanBox</h1>
+When the BeanBox starts it loads all the <a href="jar.html">JAR files</a>
+that it finds in the "jars" directory. The BeanBox uses the
+<a href="jar.html#manifest">manifest
+file</a> in each JAR file to identify any bean classes in the JAR file,
+and adds those beans to the ToolBox palette in the BeanBox.
+<p>To add your bean to the BeanBox, you must wrap it up in a JAR file which
+contains a suitable manifest file describing the bean. Take a look at one
+of the example bean makefiles such as
+<a href="../demo/juggler.mk">demo\juggler.mk</a>
+(for Windows nmake users) or
+<a href="../demo/juggler.gmk">demo/juggler.gmk</a>
+(for Unix gnumake users) to see how to create a manifest file and a JAR
+file.
+<p>Once you have a suitable JAR file, simply add it to the "jars" directory
+and restart the BeanBox, or load the JAR directly using the "LoadJar..."
+item in the "File" menu.
+<h1>
+<a NAME="designMode"></a>Toggling between runtime and design mode</h1>
+The beanbox controls the execution environment of any beans that implement
+the DesignMode interface and are PropertyChangeListeners for the designMode
+property.&nbsp; The beanbox controls the execution mode from the View menu.
+<p>The Juggler demo is an example of a bean that has a BeanContextChild
+proxy and implements the DesignMode interface.
+<h1>
+<a NAME="methodtrace"></a>Utilize MethodTracer service</h1>
+The BeanBox now includes some <a href="services.html">example BeanContext
+services</a>, one of which is a service for providing simple method tracing
+and debug statement logging.&nbsp; By writing beans that implement BeanContextChild
+and request the MethodTracer service, you can incorporate simplistic debugging
+into your bean.&nbsp; Note that the MethodTracer class may not work properly
+on all VMs.&nbsp; The logic in the trace method depends upon formatting
+of the message associated with an exception and this is not standardized.&nbsp;
+It is simply intended to demonstrate the registration, request and utilization
+of a BeanContext service.
+<p>
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

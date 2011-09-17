@@ -1,0 +1,144 @@
+.include "shared\beta"
+
+        BR(main)
+
+x1= 3                           | x1 is at offset bp-3
+y1= 4                           | y1 is at offset bp-4
+x2= 5                           | x2 is at offset bp-5
+y2= 6                           | y2 is at offset bp-6
+level=7                         | level is at offset bp-7
+xdist= 0                        | xdist is at offset bp+0
+ydist= 1                        | ydist is at offset bp+1
+
+|||||||||||||||||||||||||||||||||||||
+drawLine:
+        PUSH(lp)                | standard stack stuff
+        PUSH(bp)                | ...
+        MOV(sp, bp)             | ...
+
+dodraw:
+        ST(r31, OUTPUTDATA)     | signal start of line with 0 byte
+        LD(bp, -x1, r0)         | x1
+        ST(r0, OUTPUTDATA)      | send x1 to terminal
+        LD(bp, -y1, r0)         | y1
+        ST(r0, OUTPUTDATA)      | send y1 to terminal
+        LD(bp, -x2, r0)         | x2
+        ST(r0, OUTPUTDATA)      | send x2 to terminal
+        LD(bp, -y2, r0)         | y2
+        ST(r0, OUTPUTDATA)      | send y2 to terminal
+
+        MOV(bp,sp)              | standard stack stuff
+        POP(bp)                 | ...
+        POP(lp)                 | ...
+        JMP(lp)                 | return
+
+||||||||||||||||||||||||||||||||||||||
+fractal:
+        PUSH(lp)
+        PUSH(bp)
+        MOV(sp, bp)
+        ALLOCATE(2)
+
+        LD(bp, -level, level)
+        BRZ(level, dodraw)
+        
+recurse:
+        LD(bp, -x1, x1)
+        LD(bp, -x2, x2)
+        SUB(x2, x1, xdist)
+        SRAC(xdist, 1, xdist)
+        LD(bp, -y1, y1)
+        LD(bp, -y2, y2)
+        SUB(y2, y1, ydist)
+        SRAC(ydist, 1, ydist)
+        ST(xdist, xdist, bp)
+        ST(ydist, ydist, bp)
+        SUBC(level, 1, level)
+        ST(level, -level, bp)
+
+        PUSH(level)
+        ADD(x1, ydist, x2)
+        SUB(y1, xdist, y2)
+        PUSH(y2)
+        PUSH(x2)
+        PUSH(y1)
+        PUSH(x1)
+        ST(y2, -y1, bp)
+        ST(x2, -x1, bp)
+        CALL(fractal, 5)
+
+        LD(bp, -level, level)
+        PUSH(level)
+        LD(bp, ydist, ydist)
+        LD(bp, xdist, xdist)
+        LD(bp, -y1, y1)
+        LD(bp, -x1, x1)
+        ADD(y1, ydist, ydist)
+        PUSH(ydist)
+        ADD(x1, xdist, xdist)
+        PUSH(xdist)
+        PUSH(y1)
+        PUSH(x1)
+        ST(xdist, -x1, bp)
+        ST(ydist, -y1, bp)
+        CALL(fractal, 5)
+
+        LD(bp, -level, level)
+        PUSH(level)
+        LD(bp, ydist, ydist)
+        LD(bp, xdist, xdist)
+        LD(bp, -y2, y2)
+        LD(bp, -x2, x2)
+        LD(bp, -x1, x1)
+        LD(bp, -y1, y1)
+        SUB(y2, xdist, y2)
+        PUSH(y2)
+        ADD(x2, ydist, x2)
+        PUSH(x2)
+        PUSH(y1)
+        PUSH(x1)
+        ST(x2, -x1, bp)
+        ST(y2, -y1, bp)
+        CALL(fractal, 5)
+
+        LD(bp, -level, level)
+        PUSH(level)
+        LD(bp, -x1, x1)
+        LD(bp, -y1, y1)
+        LD(bp, -x2, x2)
+        LD(bp, -y2, y2)
+        PUSH(y2)
+        PUSH(x2)
+        PUSH(y1)
+        PUSH(x1)
+        CALL(fractal, 5)
+
+        MOV(bp, sp)
+        POP(bp)
+        POP(lp)
+        JMP(lp)
+
+|||||||||||||||||||||||||||||||||||||||
+main:
+        MOVC(stack, sp)         | initialize the stack
+
+getlevel:
+        LD(INPUTDATA, r0)       | get key from keyboard
+        BRZ(r0, getlevel)       | repeat if key wasn't typed
+
+        ST(r0, OUTPUTDATA)      | display key typed
+        SUBC(r0, '0', r0)       | subtract from char '0' to get value
+
+        PUSH(r0)                | push level
+        MOVC(192, r0)           | 192
+        PUSH(r0)                | push y2
+        PUSH(r0)                | push x2
+        PUSH(r0)                | push y1
+        MOVC(64, r0)            | 64
+        PUSH(r0)                | push x1
+        CALL(fractal, 5)        | call fractal
+
+        HALT()                  | halt when done
+
+stack:
+

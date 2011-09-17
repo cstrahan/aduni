@@ -1,0 +1,22 @@
+Things still to do
+------------------
+addition of comments
+coherent GUI
+debugging
+documentation?
+downloads <-- DONE(JMR)
+limiting connections (almost done) <-- DONE (JMR)
+limiting number of query results! <-- DONE (JMR)
+other features?
+packaging (as .jar)
+pong harvesting
+preferences <-- DONE(TONY)
+integration of prefs into GUI
+stability testing
+timeout threads
+upload table
+nicers prefs dialog
+ASCII prefs file (human editable)
+console use
+
+

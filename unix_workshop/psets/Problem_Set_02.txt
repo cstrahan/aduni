@@ -1,0 +1,71 @@
+
+PSET2 - Infinite monkeys, infinite typewriters
+
+1. Become root and grab a copy of your syslog.  This is a file containing
+various log messages from the services running on your machine.  Like most
+log files, it lives in the directory /var/log.  Copy it into your
+unix-course directory, and change it to be owned by you.
+
+There is a lot of cruft and extra information in syslog, so we need a way
+to condense the useful information.  Look at the format of each message:
+
+May 23 07:05:15 localhost ypbind[213]: broadcast: RPC: Timed out.
+
+Here we have the date, the name of the machine, a service with its PID
+(process ID), and then some service dependent message.  Count the number of
+messages from the kernel.
+
+Say you want to find out which services are writing to syslog.  Write a
+shell command (or a series of commands joined by pipes) which will pull out
+the names of the services (here "ypbind"), and present back to the user a
+list of the unique service names.  Note that ypbind[213] and ypbind[386]
+are really the same service, just different actuall processes.  (This may
+appear to be an exercise in learning to use sed, tr, grep or some other
+similar utilities.  It is really an exercise in skirting around the weak
+documentation and minor misimplementation of these utilities. )
+
+Shell Scripts
+=============
+
+1. One the video server we have a directory structure that allows for
+transparently storing the realmedia files on multiple partitions.
+Each partition is mounted under /real/d01,/real/d02,etc, and in
+/real there are symbolic links to the actual files.  In addition,
+there are .ram files in /real/ which contain a single line referencing
+the .rm file in the same directory.
+For example, 
+
+  $ ls /real
+  05-10-01Lect.rm ->  d03/05-10-01Lect.rm
+  05-10-01Lect.ram
+  04-05-01Lect.rm ->  d04/04-05-01Lect.rm
+  04-05-01Lect.ram
+  $ cat 05-10-01Lect.ram
+  rtsp://64.64.103.140/05-10-01Lect.rm
+  $ cd /real
+  $ ls d02
+  03-01-01Lect.rm
+  $
+
+Write a script which looks in all subdirectories that are listed on the
+command line (arguments to the shell can be reference by the shell
+variable $*), creates symlinks from the current directory to files in the
+given subdirectories if they do not exist, and creates the corresponding
+.ram files.  In the above example, running your script from /real, with
+the argument d02, would create a symbolic link in /real that points to
+03-01-01Lect.rm and a new file /real/03-01-01Lect.ram that contained a
+single line, "rtsp://64.64.103.140/03-01-01Lect.rm".
+
+2. Diff, only better
+There are times when you would like to compare two files, but are not
+interested in differences in comments.  Let's take java files, for
+instance.  Write a script which takes two filenames, removes the
+text that would be commented out by '// ...' and '/* ... */', and then runs
+diff on the results. 
+
+3. See homework 3 from the Cornell course.  Obviously you can ignore the
+cornell specific instructions about where to put your files and such.
+
+BONUS:  Write a shell script that prints itself out.  There is an easy way
+- using the shell's ability to read a file from the filesystem - and a
+harder way ala Shai's Logo program.

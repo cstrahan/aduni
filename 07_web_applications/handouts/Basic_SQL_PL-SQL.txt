@@ -1,0 +1,119 @@
+KEY
+---
+Curly braces group alternatives together, 
+  and alternatives are separated by pipes:  {this | that | t'other}
+Clauses in brackets are optional:            You [and john] can come.
+An asterisk indicates 0 or more instances:   I like to eat[ and eat]*.
+A plus-sign indicates 1 or more instances:   Run fast,[ go]+!
+A plus-sign also indicates addition:         select (1 + 3) from dual;
+
+Elements are defined in terms of other elements.  
+  <number> : [0-9]+  means that a number is composed of one or more digits.
+  <datatype>: {integer | char(<number>) | varchar2(<number>) | date}
+means that a <datatype> element is one of the four strings shown.
+  <column-set>: <column> = <expression>
+means that a <column-set> element is composed of a <column>, followed by
+an equals sign and an <expression>.
+
+Readability of PL/SQL is much improved by highlighting certain keywords;
+this is why some word are in all caps.
+---
+
+
+INSERTS and UPDATES
+-------------------
+<insert>: insert into <tablename> [<columns>] {values <values> | <select>} 
+<select>: select [distinct] <columns> from <tables> [<where>] [group-by]
+<select-union>:  <select> union <select> [<order-by>]
+<select-order>:  <select> <order-by>
+
+<update>    : update <tablename> set <column-set> [, <column-set>] [<where>]
+<column-set>: <column> = <expression>
+<update-from-query>: update <tablename> set <columns> = <select> [<where>]
+
+
+FUNDAMENTALS
+------------
+<name>    : [a-zA-Z][a-zA-Z0-9_]*   - that is, a string of alphanumeric chars
+                                   and underscores starting with an alpha char.
+<number>  : [0-9]+
+<datatype>: {integer | char(<number>) | varchar2(<number>) | date}
+
+<ora-alias>: a temporary nickname for a table or column, for the purposes
+             of condensing a query.
+
+LITERALS
+--------
+<value>      : {<number> | <string> | <number-expr> | <string-expr>}
+<values>     : ( <value> [, <value>]* )
+<number-expr>: {<number> | <column-name>} +  [<number> | <column-name>]*
+<string-expr>: {<string> | <column-name>} || [<string> | <column-name>]*
+
+
+NAMES and DEFINITIONS
+---------------------
+<column-name>: name of a column in a table in the current scope
+<columns>    : ( <column-name> <ora-alias> [, <column-name> <ora-alias>]* )
+<new-column> : <name> <column-def>
+<new-columns>: <new-column> [, <new-column>]*
+<column-def> : <datatype> [default <value>] [<constraint>]*
+
+<table-name> : name of a table in the current scope
+<tables>     : <table-name> <ora-alias> [, <table-name> <ora-alias>]* 
+
+<constraint> : {not null | primary key | references <table-name>}
+
+
+CREATION
+--------
+<create-table-new> : create table <name> ( <new-columns> )
+<create-table-from>: create table <name> as <select>
+
+<create-tablespace>: create tablespace <name> datafile '<filespec>'
+           size 50m autoextend on default storage (pctincrease 1);
+<filespec>         :  /opt/ora8/m02/oradata/ora8/<name>01.dbf
+
+<create-user> : create user <name> identified by <db-password> 
+       default tablespace <name> temporary tablespace temp quota 
+       unlimited on <name>;
+<grant-user>  : grant connect, resource, ctxapp to <name>;
+                grant javasyspriv to <name>;
+
+
+ADDING, DROPPING, AND DELETION
+------------------------------
+<add-column> : alter table <table-name> add ( <new-columns> )
+<drop-column>: alter table <table-name> drop column <column-name>
+
+<drop>  : drop {table|view|sequence|function} <name> 
+<delete>: delete from <table-name> [<where>]
+
+
+
+PL-SQL BASICS
+-------------
+<var-name> : A variable passed into a function, or definied in <declarations>
+<argument> : <name> IN <datatype>
+<arguments>: <argument> [, <argument>]*
+<args>     :    <value> [, <value>]*
+
+
+PL-SQL
+------
+<create-function>: create or replace function <name> ( <arguments> )
+            return <datatype> AS [<declarations>] BEGIN <function-body> END;
+
+<declarations> : <name> <datatype>[:= <value>];
+<function-body>: [{<statement> | <loop>};]*  
+                    return {<var-name> | <value>};
+
+<statement>: { <var-name> := {<expression> | <function>} |  
+               open cursor <cursor-name>                 |
+               fetch <cursor-name> into <var-name>}      |
+               
+<loop>     : LOOP [{<statement> | <loop>};]*
+               exit when <condition>
+             END LOOP; 
+
+<ora-call-function>: select <name>(<args>) from dual;
+

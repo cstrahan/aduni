@@ -1,0 +1,307 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Employee SpeechWorks">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+   <title>lecture12</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Network Programming</h2>
+
+<h3>
+Introduction: Network Protocols
+</h3>
+<ul>
+<li>Layered stack of protocol standards
+  <ul>
+  <li>HTTP | FTP | SMTP | NNTP
+  <li>TCP | UDP
+  <li>IP Layer -- packet routing
+  <li>Transport layer (Etherner, PPP)
+  </ul>
+<li> Transport layer - point to point delivery of packets, over single
+network.
+<li> Internet Protocol Layer : Internet packet transport.
+  <ul>
+  <li> Deals with routing packets though connected networks to final 
+  destination. 
+  <li> Supports Internet addressing scheme, 4 byte addresses
+  <li> Not reliable. No packet delivery guarantees
+  </ul>
+<li> TCP
+  <ul>
+  <li> Implements reliable stream semantics (usually on top of IP)
+  <li> Resends dropped packets, deals with buffering, timeouts.
+  </ul>
+</ul>
+<hr>
+<h3>Sockets</h3>
+<ul>
+<li> Sockets are a common abstraction for dealing with TCP connections.
+Originally developed at Berkeley for UNIX, now supported by Windows, Linux,
+Java.
+<li>Client/server paradigm
+  <ul>
+  <li>Client - opens a connection to remote application
+  <li>Server - listens for open requests from clients. Completes connection
+      and services client.
+  </ul>
+<li>Once connection is established either side can send data (full duplex 
+connection).
+</ul>
+<h3>Internet Addresses</h3>
+<ul>
+<li>Client refers to remote application through hostname:port pair.
+<li>Hostname
+  <ul>
+  <li>Internet addresses: 4-byte addresses usually represented as dotted
+      tuple eg. 205.0.20.1
+  <li> Address 127.0.0.1 is special loopback address. Always refers to
+       host machine
+  <li>Domain addresses: familiar dotted strings. Resolved to IP addresses
+       through DNS service and protocol. Domain names registered by a number
+       of conpanies.
+  <li>Port number. Small integer indicating application. By convention,
+      standard application listen on standard ports. Ex HTTP on port 80,
+      telnet on port 25. Ports under 1000 require root premission on UNIX.
+  </ul>
+</ul>
+<hr>
+<h3>Java Sockets</h3>
+<ul>
+<li> Java Implementation of Sockets. Somewhat easier to use use than
+the usual C interface. Hides many details.
+<li> As always, implemented with objects
+  <ul>
+  <li> Socket - Basic connection object
+  <li> ServerSocket object - server side listener
+  </ul>
+</ul>
+<h3> Client-side programming</h3>
+<ul>
+<li>Ex: 
+<pre>
+Socket s = new Socket("www.arsdigita.com",80);
+</pre>
+<li> Translates domain name to IP address.
+<li> Attempts to open connection. Throws exception on error.
+<li> Application must catch exceptions. What can go wrong:
+  <ul>
+  <li> No IP address for domain names
+  <li> Connection refused
+  <li> Connection request times out, host doesn't respond.
+  <li> Depends on host OS for timeout params, network services
+  </ul>
+<li> Constructors block until connection completes or times out. If 
+responsiveness is important. Use separate thread to establish connection.
+<li>Once socket is established, use getInputStream(), getOutputStream()
+to get stream objects. These connect with the normal I/O stream zoo.
+<li>Use setTimeout() to set connection timeouts.
+</ul>
+<h3> Network Protocols</h3>
+<ul>
+<li> There are a variety of paradigms for network programming and
+applications. A discussion of network architecures and distributed programming
+is outside the scope of this lecture. It is, howver, worth mentioning one
+paradigm common on the Internet: client-server applications
+<li>In a client-server architecture, server machines perform the 
+main application functions, maintain the database, perform transactions, etc. 
+Client processes connect to the server machines
+and make requests or issues commands to the server. Typically the client
+manages the user interface. Most of the common internet applications
+fall into this catagory. For example, the Web, News, FTP, 
+and networked file systems, are all client server architecture.
+[Note: Client-server means different things to different people. Some would
+reserve it for system with a specialized and complex client and would
+disagree that Web applications are examples of client-server architectures.
+They are entitles to their opinion.]
+<li> In order for any network application to succeed, the programs involved,
+whether clients or servers must communicate in some way. This communication
+standard or "protocol" is generally published and represents the external
+interface of the clients and servers over the network. It is an interface in
+the sense that it specifes the behavior of the client and server independent
+of their implementation.
+<li> Netowkr protocols differ from the types of interface we have seen in
+Java in that they are not defined in terms of method calls, but in terms
+of messages.
+<li> A typical network protocol consists of a set of transactions or operations
+that the protocol will support. Each operation is broken down into
+a sequence of messages sent between the interacting computers. The protocol
+specification shoudl describe in detail the sequence, usage, and format
+of each of these messages.
+<li> Message formats can be binary or text. In a binary format,
+the protocol specification must describe the content and meaning of each byte
+send over the network.
+<li> Many of the common Internet protocols are text-based including HTTP,
+the protocol behind the Web.
+<li> Netowrk protocols for internet application are usual published 
+as RFC's (Request for Comment). Many of these were developed by individuals
+or small groups in the early days of the internal. Increasingly, for
+better or worse, international standards bodies are responsible
+for developing protocols.
+<li> Below is an example of an interaction between client and server using 
+the protocol behind Usenet News. The protocol is known as NNTP,
+<em> Network News Transfer Protocol</em>. (RFC 977). Each line following
+the C: or S: represents exactly what the client or server sends over
+the network. (Port 119 is the standard port for NNTP service.)
+<pre>
+                    S:      (listens at TCP port 119)
+
+                    C:      (requests connection on TCP port 119)
+                    S:      200 wombatvax news server ready - posting ok
+
+                    (client asks for a current newsgroup list)
+                    C:      LIST
+                    S:      215 list of newsgroups follows
+                    S:      net.wombats 00543 00501 y
+                    S:      net.unix-wizards 10125 10011 y
+                            (more information here)
+                    S:      net.idiots 00100 00001 n
+                    S:      .
+
+                    (client selects a newsgroup)
+                    C:      GROUP net.unix-wizards
+                    S:      211 104 10011 10125 net.unix-wizards group selected
+                            (there are 104 articles on file, from 10011 to 10125)
+
+                    (client selects an article to read)
+                    C:      STAT 10110
+                    S:      223 10110 <23445@sdcsvax.ARPA> article retrieved - statistics
+                            only (article 10110 selected, its message-id is
+                            <23445@sdcsvax.ARPA>)
+
+                    (client examines the header)
+                    C:      HEAD
+                    S:      221 10110 <23445@sdcsvax.ARPA> article retrieved - head
+                            follows (text of the header appears here)
+                    S:      .
+
+                    (client wants to see the text body of the article)
+                    C:      BODY
+                    S:      222 10110 <23445@sdcsvax.ARPA> article retrieved - body
+                            follows (body text here)
+                    S:      .
+
+                    (client selects next article in group)
+
+                    C:      NEXT
+                    S:      223 10113 <21495@nudebch.uucp> article retrieved - statistics
+                            only (article 10113 was next in group)
+
+                    (client finishes session)
+                    C:      QUIT
+                    S:      205 goodbye.
+</pre>
+<li> Other common Internet protocols (with application, RFC, and default port)
+are:
+<ul> 
+<li> HTTP - WWW protocol - RFC2068 - port 80
+<li> NNTP - Net News - RFC977 - port 119
+<li> SMTP - mail transfer - RFC821 - port 25
+<li> FTP - file transfer - RFC959 - port 21
+<li> Telnet - remote connection - RFC854 - 23
+<li> Finger - system users info - RFC 1288 - port 79
+</ul>
+<li> HTTP servers usually operate on port 80. To access a file on
+an HTTP server, a program opens a socket on port 80 then sends the
+line
+<pre>
+GET /path/to/file.html HTTP/1.0
+<pre>
+followed by 2 newline characters '\n'. (Of course /path/to/file.html is
+the actual file path including any query string info).
+<li> Below is a sample program that requests a page from a site and path
+specified on the command line.
+import java.io.*;
+import java.net.*;
+<pre>
+class Download{
+
+    public static void main(String[] args){
+	Socket s = null;
+	PrintWriter fout;
+	BufferedReader fin;
+	try{
+	    s = new Socket(args[0],80);
+	    System.out.println("connected");
+	    fout = new PrintWriter(
+                        new OutputStreamWriter(s.getOutputStream()));
+	    fin = new BufferedReader(
+                      new InputStreamReader(s.getInputStream()));
+	    String path = "GET " + args[1] +  " HTTP/1.0\n\n";
+	    // send GET
+	    fout.print(path);
+	    // Must flush or command never gets sent!!
+	    fout.flush();
+	    //read response
+	    String line;
+	    System.out.println("sent request");
+	    while((line = fin.readLine()) != null){
+		System.out.println(line);
+	    }
+	    s.close();
+	}
+	catch(IOException e){
+	    System.out.println("Cannot connect");
+	}
+    }
+
+}
+</pre>
+<h3> Server-side programming</h3>
+Programming the server-side of a socket app is a little different if
+just as straightforward. The server listens on a port until some client
+makes a connection. It then accepts the connection (in the form of a socket).
+The normal Input and Output streams are set up and communication can
+commence.
+<ul>
+<li>Ex: 
+<pre>
+// Create listener on port 2000
+ServerSocket ss = new ServerSocket(2000);
+// Starts listening on server socket. THis call block until a client
+//  connects. It returns with the connected socket. The server socket
+//  remains alive, but will not accept more connections until another 
+//  call to accept().
+Socket s = ss.accept();
+// get Input and Output streams on s, and perform server app.
+</pre>
+<br>
+<li> ServerSocket stops listening after accept() returns.
+<li> If server want to service more than one connection, use separate
+thread to call accept() on ServerSocket. Create new thread for each
+established connection. Original thread should call accept() again
+and wait for new connection.
+</ul>
+<h4>InetAddress class</h4>
+Java provides a useful class for dealing with Internet Addresses. This class
+has methods to convert from domain names to IP addresses and back. It can
+also be used to get the local host address.
+<p>
+Below is a short program which prints out the host name and IP address
+of the machine on which it is run. 
+<pre>
+import java.io.*;
+import java.net.*;
+
+class MyAddr{
+
+    public static void main(String[] args){
+	try{
+	    InetAddress in = InetAddress.getLocalHost();
+	    System.out.println(in.getHostName());
+	    System.out.println(in.getHostAddress());
+	}
+	catch(IOException e){
+	}
+    }
+
+}
+</pre>
+<h4>URL support classes</h4>
+
+</body>
+</html>
+
+

@@ -1,0 +1,9 @@
+ruby testrace.rb
+ruby testplanet.rb
+ruby testship.rb
+ruby testboard.rb
+ruby testrules.rb
+ruby testplayer.rb
+ruby testcommand.rb
+ruby testgame.rb
+

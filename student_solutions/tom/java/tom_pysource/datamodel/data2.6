@@ -1,0 +1,101 @@
+drop table persons;
+drop table schools;
+drop table content;
+drop table teams;
+drop table person_school_map;
+drop table person_content_map;
+
+drop sequence persons_person_id_seq;
+drop sequence schools_school_id_seq;
+drop sequence teams_team_id_seq;
+drop sequence content_list_id_seq;
+
+
+
+create table persons (
+       person_id serial PRIMARY KEY,
+       email text NOT NULL UNIQUE,
+       first_names text NOT NULL,
+       last_name text NOT NULL,
+       date_registered timestamp NOT NULL,
+       access_level text CHECK (access_level IN ('admin','basic')) DEFAULT 'basic' not null,
+       status text CHECK (status IN ('approved','not approved','not reviewed')) DEFAULT 'not reviewed' not null,
+       url text, 
+       street_address text,  
+       city text,
+       state text,
+       zipcode text,
+       office_phone text,
+       mobile_phone text,
+       fax text
+);
+
+insert into persons (email, first_names, last_name, date_registered,
+		    access_level, status) values
+		    ('tom_hickerson@hotmail.com','T.B.','Hickerson',current_timestamp,
+		    'basic','active');
+
+create table schools (
+       school_id serial PRIMARY KEY,
+       school_name text NOT NULL UNIQUE,
+       date_registered timestamp NOT NULL,
+       ndt_district text,
+       ceda_region text,
+       ada_member bool default false,
+       school_password text,
+       status text CHECK (status IN ('approved','not approved','not reviewed')) DEFAULT 'not reviewed' not null
+);
+
+insert into schools (school_name, date_registered)
+		    values ('Rutgers University',current_timestamp);
+
+create table person_school_map(
+       person_id integer NOT NULL REFERENCES persons,
+       school_id integer NOT NULL REFERENCES schools,
+       public_contact bool NOT NULL DEFAULT false,
+       website_contact bool NOT NULL DEFAULT false
+);
+
+create table teams (
+       team_id	   serial PRIMARY KEY,
+       school_id   integer NOT NULL REFERENCES schools,
+       team_name   text NOT NULL,
+       date_created	    timestamp NOT NULL,
+       member_one_first_name	 text,
+       member_one_last_name	 text,
+       member_two_first_name	 text,
+       member_two_last_name	 text,
+       status text CHECK (status IN ('approved','not approved','not reviewed')) DEFAULT 'not reviewed' not null
+);
+
+create table content (
+       list_id	        serial primary key,
+       content_type text CHECK(content_type IN ('caselist','comment')),
+       title text NOT NULL,
+       date_posted	 timestamp NOT NULL,
+       team_id		 integer NOT NULL REFERENCES teams,
+       person_id	 integer NOT NULL REFERENCES persons, 
+       mod_total	 integer NOT NULL DEFAULT 1,
+       message		 text default ' ',
+       side		 text CHECK (side IN ('affirmative','negative')),
+       reference_id  integer REFERENCES content,
+       status text CHECK (status IN ('approved','not approved','not reviewed')) DEFAULT 'not reviewed' not null
+);
+
+### NOTE: these above versions all work in PGSQL as of 4/19/01--tbh
+### version 2.3, revised 4/18/01...
+### reduce caselist & comments to same self-referencing table "content"
+
+
+
+
+
+
+
+
+
+
+
+
+
+

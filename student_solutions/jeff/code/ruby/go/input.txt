@@ -1,0 +1,60 @@
+# a mini-game
+
+#  size=9
+
+#  0 B W 0 0 W W B 0
+#  W W 0 0 W B 0 W 0
+#  0 0 B 0 0 W W 0 0
+#  0 0 W W W B 0 0 0
+#  B W W B B W B 0 0
+#  0 0 W B W 0 0 B 0
+#  0 0 B W 0 0 W W W
+#  W W 0 0 0 W W 0 0
+#  0 W 0 0 0 0 0 0 0
+
+#move=B
+
+# a medium game
+
+#  size=11
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  0 0 0 0 0 0 0 0 0 0 0 0 0
+#  move=W
+
+
+# a full sized game
+
+size=19
+
+W 0 B W 0 0 0 0 B B 0 0 0 0 0 0 0 W W 
+W W B W 0 0 B 0 0 B 0 0 0 0 0 W W 0 B 
+B B W 0 0 B 0 B 0 0 B B 0 0 W 0 W 0 B 
+0 0 0 0 0 0 B 0 0 0 0 B B 0 W B B W 0 
+B B 0 0 0 W W 0 0 0 0 W B W B B W 0 0 
+W W B 0 W B 0 W 0 0 W 0 0 0 W W B 0 0 
+W 0 B 0 0 W W 0 0 0 0 0 0 0 0 B W B 0 
+B B 0 0 0 W W 0 0 0 0 W 0 0 B W 0 W B 
+0 0 0 0 W B B W 0 0 W B W 0 0 B W B 0 
+0 0 0 W B 0 W B W 0 W 0 W B 0 0 B 0 0 
+0 B W 0 W B B W 0 0 W B W B 0 0 0 0 0 
+B W B 0 0 W W 0 B B W W 0 0 0 0 B B B 
+B W W B 0 0 0 B W W B 0 0 0 0 B W 0 B 
+0 B B 0 0 0 0 B W 0 W B 0 0 B B B B 0 
+0 0 0 0 B W 0 0 B W W B 0 0 B 0 0 0 0 
+0 0 0 B W 0 W 0 0 B B 0 0 B B W W 0 0 
+0 0 0 0 B W 0 W 0 0 0 B W W W W B W 0 
+W W 0 0 0 0 W 0 0 0 B 0 B W W W B B W 
+0 W 0 0 0 0 0 0 0 0 0 B W B B B 0 B W
+
+move=W

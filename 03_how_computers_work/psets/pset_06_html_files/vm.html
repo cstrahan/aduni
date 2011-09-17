@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Generator" CONTENT="Microsoft Word 97">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.07 [en] (Win98; U) [Netscape]">
+   <TITLE>After two straight all-nighters spent working on his Beta design, Ben Bitdiddle rushes off to his final 6</TITLE>
+</HEAD>
+<BODY>
+
+<OL TYPE="A">
+<H2>
+Problem 4: Virtual Memory</H2>
+<FONT SIZE=-1>(a) We are to design a simple (single level) page map</FONT>
+<BR><FONT SIZE=-1>(from virtual addresses to physical addresses) for a
+system</FONT>
+<BR><FONT SIZE=-1>with 32 bit address space and up to 2^24 bytes of physical
+memory.</FONT>
+<BR><FONT SIZE=-1>We are constrained to use no more than 2Mbyte of memory</FONT>
+<BR><FONT SIZE=-1>for the mapping table.&nbsp; What is the smallest page
+size we</FONT>
+<BR><FONT SIZE=-1>can use in the design? (Assume that you can pack the
+bits</FONT>
+<BR><FONT SIZE=-1>into the mapping table memory without waste or padding).</FONT><FONT SIZE=-1></FONT>
+<P><FONT SIZE=-1>(b) To implement page replacement, we also need the inverse</FONT>
+<BR><FONT SIZE=-1>of the above table --- a mapping from physical addresses
+to</FONT>
+<BR><FONT SIZE=-1>virtual addresses.&nbsp; How large is that table, based
+on the above</FONT>
+<BR><FONT SIZE=-1>design?</FONT><FONT SIZE=-1></FONT>
+<P><FONT SIZE=-1>(c) For the design above using the smallest possible page
+size,</FONT>
+<BR><FONT SIZE=-1>what is the largest physical memory we can handle using
+2Mbyte</FONT>
+<BR><FONT SIZE=-1>of storage for the paging table?</FONT><FONT SIZE=-1></FONT>
+<P><FONT SIZE=-1>(d) A two-level page map for a system with a 32 bit address</FONT>
+<BR><FONT SIZE=-1>space uses pages of 1024 bytes.&nbsp; The first level
+mapping table</FONT>
+<BR><FONT SIZE=-1>has to always be accessible. How large is it?</FONT><FONT SIZE=-1></FONT>
+<P><FONT SIZE=-1>(e) A paging system has space only for 4 user pages.</FONT>
+<BR><FONT SIZE=-1>Suppose that the user pages are accessed in the order</FONT>
+<BR><FONT SIZE=-1>0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, ...</FONT>
+<BR><FONT SIZE=-1>Using a FIFO replacement strategy, how many cache</FONT>
+<BR><FONT SIZE=-1>entries are replaced during each cycle of 8 page accessed,</FONT>
+<BR><FONT SIZE=-1>once steady state has been&nbsp; reached?</FONT>
+<BR><FONT SIZE=-1>Repeat for the LRU replacement strategy.</FONT>
+<BR><FONT SIZE=-1>Does FIFO replacement or LRU replacement work better</FONT>
+<BR><FONT SIZE=-1>for this particular access pattern.</FONT><FONT SIZE=-1></FONT>
+<P><FONT SIZE=-1>(f) Repeat part (e) for the following access pattern:</FONT>
+<BR><FONT SIZE=-1>0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, ...</FONT></OL>
+
+</BODY>
+</HTML>

@@ -1,0 +1,46 @@
+.include "../shared/beta"
+
+        MOVC(stack,sp)
+
+main:   MOVC(5,r1)
+
+        PUSH(r1)
+        BR(fib,lp)
+        DEALLOCATE(1)
+
+        HALT()
+
+fib:    PUSH(lp)
+        PUSH(bp)
+        MOV(sp,bp)
+        PUSH(r1)
+        PUSH(r2)
+                
+        LD(bp,-3,r1)
+
+        CMPLEC(r1,1,r0)
+        BT(r0,base)
+
+        SUBC(r1,1,r1)
+        PUSH(r1)
+        BR(fib,lp)
+        DEALLOCATE(1)
+        MOV(r0,r2)
+
+        SUBC(r1,1,r1)
+        PUSH(r1)
+        BR(fib,lp)
+        DEALLOCATE(1)
+        ADD(r0,r2,r0)
+        BR(return)
+
+base:   MOV(r1,r0)
+
+return: POP(r2)
+        POP(r1)
+        MOV(bp,sp)
+        POP(bp)
+        POP(lp)
+        JMP(lp)
+
+stack:

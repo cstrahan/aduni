@@ -1,0 +1,18 @@
+Subject: Re: [Fwd: [Fwd: A new puzzle]]
+Date: Fri, 16 Jun 2000 00:13:31 -0500 (CDT)
+From: Weiping Shi <wshi@silo.csci.unt.edu>
+To: Shai Simonson <shai@stonehill.edu>
+CC: sjklein4913@yahoo.com
+
+Hi Mr. Klein,
+
+Yes your general result is true.
+But I suspect finding span(n), which I assume
+is the set of possible integers one can choose
+so the problem can be solved in n queries,
+for general n is #P1-complete.  It is similar
+to the problem of finding S(n), the minimum
+number of comparisons to sort n numbers.
+
+Best regards,
+Weiping Shi

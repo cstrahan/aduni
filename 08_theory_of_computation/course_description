@@ -1,0 +1,17 @@
+<p>
+A theoretical treatment of what can be computed and how fast it can be
+don.  Applications to compilers, string searching, and control circuit
+design will be  discussed.  The hierarchy of finite state machines,
+pushdown machines, context free grammars and Turing machines will be
+analyzed, along with their variations.  The notions of decidability,
+complexity theory and a complete discussion of NP-Complete problems
+round out the course.
+</p><p>
+Text: <i>Introduction to the Theory of Computation</i>, Michael Sipser.
+</p><p>
+Reference:  <i>Introduction to Automata Theory, Languages and Computation
+by Hopcroft</i>, Motwani and Ullman.
+</p><p>
+Requirements: Two exams, five problem sets.
+</p><br>
+

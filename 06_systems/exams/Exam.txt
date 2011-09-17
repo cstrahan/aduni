@@ -1,0 +1,136 @@
+Question 1: [10 points]
+
+Suppose you were on a computer where every email message was read
+by a human.  Suppose you wanted to transfer a 1 megabyte file out of
+the server, undetected, using email.  Describe how you would do this
+at a high level - i.e., you don't have to give an informal coding
+algorithm.
+
+Write a program that can output intelligible English sentences (like
+the BS program that was advertised on the Systems bboard).  Have the
+program encode the 1 megabyte file in the length of the words used.
+
+Question 2: [25 points]
+
+In lecture, you learned about X.509 authentication via certificates.
+An issuing authority like Verisign creates certificates for its
+customers (e.g., Amazon).  Your browser can use these certificates to
+authenticate a server as an Amazon server.
+
+In the questions below, assume the issuer is Verisign, the issuee is
+Amazon, and the client is a Netscape browser on your machine.  
+
+a>[3 points] You decide to buy a book from Amazon.  Your browser requests a
+certificate from Amazon.  This certificate contains a signature.  Who
+created that signature?
+
+b>[5 points] What is stored in the signature? (List the components).
+How are they sealed? (List whose key(s) are used to seal any
+information - be sure to specify public or secret)
+
+c>[7 points] Given your answer to <b>, can the signature be duplicated by
+someone who is not Verisign?  If so, why?  If not, why not? (2-3
+sentences)
+
+d>[10 points] Describe how you would use a nonce to make the signature more
+secure.
+
+Question 3: [15 points]
+
+In lecture, you learned about the DNS Internet service.  
+
+a>[3 points] Describe the role of the Time To Live parameter for a DNS caching
+server.  
+
+b>[3 points] What happens to DNS performance as you increase the TTL?  List 1
+key tradeoff.
+
+c>[3 points] What happens to DNS performance as you decrease the TTL?  
+
+d>[6 points] Give an example where short TTLs make sense, and explain why it
+makes sense.
+
+
+Question 4: [45 points]
+
+A sender S and a receiver R are communicating over one megabit/second
+(1,000,000 bits/sec) digital channels via a geostationary satellite.
+The communications delays from S to R and from R to S are each 0.250
+seconds.  The transmitter is sending a sequence of packets of size
+1,000 bits.  The receiver sends packets of the same size at certain
+times for purposes of acknowledgment and control.
+
+The receiver can buffer B of the transmitter's packets.  It may be
+prevented from emptying the buffer for unpredictable lengths of time
+by other tasks.  Otherwise, it can empty the buffer almost as fast as
+the packets arrive.  Suppose that communication has been established,
+and a protocol is used which prevents buffer overflow.  Assume no
+errors, drops, or out-of-order deliveries for this channel: the
+protocol deals only with buffer overflow issues.
+
+a> [5 points] Suppose that a lock-step flow control protocol is used, with B=1.
+What is the maximum rate at which the transmitter can send packets,
+assuming the receiver is not servicing other tasks?  (One percent
+accuracy will do.)
+
+The receiver decides that lock-step is too slow, and converts to a
+different protocol in which the transmitter continues to send packets
+at its peak rate until it receives an explicit *stop* message.  The
+receiver will then send a message calling for more packets as soon as
+its buffer is empty.  This is called a bang-bang protocol.
+
+b> [6 points] What is the smallest B (i.e., number of packets) needed to ensure
+that the buffer will not overflow, even when the receiver is busy?
+
+c> [7 points] Assuming the receiver is using your value of B from part (b), when
+does the receiver tell the sender to stop?
+
+d> [7 points] What is the best rate attainable with your value of B from part (i)
+when the receiver is not busy?
+
+To try to increase performance further, the receiver tries a
+window-based flow control protocol.
+
+e> [10 points] What is the maximum rate that can be achieved with a window-based
+protocol when the receiver is not busy? 
+
+f> [10 points] How large a window is required to attain that rate?
+
+Question 5: [50 points]
+
+Consider an operating system running n processes.  The OS gives each
+process ts milliseconds of run time.  ts includes the context switch
+time, c milliseconds.  In this operating system, processes have equal
+priority.  Assume you can adjust ts, but not c.  For the problems
+below, ignore I/O as an issue (e.g., the OS doesn't pre-empt a process
+when a mouse click is detected for another process).
+
+a> [10 points] If one of the n processes is your gnutella client, what percentage
+of time is the system running your gnutella code? (we'll call the the
+effective efficiency of the system)
+
+b> [3 points] What happens to the effective efficiency of your code as the number
+of processes increases?  (give your answer in O(f(n)) notation)
+
+c> [5 points] What is the minimum ts you can set?  What happens if you set a ts
+lower than this minimum?
+
+d> [3 points] If n is fixed, what is the theoretical maximum effective
+efficiency?
+
+Now, let's consider the effects of virtual memory.  Suppose the
+average amount of time required by the virtual memory system to swap a
+process out and another in is v milliseconds.
+
+e> [9 points] What is the new effective efficiency?
+
+f> [5 points] What is the new minimum ts you can reasonably set?  
+
+g> [10 points] At what v does thrashing occur? (thrashing was discussed in
+lecture)
+
+In a real OS, v is actually a function of n.  That is, the amount of
+time spent swapping depends on the number of processes being run.
+
+h> [5 points] For simplicity, assume that v=k*n, where k is a constant.  What's
+the maximum number of processes you can run before you start thrashing?

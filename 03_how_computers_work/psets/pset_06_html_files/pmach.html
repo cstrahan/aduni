@@ -1,0 +1,119 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; U; Linux 2.0.34 i686) [Netscape]">
+   <title>After two straight all-nighters spent working on his Beta design, Ben Bitdiddle rushes off to his final 6</title>
+</head>
+<body>
+
+<ol TYPE="A">
+<h2>
+Problem 2: Designing a Parallel Machine</h2>
+<font size=-1>In this problem we will design a parallel machine for sorting</font>
+<br><font size=-1>numbers.</font>
+<p><font size=-1>Each processor has N input connections and N output connections.</font>
+<p><font size=-1>Each processor runs a single function called <b>run()</b>
+once per</font>
+<br><font size=-1>communication clock cycle.&nbsp; (Note: the communication
+clock cycle is</font>
+<br><font size=-1>the frequency at which messages can be sent or received.&nbsp;
+It is</font>
+<br><font size=-1>significantly slower than the processor clock cycle.)&nbsp;
+For each</font>
+<br><font size=-1>communications cycle <b>run</b> is called with an array
+of inputs,</font>
+<br><font size=-1>containing one value for each of the input connections.&nbsp;
+As the</font>
+<br><font size=-1>function runs it can send one message out along each
+of its N output</font>
+<br><font size=-1>connections.&nbsp; (Note: The outputs messages are collected
+and sent out</font>
+<br><font size=-1>all at once at the beginning of the next communication
+cycle.&nbsp; In</font>
+<br><font size=-1>other words, all communication is synchronous.)</font>
+<p><font size=-1>When the parallel machine is turned on, the value for
+the variable</font>
+<br><font size=-1><b>CURRENT</b> is initialized to an integer.&nbsp; (Note:
+Every processor</font>
+<br><font size=-1>has its own independent value of <b>CURRENT</b>.)&nbsp;
+On the first communication</font>
+<br><font size=-1>cycle the function&nbsp; <b>first_cyle</b> is run.&nbsp;
+From then on the function</font>
+<br><font size=-1><b>run</b> is called for each subsequent cycle.</font>
+<p><font size=-1>You are given the following definitions:</font>
+<p><font size=-1>int CURRENT;</font>
+<p><font size=-1>run(int *inputs)</font>
+<br><font size=-1>{</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp; int i;</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp; int *sorted;</font>
+<p><font size=-1>&nbsp;&nbsp;&nbsp; sorted = sort_ints(inputs);</font>
+<p><font size=-1>&nbsp;&nbsp;&nbsp; CURRENT = sorted[N/2];</font>
+<p><font size=-1>&nbsp;&nbsp;&nbsp; for (i = 0; i&lt;N; i++)</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; send(i, sorted[i]);</font>
+<br><font size=-1>}</font>
+<br>&nbsp;
+<p><font size=-1>first_cycle(int *inputs)</font>
+<br><font size=-1>{</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp; int i;</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp; for (i = 0; i&lt;N; i++)</font>
+<br><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; send(i, CURRENT);</font>
+<br><font size=-1>}</font>
+<p><font size=-1>Note: the variable N is set to the number of connections.&nbsp;
+The</font>
+<br><font size=-1>expression N/2 yields the largest integer less than or
+equal to</font>
+<br><font size=-1>N/2.</font><font size=-1></font>
+<p><font size=-1>You are told that these functions are useful for building
+a parallel</font>
+<br><font size=-1>machine that can sort integers quickly.&nbsp; (Note:
+<b>sort_ints</b>
+takes</font>
+<br><font size=-1>an array of ints and returns an array which is sorted
+smallest to</font>
+<br><font size=-1>largest.)</font>
+<p><font size=-1>A) You are given 5 processors labelled A through E, each
+with 3 inputs</font>
+<br><font size=-1>and 3 outputs.&nbsp; Based on the definitions above,
+draw a connection</font>
+<br><font size=-1>diagram so that the parallel system will eventually sort
+the numbers</font>
+<br><font size=-1>initially stored in <b>CURRENT</b> (the smallest value
+should appear in</font>
+<br><font size=-1>A, the largest value in E).</font>
+<p><font size=-1>B) Place the values 3 in A, 4 in B, 2 in C, 1 in D, and
+5 in E.&nbsp; Show</font>
+<br><font size=-1>values for <b>CURRENT</b> and the messages on the second
+cycle.&nbsp; Show the</font>
+<br><font size=-1>values for <b>CURRENT</b> and the messsage on the 10th
+cycle.</font>
+<p><font size=-1>C) In the general case where there are M processors and
+M integers</font>
+<br><font size=-1>arranged in this fashion, how many communication cycles
+are required</font>
+<br><font size=-1>to sort the numbers?  Please use "theta" notation. </font>
+<p><font size=-1>E) Ben Bitdiddle shows up and suggests that instead we
+build our</font>
+<br><font size=-1>machine with processors that have M+1 connections.&nbsp;
+"That would make the</font>
+<br><font size=-1>machine really fast!", he says.&nbsp; Could the programs
+given above be</font>
+<br><font size=-1>used to wire up a machine with M processors, M+1 inputs
+connections, and</font>
+<br><font size=-1>M+1 output connections?&nbsp; Describe how this would work.&nbsp;
+How many</font>
+<br><font size=-1>communication cyles are required to sort the numbers?</font>
+<p><font size=-1>F) Does Ben's idea make any sense?&nbsp; Is this really
+going to save</font>
+<br><font size=-1>anything over a serial implementation.</font>
+<p><font size=-1>G) (Extra Credit) Alyssa shows up and suggests that it
+might be better</font>
+<br><font size=-1>to build a machine with 4 input connections and 4 outputs.&nbsp;
+Can you</font>
+<br><font size=-1>propose a wiring scheme for such a machine?&nbsp; How
+would it work?&nbsp; Would</font>
+<br><font size=-1>it work better than the original 2 input design?</font></ol>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<html>
+<head><title>Exercise 3</title></head>
+
+<body bgcolor=#ffffff>
+<blockquote>
+<font face=helvetica,arial>
+
+<table width=90%>
+<tr><td> <h2>Exactly how long a lens do you need?</h2> </td>
+<td align=right> <a href=../>Home</a> </td></tr>
+</td></tr></table>
+
+<hr>
+
+<form method=post action=focal-length.tcl>
+<table>
+<tr><td> How far away is your subject?  </td>
+<td> <input type=text name=distance_in_feet size=10>  (in feet) </td></tr>
+
+<tr><td> How high is the object you want to fill the frame?  </td>
+<td> <input type=text name=subject_size_in_feet size=10>  (in feet) </td></tr>
+</table>
+
+<input type=submit value=Calculate>
+</form>
+
+<hr>
+
+<address><a href="mailto:shyam@massmed.org">shyam@massmed.org</a></address>
+
+</blockquote>
+
+</body>
+</html>
+
+
+

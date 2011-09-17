@@ -1,0 +1,52 @@
+Subject: Re: card puzzle
+Date: Fri, 24 Nov 2000 18:15:11 -0600 (CST)
+From: Weiping Shi <wshi@ee.tamu.edu>
+To: Shai Simonson <shai@stonehill.edu>
+CC: "Dr. Melvin R. Mercer" <mercer@ee.tamu.edu>
+
+Shai,
+
+You can do it for 52+4 cards! But it's messy.
+
+Let each suit contain 14 cards. Consider the
+distribution of the 5 cards among 4 suits:
+
+Case 1. 2-1-1-1.
+Case 1.1. If two spades X and Y:
+1 <= X-Y (or Y-X) <= 6 (mod 14), we are done.
+Case 1.2. If two spades X and Y:
+X-Y=Y-X=7 (mod 14), then at least two of the remaining 3
+cards will be interval {X, X+1, ..., X+6}
+or {Y, Y+1, ..., Y+6}. (If all three cards are
+in the same interval, choose the highest two
+in any pre-specified order.  Let the two
+chosen cards be i and j, and AWLG they are in {X, ..., X+6}.
+Then show X as the first card.
+We must have 0 <= min{i-j, j-i} <= 3 (mod 7).
+We will show either i (or j) and use 4 of the
+3!=6 possible permutations to identify the
+offset j-i (or i-j). The 2 un-used permutation will
+be used in case 3.
+
+Case 2. 3-1-1 or 3-2 or 4-1.
+This is what we just discussed in the last email.
+Basically you can always pick two spades
+that are not distance 7, and hide a spade that is
+within distance 6 or less from the shown card.
+
+Case 3. 2-2-1.
+If the two spades are not distance 7 apart, then we are done.
+If the two hearts are not distance 7 apart, we are also done.
+Otherwise, we will show any spade as the first card,
+followed by a permutation of spade, heart and diamond.
+So we hide a heart.
+To avoid confusing with case 1.2, we will use
+the un-used 2 permutations in case 1.2 to identify
+if the missing suit is heart or diamond. The value of the
+missing card must be distance 7 from the shown card (heart)
+in this case.
+
+There is still some room for further improvement,
+but it's getting really messy.
+
+Weiping

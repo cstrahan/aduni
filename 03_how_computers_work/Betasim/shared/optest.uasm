@@ -1,0 +1,27 @@
+|| beta definitions
+.include beta
+
+|| start:
+BR(main)
+|| illegal op:
+BR(oops)
+
+main:
+   CMPEQ(r1, r2, r4)
+   ADDC(r31, foo, r1)
+   LD(r1, -1, r2)
+   ST(r4, -1, r1)
+   JMP(r1, lp)
+   SVC(21)
+   HALT()
+
+   LONG(3)
+foo:
+   SUB(r2, r4, r2)
+   BRNZ(r2, foo)
+   JMP(lp)
+
+oops:
+   LD(XP, -1, r0)
+   JMP(XP)
+

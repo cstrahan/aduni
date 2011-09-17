@@ -1,0 +1,175 @@
+<html>
+<head>
+<title>ADUni - Theory of Computation - Problem Set 02 Solutions</title>
+</head>
+
+<body fgcolor=black bgcolor=white>
+<center>
+A R S D I G I T A &nbsp V N I V E R S I T Y<br>
+<font size=+2>Month 8: Theory of Computation</font><br>
+Problem Set 2 Solutions - Mike Allen and Dimitri Kountourogiannis
+</center>
+
+
+<ol>
+<li><font size=+1>Minimizing DFAs</font>
+	<table cellspacing=35>
+	<tr>
+	<td nowrap>a. Convert to a DFA<br><img src="Problem_Set_02_Files/1a-ans.gif">
+	<td nowrap>b. Convert to a minimal DFA<br><img src="Problem_Set_02_Files/1-ans.gif">
+	<tr>
+	<td nowrap valign=top>c. Conver to a regular expression:<br><b><tt>0 + (00 + 1 + 11)00*</tt></b>
+	<tr>
+	<td nowrap valign=top>d. Convert to a regular grammar using the NFA:<br><b><tt>A -> 0 | 0B | 1C | 1D<br>B -> 0D<br>C -> 1D<br>D -> 0 | 0D
+	<td nowrap valign=top> Using the DFA: <br><b><tt>S -> 0A | 1B <br> A -> 0C | e <br> B -> 0D | 1C <br> C -> 0D </tt></b>
+	<tr>
+	 <td nowrap valign=top> Using the regular expression: <br><b><tt> S -> 0 | 110A | 000A | 10A<br> A -> 0 | 0A | e</tt><b>
+	</table>
+
+<li><font size=+1>Regular or Not?</font><p>
+	<ol type=a>
+	<li><b>NOT</b>. (1.17b) {www | w is {a,b}*}<p>
+	Assume that the language is regular. Let p be the pumping length, and choose s to be the string 0<sup>p</sup>10<sup>p</sup>10<sup>p</sup>1. Now we try to break it up into s=xyz. Since |xy| <= p and |y|>0,  y can only contain 0's. When we pump the string even just once we get xy<sup>2</sup>z = 0<sup>p+|y|</sup>10<sup>p</sup>10<sup>p</sup>1, and this is not of the form www, since |y| > 0.
+This contradicts the pumping lemma, so the language is not regular. <p>
+
+	<li><b>NOT</b>. (1.23c) {0<sup>m</sup>1<sup>n</sup> | m is not equal to n}<p>
+	 We know that
+<pre>
+	{0<sup>n</sup>1<sup>n</sup> | n >= 0}  = {0<sup>m</sup>1<sup>n</sup> | m,n >= 0}^{0*1*}<sup>c</sup>,
+</pre>
+
+where we are using ^ to denote intersection and <sup>c</sup> to denote complement.
+The proof is by contradiction. If {0<sup>m</sup>1<sup>n</sup> | m is not equal to n}
+really were regular then {0<sup>n</sup>1<sup>n</sup> | n >= 0}  would also  be regular
+because  0*1* is regular and because of the closure properties of regular sets. Therefore it
+can't be regular
+
+<p>There is a direct way to prove it as well: If p is the pumping length and we take the
+string s = 0<sup>p</sup>1<sup>p+p!</sup>, then no matter what the decomposition s = xyz is
+the string xy<sup>1+p!/|y|</sup>z will equal 0<sup>p+p!</sup>1<sup>p+p!</sup> which is not
+in the language.
+<p>
+
+	<li><b>NOT</b>. (1.23a) {0<sup>m</sup>1<sup>n</sup>0<sup>m</sup> | m,n >= 0}<p>
+	Assume that the language is regular. Let p be the pumping length, and choose s to be the string 0<sup>p</sup>10<sup>p</sup>. Now we try to break it up into s=xyz. Since |xy| <= p, 
+y can only have zeros in it. Now xy<sup>j</sup>z = 0<sup>p+ (j-1) |y|</sup>10<sup>p</sup>, and
+since |y|>0 the number of 0's on the left and right sides of xy<sup>j</sup>z will not be
+the same for any j>1 so xy<sup>j</sup>z will not be in the language, contradicting the pumping lemma.
+Therefore {0<sup>m</sup>1<sup>n</sup>0<sup>m</sup> | m,n >= 0} is not regular<p>
+
+	<li><b>REGULAR</b>. The set of strings that have an even number of double zeros in them.<p>This can be decided by the DFA below.<br><img src="Problem_Set_02_Files/2a-ans.gif"><p>
+
+	<li><b>REGULAR</b>. The set of all strings of the form xwx<sup>R</sup> where x and w are strings over the alphabet {0,1}.<p>
+	This description is somewhat misleading. Since w can represent any string and x can be 0 or 1, this is the same as all strings which begin and end with the same character. This is easily seen to be a regular language.<p>
+
+	<li><b>NOT</b>. The set of all strings over the alphabet {0} whose length is n! for some n>0.<p>
+	Assume that the set is regular. Let p be the pumping length. Without loss of generality we can assume that p is at least 2. (We can always increase the pumping length. We only do this 
+because some of our calculations don't work for p = 1) 
+Then, according to the pumping lemma, we can break the string s=0<sup>p!</sup> into s=xyz where y has positive length and |xy| <= p. Then  s=xy<sup>2</sup>z =  0<sup>p!&nbsp+&nbsp|y|</sup>  must also be in the language, so p!+|y| must also be a factorial. But (p+1)!-p! = (p)p! > p >= |y| so it follows that p! + |y| < (p+1)!,
+and therefore p! + |y| is not a factorial. This is a contradiction so the language cannot be regular.
+<p>	
+
+	<li><b>NOT</b>. The set of strings over the alphabet {0} of the form 0<sup>n</sup> where n is not prime.<p>To prove this language is not regular, we instead examine the complement because the set of regular languages is closed under complement. Assume that the set is regular. Let p be the pumping lenght of the language. Then, according to the pumping lemma, we break the string s=0<sup>p</sup> into s=xyz where y has positive length. Then, s=xy<sup>i</sup>z = 0<sup>p + (i-1) |y|</sup> must also be in the set for any i. In particular let i = p+1. Then xy<sup>p+1</sup>z=0<sup>p+p|y|</sup> must be in the set so  p + p|y| = p(1 +|y|) must be prime.  Thus  we have a contradiction 
+and the set cannot be regular.<p>
+
+	</ol>
+
+<li><font size=+1>Find the Flaw in the Proof</font><p>
+
+The flaw in the proof is the following: if p is the pumping length of 0*1* and s = 0<sup>p</sup>1<sup>p</sup> is decomposed into xyz in the usual manner then s absolutely positively <i>can</i> be pumped since 
+xy<sup>j</sup>z is equal to  0<sup>p+(j-1)|y|</sup>1<sup>p</sup> which will still be in 0*1*.<p>
+
+<li><font size=+1>A counterexample to the converse of the pumping lemma</font><p>
+
+The pumping lemma only states that if a language is regular, then it can be pumped. The converse, if a language can be pumped, then it is regular, is not necessarily true, so irregular languages may satisfy the pumping lemma's conditions without contradicting it. In this particular case of
+<p>
+{a<sup>i</sup>b<sup>j</sup>c<sup>k</sup> | i,j,k >= 0,if i=1 then j=k},
+<p> 
+if s is any string in the given language then the decomposition s = xyz  with x = the empty string, y = to the first character of s, z = the
+rest of s, will always work with the pumping lemma. The resulting xy<sup>j</sup>z will always be in the language.<p>
+
+<li><font size=+1>Decision Algorithms</font><p>
+	<ol type=a>
+	<li>Contains all strings of the form 0*1*.<p>
+	Given a DFA, M, we can determine if it accepts all strings of the form 0*1* by taking its complement and intersecting it with the DFA which accepts 0*1*, and then minimizing the resulting DFA. If the result is
+the machine that accepts nothing, then accept M, otherwise reject M.<p>
+
+	<li>Is co-finite.<p>
+	Given a DFA, M, we can determine if it is cofinite by taking its complement and then checking to see whether the result has any cycles from which an accept state is reachable. If it does not, then accept M, otherwise reject M.<p>
+
+	<li>Has at least one string w that has 111 as a substring.<p>
+	Given a DFA, M, we can determine if it accepts at least one string of the form 111 by intersecting it with another DFA which accepts (0+1)*111(0+1)* and minimizing the resulting DFA. If the result accepts anything, then accept M, otherwise reject M.<p>
+	
+	</ol><p>
+
+<li><font size=+1>Regular Linear Grammars</font><p>
+	<ol type=a>
+	<li>A regular grammar to generate the set of strings that are evenly divisible by 5<br>
+	<b><tt>	A<sub>0</sub> -> 0A<sub>0</sub> | 1A<sub>1</sub> | e<br>
+		A<sub>1</sub> -> 0A<sub>2</sub> | 1A<sub>3</sub><br>
+		A<sub>2</sub> -> 0A<sub>4</sub> | 1A<sub>0</sub><br>
+		A<sub>3</sub> -> 0A<sub>1</sub> | 1A<sub>2</sub><br>
+		A<sub>4</sub> -> 0A<sub>3</sub> | 1A<sub>4</sub></tt></b><p>
+
+	<li>A finite automaton can be converted into a right-linear grammar as follows:<br>
+		<ol>
+		<li>Reverse all the arrows in the finite automaton.
+		<li>Create a start state with epsilon transistions pointing towards each of the old accept states.
+		<li>Change the old start state to be the accept state.
+		<li>Convert the automaton as you would to get a left-linear grammar, except that terminals are placed on the right side. (ie A->Ba instead of A->aB)
+		</ol>
+	</ol><p>
+
+<li><font size=+1>Linear Grammars and Palindromes</font><p>
+
+	<ol type=a>
+	<li>Since we know that left and right linear grammars describe only regular languages and the set of palindromes over the language {0,1} is not regular, neither grammar can describe a palindrome.<p>
+	<li>If we allow a mixed left-right linear grammar, we can describe the palindromes as follows:<br>
+	<b><tt>	S -> 0A | 1B | 0 | 1| e<br>
+		A -> S0<bR>
+		B -> S1</tt></b><p>
+	</ol><p>
+
+<li><font size=+1>Single Symbol Regular Languages</font><p>
+	<ol type=a>
+	<li>Languages of the form 0<sup>mx+b</sup> are accepted by DFAs of the form below, so they must be regular.<br><img src="Problem_Set_02_Files/5a-ans.gif"><p>
+
+	<li>Unions of machines from the set described by (a) are regular, though not of the form 0<sup>mx+b</sup>.<p>
+	 
+	<li><b>Extra Credit:</b> This is actually fairly simple using the DFA characterization
+	of regular sets. Since there can only be one transiton from each state the DFA is completely
+	specified by giving 
+	<p>
+	<ol type=i>
+	<li>The number of states, n, in the machine.
+	<li>An n-bit number, f, which tells us whether each state is final or not.
+	<li>A periodicity number, m, which has some value 0 <= m <= n
+	</ol>
+	<p>
+	The DFA is constructed by making state 1 the initial state, setting the
+	j-th state to accept if and only if the j-th bit of the number f is a 1, adding
+	a transition on 0 from state j to state j+1 for 1<= j <= j-1 and
+	finally if m is not zero, adding a transition from state n to state n-m+1.
+	The language constructed from this DFA will finite if m=0, and
+	otherwise will be eventually periodic, of period m.<p>
+	It pretty easy to see from the above description that, up to 
+	a finite set, every regular language over 0 is of the
+	form <p>
+(0<sup>b_1</sup> +   0<sup>b_2</sup> + ... + 0<sup>b_k</sup>)(0<sup>m</sup>)*,
+<p>
+for some choice of m, where {b_1, b_2, ..., b_k} is some subset of {0,1,2,...,m-1}
+<p>
+
+	</ol>
+
+<li><font size=+1>(extra credit) Simulating NFAs</font><p>
+
+
+<li><font size=+1>(triple extra credit) Minimizing DFAs</font><p>
+
+
+
+
+</ol>
+</body>
+</html>

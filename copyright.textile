@@ -1,0 +1,1 @@
+Copyright (c) 2000, 2001 by ADUni.  This material may be distributed only subject to the terms and conditions set forth in the Open Content License.  See LICENSE file for details.

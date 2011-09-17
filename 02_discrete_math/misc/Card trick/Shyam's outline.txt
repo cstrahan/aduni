@@ -1,0 +1,24 @@
+Subject: Re: Card Trick Pset and Pset 7
+Date: Sat, 25 Nov 2000 00:19:20 +0000
+From: Shyam Visweswaran <shyam@jipmer.org>
+To: Shai Simonson <shai@stonehill.edu>
+
+Hi Shai:
+
+Does a better strategy for the card trick be rememberable by a human?
+Or will it be a list of computer-geenrated numbers that the magician can look
+up?
+
+I get a coding for choosin 3 cards with a deck of 8 cards. See the enclosed
+file.
+Also generated an apparently unique coding for choosing 4 cards from a deck
+of 20 cards. Its a huge list and i am looking over it to see if  there are
+really
+no duplicates.
+
+Shyam
+
+    ---------------------------------------------------------------------
+
+   card.txtName: card.txt
+           Type: Plain Text (text/plain)

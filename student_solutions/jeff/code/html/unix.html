@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>Unix Practicum - March 1, 2001</title>
+</head>
+<body>
+<center><h1>Using Unix Effectively</h1></center>
+<p></p>
+
+<!-- introduction  -->
+<h1>Introduction</h1>
+Unix is a very powerful tool.  It was made by programmers for
+themselves to use, and as a result tends to be fast, configurable,
+extremely powerful.  It also can be decidedly daunting for
+beginners, as it was not designed with beginners in mind.  
+By talking about some of the basics of the Unix philosophy
+and building blocks of the Unix system and programs, we hope to give
+you motivation to explore the full power and richness of the system.
+
+<!-- philosophy section here  -->
+<h1>Topics for Today</h1>
+<ul>
+<li><a href = "#philosophy">The Unix Philosophy</a>
+<li><a href = "#shells">Shells</a>
+<li><a href = "#filesys">Getting around a Unix Filesystem</a>
+<li><a href = "#permissions">Permissions</a>
+<li><a href = "#pipes_redir">Pipes and redirects</a>
+<li><a href = "#cool_programs">A few cool programs</a>
+<li><a href = "#help">Where to get help</a>
+<li><a href = "#trouble">Troubleshooting</a>
+</ul>
+
+<!-- philosophy section here  -->
+<a name = "philosophy"><h1>The Unix Philosophy</h1></a>
+<ul>
+<li>Take the time to find the most efficient way to do something.
+<li>Automate tedium.
+<li>Don't reinvent the wheel unless you want to.
+<li>Use all the resources available to find answers to your questions.
+</ul>
+
+For a longer description of the Unix philosophy, look at Eric Raymond's <a
+href="http://www.tuxedo.org/~esr/writings/taoup/chapter1.html"> The Art of Unix Programming</a>
+
+<!-- shells section here  -->
+<a name = "shells"><h1>Shells</h1></a>
+A shell is a program which takes user input and passes it on to the
+operating system.  Unix gives you a choice in shells (or write your
+own!). A few different shells:
+<ul>
+<li><i>csh</i>, C shell
+<li><i>ksh</i>, Korn shell
+<li><i>bash</i>, Bourne again shell (default on our system)
+</ul>
+<h4>What does the shell do for you?</h4>
+At the basic level a shell allows you to navigate the file system and run
+programs. It can also be programmed, allowing you to automate and
+script things.
+
+<blockquote>
+<h4>A simple shell script</h4>
+This script will take a file, make a backup copy, and then open the
+file in Emacs. 
+<pre>
+#!/bin/sh
+# edit -- example shell script
+
+cp $1 $1.bak             # make a copy. $1 is the first command line variable
+emacs $1                 # start emacs 
+</pre>
+
+Change the permission, allowing the file to the executed, and put it
+in your path directory, and you've got a working program.
+
+<h4>But what's a path?</h4>
+The path is a list of places that the shell looks when you ask it to
+run a program.
+<pre>
+[jeff@localhost jeff]$ echo $PATH
+/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/games:/opt/home/jeff/bin:/usr/java/jdk1.3/bin/:/opt/home/jeff/lib:/usr/X11R6/bin:/usr/games
+</pre>
+
+</blockquote>
+
+<!-- permissions section here  -->
+<a name = "permissions"><h1>Permissions</h1></a>
+<ul>
+<li>Three kinds of permissions: <b>read</b>, <b>write</b> and
+<b>execute</b>
+<li>Three levels of permissions: <b>user</b>, <b>group</b> and <b>global</b> 
+</ul>
+To see permissions for a file, use <code>ls -l</code>:
+<pre>
+      [jeff@localhost jeff]$ ls -l edit 
+      -rw-r--r--    1 jeff     students           33 Mar  1 09:27 edit
+</pre>
+</blockquote>
+These permissions do not apply to <code>root</code>, who has complete and unrestricted access to every file in the system. 
+
+<!-- filesystem section here  -->
+<a name = "filesys"><h1>Getting Around a Unix Filesystem</h1></a>
+<ul>
+<li>It's a tree.
+<li>Everything is a file.
+<li>Things are stored according to function. A few examples:
+<ul>
+<li><code>/bin</code> Binary (executable files)
+<li><code>/doc</code> Documentation
+<li><code>/usr</code> User added files
+<li><code>/src</code> Source code
+<li><code>/etc</code> Configuration files
+</ul>
+<li>Symbolic links are like shortcuts, they create a weak link from
+one point in the file tree to another. Let's say there is a
+directory <code>~/code/java/ps2/prob2/src/</code>, and you don't want
+to type it in every time you go there.
+A symbolic link can be created.
+<blockquote>
+<code>bash$ ln -s ~/code/java/ps2/prob2/src current</code>
+</blockquote>
+Now <code>current</code> is a symbolic link to the same place.
+</ul>
+
+<!-- pipes and redirect section here  -->
+<a name = "pipes_redir"><h1>Pipes and Redirects</h1></a>
+Unix makes it easy to use the output of one program as the input of
+another. Combine this with the fact that everything in the system is a
+file, and you have some powerful options.
+
+A few examples of pipes:
+<ul>
+<li>ps aux | grep jeff
+<li>cat file.java | lpr
+<li>who | cut -c1-8 | sort -u | pr -l1 -8 -w78 -t
+</ul>
+
+<!-- cool programs  section here  -->
+<a name = "cool_programs"><h1>A Few Cool Programs</h1></a>
+Most Unix programs are run via a command line interface. Here is the
+standard syntax:
+<code>command flags input output</code>
+<ul>
+<li><code>chmod</code>
+<li><code>chown</code>
+<li><code>ps</code>
+<li><code>grep</code>
+<li><code>find</code>
+<li><code>whoami</code>
+<li><code>true</code>
+<li><code>cal</code>
+</ul>
+
+<!-- help starts here -->
+<a name = "help"><h1>Where to get help</h1></a>
+<ul>
+<li>Search engines
+<li>How-to and mini how-to
+<li>Online manuals
+<li><code>apropos</code>
+<li><code>man</code> pages
+<li><code>info</code> pages
+<li>Unix folk you know
+</ul>
+
+<!-- troubleshooting section here  -->
+<a name = "trouble"><h1>Troubleshooting</h1></a>
+<ul>
+<li>Use your problem to give you a better understanding of the system.
+<li>Document your solution, for yourself and others.
+<li>Chances are your problem is not a unique one. If it is, you are lucky!
+</ul>
+
+<!-- links  -->
+<h1>Links</h1>
+<ul>
+<li><a href = "http://www.linuxdocs.org">www.linuxdocs.org</a>  Home of the
+Linux Documentation Project, contains many How-tos and   mini-how-tos.
+<li><a href = "http://www.linuxnewbie.org">www.linuxnewbie.org</a> Caters to
+helping users transition from Windows environments to Linux
+<li><a href = "http://www.gnu.org">www.gnu.org</a> A huge number of programs
+on the system are GNU made. This site has lots of information as well
+as free, well written manuals.
+<li><a href = "http://groups.google.com">groups.google.com</a> Usenet archives. Formerely
+Deja.com, search through millions of records, you'll often find
+someone with the same problem as yours.
+<li><a href = "http://www.google.com/linux">www.google.com/linux</a> Linux only search engine
+<li><a href =
+"http://cisco.netacad-currdev.net/unix/toc.html">http://cisco.netacad-currdev.net/unix/toc.html</a>
+Fundamentals of Unix
+</ul>
+
+<hr>
+2001 Jeffrey Radcliffe and Robb Monn
+</body>
+</html>

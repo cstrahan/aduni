@@ -1,0 +1,26 @@
+
+SRCDIR = sunw/demo/methodtracer
+
+CLASSFILES= \
+		$(SRCDIR)/MethodTracer.class
+
+JARFILE= ../lib/methodtracer.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES)
+	echo "Name: sunw/demo/methodtracer/MethodTracer.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp $(SRCDIR)/*.class 
+	@/bin/rm manifest.tmp
+
+# Rule for compiling a normal .java file
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+clean:
+	/bin/rm -f $(SRCDIR)/*.class
+	/bin/rm -f $(JARFILE)

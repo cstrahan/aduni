@@ -1,0 +1,324 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Employee SpeechWorks">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+   <title>lecture8</title>
+</head>
+<body>
+<h3>Window Systems and Graphics</h3>
+
+<h4>Introduction: Window Systems, some history</h4>
+<ul>
+   <li> UP to now, we have been writing console apps
+   <li> Model of interaction based on 1980 (or before) technology: 
+       a character terminal connected (via serial line) to a shared
+       processor. The terminal send key presses to the computer, which
+       sends backs characters to display. A small step away from
+       printer based teletypes.
+   <li> Early 80s saw introduction of graphic workstations (commercially)
+     <li> Window systems were developed to manage screen areas and new input
+         devices
+     <li> window systems divide the screen in rectangular areas which are
+        associated with processes/programs.
+     <li> Initially, this merely supported multiple virtual character
+        terminals.
+   <li> Eventually, more elaborate Window systems were developed. Apple
+       Mac was an early commercial example, though this was based on
+       the Xerox PARC Alto research (and indeed all of the ideas of the
+       modern desktop had been demonstrated back in 1968). Windows followed
+       pretty much along the lines of the Mac. At MIT the X window system
+       was developed along slightly different lines, planning for network
+       connectivity and distributed client/server applications from the
+       beginning. Lately the Linux community has come up with a number
+       of X-based Gui environments include KDE and Gnome/GDK
+     <li> Development of libraries of configable GUI components (usually
+         called widgets): buttons, menus, dialogs, text input, sliders. etc
+     <li> These widgets had higher level interaction semantics, ie a button click
+</ul>
+
+<h4>Window Systems</h4>
+
+<h5>Frames and Components</h5>
+
+When we look at the screen of a typical window system, we see a collection
+of rectangular regions which I will call <b>frames</b>. 
+Each frame corresponds to a program
+running on the system, though the mapping is not one-to-one. Each program can
+have 0, 1, or several frames associated with it. By typing or mousing, 
+we can send input to the program associated with the current frame. The program
+can respond by drawing text or graphics in its frames (or creating new ones).
+<p>
+Each frame is often subdivided into a number of rectangular areas, which I will call
+<b>components</b>. Examples of components are buttons, menus, menubars, text input
+fields, and areas in which text and graphics are drawn. These components often
+have particular behavior in response to mouse clicks, etc. However, these
+components are bound in some deep way to the enclosing frame. For example,
+all components of a frame move together when the frame is moved.
+<p>
+We can also use the mouse to move a frame around, resize the frame, Iconify the
+frame, kill the frame, select a frame, bring a frame to the foreground so
+it is not covered by other frames, etc.
+
+<h5>Window Systems and Operating Systems</h5>
+
+There is a tremendous amount of technology behind the scenes that is making this
+picture work. For each frame, three different entities are interacting to
+produce the behavior we see on our screens: the program attached to the frame,
+the operating system, and the <b>Window System</b> which is mediating between them.
+<p>
+Each program is only responsible for the contents of its own frames. It is
+in general, not resposible for where they are on the screen, whether they
+are on top or buried, etc. Each program wants to treat its frames as a
+collection of rectangular areas, independent of any other program's frames.
+<p>
+The operating system is responsible for managing attached hardware. In particular,
+the mouse, the keyboard, and the screen. It tracks low level motion, click, and
+keypress events, and sets pixels on the screen to particular colors.
+<p>
+A digression--<b>Pixels and Screens</b>: The image on your screen is made up 
+of a rectangular array of dots which can be set to some color by the computer's
+graphics hardware. These dots are called <em>pixels</em>. Depending on the
+computer, monitor, and graphics card, the screen will consist of different
+sized arrays; for example 1024x800 pixels, 1600x1200, 480x760.
+<p>
+The <b>Window System</b> is an entity that mediates between the operating
+system and the programs to manage the global resources of screen, mouse, and
+keyboard, while giving each program the view that it is connected to a mouse,
+keyboard and some number of frames. It is the window system that is responsiable
+for placing frames on the screen, moving them, iconifying them, killing then,
+selecting them, uncovering them etc. It also decides which frame--and therefore
+which program--each mouse event and key press belongs to. The main abstraction
+the Window System supports is called, naturally, a <b>Window</b>. Windows
+correspond to rectangular areas of the screen managed by the Window Systems.
+Both the <em>frames</em> and <em>components</em> discussed above are windows.
+In a typical application, each button, menu, scrollbar, etc. is its own window.
+(At least in most implementations; sometimes there are attempts to cheat for
+efficiency).
+<p>
+Frame windows are generally treated specially by the window system in that
+they are given borders, and a title bar with close and iconify icons, and
+all the other stuff for moving and resizing. (Of course a program
+can request this stuff be turned off).
+<p>
+Inside a frame, a program's windows are organized hierarchically. This
+hierarchy usually follows geometric enclosure. Child windows appear inside
+parent windows. Note: this hierarchy of windows is NOT the inheritance
+hierarchy of the various window types.
+<p>
+In general, the program is responsible for drawing the contents of
+its windows and reacting to mouse and keyboard events appropriately.
+For windows of common functionality, like buttons, there are libraries
+that support this functionality so it doesn't have to be duplicated. Some
+of these implement GUI components, and are often called <em>widgets</em>.
+There are other window types whose sole function is to organise the layout of
+their children. These are usually called <em>container</em> or <em>layout</em>
+windows.
+
+<h5>Windows in Java</h5>
+
+OK enough background. Let's write a program in Java that creates a frame
+Window.
+<p>
+The Java class that will do this for us (using the Swing GUI implementation)
+is <code>JFrame</code>. We will subclass <code>JFrame</code> to make a frame
+with the behavior we want.
+
+<pre>
+
+// Need to import these
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.*;
+
+/**
+ * Basic code to put up a frame.
+ */
+
+class MyFrame extends JFrame{
+
+    public MyFrame(){
+	setTitle("MyFrame");
+	setSize(200,200);        // size in pixels, must set: defaults to 0,0
+	// Magic to get program to quit on Frame window close
+	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+}
+
+public class FrameTest{
+
+    // OK let's have our main() create a frame.
+    public static void main(String[] args){
+	// Create new frame
+	MyFrame myframe = new MyFrame();
+	// Show frame
+	myframe.show();
+    }
+}
+
+</pre>
+
+<p>
+When I compile and run this program, it opens a frame whose size is 200x200 pixels
+with title "MyFrame". Notice I can move it, resize it, iconify it, close it; it
+appears in the taskbar, I can lower or raise it. All without doing any work.
+The Window System handles it all for me. Is this cool or what?
+
+<h5>Scaling and Size Issues</h5>
+
+When I created this frame, I made it the fixed size 200x200. On my office screen,
+which is about 1000x800 pixels, this takes up about 1/20 of the screen area. On
+a smaller screen, say 400x600 pixels, is would take up 1/6 of the screen. This
+is important to remember any time you are writing a GUI application. It may be
+run on a number of different screen sizes and you should do your best to
+make it work well on all. Java ( and most Window systems) have facilities for
+querying the size of the screen, so you can size your window appropriately.
+<p>
+Sizing issues go beyond how big to make the frame window. Clearly you can fit
+more stuff into a 400x400 window than a 200x200 window. The application developer
+must decide how best to adjust to the smaller area, whether to scale everything,
+pack things close together, or simply omit things. This issue also appears
+when the user resizes the window. The program must adjust to the new size to make
+it look good (or simply not allow re-sizing).
+
+<h5>Drawing</h5>
+Today's topic is graphics, so let's draw something. It is poor form
+to draw directly into the JFrame. What we need is a component for drawing into.
+In Java Swing, this component is usually JPanel. Again we must subclass
+JPanel to make a panel that behaves the way we want.
+
+<pre>
+class MyPanel extends JPanel{
+
+	public void paintComponent(Graphics g){
+	    super.paintComponent(g);
+	    g.drawString("Hello World",50,50);
+
+	}
+
+}
+</pre>
+
+<ul>
+<li>In order to draw onto our JPanel, must override the paintComponent()
+method of JPanel to call the drawing routines we want.
+<li>
+The paintComponent method is called with a Graphics context object as its
+argument. The system produces this so we don't have to worry about creating
+it. This object holds information about the current drawing style (line
+width, color, etc). It also knows about the calling panel and performs
+clipping to panel boundaries. The Graphics and related Graphics2D class have
+methods for drawing shapes, text and Images.
+<li> One of these is the drawString() method we call above.
+<li> In order to use MyPanel in our application we need to instantiate
+one in main() and add it (as a sub-window) into the frame. This is done my the
+code shown below. (The book explains why the ContentPane stuff is required.
+For now, just treat this as an incantation to copy and use).
+<li> Note that we have to call super.paintComponent() before we draw.
+
+
+<pre>
+public class FrameTest{
+
+    // OK let's have our main() create a frame.
+    public static void main(String[] args){
+	// Create new frame
+	MyFrame myframe = new MyFrame();
+	MyPanel mypanel = new MyPanel();
+	// Random stuff we just have to do (the book explains, kind of)
+	Container contentPane = myframe.getContentPane();
+	// add panel
+	contentPane.add(mypanel);
+	// Show frame
+	myframe.show();
+    }
+}
+</pre>
+
+
+<li> When we compile and run this program, our frame now has Hello World
+in it. Notice when we cover up the frame, or minimize it, the Hello world is
+still there when we uncover the frame. 
+<p>
+This happens because the our paintComponent() method is called by the 
+WindowSystem when a window needs to
+be repainted due to being moved, uncovered, de-iconifyed, etc. 
+We can see that this is happening by adding a System.out.println() to
+our paintComponent() method. The Java
+model (and the model of most systems)  is that the programmer is responsible
+for refreshing graphics; the window system does not buffer or remember
+the current contents. We will learn more about how this happens tomorrow.
+<li> We set the coordinates 50,50 into the drawString() method. Note:
+<ul>
+<li>These coordinates are relative to our current window (not screen, not frame)
+in this case, our MyPanel.
+<li>The origin (0,0) is in the upper left hand side of the window.
+<li>The Y coordinate increases DOWNWARDS. This is the opposite of the normal
+way to graph the x and y axes in mathematics.
+</ul>
+</ul>
+
+<h5>More Drawing</h5>
+<ul>
+<li> In moving from version 1.2 to 1.3, Java re-worked the drawing routines.
+The older version are attached to the Graphics class, use <code>int</code>s for
+pixel values, and consist of methods like drawLine().
+<li> The newer versions use a Graphics2D class ( a subclass of Graphics),
+use <code>float</code> or <code>double</code> for pixel coordinates and
+are implemented as separate classes. In order to use them, you must
+instantiate one, set any properties you want on the Graphics object,
+ then draw (or fill) it, using the draw() or fill() methods on Graphics2D.
+<li> One property you can set is color. Colors are also objects in Java.
+Colors can be chosen by selecting the mixture of red, green, and blue on a
+scale of 0-255, for example (255,0,0) is bright red, (0,0,0) is black. Some
+colors are predefined staticly.
+<pre>
+Color red = new Color(255,0,0);
+Color blue = Color.blue;
+</pre>
+<li>To draw a line (useing the new stuff) you need the x and y positions of
+the endpoints.
+<pre>
+Graphics2D g2 = (Graphics2D)g; // downcast Graphics object
+Line2D line = new Line2D.float(100,100,150,150);
+g2.setColor(red);
+g2.draw(line);
+</pre>
+<li>To draw a rectangle (or ellipse) you need the coordinate of the
+upper left corner, the width and height.
+
+<pre>
+Rectangle2D r = new Rectangle2D.float(120,100,30,30);
+g2.setColor(red);
+g2.draw();
+g2.setColor(blue);
+g2.fill();  // To draw a solid rectangle we call fill() rather than draw()
+</pre>
+<li>
+<h5>Drawing Images</h5>
+The ToolKit object, as the name implies, packages an assortment of useful
+functions. One of them is creating Images, which can then be drawn with
+the <code>drawImage</code> method.
+
+<pre>
+// use static method on ToolKit class to get the system-dependent ToolKit
+//  to really use.
+Toolkit kit = Toolkit.getDefaultToolkit();
+Image im = kit.getImage("img01.jpg");
+g.drawImage(im,50,50,null);
+</pre>
+<p>
+More complex Image handling issues are discussed in the book.
+</ul>
+<p>
+The only way to really learn to use these tools is to try them. Explore nad
+have fun.
+</body>
+</html>
+
+
+
+
+

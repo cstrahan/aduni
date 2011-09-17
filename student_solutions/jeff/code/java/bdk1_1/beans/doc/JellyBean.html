@@ -1,0 +1,187 @@
+<html>
+<head>
+<title>JellyBean.java Color-Annotated Source</title>
+</head>
+<body BGCOLOR=#C0C0C0>
+<h1><center>JellyBean.java Color-Annotated Source</center></h1>
+<hr>
+
+<p>
+This example illustrates <font color=green>constrained properties</font>, 
+<font color=brown>bound properties</font>, and <a href="JellyBeanBeanInfo.html">
+icon customization</a>.
+
+<p>An object with <font color=green>constrained properties</font>
+allows other objects
+to veto a constrained property change. Constrained property 
+listeners can veto a change by throwing a PropertyVetoException.
+JellyBean has a constrained property called 
+<font color=green>PriceInCents</font>.</p>
+
+<p>A <font color=brown>bound property</font> notifies 
+other objects when its value changes.
+Each time its value is changed, the property fires a PropertyChange
+event which contains the property name, the old value, and the new
+value. JellyBean has a bound property called 
+<font color=brown>Color</font>.</p>
+<br><br>
+<pre>
+package sunw.demo.jelly;
+
+import java.awt.*;
+import java.beans.*;
+
+public class JellyBean extends Canvas {
+
+    /**
+     * Construct a smallish JellyBean.
+     */
+    public JellyBean() {
+	setSize(60,40);
+    }
+
+    public void paint(Graphics g) {
+	g.setColor(ourColor);
+	g.fillArc(5, 5, 30, 30, 0, 360);
+	g.fillArc(25, 5, 30, 30, 0, 360);
+	g.fillRect(20, 5, 20, 30);
+    }
+    /** 
+     * Returns the color that the jelly bean is rendered with.
+     * @see #setColor
+     */
+    public <font color=brown>synchronized </font>Color getColor() {
+        return ourColor;
+    }
+    /** 
+     * Sets the color that the jelly bean is rendered with.  This is a 
+     * bound property.
+     * @see #getColor
+     */
+    public void setColor(Color newColor) {
+	Color oldColor = ourColor;
+        ourColor = newColor;
+</pre></font><font color=brown><pre>
+	changes.firePropertyChange("color", oldColor, newColor);
+</pre></font><pre>
+	repaint();
+    }
+    /** 
+     * Returns the current price.
+     * @see #setPriceInCents
+     */
+    public <font color=green>synchronized</font> int getPriceInCents() {
+        return ourPriceInCents;
+    }
+    /**
+     * Set the price in cents unless one of the VetoableChangeListeners
+     * throws a PropertyVetoException.  This is a constrained property.
+     * 
+     * @exception PropertyVetoException if the proposed price was vetoed
+     */
+    public void setPriceInCents(int newPriceInCents)<font color=green>
+                            throws PropertyVetoException</font> {
+	int oldPriceInCents = ourPriceInCents;
+
+	// First tell the vetoers about the change.  If anyone objects, we
+	// don't catch the exception but just let if pass on to our caller.
+<font color=green>
+	vetos.fireVetoableChange("priceInCents", 
+				new Integer(oldPriceInCents),
+				new Integer(newPriceInCents));
+</font>
+	// No-one vetoed, so go ahead and make the change.
+ 	ourPriceInCents = newPriceInCents;
+<font color=brown>
+	changes.firePropertyChange("priceInCents", 
+				new Integer(oldPriceInCents),
+				new Integer(newPriceInCents));
+</font>
+    }
+
+    //----------------------------------------------------------------------
+    // Methods for registering listeners:
+
+    /**
+     * The specified PropertyChangeListeners <b>propertyChange</b> method will
+     * be called each time the value of any bound property is changed.
+     * The PropertyListener object is addded to a list of PropertyChangeListeners
+     * managed by the JellyBean, it can be removed with removePropertyChangeListener.
+     * Note: the JavaBeans specification does not require PropertyChangeListeners
+     * to run in any particular order.
+     *
+     * @see #removePropertyChangeListener
+     * @param l the PropertyChangeListener
+     */      
+<font color=brown>
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+	changes.addPropertyChangeListener(l);
+    }
+</font>
+    /** 
+     * Remove this PropertyChangeListener from the JellyBeans internal list.  
+     * If the PropertyChangeListener isn't on the list, silently do nothing.
+     * 
+     * @see #addPropertyChangeListener
+     * @param l the PropertyChangeListener
+     */      
+<font color=brown>
+    public void removePropertyChangeListener(PropertyChangeListener l) {
+	changes.removePropertyChangeListener(l);
+    }
+</font>
+    /**
+     * The specified VetoableChangeListeners <b>vetoableChange</b> method will
+     * be called each time the value of any constrained property is changed.
+     * Currently, the only constrained property is "priceInCents".
+     * The VetoableChangeListener object is addded to a list of VetoableChangeListeners
+     * managed by the JellyBean, it can be removed with removeVetoableChangeListener.
+     * Note: the JavaBeans specification does not require VetoableChangeListeners
+     * to run in any particular order.
+     *
+     * @see #removeVetoableChangeListener
+     * @param l the VetoableChangeListener
+     */      
+<font color=green>
+    public void addVetoableChangeListener(VetoableChangeListener l) {
+	vetos.addVetoableChangeListener(l);
+    }
+</font>
+
+    /** 
+     * Remove this VetoableChangeListener from the JellyBeans internal list.  
+     * If the VetoableChangeListener isn't on the list, silently do nothing.
+     * 
+     * @see #addVetoableChangeListener
+     * @param l the VetoableChangeListener
+     */      
+<font color=green>
+    public void removeVetoableChangeListener(VetoableChangeListener l) {
+	vetos.removeVetoableChangeListener(l);
+    }
+</font>
+    //----------------------------------------------------------------------
+    // Private data fields:
+<font color=brown>
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+</font><font color=green>
+    private VetoableChangeSupport vetos = new VetoableChangeSupport(this);
+</font>
+    private Color ourColor = Color.orange;
+    private int ourPriceInCents = 2;
+}
+</pre>
+<hr>
+<center>
+<p>
+<font size=1>
+Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems Inc.
+<p>
+Copyright &#169;
+1996 Sun Microsystems, Inc., 2550 Garcia Ave., Mtn. View, CA 94043-1100 USA.
+<br>All rights reserved.
+</font>
+</center>
+</body>
+</html>
+

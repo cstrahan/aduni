@@ -1,0 +1,38 @@
+
+# This makefile delivers two beans (OurButton and ExplicitButton)
+# in a single JAR file.
+
+CLASSFILES= \
+	sunw/demo/misc/Voter.class \
+	sunw/demo/misc/TickTock.class \
+	sunw/demo/misc/ChangeReporter.class
+
+
+DATAFILES=
+
+JARFILE= ../jars/misc.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/misc/Voter.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	echo "" >> manifest.tmp
+	echo "Name: sunw/demo/misc/TickTock.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	echo "" >> manifest.tmp
+	echo "Name: sunw/demo/misc/ChangeReporter.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/misc/*.class $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+# Rule for compiling a normal .java file
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+clean:
+	/bin/rm -f sunw/demo/misc/*.class
+	/bin/rm -f $(JARFILE)

@@ -1,0 +1,21 @@
+       <p> <dt> <a href="source2html">source2html</a> <dd>
+       <b>source2html</b> is a Ruby program that scans a number of
+       source files and produces a set of HTML files containing nicely
+       formated source with hyper-links between the files.  An index
+       file for all the included source code is also generated.  The
+       user has some small control over the format of the HTML files.
+       You can see some examples <a
+       href="source2html/accept/source.html">here</a>.
+
+       <p> Currently supported languages are: 
+       <b>Eiffel</b>,
+       <b>Emacs Lisp</b>,
+       <b>Java</b>,
+       <b>Perl</b>,
+       <b>Python</b>,
+       <b>Ruby (of course)</b>, and
+       <b>Shell Scripts</b>.
+
+       <p><b>Links:</b> <a href="source2html/index.html">Doc</a>,
+       <a href="source2html/source.html">Browsable Source</a>, and
+       <a href="ftp://ftp.one.net/pub/users/jweirich/tools/source2html">Download</a>.

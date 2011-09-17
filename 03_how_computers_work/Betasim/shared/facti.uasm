@@ -1,0 +1,34 @@
+.include "../shared/beta"
+
+        MOVC(stack,sp)
+
+main:   MOVC(5,R1)
+
+        PUSH(R1)
+        BR(fact,lp)
+        DEALLOCATE(1)
+
+        HALT()
+
+fact:   PUSH(lp)
+        PUSH(bp)
+        MOV(sp,bp)
+        PUSH(r1)
+
+        LD(bp,-3,r1)
+        MOVC(1,r0)
+
+loop:   BEQ(r1,return)
+        MUL(r1,r0,r0)
+        SUBC(r1,1,r1)
+        BR(loop)
+
+return: POP(r1)
+        MOV(bp,sp)
+        POP(bp)
+        POP(lp)
+        JMP(lp)
+
+stack:
+
+

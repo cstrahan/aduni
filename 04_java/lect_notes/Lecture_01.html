@@ -1,0 +1,430 @@
+<html>
+<head>  
+  <title>  
+   Lecture 1  
+  </title>
+</head>  
+<body bgcolor="#ffffff">  
+<h2>Lecture 1<h2>  
+<h3>Introduction,Administration, and Procedural Programming</h3>  
+<pre>  
+Introduction:  
+  About me: short bio  
+  About Alan:  
+  About the course:  
+    Administration:  
+       Lectures M-F 10-11:30  
+       Recitation M 3:30, T-F 1:00  
+       Problem Sets: 4 total,   
+           programming exercises at first, then projects  
+       Quizzes: Quiz 1: Wed Jan 11 Evening (covers PS1)  
+                Quiz 2: Sun Jan 21 4 PM (covers PS2)  
+                Note: Quiz 1 is on Wed evening to allow for grading and  
+		return of PS1 before Quiz1.  
+  
+    Coverage and goals:  
+       Title: OOP in Java  
+       Goals: Teach good programming skills, technique, and practice. Not  
+               primarily a course in Java (though you will learn it). Nor  
+	       a course in OOP philosophy (though we will cover it). We will  
+	       emphesize general principles behind OOP, programming methods  
+	       and languages. Need to be able to apply principles in different  
+	       circumstances, using different languages. We will focus on  
+	       the pragmatic and (as much as possible), the universal.  
+       Coverage: 3 major sections.  
+            Basic Programming constructs  
+	      Procedural programming: types, structured control.  
+	      OOP: Classes, inheritance, and interfaces.  
+	      Exception handling  
+            Common programming paradigms: current practice  
+	      I/O programming  
+	      Event-based programming  
+	      GUI and graphics programming  
+	      MultiThreaded Programming  
+	      Network Programming  
+	      Asynchronous, Re-entrant and Distributed Programming: RPC etc.  
+	    Design and cultural topics  
+	      Program design and methodogies  
+	       Class design and relationships: UML    
+	       Design patterns, anti-patterns, etc.  
+	       Project/program development cycle  
+	      Documentation  
+	      Testing  
+	    Advanced programming topics  
+	      Components: JavaBeans, Controls, EJB, scripting, etc.  
+	      OOP in C/C++  
+	      I18N and L10N  
+	      Persistance and serialization  
+	      Intro to Windows  
+	      Java Web Programming  
+</pre>  
+<pre>  
+  
+OOP and Java:  
+  About OOP:  
+         Latest in a long line of programming styles or fads, from structured  
+	     programming, modular programming, abstract data types, OOP. These  
+	     appear periodically like diet fabs or self-help fabs. Each new  
+	     system promises to revolutionize programming, eliminate bugs,  
+	     ensure projects finish under busget and on-time, and guarantee  
+	     thin thighs in 30 days. OOP has been the methodology-du-jour for  
+	     some time now and there is little evidence things have radically  
+	     changed. New methodologies are constantly appearing, design   
+	     patterns, Anti-Patterns, Extreme Programming (best name I think).  
+  
+	     Although the fad/movement aspect of these techniques can be   
+	     distracting and can lead to long ideological discussions (software  
+	     developers have a tendency towards doctrine), they are not without  
+	     merit. There are elements of good practice in all of these (just  
+	     as eating well and exercising are good ideas even if you aren't  
+	     in the Zone). It is our goal to extract and present these with  
+	     a minimum of ideology.  
+  
+  About Java:  
+       Java is an Object-Oriented language developed by Sun Microsystems. In  
+       it's short history it has been re-marketed several times. Originally  
+       designed as a language for programming computing appliances, it was  
+       re-targeted around applets in the early days of the Web. The advantage  
+       of Java for this task lay in it's platform independence. As applets  
+       failed to gain widespread traction, Java was re-marketed as a   
+       replacement for C++ in enterprise software development. It's features  
+       being it's simplified semantics, memory management, and again  
+       portability. It has made some small inroads in this area but far  
+       from dominant (or even significant). Currently, the most action in  
+       the Java world seems to be around server-side Web programming.  
+  
+       Despite its currently limited role in the application development  
+       space, Java is a good language for learning OOP. It is considerably  
+       less complex than C++, yet keeps low-level details (such as memory  
+       management) from being distracting. The main danger of Java is that  
+       one gets too used to things being easy and hidden and become unable  
+       to function in a less supportive and protective environment.  
+  
+       One more note: Although Java is usually thought of as a language. It  
+       is really 3 things: a language, a set of libaries,and a run-time  
+       environment that supports the language and iteracts with the  
+       actual underlying platform (UNIX, Windows, etc). You will see this,  
+       for example,in the way Java maps classes to files and class names   
+       to file paths.  
+</pre>  
+<pre>  
+  
+  About Programming Languages:  
+       This is probably a good time for a brief overview of the space  
+       of programming languages one is likely to see.  
+  
+                       Performance  EaseofUse   Typing  StorageMgnt    Objects  
+  
+       C/C++              High        Low       Strong    Explicit        C++  
+       Fortran  
+  
+       Java               Med/Low     Med       Strong     GC             Yes  
+       VB		                                   ??  
+       (Lisp,Scheme)  
+  
+  
+       JavaScript         Med/low     High      Weak       GC           Sort-of  
+       Perl               Med/low     VHigh     No         GC           Sort-of  
+       Tcl                Med/low     High      Weak       GC           Sort-of  
+  
+  
+       Feature: C/C++/Java/JavaScript/Perl all have very similar syntax.  
+  
+</pre>  
+<pre>  
+  
+Introduction to Procedural Programming: (or C programming in 30 minutes).  
+  
+  Main differences between "procedural" languages vs.  Scheme.  
+      -Strong typing  
+      -Infix syntax and {},; delimitation.  
+      -Lexical scoping  
+      -Support for and bias toward explicit iteration rather than recursion.  
+      -Procedural, side-effect oriented style (as opposed to functional)  
+      -Heap storage more visible and varied: objects (in contrast to lists)  
+  
+  Variables  
+  
+       {  
+          int count=1;  
+	  double value = 3.0;  
+  
+	  ... code here ...  
+  
+	  char = 'c';  
+	  int foo;             // danger! uninitialized variable  
+  
+	  {  
+	    int y=3;  
+	    int count;         // Error, cannot shadow vars in enclosing blocks  
+	    ... more code here ...  
+  
+	  }  
+          ... more code here ...  
+       }  
+  
+       Notes:  
+        - statements are terminated with ;  
+        - {} are used to delimit blocks (compound statements)  
+        - // used for end-of-line comments. C /* ... */ syntax also allowed  
+        - variables must be defined before use.    
+	- variables can be defined anywhere in block.  
+	   - unlike C which required definitions at top.  
+	- variables can be initialized with '='  
+	- variables don't have to be initialized, but they should be.  
+	- variables are defined with 'types'  
+  
+  Types  
+     - 'types' specify partial information about a variable's value. Ex.  
+           we know it's an integer, not a character string, but we don't  
+	   know which one.  
+     - Types are used by compiler to perform error checking on programs  
+         Eg. Makes sure you don't multiply a number and a string.  
+     - Types also define size of storage to be allocated.  
+     - Java has a number of built-in basic types:  
+         boolean - true or false  
+	 byte,short,int,long - 1,2,4,8 byte signed integers  
+	     - note diffs with C/C++  
+	 float,double - 4 and 8 byte floating point numbers  
+	 char - character type (Unicode); not convertable to int  
+	 void - no type, used to type functions that don't return a value  
+     - Java also supports array types (more in recitation).  
+     - As well as basic types, Java supports Object types (more tomorrow)  
+        - object support lets programmings extend the type system and  
+	  take advantage of the type checking (as well as other benefits).  
+             
+  Variable Scoping  
+     - Variable are either local variables (local to some method) or  
+        instance/class variables. There are no global variables per-se  
+	in Java.  
+     - Local variables are allocated on the stack and scoped to the  
+        enclosing block. The extent of local variables is the local block.  
+	Note: The extent of a reference variable and the object it references  
+	are different!  
+     - Instance variables we discuss tomorrow.  
+  
+  Expressions  
+    - combine variables and constants   
+    - expressions evaluate to (typed) value  
+    - expression syntax is infix operator syntax (ie normal math syntax).  
+       Ex. a+3, b*7  
+    - Operator overview  
+       Arith        +,-,*,/,%        number -&gt; number  
+       Logical      &&,||,^          boolean -&gt; boolean  
+       Comp         ==,!=,&gt;,&lt;,&gt;=,&lt;=  number -&gt; boolean         
+       Bit          |,&,~,&lt;&lt;,&gt;&gt;      number-&gt;number  
+       SideEffect   ++,--            number-&gt;number w/ assignment  
+       Assignment   = , += , -=      number-&gt;number w/ assignment  
+  
+    - Operators have precedence (as in math), don't rely on this. Use  
+       parens to explicitly structure.  
+         Ex.  (a+b)*34   
+  
+    - Type conversion: Automatically converts integers -&gt; float -&gt; double  
+        as needed.  Ex.  (2.4 * 2) -&gt; 4.8  (a double)  
+	- Be care with conversion: rounding and overflow can cause errors.  
+  
+   Control Flow  
+  
+    Basic conditional: if,elseif,else  
+     -syntax  
+  
+     if(..condition..) {  
+       .. code executed if condition is true  
+     }  
+     else{  
+       .. code executed if condition is false  
+     }  
+  
+     - condition must evaluate to a boolean type   
+          - no fooling around as in C/C++  
+     - else clause is optional  
+     - if branch code is single statement, the {} are not required.  
+       - Be careful, if later a second statement is added only one  
+         will be considered inside the 'if'. Best to always use {}.  
+     - The 'else' associated with closest 'if' when ambiguous. Use  
+       delimiters to avoid ambiguity  
+  
+        /* Bad and confusing */  
+          if(cond1)               
+	   if(cond2)  
+              statement1  
+	   else                 // assoc with cond2 if  
+              statement2  
+  
+        /* Clearer */  
+          if(cond1){  
+	   if(cond2){  
+              statement1  
+	   }  
+	   else                 // assoc with cond2 if  
+              statement2  
+	   }  
+          }  
+  
+  
+     - can chain if, else if to test multiple alternatives  
+  
+           if(cond1){  
+              statement1  
+           }  
+	   else if(cond2){  
+              statement2  
+	   }  
+	   else if(cond3){  
+              statement3  
+	   }  
+	   else {  
+              statement4  
+	   }  
+  
+     - there are often better ways to implement chains like this  
+  
+    For loop  
+  
+    -syntax  
+  
+      for(initialization;condition;incrment){  
+           ..loop code..  
+      }  
+      ..code after loop..  
+  
+    -initialization and increment are statements  
+    -condition is an expression that evaluates to a boolean  
+    - Semantics  
+      1) execute initialization  
+      2) evaluate condition  
+      3) if false, jump to code after loop  
+      4) if true, execute loop code, then execute increment  
+      5) goto 2)  
+    - continue and break statements provide fine control on loops  
+        - break -- leave loop immediately (goto code after loop)  
+	- continue -- stop executing loop code, jump to increment   
+	                and condition test  
+  
+    -common patterns: counting loop  
+  
+      for(i=0;i&lt;N;i++){  
+        ..loop code..  
+      }  
+        
+      - executes N times (assuming no breaks or assignments to i)  
+         - i goes from 0 to N-1 in loop  
+	 - i == N when loop terminates  
+      - numerical pgmrs like to start loops at 1, be careful to avoid  
+        fencepost errors.  
+      - Be consistant in your loops (eg, start from 0, count up).  
+      - Don't alter loop variable in loop code (too confusing)  
+  
+    -common patterns: next loop   
+      for(i=first;i!=null;i = i.getNext()){  
+        ..loop code..  
+      }  
+      - used to follow a chain of links data structures  
+        Ex. cdr'ing down a linked list.  
+  
+    -probably 99% of all for loops you write will follow these patterns  
+  
+  
+    While loop  
+  
+    -syntax  
+  
+    while(condition){  
+       ..code to execute..  
+    }  
+  
+    -semantics  
+      1) evaluate condition  
+      2) if false, exit loop  
+      3) if true, execute loop code  
+      4) goto 1)  
+  
+    -equivalent to for(;condition;){}  
+      
+    - loop code (or external input), must affect 'condition' value  
+       (or else we loop forever).  
+  
+    Functions  
+  
+     - Java does not have glocal functions per-se (too ideologically pure).  
+     - Static methods are semanticly equivalent.  
+     - Ignore strange syntax for now.  
+  
+     public static int square(int x){  
+        return(x*x);  
+     }  
+  
+     - Argments and return values must be typed  
+     - Static keyword indicates global scope  
+     - public keyword indicates accessability  
+     - methods can be called from within defining class with method name  
+  
+     // Calling square within calls  
+     int x = 4;  
+     int sq = square(x);       // This x is different than formal param in  
+                               //   square def'n  
+  
+  
+     - function names  can be overloaded by types  
+  
+     // calling square on a float will call this method  
+     public static float square(float x){  
+        return(x + 3.0);         // return wrong value just for fun.  
+     }  
+  
+</pre>  
+<pre>  
+  
+Putting it all together: Hello World  
+  
+   - When dealing with new language, always do "hello world"  
+  
+  public class Hello{  
+     public static void main(String[] args){  
+        // real code goes here  
+        System.out.println("Hello World");  
+     }    
+  }  
+  
+   - Java makes some simple things hard. Ignore magic for now.  
+   - Java allows one public class per file. If class is named Hello,  
+      the source file MUST be named Hello.java  
+   - To compile: javac Hello.java  
+   - To run: java Hello  
+     - should type Hello World on console  
+     
+One more: Recursive fact  
+  
+  public class FactTest{  
+  
+     public static int fact(int a){  
+        if(a &lt;= 1) return(1);  
+	return(a * fact(a-1));  
+     }  
+  
+     public static void main(String[] args){  
+	int x = 7;  
+	// println() converts int to string, adds \n  
+	// Can use '+' to concatente strings  
+        System.out.println("Fact of " + x + " is " + fact(x));  
+  
+     }    
+  }  
+  - This should print out 'Fact of 7 is 5040' on the console.  
+</pre>  
+<hr>  
+<pre>  
+  
+Recitation:  
+  
+     Reference types: should be familiar from Scheme  
+     Arrays and array variables  
+       - concentrate on static arrays for now, (ie no 'new')  
+     Reference types and aliasing (sharing structure)  
+     Switch  
+     Named break if time.  
+</pre>  
+  
+</body>  
+</html>

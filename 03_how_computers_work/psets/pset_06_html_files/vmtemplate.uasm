@@ -1,0 +1,784 @@
+|| file: vmtemplate.uasm
+||   by: wooly
+|| date: Wed May  5 17:46:15 1999
+|| beta definitions
+.include beta
+
+.macro CHK() betaopc(0x0D, r31, -1, r31) betaopc(0x0D, r31, -1, r31)
+
+.macro LDRV(c, rc) betaopc(0x0F, 0, c, rc)
+.macro LDV(ra, c, rc) betaopc(0x08, ra, c, rc)
+.macro LDV(c, rc) betaopc(0x08, r31, c, rc)
+.macro STV(ra, c, rc) betaopc(0x09, ra, c, rc)
+.macro STV(ra, c) betaopc(0x09, ra, c, r31)
+
+.macro BEQV(ra, c, rc) betaopc(0x0D, ra, c-.-1, rc)
+.macro BEQV(ra, c) betaopc(0x0D, ra, c-.-1, r31)
+.macro BRV(c, rc) betaopc(0x0D, r31, c-.-1, rc)
+.macro BRV(c) betaopc(0x0D, r31, c-.-1, r31)
+.macro BNEV(ra, c, rc) betaopc(0x0E, ra, c-.-1, rc)
+.macro BNEV(ra, c) betaopc(0x0E, ra, c-.-1, r31)
+
+.macro JMPV(ra, rc) betaopc (0x0B, ra, 0, rc)
+.macro JMPV(ra) betaopc (0x0B, ra, 0, r31)
+
+.macro SAVE(Rn)  ST(Rn, SavedRegs+Rn, r31)
+.macro RSTR(Rn)  LD(r31, SavedRegs+Rn, Rn)
+
+savedxp = r0
+badinst = r1
+temp = r2
+temp2 = r3
+
+page0:
+        BRV(set_to_virtual_address_of_main)
+illegalop:
+        BR(IllegalOp)
+interrupt:
+        SAVE(r0) SAVE(r1) SAVE(r2) SAVE(r3) SAVE(r4) SAVE(r5)
+        SAVE(r6) SAVE(r7) SAVE(r8) SAVE(r9) SAVE(r10)     | save registers
+        SUBC(xp,1,savedxp)                                                        | calculate xp-1
+        ADD(savedxp,r31,r26)                                                      | stash a copy in r26
+        BR(resolvexp,resolvereturn)
+page1:
+        LDV(savedxp, 0, badinst)                 | load offending LD/LDR/ST instruction
+        SHRC(badinst,26,temp)                  | get opcode
+        CMPEQC(temp, 0x08, temp2)         | LDV
+        BNE(temp2, LDVhand)
+|        CMPEQC(temp, 0x09, temp2)         | STV
+|        BNE(temp2, STVhand)
+|        SHLC(badinst,11,temp)                   | LDRV
+|        SHRC(temp,16,temp) | get const
+|        ADD(savedxp,temp,temp)
+|        ADDC(temp,1,savedxp)
+|        BR(resolvexp)
+
+STVhand:
+        ANDC(badinst,15,temp)               | isolate rc
+        SHLC(temp,21,temp)                    | move to ra position
+        LD(constmask, temp2)
+        AND(temp2,badinst,temp2)         | get constant
+        ADD(temp,temp2,badinst)           | and add to op
+        LD(ADDCblank, temp)
+        XOR(badinst,temp,badinst)         | convert to ADDC
+        BR(trapproceed)
+
+LDVhand:
+        LD(LDVxorADDC, temp)               
+        XOR(badinst,temp,badinst)         | convert to ADDC
+        ANDC(badinst,0xFFE0,badinst)  | set rc = r0
+
+trapproceed:
+        SHRC(badinst,21,temp)
+page2:
+        ANDC(temp,31,temp)                   | get ra
+        CMPLTC(temp,11,temp2)           | was it stored?
+        BEQ(temp2, tpend)
+        LD(temp, SavedRegs, r0)           | load it into r0
+        LD(ramask, temp)
+        AND(temp, badinst, badinst)      | set op's ra to r0
+tpend:
+        ST(badinst,newinst)                     | store new op
+        newinst: .=.+1                                | and execute
+        ADD(r31,r0,savedxp)                    | save target address as xp and fall into resolvexp
+
+resolvereturn = r1
+loadreturn = r2
+
+resolvexp:              | this function performs a table lookup on xp
+                                | loading any necessary pages
+        fill_in_code
+        JMP(resolvereturn)
+
+loadpage:             | this function loads a disk page into memory
+                               | saving the old one if dirty and updates necessary state info
+        ADDC(r25,1,r25)                             | increment fault count
+        fill_in_code
+        JMP(loadreturn)
+
+LDVxorADDC: 0xE0000000
+ADDCblank: ADDC(r0,r0,r0)
+ramask:0xFC1FFFFF
+constmask: 0x001FFFE0
+
+RestoreState:
+        RSTR(r0) RSTR(r1) RSTR(r2) RSTR(r3) RSTR(r4) RSTR(r5)
+        RSTR(r6) RSTR(r7) RSTR(r8) RSTR(r9) RSTR(r10)
+        JMPV(r26)             | can't use xp because illegal op clobbers it
+
+| if so, XP-1 was LD/ST, get addr and load page
+| else load page with XP
+| check if XP-1 in memory
+| if it is check if XP-1 was LD/ST
+| if so, JMP XP-1
+| else JMP XP
+
+SavedRegs:
+        .= .+11
+page3: page4: page5: page6:  | there should go every 16 words in your
+page7: page8: page9: page10: | kernel code, but are not necessary.
+       0                                                             | they must go before swappable pages
+                                                                       | and be followed by a CHK(), though.
+page11: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 CHK()
+page12: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 CHK()
+page13: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 CHK()
+page14: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 CHK()
+
+page15:
+rootpage:           || fill in what the first level page table should be
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+
+disk:                     || fill in second level pages and other data
+
+disk0:   | (0x0??)
+| put second level page tables here
+|
+|
+|
+main:
+|| construct the heap
+        ADDC(r31,2,r0)
+nextnumber:
+        ADD(r0,r31,r1)
+nextlevel:
+        SHRC(r1,1,r2)
+        LDV(r1,data-1,r3)
+        LDV(r2,data-1,r4)
+        CMPLT(r4,r3,r5)
+        BEQV(r5, continue)
+        STV(r3,data-1,r2)
+        STV(r4,data-1,r1)
+        ADD(r2,r31,r1)
+        BRV(nextlevel)
+continue:
+        CMPEQC(r0,elements,r1)
+        ADDC(r0,1,r0)
+        BEQV(r1,nextnumber)
+
+|| strip off top element
+        ADDC(r31,elements,r0)
+next:
+        LDV(r0,data-1,r1)
+        LDV(r31,data,r2)
+        STV(r2,data-1,r0)
+        STV(r1,data,r31)
+        SUBC(r0,1,r0)
+        ADDC(r31,1,r2)
+|| and heapify
+pushdown:
+        SHLC(r2,1,r3)
+        CMPLE(r3,r0,r3)
+        BEQV(r3,cont)
+        LDV(r2,data-1,r1)
+        SHLC(r2,1,r3)
+        LDV(r3,data-1,r6)
+        ADDC(r3,1,r4)
+        CMPLE(r4,r0,r5)
+        BEQV(r5,procA)
+        LDV(r4,data-1,r7)
+        CMPLE(r7,r6,r5)
+        BNEV(r5,procA)
+        CMPLT(r7,r1,r5)
+        BNEV(r5,cont)
+        STV(r7,data-1,r2)
+        STV(r1,data-1,r4)
+        ADD(r4,r31,r2)
+        BRV(pushdown)
+procA:
+        CMPLT(r6,r1,r5)
+        BNEV(r5,cont)
+        STV(r6,data-1,r2)
+        STV(r1,data-1,r3)
+        ADD(r3,r31,r2)
+        BRV(pushdown)
+cont:
+        CMPEQC(r0,1,r1)
+        BEQV(r1,next)
+        HALT()
+
+elements = 32
+sentinel: 0x0FFFFFFF
+data = 0 set_this_to_virtual_address_of_next_line
+0x05
+0x12
+0x10
+0x20
+0x1C
+0x1F
+0x2B
+0x11
+0x3D
+0x0
+0x35
+0x1B
+0x2D
+0x3F
+0x3A
+0x0A
+0x03
+0x16
+0x37
+0x09
+0x1E
+0x3C
+0x19
+0x30
+0x13
+0x07
+0x0F
+0x15
+0x04
+0x34
+0x28
+0x08
+0x1D
+0x0B
+0x29
+0x0E
+0x2C
+0x17
+0x14
+0x26
+0x38
+0x24
+0x1A
+0x21
+0x25
+0x0C
+0x3E
+0x32
+0x2F
+0x2E
+0x23
+0x31
+0x06
+0x3B
+0x2A
+0x36
+0x22
+0x39
+0x02
+0x27
+0x01
+0x18
+0x0D
+0x33
+       0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+disk1:   | (0x1??)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+disk2:   | (0x2??)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+disk3:   | (0x3??)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||
+| end template code
+|
+| begin I/O controller simulator code
+|||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+TLBSavedRegs:
+        .= .+32
+
+.macro TLBSAVE(Rn)  ST(Rn, TLBSavedRegs+Rn, r31)
+.macro TLBRSTR(Rn)  LD(r31, TLBSavedRegs+Rn, Rn)
+
+IllegalOp:
+        | save state
+        TLBSAVE(r0)  TLBSAVE(r1)  TLBSAVE(r2)   TLBSAVE(r3)
+        TLBSAVE(r4)  TLBSAVE(r5)  TLBSAVE(r6)   TLBSAVE(r7)
+        TLBSAVE(r8)  TLBSAVE(r9)  TLBSAVE(r10)  TLBSAVE(r11)
+        TLBSAVE(r12) TLBSAVE(r13) TLBSAVE(r14)  TLBSAVE(r15)
+        TLBSAVE(r16) TLBSAVE(r17) TLBSAVE(r18)  TLBSAVE(r19)
+        TLBSAVE(r20) TLBSAVE(r21) TLBSAVE(r22)  TLBSAVE(r23)
+        TLBSAVE(r24) TLBSAVE(r25) TLBSAVE(r26)  TLBSAVE(r27)
+        TLBSAVE(r28) TLBSAVE(r29) TLBSAVE(r30)  TLBSAVE(r31)
+
+        LD(xp, -1, r0)          | load [xp-1] (illegal instruction) into r0
+        SHRC(r0, 26, r1)        | shift right to get the actual opcode
+        LD(r1, optable, r1)     | load trap address from table into r1
+        LD(valid, r2)
+        ADD(r1, r2, r1)
+        JMP(r1)
+
+UNK = UnknownOp
+
+optable:
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        LDV STV UNK JMPV UNK BEQV BNEV LDRV
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+
+UnknownOp:
+        HALT()
+
+PPT:
+page0
+page1
+page2
+page3
+page4
+page5
+page6
+page7
+page8
+page9
+page10
+page11
+page12
+page13
+page14
+page15
+
+TLB:
+0x80000000
+0x80000001
+0x80000002
+0x80000003
+0x80000004
+0x80000005
+0x80000006
+0x80000007
+0x80000008
+0x80000009
+0x8000000A
+0x8000000B
+0x8000000C
+0x8000000D
+0x8000000E
+0x8000000F
+
+valid:0x80000000
+validmask: 0x7FFFFFFF
+TLBmask: 0x00FFFFFF
+dirty: 0x40000000
+dirtymask:0xBFFFFFFF
+
+LDV:
+        || get Rb into r2
+        SHLC(r0, 11, r2)
+        SRAC(r2, 16, r2)         | r2 now holds const
+
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        
+        ADD(r1,r2,r3)           | r3 now holds address
+
+        CMPLTC(r3,0,r7)
+        BNE(r7, GETSTAT)
+
+        BR(V2physical, LP)  | r8 now holds physical addr
+        LD(r8, 0, r2)
+        ANDC(r0, 31, r1)        | r1 now holds Rc
+        ST(r2, TLBSavedRegs, r1)   | save value into saved regs
+        BR(TLBRestoreState)
+
+STV:
+        || get Rb into r2
+        SHLC(r0, 11, r2)
+        SRAC(r2, 16, r2)         | r2 now holds const
+
+        ANDC(r0, 31, r1)        | r1 now holds Rc
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Rc>
+        
+        ADD(r1,r2,r3)           | r3 now holds virtual address
+
+        CMPEQC(r3, -1, r7)
+        BNE(r7, LDP)
+        CMPEQC(r3, -2, r7)
+        BNE(r7, STP)
+        CMPEQC(r3, -3, r7)
+        BNE(r7, INVALIDATE)
+        CMPEQC(r3, -4, r7)
+        BNE(r7, CLEAN)
+
+        BR(V2physical, LP)  | r8 now holds physical addr
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        ST(r1, 0, r8)                | perform store
+        BR(TLBRestoreState)
+
+LDP:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        LD(TLBmask, r2)
+        AND(r1,r2,r1)              | mask unused bits
+        ANDC(r1,15,r5)
+        LD(r5,PPT,r8)
+        ANDC(r1,0x0FF0,r4)
+        ADDC(r4,disk,r4)
+        LD(r4,0,r2)
+        ST(r2,0,r8)
+        LD(r4,1,r2)
+        ST(r2,1,r8)
+        LD(r4,2,r2)
+        ST(r2,2,r8)
+        LD(r4,3,r2)
+        ST(r2,3,r8)
+        LD(r4,4,r2)
+        ST(r2,4,r8)
+        LD(r4,5,r2)
+        ST(r2,5,r8)
+        LD(r4,6,r2)
+        ST(r2,6,r8)
+        LD(r4,7,r2)
+        ST(r2,7,r8)
+        LD(r4,8,r2)
+        ST(r2,8,r8)
+        LD(r4,9,r2)
+        ST(r2,9,r8)
+        LD(r4,10,r2)
+        ST(r2,10,r8)
+        LD(r4,11,r2)
+        ST(r2,11,r8)
+        LD(r4,12,r2)
+        ST(r2,12,r8)
+        LD(r4,13,r2)
+        ST(r2,13,r8)
+        LD(r4,14,r2)
+        ST(r2,14,r8)
+        LD(r4,15,r2)
+        ST(r2,15,r8)
+        SHRC(r1,12,r1)
+        LD(r31,valid,r2)
+        ADD(r2,r1,r2)
+        ST(r2,TLB,r5)
+        BR(TLBRestoreState)
+
+STP:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        LD(TLBmask, r2)
+        AND(r1,r2,r1)              | mask unused bits
+        ANDC(r1,15,r5)
+        LD(r5,PPT,r8)
+        ANDC(r1,0x0FF0,r4)
+        ADDC(r4,disk,r4)
+        LD(r8,0,r2)
+        ST(r2,0,r4)
+        LD(r8,1,r2)
+        ST(r2,1,r4)
+        LD(r8,2,r2)
+        ST(r2,2,r4)
+        LD(r8,3,r2)
+        ST(r2,3,r4)
+        LD(r8,4,r2)
+        ST(r2,4,r4)
+        LD(r8,5,r2)
+        ST(r2,5,r4)
+        LD(r8,6,r2)
+        ST(r2,6,r4)
+        LD(r8,7,r2)
+        ST(r2,7,r4)
+        LD(r8,8,r2)
+        ST(r2,8,r4)
+        LD(r8,9,r2)
+        ST(r2,9,r4)
+        LD(r8,10,r2)
+        ST(r2,10,r4)
+        LD(r8,11,r2)
+        ST(r2,11,r4)
+        LD(r8,12,r2)
+        ST(r2,12,r4)
+        LD(r8,13,r2)
+        ST(r2,13,r4)
+        LD(r8,14,r2)
+        ST(r2,14,r4)
+        LD(r8,15,r2)
+        ST(r2,15,r4)
+        LD(r31,dirtymask,r2)
+        LD(r5,TLB,r1)
+        AND(r2,r1,r2)
+        ST(r2,TLB,r5)
+        BR(TLBRestoreState)
+
+INVALIDATE:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        ANDC(r1,15,r1)
+        LD(r1,TLB,r2)
+        LD(validmask, r3)
+        AND(r2,r3,r4)
+        ST(r4,TLB,r1)
+        BR(TLBRestoreState)
+
+CLEAN:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        ANDC(r1,15,r1)
+        LD(r1,TLB,r2)
+        LD(dirtymask, r3)
+        AND(r2,r3,r4)
+        ST(r4,TLB,r1)
+        BR(TLBRestoreState)
+
+GETSTAT:
+        ANDC(r3,1,r7)
+        BNE(r7, ISVALID)
+
+ISDIRTY:
+        XORC(r3,-1,r3)
+        SHRC(r3,4,r3)
+        ANDC(r3,15,r3)
+        LD(r3,TLB,r4)
+        SHRC(r4,30,r4)
+        ANDC(r4,1,r4)
+        ANDC(r0, 31, r1)        | r1 now holds Rc
+        ST(r4, TLBSavedRegs, r1)   | save value into saved regs
+        BR(TLBRestoreState)
+        
+ISVALID:
+        XORC(r3,-1,r3)
+        SHRC(r3,4,r3)
+        ANDC(r3,15,r3)
+        LD(r3,TLB,r4)
+        SHRC(r4,31,r4)
+        ANDC(r0, 31, r1)        | r1 now holds Rc
+        ST(r4, TLBSavedRegs, r1)   | save value into saved regs
+        BR(TLBRestoreState)
+
+
+BEQV:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        ANDC(r0, 31, r2)        | r2 now holds Rc
+        CMPEQC(r2,31,r3)
+        BNE(r3, beqvnext)
+        BR(xp2virtual,LP)       | 
+        ST(r8, TLBSavedRegs, r2)         | save link pointer
+beqvnext:
+        BEQ(r1, Bjump)
+        BR(TLBRestoreState)       
+BNEV:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r1)   | r1 now holds <Ra>
+        ANDC(r0, 31, r2)        | r2 now holds Rc
+        CMPEQC(r2,31,r3)
+        BNE(r3, bnevnext)
+        BR(xp2virtual,LP)       | 
+        ST(r8, TLBSavedRegs, r2)         | save link pointer
+bnevnext:
+        BNE(r1, Bjump)
+        BR(TLBRestoreState)       
+Bjump:
+        || get Rb into r2
+        BNE(r3,xp2virtual,LP)
+        SHLC(r0, 11, r2)
+        SRAC(r2, 16, r2)         | r2 now holds const
+        ADD(r2,r8,r3)               | r3 now holds new PC
+        BR(V2physical, LP)
+        ST(r8, TLBSavedRegs+30, r31)  | save new return value
+        BR(TLBRestoreState)
+
+JMPV:
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, TLBSavedRegs, r3)   | r3 now holds <Ra>
+        ANDC(r0, 31, r2)        | r1 now holds Rc
+        CMPEQC(r2,31,r4)
+        BNE(r4,jmpvnext)
+        BR(xp2virtual,LP)
+        ST(r8, TLBSavedRegs, r2)         | save link pointer
+jmpvnext:
+        ADDC(r3,1,r3)
+        ST(r3,TLBSavedRegs+30,r31)   | put virtual addr in XP in case interrupt is generated
+        SUBC(r3,1,r3)
+        BR(V2physical, LP)
+        ST(r8,TLBSavedRegs+30,r31)    | lookup successful, put physical addr in XP
+        BR(TLBRestoreState)
+
+LDRV:
+        BR(xp2virtual,LP)
+        SHLC(r0, 11, r2)
+        SRAC(r2, 16, r2)         | r2 now holds const
+        ADD(r2,r8,r3)
+        BR(V2physical, LP)  | r8 now holds physical addr
+        LD(r8, 0, r2)
+        ANDC(r0, 31, r1)        | r1 now holds Rc
+        ST(r2, TLBSavedRegs, r1)   | save value into saved regs
+        BR(TLBRestoreState)
+
+TLBRestoreState:
+        TLBRSTR(r0)  TLBRSTR(r1)  TLBRSTR(r2)   TLBRSTR(r3)
+        TLBRSTR(r4)  TLBRSTR(r5)  TLBRSTR(r6)   TLBRSTR(r7)
+        TLBRSTR(r8)  TLBRSTR(r9)  TLBRSTR(r10)  TLBRSTR(r11)
+        TLBRSTR(r12) TLBRSTR(r13) TLBRSTR(r14)  TLBRSTR(r15)
+        TLBRSTR(r16) TLBRSTR(r17) TLBRSTR(r18)  TLBRSTR(r19)
+        TLBRSTR(r20) TLBRSTR(r21) TLBRSTR(r22)  TLBRSTR(r23)
+        TLBRSTR(r24) TLBRSTR(r25) TLBRSTR(r26)  TLBRSTR(r27)
+        TLBRSTR(r28) TLBRSTR(r29) TLBRSTR(r30)  TLBRSTR(r31)
+        JMP(xp)
+
+xp2virtual:
+        ADDC(r31,0,r5)
+        ADDC(xp,0,r1)
+        CMPLT(xp, r31, r2)
+        BEQ(r2,X2Vloop)
+        LD(valid,r1)
+        ADD(xp,r1,r1)
+X2Vloop:
+        LD(r5,PPT,r6)           | load r5th PP addr entry
+        CMPLT(r1,r6,r7)     | does tag match page number?
+        BNE(r7,X2Vhit)
+        ADDC(r5,1,r5)
+        CMPEQC(r5,16,r6)
+        BEQ(r6, X2Vloop)
+        HALT()                     | ERROR!  Instruction not in memory
+X2Vhit:
+        SUBC(r5,1,r5)
+        LD(r5,TLB,r8)
+        SHLC(r8,4,r8)
+        LD(r5,PPT,r6)
+        ADD(r8,r1,r8)
+        SUB(r8,r6,r8)
+        JMP(LP)
+
+V2physical:
+        SHRC(r3,4,r4)         | get virtual page number
+        ADDC(r31,0,r5)
+        LD(r31,TLBmask,r8)
+V2Ploop:
+        LD(r5,TLB,r6)           | load r5th TLB entry
+        CMPLT(r6,r31,r7)
+        BEQ(r7,V2Pnext)     | skip to next if it is not valid
+        AND(r8,r6,r6)           |  otherwise clear dirty bit (doesn't matter)
+        CMPEQ(r6,r4,r7)     | does tag match page number?
+        BNE(r7,V2Phit)
+V2Pnext:
+        ADDC(r5,1,r5)
+        CMPEQC(r5,16,r6)
+        BEQ(r6, V2Ploop)
+        SHRC(r0,26,r0)       | translation failed
+        CMPEQC(r0,0x08,r1) | if instruction was a STV, LDV, or LDRV
+        BNE(r1, V2Pio)      | put update V2P(xp) in xp
+        CMPEQC(r0,0x09,r1)
+        BNE(r1, V2Pio)
+        CMPEQC(r0,0x0F,r1)
+        BNE(r1, V2Pio)
+        ADDC(r3,1,r3)          | otherwise is was a instruction miss, put r3 in xp
+        ST(r3, TLBSavedRegs+30)  | save new xp
+        BR(V2Pexit)
+V2Pio:
+        BR(xp2virtual, LP)
+        ST(r8,TLBSavedRegs+30)
+V2Pexit:
+        TLBRSTR(r0)  TLBRSTR(r1)  TLBRSTR(r2)   TLBRSTR(r3)
+        TLBRSTR(r4)  TLBRSTR(r5)  TLBRSTR(r6)   TLBRSTR(r7)
+        TLBRSTR(r8)  TLBRSTR(r9)  TLBRSTR(r10)  TLBRSTR(r11)
+        TLBRSTR(r12) TLBRSTR(r13) TLBRSTR(r14)  TLBRSTR(r15)
+        TLBRSTR(r16) TLBRSTR(r17) TLBRSTR(r18)  TLBRSTR(r19)
+        TLBRSTR(r20) TLBRSTR(r21) TLBRSTR(r22)  TLBRSTR(r23)
+        TLBRSTR(r24) TLBRSTR(r25) TLBRSTR(r26)  TLBRSTR(r27)
+        TLBRSTR(r28) TLBRSTR(r29) TLBRSTR(r30)  TLBRSTR(r31)
+        BR(2)           | page fault
+V2Phit:
+        SHRC(r0,26,r4)
+        CMPEQC(r4,0x09,r4)  | STV?
+        BEQ(r4,V2Pfinish)
+        LD(r5,TLB,r6)
+        LD(dirty,r4)
+        OR(r4,r6,r6)
+        ST(r6,TLB,r5)
+V2Pfinish:
+        LD(r5,PPT,r8)
+        ANDC(r3, 15, r4)
+        ADD(r4, r8, r8)
+        JMP(LP)
+
+P2virtual:
+        ADDC(r31,1,r5)
+P2Vloop:
+        LD(r5,PPT,r6)
+        CMPLT(r3,r6,r7)
+        BNE(r7,P2Vhit)
+        ADDC(r5,1,r5)
+        CMPEQC(r5,16,r6)
+        BEQ(r6, P2Vloop)
+P2Vhit:
+        SUBC(r5,1,r5)
+        LD(r5,PPT,r6)
+        SUB(r3,r6,r4)
+        LD(r5,TLB,r8)
+        ADD(r4,r8,r8)
+        JMP(LP)
+        
+        
+
+

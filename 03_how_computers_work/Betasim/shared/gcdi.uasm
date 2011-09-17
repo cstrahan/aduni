@@ -1,0 +1,41 @@
+.include "../shared/beta"
+
+        MOVC(stack,sp)
+
+main:   MOVC(36,R1)
+        MOVC(14,R2)
+
+        PUSH(R2)
+        PUSH(R1)
+        BR(gcd,lp)
+        DEALLOCATE(2)
+
+        HALT()
+
+gcd:    PUSH(lp)
+        PUSH(bp)
+        MOV(sp,bp)
+        PUSH(r1)
+        PUSH(r2)
+
+        LD(bp,-3,r0)
+        LD(bp,-4,r1)
+
+loop:   BEQ(r1,gcdend)
+
+        DIV(R0,R1,R2)
+        MUL(R2,R1,R2)
+        SUB(R0,R2,R2)        
+        
+        MOV(R1,R0)
+        MOV(R2,R1)
+        BR(loop)
+
+gcdend: POP(r2)
+        POP(r1)
+        MOV(bp,sp)
+        POP(bp)
+        POP(lp)
+        JMP(lp)                         
+        
+stack:

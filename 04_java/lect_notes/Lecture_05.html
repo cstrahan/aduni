@@ -1,0 +1,293 @@
+<html>
+<head>
+  <title>
+   Lecture 5
+  </title>
+</head>
+<body bgcolor="#88aaff">
+<h2>OOP Design and Design Process</h2>
+<h3>Lecture</h3>
+
+<h4>The very high level view</h4>
+There are two classes of 'customer' that need to be satisfied
+in the software development process. 
+<ul>
+<li>The producers: developers, designers, and project managers
+<li> and the consumers: users, clients, paying customers.
+</ul>
+
+These groups have very different concerns. 
+<ul>
+<li>User concerns
+  <ul>
+  <li>Efficiency: Program speed, and memory usage.
+  <li>Reliability: Software runs with no bugs and minimum maintainance.
+  <li>Feature Completeness: It does what the user wants.
+  <li>Schedule and Price: Software is available when needed
+and not too expensive.
+  </ul>
+<li>Project Manager ( and Developer ) concerns
+  <ul>
+  <li>Programmer Efficiency: Project gets completed on schedule,
+or at least before it gets cancelled.
+  <li>Maintainability: Bugs can be fixed and new versions can be released 
+without constant attention from original development team.
+  <li>Extensability: Software can be easily improved, and extended
+  <li>User satisfaction: The users concerns are reasonably met.
+  </ul>
+</ul>
+
+All programming methodologies and tools, including OOP primarily 
+address the need  of the project managers and developers (who not 
+coincidently who the methodologies and tools are sold to).
+
+<h4>The high level view</h4>
+
+What ideas do we have to achieve the goals described above?
+<ul>
+<li>Encapsulation: Hiding the implementation of functionality 
+from the users (callers) of that functionality. This greatly
+improves maintainability separating functionality
+into well defined units, preventing changes in one
+part of the code to unexpectedly break other parts.
+<li>Abstraction: This improves reliability, extensability, and maintainability
+by minimizing code duplication and reducing the total amount of code
+(in general, less code, fewer bugs, more code, more bugs). There are
+several types of abstraction:
+<ul>
+<li> abstracting data through class hierarchies,
+<li> factoring out common code into subroutines (methods)
+<li> factoring out common code into parent class methods.
+<li> writing algorithms in terms of abstract types or interfaces and
+using polymorphism
+</ul>
+<li> Error checking and minimization: Compile-time test for bugs, avoiding
+unsafe language constructs.
+<li> Programming style and Documenation: A well written program is a story
+explaining itself to future developers, as well as an effective implementation
+for users.
+</ul>
+<h4>The view from Java</h4>
+What tools do we have to support these concepts.
+<ul>
+<li>Strong Typing improves reliability by catching some bugs at compile time.
+<li>Sequestering data in classes instances and limiting access with
+'private' and 'protected' helps support encapsulation and isolation of
+implementation and use.
+<li>Polymorphism, inheritance and interfaces encourage the abstraction in
+algorithms implementation for maximum code re-use.
+<li>Interfaces encourage encapsulation by completely hiding implementation.
+<li>Inheritance encourages factoring of common code onto parent classes.
+<li>Inheritance concentrates data specification and representation decisions
+(only have to maek/change them on superclass, not all subclasses)
+</ul>
+
+<h4>OOP Design: Object Relationships</h4>
+
+One of the skills to learn in OOP design is when to use inheritance vs
+interfaces. Diceding whether something shoulf be a subclass or instance
+variable. etc.
+<p>
+While there are no hard and fast rules. There are some general principles and
+advice. One key is to think about the relationships of the objects involved.
+There are (at least) four major relationships in OOP programmion:
+IS-A, HAS-A, USES, and BEHAVES-LIKE. The meanimg of these relationships
+is exactly what it is in English.
+<ul>
+<li>Two things, X and Y are in the IS-A relationship simply if the
+phrase "X is a Y"  or "all Xs are Ys" makes sense (and is true). 
+Objects in an IS-A relationship are good candidates for inheritance 
+as in <code>class X extends Y</code>.  For example, A Duck is a Bird, so
+a Duck class might inherit from a Bird class.
+
+<li>Two things, X and Y are in a HAS-A relationship if Y is a property or
+componment of X, as in the English phrases "X has a Y", or "Y is a component of
+X". If X HAS-A Y, than Y will probably be an <b>instance variable</b> 
+on class X. The HAS-A relationship does NOT indicate inheritance.
+
+<li>If we can say "X uses Y", Than we have a USES relationship. This usually
+means that methods in X call methods on Y. The instances of Y used by methods
+on X can either be instance variable on X, or passed as arguments to methods on
+X.
+
+<li>The BEHAVES-LIKE relationship is similar to IS-A but not as strict.
+BEHAVES-LIKE relationships are usually implemented with <b>interfaces</b>.
+For example, a Bird behaves like a FlyingThing, in that it
+has some properties associated with FlyingThing (airspeed, for example).
+</ul>
+
+</ul>
+<h4>Software Development Process (part 1)</h4>
+
+In the remaining time, we will examine the design process for a
+small to medium size system, one with no major subsystem capable of
+being built by one or two people is a short amount of time. We will
+discuss the design process for multi-module system, and larger teams
+later in the course.
+
+<h4>Design</h4>
+
+Maxim: "Think first, program last"
+<p>
+The "think first" part of the development process is also known an the
+design stage. In this stage we need to plan out what we need to build
+without actually building it. The OOP design process is pretty much
+the same as any other, except it places a greater emphasis on data. In OOP
+design, the class hierarchy comes first, then the algorithms (methods).
+<p>
+There are several stages to the design process. To make them concrete we
+will develop a running example: writing the game Tetris. At first glance,
+this is a daunting project. We shall see if we can make it more managable.
+<p>
+
+Our design process will be mainly top-down, in that we will design our
+system in terms of classes and methods we wish we had, then we will
+implement those classes and methods. (Occasionally, a bottom-up approach
+is called for, especially when a method or algorithm looks like it
+will be difficult to implement. In this case it might be worthwhile
+to implement the trouble spots and see how this implementation affects
+the design so far.}
+
+<ul>
+<li> Step 1. Write out, in English or pseudo-code, what the program is supposed
+to do, and what the main operations are.
+For Tetris:
+<ul>
+<li> A new block starts at top of well
+<li> The block falls until it contacts squares in the well, at which
+point it stops and joins the squares in the well
+<li> User input from keyboard can shift or rotate falling block. However,
+block is restricted to stay in well and also cannot penetrate squares.
+<li> When block stops falling, any complete row is deleted from well
+<li> Remaining blocks in the well are compacted downword row by row.
+<li> User score is based on difficulty level and number or rows cleared.
+<li> Of course, all of this action must be displayed on the screen.
+</ul>
+This is starting to look reasonable.
+<p>
+<li> Step 2. Object (class) Level Design: What are the major classes in
+the design and what do they represent. In the Tetris case, we case come
+up a few.
+<ul>
+<li> The Well is naturally a class. It maintains the current state of the
+squares and falling block. 
+<li> Squares are another natural type (if minimal). The represent the
+squares in the well, and their main property is color.
+<li> Blocks are another good class. They represent the falling block and
+maintain it's color and orientation. Should a Block's position be
+kept on the block itself on the Well class...not sure yet.
+<li>WellPanel:
+<ul>
+<li> Our Well keeps the state of game in an abstract form convenient for 
+computation. However, we also need to display it.
+<li> One common <b>Design Pattern</b> (re-usable idea for program organisation)
+is called the Model-View-Controller pattern. 
+The idea is to separate the internal representation of data from the way 
+it is displayed and/or modified. This makes it easy for  the same data to 
+be displayed in multiple ways (as in the diffent file views in the
+file tree walker (Explorer on Windows)). It also makes it easy to
+parameterize the display.
+<li> We will isolate our display knowledge in the WellPanel class. We call
+it WellPanel because in Java, it will inherit from JPanel.
+</ul>
+</ul>
+<p>
+<li> Step 3. Instance data and method type: Once we have our classes
+we can fill in the methods and some of the instance data we think we will need.
+At this point we are not doing any implementation. For Tetris
+<pre>
+public class Well{
+   /*
+    * The array of squares, (null represents an empty square)
+    */
+    Square[][] squares;
+   /*
+    * Dimensions of well
+    */
+    int wellWidth;
+    int wellHeight;
+    Block block; // the current falling block
+
+   /*
+    * Detects collisions between block and squares in well.
+    *  Used to stop falling blocks and prevent illegal shift and rotations
+    */
+    public boolean collision(Block b);
+
+   /*
+    *  Start a new block falling
+    */
+    public void startBlock();
+
+   /*
+    * Checks well for complete rows and deletes them (null's them out)
+    * @return Number of rows cleared (for scoring)
+    */
+    public int clearRows();
+   /*
+    * Compacts squares in well downward
+    */
+    public void compact();
+
+}
+
+public class Block{
+   int type; // type (shape) of block
+   int color; // color code, shered between block and display class
+   int orientation; // rotation
+   int height; // current hieght in well - 0 == bottom
+   int xpos;   // current x position o == far left
+    
+   /*
+    *  Rotate left or right
+    */
+    public void rotate(int direction);
+
+   /*
+    *  Shift left or right
+    */
+    public void shift(int direction);
+
+   /*
+    *  Decrement height one unit
+    */
+    public void drop();
+
+}
+
+The Square types consists only of a 'color' property and an accessor.
+The Display stuff we won't worry about (until Friday).
+
+</pre>
+
+This list pretty much completes our design. Things are looking pretty
+under control. Except for the collision() method and the representation
+of block shapes and orientations, everything looks pretty straightforward
+to implement.
+<p>
+<li> Step 4. Implementation: Here we flesh out our data representations
+and implement our methods. In order to minimze bugs and stay sane, we
+want to implement and test incrementally. The general order is:
+<ul>
+<li>Implement constructors for classes
+<li>Implement test driver and some display/print/toString method. Test
+constructors.
+<li>Add new methods one by one, from less complex to more. Test each
+method as it is implemented.
+<li>Implement utility methods that other methods in this class 
+depend on first, and test them independently.
+</ul>
+
+</ul>
+<h3>Recitation</h3>
+More design examples.
+
+Emphasize IS-A, HAS-A, BEHAVES-LIKE, and USES
+
+</body>
+</html>
+
+
+
+
+

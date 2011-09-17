@@ -1,0 +1,148 @@
+Menopause Group -- answers to PS on WAP
+# PS "Adding Wireless Users to your Community
+
+#---------------------------------------------------------------
+Ex 1.   Times                  PYWEB emulator   ---  HTML browser
+a. Weather www.boston.com/        12"                     3"              
+
+b. Stock quote for IBM          4:00 and fail		 30" 
+ (on www.boston.com, I could search in the emulator for a quick quote for IBM
+ and was able to see the labels but not the data for current price.)
+
+c. ineluctable                   :40                     12"
+ (dictionary.com
+d. amazon.com                   2:30 and fail            35"
+ (With the WAPalizer, it was too painful to get the book "Imaginary Gardens"
+that I could find in seconds in the HTML browser.
+
+e. photo.net                    1:50 and unsure        1:22
+ (on photo.net with the emulator, I could not tell if I was seeing the
+ latest question or the latest unanswered question.  With HTML, I could look at the time stamps in just a few moments.)
+
+#---------------------------------------------------------------------------------
+Ex 2. How our community can use WAP.  
+In our medical community, users belong to groups, and many of these
+groups have meeting time, place, and note -- e.g. Mon 7pm, MGH 2-135, Please
+bring you questionnaire!   Aftert a user logs in, his/her special
+information is visible near the bottom of his/her home page.  We must
+determine that a user is on a WAP connection, then let them login, then
+deliver their pertinent meeting information.
+
+If we want to, we could add the ability to tell an administrator about current
+load and recent usage.
+
+#----------------------------------------------------------------------
+Ex 3.
+
+Step 1:  Had to edit configuration file todd.tcl and restart nsd.
+The online AOLSERVER documentation (which shows as a blkank page to Netscape,
+but visible to IE) implied (to Rusty; thanks, Rusty), that I needed a section header:
+
+ns_section ns/mimetypes
+ns_param .wml text/vnd.wap.wml
+
+Step 2.  TELNET session did indeed differ slightly from the handout's printed header:
+[tsjoblom@localhost tsjoblom]$ telnet 10.11.0.111 8080
+Trying 10.11.0.111...
+Connected to 10.11.0.111.
+Escape character is '^]'.
+GET  /first-page.wml HTTP/1.0
+User-Agent: UP.Browser
+Accept: text/vnd.wap.wml
+ 
+HTTP/1.0 200 OK
+Last-Modified: Mon, 23 Apr 2001 09:01:06 GMT
+Content-Type: text/vnd.wap.wml; charset=iso-8859-1
+MIME-Version: 1.0
+Date: Mon, 23 Apr 2001 11:47:33 GMT
+Server: AOLserver/3.2+ad12
+Content-Length: 189
+Connection: close
+ 
+<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
+ "http://www.wapforum.org/DTD/wml_1.1.xml">
+ 
+<wml>
+ <card>
+  <p>We're not in the 1970s anymore.</p>
+ </card>
+</wml>Connection closed by foreign host.  
+
+Step 3.  Find a WAP emulator.  
+I tried GELON and had such a bad experience, even on a WIndows box with cable modem, that
+I gave up.  There were too many advertisements!  With Jeffrey's help, I downloaded:
+/www.pyweb.com/php/license.php3?url=/deck-it/deckit-1.2.4.tar.gz&lg=fr...
+and installed.  I loaded the page and saw the quote about the seventies.  
+I also looked at my old PS1 website, and searched all quotations for "todd".  If I'm patient
+enough to scroll, I can see them all.
+
+Step 4.  No luck here; no-one can afford it.  I did read on Google about how you would
+use a phone to do a Google search; they said to GoTo wap.google.com.  Unfortuantely, since
+I don't have a phone, I tried this with the emulator and got 
+"Malformed http response <HTML><HEAD><TITLE>Bad Request </TITLE></HEAD>"
+It seems that Google did not really make their site WAP-enables, or maybe it's just my emulator
+which is bad.
+
+#--------------------------------------------------------------
+
+Ex. 4 
+
+file: login.wml for input of emial and pwd
+
+<wml> 		
+	<card id="login" title="PIE"> 
+            <do type="accept" label="Next">
+              <go method="post" href="http://10.11.0.111:8080/login-wap.tcl">
+                <postfield name="wml_email" value="$(email)"/>
+                <postfield name="wml_pwd" value="$(pwd)"/>
+              </go>
+            </do>                       
+            <p>
+              Email: 
+              <input type="text" name="email"/><br/>
+	      Password:
+	      <input type="password" name="pwd"/>
+            </p> 
+           </card> 
+</wml>
+
+file: login-wap.tcl that display email and pwd with only first character
+
+set email [ns_queryget wml_email]
+set pwd [ns_queryget wml_pwd]
+
+set display_pwd [string index $pwd 0]
+
+for { set i 1 } { $i < [string length $pwd] } { incr i } {
+   append display_pwd "*"
+} 
+
+set page_content "
+<wml>
+  <card>
+    <p>Email: $email<br/>
+       Pwd: $display_pwd</p>
+ </card>
+</wml>
+"
+
+ns_return 200 text/vnd.wap.wml $page_content
+
+#--------------------------------------------------------------
+
+Ex. 8 
+
+look at our website.
+
+
+
+
+
+
+
+
+
+
+
+

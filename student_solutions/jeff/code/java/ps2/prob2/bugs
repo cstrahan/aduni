@@ -1,0 +1,5 @@
+BUG LIST FOR SAMEJAVA
+---------------------
+1/13/2001	JMR	
+New Game command doesn't current work sometimes. I think it has to do
+with completing a move and not moving the mouse.

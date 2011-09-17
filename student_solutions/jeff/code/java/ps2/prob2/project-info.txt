@@ -1,0 +1,37 @@
+brainsotrming on samegnome project
+
+objects
+
+ball
+	color
+		int color (BLUE = 0 ; RED  = 1 ; GREEN = 2)
+	neighbors
+		int[] neighbors (NORTH = 0, EAST = 1; SOUTH = 2 ; WEST
+	= 3)
+
+	each ball will have an actionListener that will let it know
+	to either look for its neighbors and highlight itself
+	or send a message to the board saying it wants to remove
+	itself
+
+	A search routine (breadh first tree search, perhaps with
+	multithreading?) will be the most complicated issue in this.
+
+
+
+board
+	15 x 10 board
+		int[][] board
+		pieces will be 30 x 30
+	keeps track of what is in a square at a given time
+	takes care of compressing
+	sends results to score
+
+  perhaps inner classes:
+	compressor
+	score
+
+
+
+
+	

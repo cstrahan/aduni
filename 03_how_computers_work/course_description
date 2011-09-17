@@ -1,0 +1,15 @@
+<p>
+Includes the basics of digital logical design, computer organization
+and architecture including assembly language, processor design, memory
+hierarchies and pipelining. Students examine the detailed construction
+of a very simple computer.  Problem sets use <i>Beta-Sim</i>, a RISC simulator
+written by Mike Wessler.  A higher level view of a modern RISC
+architecture is studied, using the Patterson and Hennessey
+introductory text, from both the programmer's point of view and the
+hardware designer's point of view. The distinction between RISC and
+CISC architectures is emphasized. 
+</p><p>
+Text: <i>Computer Organization and Design</i>, Patterson and Hennessey.
+</p><p>
+Requirements: Two exams and four problem sets.
+</p><br>

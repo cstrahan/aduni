@@ -1,0 +1,491 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>Juggler Color-Annotated Source</title>
+</head>
+<body bgcolor="#C0C0C0">
+
+<center>
+<h1>
+Juggler.java Color-Annotated Source</h1></center>
+
+<hr>
+<p>This example illustrates two aspects of persistence: <font color="#FFFF00">automatic
+persistence</font> and <font color="#008000">restoring transient state</font>.
+The animation <font color="#FFFF00">"rate"
+</font>and the boolean <font color="#FFFF00">"stopped"</font>
+indicating whether the Juggler is juggling or not are both automatically
+stored and read. <font color="#008000">"Thread"</font> and <font color="#008000">"Image"</font>
+are explicitly stored and restored.
+<p>This example also illustrates how the BeanContext API can be used to
+provide <font color="#3333FF">containment and services</font>.&nbsp; The
+BeanBox uses a BeanContextProxy to manage containment aspects, and adds
+Juggler to it's collection at instantiation time.&nbsp; It also <font color="#3366FF">initializes
+the </font><font color="#3333FF">BeanContext resources</font> that Juggler
+is interested in, and sets Juggler's initial <font color="#3333FF">execution
+mode</font> to reflect whatever mode the beanbox is currently in, i.e.
+design mode.
+<br>&nbsp;
+<p>package sunw.demo.juggler;
+<p>/**
+<br>&nbsp;* A simple JavaBean demonstration class that displays an animation
+<br>&nbsp;* of Duke juggling a couple of coffee beans.&nbsp;&nbsp;&nbsp;
+The Juggler class
+<br>&nbsp;* is a good simple example of how to write readObject/writeObject
+<br>&nbsp;* serialization methods that restore transient state.&nbsp;&nbsp;&nbsp;
+In this case
+<br>&nbsp;* the transient state is an array of images and a Thread.
+<br>&nbsp;*/
+<p>import java.applet.Applet;
+<br>import java.awt.*;
+<br>import java.awt.event.*;
+<br>import java.awt.image.*;
+<br>import java.net.URL;
+<br>import java.beans.*;
+<br>import java.beans.beancontext.*;
+<br>import java.beans.DesignMode.*;
+<br>import sunw.demo.methodtracer.*;
+<p>//To make non transient/static fields automatically persistent, simply
+<br>//define your class to <font color="#FFFF00">implement java.io.Serializable</font>.
+<br>//Juggler extends Applet and therefore implements Serializable.
+<br>public class Juggler <font color="#FFFF00">extends Applet</font> implements
+Runnable, <font color="#3333FF">BeanContextProxy,</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<font color="#3333FF">BeanContextServicesListener,</font>
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+PropertyChangeListener, DesignMode</font> {
+<br>&nbsp;&nbsp;&nbsp; private transient Image[] images;
+<br>&nbsp;&nbsp;&nbsp; private transient Thread animationThread;
+<br><font color="#FFFF00">&nbsp;&nbsp;&nbsp; private int rate = 125;</font>
+<br>&nbsp;&nbsp;&nbsp; private transient int loop;
+<br><font color="#FFFF00">&nbsp;&nbsp;&nbsp; private boolean stopped =
+true;</font>
+<br>&nbsp;&nbsp;&nbsp; private boolean debug = false;
+<br>&nbsp;&nbsp;&nbsp; private boolean dmode = false;
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp; private transient MethodTracer
+mtService;</font>
+<br>&nbsp;&nbsp;&nbsp; private transient MethodTracer mt;
+<p>&nbsp;&nbsp;&nbsp; //&nbsp; Use the BeanContextChildSupport help class
+to delegate BeanContextChild functionality to.
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp; private BeanContextChildSupport
+bccs = new BeanContextChildSupport() {</font>
+<blockquote>&nbsp; protected void <font color="#3333FF">initializeBeanContextResources</font>()
+{
+<blockquote>&nbsp;try {
+<blockquote>&nbsp; // Get method tracing service if it's available.
+<br>&nbsp; BeanContextServices bcs = (BeanContextServices)bccs.getBeanContext();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (bcs.hasService(MethodTracer.class))
+{
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#3333FF">mtService = (MethodTracer)bcs.getService(</font>
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp; getBeanContextProxy(),
+Juggler.this,</font>
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp; MethodTracer.class,
+null, Juggler.this);</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bcs.addBeanContextServicesListener(Juggler.this);
+<br>&nbsp; }
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Allow nesting BeanContext control
+design/runtime mode.
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bcs.addPropertyChangeListener("designMode",
+Juggler.this);</font>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; } catch (ClassCastException ex) {
+<br>&nbsp; // Nesting BeanContext is not a BeanContextServices
+<br>&nbsp; // so do nothing.</blockquote>
+&nbsp;&nbsp;&nbsp;&nbsp; } catch (Exception e) {
+<blockquote>&nbsp; System.err.println("Error initializing BeanContext resources.");
+<br>&nbsp; System.err.println(e);</blockquote>
+&nbsp;&nbsp;&nbsp;&nbsp; }</blockquote>
+&nbsp;}
+<p>&nbsp;protected void <font color="#3333FF">releaseBeanContextResources</font>()
+{
+<blockquote>&nbsp;if (mtService != null) { mtService = mt = null; }
+<br>&nbsp;try {
+<blockquote>&nbsp; BeanContextServices bcs = (BeanContextServices)getBeanContext();
+<br>&nbsp; bccs.removePropertyChangeListener("designMode", Juggler.this);
+<br>&nbsp; bcs.removeBeanContextServicesListener(Juggler.this);</blockquote>
+&nbsp;&nbsp;&nbsp;&nbsp; } catch (Exception ex) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;}</blockquote>
+&nbsp;&nbsp;&nbsp; };</blockquote>
+&nbsp;&nbsp;&nbsp; //&nbsp; BeanContextProxy interface method
+<br>&nbsp;&nbsp;&nbsp; public BeanContextChild <font color="#3333FF">getBeanContextProxy</font>()
+{
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return bccs;
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Applet method: start the Juggler applet.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<p>&nbsp;&nbsp;&nbsp; public synchronized void start() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startJuggling();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Applet method: stop the Juggler applet.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<p>&nbsp;&nbsp;&nbsp; public synchronized void stop() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stopJuggling();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Initialize the Juggler applet.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<p>&nbsp;&nbsp;&nbsp; public void init() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#008000">//
+Load the image resources:</font>
+<br><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; images
+= new Image[5];</font>
+<br><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for
+(int i = 0; i &lt; 5; i++) {</font>
+<br><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String imageName = "sunw/demo/juggler/Juggler" + i + ".gif";</font>
+<br><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+images[i] = loadImage(imageName);</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if (images[i] == null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+System.err.println("Couldn't load image " + imageName);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * This is an internal utility method to load
+GIF icons.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * It takes the name of a resource file associated
+with the
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * current object's class-loader and loads
+a GIF image
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * from that file.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * &lt;p>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @param resourceName&nbsp;&nbsp;&nbsp; A
+pathname relative to the DocumentBase
+<br>&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp; of this applet, e.g. "wombat.gif".
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @return&nbsp;&nbsp;&nbsp; a GIF image object.&nbsp;&nbsp;&nbsp;
+May be null if the load failed.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br><font color="#006600">&nbsp;&nbsp;&nbsp; private java.awt.Image loadImage(String
+name) {</font>
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+(mt != null) mt.traceMethod();</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+try {</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+java.net.URL url = getClass().getResource(name);</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return createImage((java.awt.image.ImageProducer) url.getContent());</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} catch (Exception ex) {</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return null;</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}</font>
+<br><font color="#006600">&nbsp;&nbsp;&nbsp; }</font>
+<br>&nbsp;
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Draw the current frame.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void paint(Graphics g) {
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+(mt != null) mt.traceMethod();</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int index = (loop%4)
++ 1;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // If the animation is stopped,
+show the startup image.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (stopped) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+index = 0;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (images == null
+|| index >= images.length) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Image img = images[index];
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (img != null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+g.drawImage(img, 0, 0, this);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * If false, suspend the animation thread.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public synchronized void setEnabled(boolean x) {
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+(mt != null) mt.traceMethod();</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.setEnabled(x);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; notify();
+<br>&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Resume the animation thread if we're enabled.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @see #stopJuggling
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @see #setEnabled
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public synchronized void startJuggling() {
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+(mt != null) mt.traceMethod();</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (images == null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+initialize();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (animationThread
+== null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+animationThread = new Thread(this);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+animationThread.start();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stopped = false;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; notify();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Suspend the animation thread if neccessary.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @see #startJuggling
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @see #setEnabled
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public synchronized void stopJuggling() {
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+(mt != null) mt.traceMethod();</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stopped = true;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loop = 0;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Draw the stopped
+frame.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Graphics g = getGraphics();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (g == null || images
+== null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Image img = images[0];
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (img != null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+g.drawImage(img, 0, 0, this);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * An event handling method that calls startJuggling.&nbsp;&nbsp;&nbsp;
+This method
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * can be used to connect a Button or a MenuItem
+to the Juggler.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; *
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void startJuggling(ActionEvent x) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startJuggling();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * This method can be used to connect a Button
+or a MenuItem
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * to the Juggler.stopJuggling method.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void stopJuggling(ActionEvent x) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stopJuggling();
+<br>&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Returns false if the Juggler is stopped,
+true otherwise.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public boolean isJuggling() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return stopped;
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; public int getAnimationRate() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return rate;
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; public void setAnimationRate(int x) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rate = x;
+<br>&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;
+<p>&nbsp;&nbsp;&nbsp; public Dimension getMinimumSize() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return new Dimension(144,
+125);
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @deprecated provided for backward compatibility
+with old layout managers.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public Dimension minimumSize() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return getMinimumSize();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; public Dimension getPreferredSize() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return minimumSize();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * @deprecated provided for backward compatibility
+with old layout managers.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public Dimension preferredSize() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return getPreferredSize();
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * Returns true if debugging is enabled, false
+if it's not.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public boolean isDebug() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return debug;
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /**
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * <font color="#3333FF">Turns debugging on,
+only if a MethodTracer service is available</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * <font color="#3333FF">and we are in design
+mode.</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void setDebug( boolean debug) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (debug) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if (isDesignTime() &amp;&amp; (mtService != null)) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mt = mtService;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this.debug = true;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} else if (mtService == null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+System.err.println("MethodTracer service not available.");
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this.debug = false;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} else if (!isDesignTime()) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+System.err.println("Debugging not available during runtime.");
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this.debug = false;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mt = null;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this.debug = false;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /*
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * PropertyChangeListener method.&nbsp; <font color="#3333FF">Currently
+only listen for designMode</font>.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void propertyChange( PropertyChangeEvent
+evt) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp; if (evt.getPropertyName().equals("designMode"))
+{
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; boolean dmode = (boolean)((Boolean)evt.getNewValue()).booleanValue();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setDesignTime(dmode);
+<br>&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /*
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * If switching to runtime, turn off method
+tracing if it was enabled.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * If switching to design time and debugging
+is true, then enable
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * method tracing if the service is available.
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void <font color="#3333FF">setDesignTime</font>(boolean
+dmode) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.dmode = dmode;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (dmode) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if (isDebug() &amp;&amp; (mtService != null)) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mt = mtService;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (!dmode
+&amp;&amp; (mt != null)) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mt = null;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp; /*
+<br>&nbsp;&nbsp;&nbsp; * Returns true if we're in design mode, false if
+in runtime mode.
+<br>&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public boolean isDesignTime() {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return dmode;
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; /*
+<br>&nbsp;&nbsp;&nbsp;&nbsp; * <font color="#3333FF">BeanContextServicesListener
+methods.</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; */
+<br>&nbsp;&nbsp;&nbsp; public void <font color="#3333FF">serviceRevoked</font>(
+BeanContextServiceRevokedEvent bcsre) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.err.println("Method
+Tracing service revoked.");
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setDebug( false);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mtService = null;
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; public void <font color="#3333FF">serviceAvailable</font>(
+BeanContextServiceAvailableEvent bcsae) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (bcsae.getServiceClass()
+== MethodTracer.class) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+// MethodTracer service has just become available.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+try {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mtService = <font color="#3333FF">(MethodTracer)bcsae.getSourceAsBeanContextServices().getService(
+getBeanContextProxy(),</font>
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this,&nbsp; MethodTracer.class, null, this);</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} catch ( Exception ex) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+System.err.println(ex);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<p>&nbsp;&nbsp;&nbsp; public void run() {
+<br><font color="#3333FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+(mt != null) mt.traceMethod();</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+while(true) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+// First wait until the animation is not stopped.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+synchronized (this) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+while (stopped || !isEnabled()) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+wait();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+loop++;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+// Now draw the current frame.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Graphics g = getGraphics();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Image img = images[(loop % 4) + 1];
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if (g != null &amp;&amp; img != null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+g.drawImage(img, 0, 0, this);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Thread.sleep(rate);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch (InterruptedException
+e) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; }
+<p>}
+<p>
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

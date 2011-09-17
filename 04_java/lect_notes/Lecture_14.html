@@ -1,0 +1,269 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture14</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Misc. Topics in Java</h2>
+<h3>Layout</h3>
+Earlier, we discussed how to draw graphics, handle events, and use
+GUI components. In doing so, we ignored an important issue: How to place
+our GUI components in our windows to make an attractive and useful UI.
+This process is called GUI layout and Java provides several alternative
+strategies.
+<p>
+The key problem we are trying to solve is to keep the UI attractive and
+useful for a variety of window sizes and shapes. If we do not
+allow the user to resize the window (or resize it for different screen sizes),
+we can simply specify the exact location and size for each component (we
+will discuss how later).
+<h4>Containers and Layouts</h4>
+<ul>
+<li>Java GUI components are added to and arranged on special component types called
+Containers. the contentPane and JPanels are examples of container components.
+<li> Associated with a Container object is a Layout object which controls
+how components added to the container are arranged on the screen.
+<li> A Layout is an object and the particular Layout for a container can be set with the method <code>setLayout(Layout l)</code>
+<li> Java provides the following Layout subclasses
+<ul>
+<li>FlowLayout
+<li>BorderLayout
+<li>GridLayout
+<li>BoxLayout
+<li>GridBagLayout
+<li>null
+</ul>
+</ul>
+
+<h4>Flow Layout</h4>
+<p>
+The flow layout is the default layout for JPanel. The flow layout arranges
+the widgets in rows, according to the order of addition. Components are
+added to each row until no-more can fit, then another row is started. Rows
+are filled from top to bottom. The components within a row are center
+aligned by default. When the frame window is resized, the flow latout
+recomputes the position of the components based on this algorithm.
+<p>
+<h4>Border Layout</h4>
+<ul>
+<li>The Border Layout divides the container into five regions. North, South,
+East, West, and Center. When components are added using the Border Layout,
+the add() method takes a second argument, a String indicating the area
+this component is to be assigned to.
+<li> A problem with the border layout is that it tends to grow all the 
+components is each area to the size of the area. It the lays the out
+on top of each other. Not very useful.
+<li> In order to make the BorderLayout useful, one needs to use a JPanel
+as the primary component in each area, then add the components to be laid out 
+into these JPanels (using FlowLayout or some other Layout).
+</ul>
+<h4>Grid Layout</h4>
+<ul>
+<li>The Grid layout arranges components on a grid of equal-sized rectangles.
+The size of the rectangles depends on the size of the largest component
+to be laid out.
+<li> The number of cells in each dimension is specified in the
+constructor of the GridLayout.
+<pre>
+    GridLayout grid = new GridLayout(3,4);
+    setLayout(grid);
+</pre>
+<li> As components are added to the grid layout, they occupy cells
+starting from upper left, filling a row at a time.
+</ul>
+<h4>Box Layout</h4>
+<ul>
+<li> The box layout comes in two varieties, horizontal and vertical.
+<li> The box layout arranges components in a single row
+or column, depending on the type of box.
+<li> There is a Box container class that supports this layout and
+some convenient static methods. Use static <code>create...</code>
+methods on Box rather than constructors.
+<li> The Box class has static methods that create <em>struts</em>,
+fixed size spaces, and <em>glue</em>, expandable space that grows and
+shrinks as the surrounding frame resizes.
+<pre>
+	Box[] boxes = new Box[3];
+	boxes[0] = Box.createHorizontalBox();
+	boxes[1] = Box.createHorizontalBox();
+	boxes[2] = Box.createHorizontalBox();
+	// add buttons and glue
+	for(int i=0;i&lt;11;i++){
+	    boxes[i%3].add(buttons[i]);
+	    if(i%2 == 1)
+		boxes[i%3].add(Box.createHorizontalGlue());
+	}
+	// stack hboxes in vbox with a 50 pixel strut and glue
+	vbox.add(boxes[0]);
+	vbox.add(Box.createVerticalStrut(50));
+	vbox.add(boxes[1]);
+	vbox.add(Box.createVerticalGlue());
+	vbox.add(boxes[2]);
+</pre>
+<li> Horizontal and vertical boxes can be nested to form columns of
+rows and vice versa. Though the layout within each box is independent
+of the others (ie not aligned).
+<li> The Box layouts essentially implement the layout model used in
+many text formatter and text layout systems such as Tex. Tex composes
+a pages as a layout of vertical and horizontal boxes. (eg each paragraph
+is a vbox, each line is an hbox).
+</ul>
+<h4>GridBag Layout</h4>
+<ul>
+<li> If the Box layout implements the typical layout algorithm on text
+formatters, the GridBag layout implements the typical table layout
+algorithm found in HTML, or Tex, or Word.
+<li> The area is divided into a grid of cells based on
+a number rows and columns. The rows and columns do not have to be of equal
+size (but life is simpler is they are).
+<li> For each component to be added, a GridBagConstraints object must
+be created. This specifies the starting x and y position of the
+component in terms of cell location (0,0 is upper left). It also
+specified the width and height in terms of cells. It can also
+specify whether components should grow to fill the cell or
+remain at their preferred size.
+<pre>
+    // utility method to create and set up constraints
+    public GridBagConstraints makeConstraints(int x, int y, int w, int h){
+	GridBagConstraints c = new GridBagConstraints();
+	c.weightx = 100;
+	c.weighty = 100;
+	c.gridx = x;
+	c.gridy = y;
+	c.gridwidth = w;
+	c.gridheight = h;
+	c.fill = GridBagConstraints.BOTH;
+	return(c);
+    }
+</pre>
+<li> The GridBagConstraints object is included as a second argument
+to the add() method when adding components to a container using the
+gridbag layout.
+<li> Unlike the box layout, components are globally aligned, not just
+in individual rows and columns. Unlike the Grid layout, the cells do
+not have to be uniform size, and components can span multiple cells.
+</ul>
+<h4>null Layout</h4>
+<ul>
+<li>Sometime you just don't want to fool around with getting  Layout
+managers to do what you want. You can always drop back and punt by setting
+the Layout on a container to <code>null</code> and positioning and sizing
+each component by hand using the
+<code>setBounds(int x, int y, int w, int h)</code> method on the components.
+</ul>
+<h3>Packages</h3>
+<ul>
+<li>As the
+number of classes in a program grows, the chances or name collisions
+between classes increases (where are only so many interesting class names).
+This is particularly true when the  classes are developed by multiple people 
+or provided by outside vendors. A programmer has no way of telling whether 
+a class name has been used or will be used by someone else on the project.
+<li>Most programming languages provide a mechanism to divide up name spaces
+so that class names (and procedure names in non-OOP languages) don;t conflict
+across divisions.
+<li>Packages are the mechanism in Java for separating namespaces.
+<li>Package names are dotted string as in <code>java.io</code>
+<li>To include the classes in a file into a package, the line
+<pre>
+package my.package.name;
+</pre>
+must be the first non-comment line of the .java file.
+<li> Classes without a <code>package</code> line are put into a default
+unnamed package.
+<li> Classes in packages can be referred to by their full path name. 
+For example, <code>java.io.FileInputStream</code>. To save typing, the
+<code> import</code> line, makes a public classes in a package
+available for reference by their internal name. This is the meaning of the
+lines
+<pre>
+import java.io.*;
+import javax.swing.*;
+</pre>
+that we have used on many of our programs.
+<li> Only the public classes of a package are available for outside
+access. These must be declared <code>public</code> is their definition.
+By default, classes are given package scope.
+<li> One might notice that putting classes in packages only moves to name
+collision problem to package names. What prevents two people from using the
+same package name? In fact, nothing in the technology solves this problem,
+however, by convention a strong attempt is made to use unique package
+names. Java recommends using an organization's URL in reverse as the
+prefix for a package name. Thus my package for LayoutTest might be:
+<pre>
+package org.aduni.javacourse.lecture14;
+</pre>
+That ought to be unique!
+<li> A disadvantage of these longer package names is that Java mixes
+package names and file system address in an unfortunate way. Java will
+attempt to find the class 
+<code>org.aduni.javacourse.lecture14.LayoutTest</code> in the file
+LayoutTest.class in the
+directory <code>org/aduni/javacourse/lecture14</code> relative to
+the CLASSPATH (or current directory). 
+<li>
+The java compiler does not copy your class files into the correct place, that
+is the responsability of the user.
+<li> Clearly, this naming scheme can be a nuisance as is requires
+these deep directory hierarchies which may not be the way one wants
+to organize the system during development.
+<li>Fortunately, we are (somewhat) saved by JAR files.
+</ul>
+<h3>JAR files</h3>
+<ul>
+<li> JAR files are ZIP compressed archive files (analogous to .tar.gz files
+in UNIX, but different format).
+<li> A JAR file can archive a compete directory hierarchy of classes into
+a single file.
+<li> In addition to class files, JAR archives can contain a special
+<em>manifest</em> files with meta-data about the archive that can be used by
+various programs.
+<li> Jar files are created with the <code>jar</code> command which has
+command line arguments similar to UNIX tar. If I had just compiled my
+LayoutTest program in the current directory (but specified package
+</codepackage org.aduni.javacourse.lecture14</code> in the sources),
+and wanted to create a JAR file. I would create the needed subdirectories,
+then
+<pre>
+cp *class org/aduni/javacourse/lecture14
+jar cvf LayoutTest.jar org/aduni/javacourse/lecture14/*.class
+</pre>
+This will create LayoutTest.jar with all of my classes having the
+proper relative pathnames.
+<li> The nice thing about JAR files is that the java command will search
+the path structure of a JAR file for classes with having to expand the
+archive in place. However, the JAR file does have to be put into the class 
+path. Thus
+<pre>
+java -classpath LayoutTest.jar LayoutTest
+</pre>
+should runt the LayoutTest program from within the JAR file.
+<li> The JAR file manifest has a number of properties that can be set.
+Many of the are relevant to using the archive as an applet, JavaBean, EJB,
+etc.
+<li> The Main-Class attribute specifies the class in which java should look
+for main. This allows us to packages up a collection of classes into
+something that looks (almost) like an executable program. A sample manifest 
+file, <em>manifest.mf</em>to do this is
+<pre>
+Manifest-Version: 1.0
+Main-Class: org.aduni.javacourse.lecture14.LayoutTest
+</pre>
+<li> Manifests are included into a JAR using the 'm' option to jar
+<pre>
+cp *class org/aduni/javacourse/lecture14
+jar cvfm LayoutTest.jar manifest.mf org/aduni/javacourse/lecture14/*.class
+</pre>
+Note: the order of the 'f' and 'm' tags must be the same as the outputfile
+and manifest file arguments
+<li> With this archive I can now run my program as
+<pre>
+java -jar LayoutTest.jar
+</pre>
+<li> Try putting your SameJava game into a package, then into a self-executing
+JAR file.
+</ul>
+
+</body>
+</html>

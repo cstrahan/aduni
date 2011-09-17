@@ -1,0 +1,314 @@
+\documentclass[12pt]{amsart}
+
+\usepackage{fullpage}
+\usepackage{psfig}
+\newcommand{\fr}[2]{\frac{#1}{#2}}
+\title[Problem Set 4]{Ars Digita University\\Month 2:  Discrete Mathematics\\Professor Shai Simonson\\Problem Set 4 Answers}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+\item {\bf Whats' wrong}
+\begin{enumerate}
+\item {\bf}
+    The problem with the induction is that the base case is wrong.  If the base case choosen is where n = 1 then at the base case you can have a binary number of either 1 or 0 thus disproving that it is the same.
+
+
+\item {\bf}
+    The problem with this induction is again the base case fails because you can not reach the number 22.
+
+\end{enumerate}
+
+
+\item{\bf Second Problem}
+\begin{enumerate}
+
+
+\item {\bf Fibonacci Sequence}\\
+\\
+    Assumption:
+    $$  F(n) = (\fr{1}{\sqrt {5}})[(\fr{1}{2} + \fr{\sqrt{5}}{2}^n) - (\fr{1}{2} -
+        \fr{\sqrt{5}}{2})^n]$$
+    Base Case:
+$$
+    F_1 = 1 \qquad    F_0 = 0
+$$
+        Prove:
+    $$  F(n+1) = F(n) + F(n-1) \\$$
+    Let $a = (\fr{1}{2} + \fr{\sqrt{5}}{2})$\\
+    Let $b = (\fr{1}{2} - \fr{\sqrt{5}}{2})$\\
+$$
+               \fr{1}{\sqrt{5}}(a^{n+1} - b^{n+1}) =  \fr{1}{\sqrt{5}}(a^n - b^n) + \fr{1}{\sqrt{5}}
+                (a^{n-1} - b^{n-1}))
+$$
+\\
+        Divide both sides through by  $\sqrt{5}$\\
+                    $$a^{n+1} - b^{n+1} =  a^n - b^n + a^{n-1} - b^{n-1}$$
+
+
+
+
+\item {\bf The series}\\
+
+
+    Assumption: $$1 + a + a^2 + a^3 \ldots + a^n = \fr{(1 - a^{n+1}}{1-a)}$$\\
+    Base Case: $$n = f(1)$$\\
+                     $$= \fr{(1 - a^2)}{1 - a} = \fr{((1 - a)(1 + a))}{(1 - a)} = 1 + a$$\\
+                  $$ n = 1 + a$$
+
+        Theory:    $$\fr{(1 - a^{n+1})}{1-a + a^{n+1}} = \fr{(1 - a^{n+2})}{1 -
+        a}$$
+
+                   $$(1 - a)(1 - a^{n+1})/1-a + (1 -a)(a^{n+2}) = (1 - a)(1 - a^{n+2})/1 -
+                   a$$
+
+                   $$(1 - a^{n+1}) + (1 - a)a^{n+1} = (1 -
+                   a^{n+2})$$
+
+           $$(1 - a^{n+1}) + a^{n+1} - a^{n+2} = (1 - a^{n+2})$$
+
+           $$1- a^{n+2} = (1 - a^{n+2})$$
+qed.
+\\
+
+
+\item {\bf The Mod Squad}
+\\
+
+    Assumption: $$4^{n+1} + 5^{2n-1} = 21a $$ where a is some constant
+    $\geq $  0\\
+  \\  Base Case:  $$n = 1$$
+     $$4^{2} + 5^{1} = 21a$$
+                     $$ 16 + 5 = 21a$$
+                     $$ 21 = 21a$$
+
+        Theory:     That for some n the assumption holds true.
+
+                   $$ 4^{n+1} + 5^{2n-1} = 21b$$
+                    $$4^{n+2} + 5^{2n+1} = 21b$$
+                   $$ 4*4^{n+1} + 5^2 * 5^{2n-1} = 21b$$
+                    \\    Let $4^{n+1} = 21a - 5^{2n-1}$ and substitute in
+                       for
+                        $4^{n+1}$\\
+                   $$ 4*(21a - 5^{2n-1}) + 5^2 * 5^{2n-1} = 21b$$
+                   $$ 4*21a - 4*5^{2n-1} + 5^2 * 5^{2n-1} = 21b$$
+                   $$ 4*21a - 21* 5^{2n-1} = 21b$$
+\\
+        qed. since all terms are divisible by 21.
+
+
+
+\item{\bf Binary Trees}
+\\
+       Assumption: The number of leaves in a complete binary tree is one more then the number of internal nodes.
+       Base Case:  A complete tree of level 1 has 1 nodes and 2 leaves.
+
+       Theory:  To increase from a tree of any depth of $l$ you must add two leaves to each old leaf.  This increase the
+number of leaves by $2*l$ and turns all old leaves into nodes. You
+now have twice as many leaves as before with an increase of nodes
+by a factor of $2^{n-1}$ where $n$ is the depth at which you are
+at. Since the previous relationship of nodes to leaves was $l = n
+- 1.$ When you double the number of leaves and you add the number
+of old leaves to the number of nodes.  The relationship stays the
+same so the new tree still has $l = n - 1$ leaves.
+\\
+\item{\bf Disjointed Graphs}\\
+    Assumption: That a graph with n edge-disjoint paths has n pairs of odd degree
+vertices.
+    Base Case: 1 odd pair graph has one edge.
+
+    Theory: Take any graph of G with n + 1 pairs of odd vertices and
+create an edge between them the graph would now have n odd
+vertices.  Based on our assumption we know that this has n
+disjoint paths.  If we remove the edge that we just placed on the
+graph we now have an extra created n + 1 odd vertices and since we
+removed this path we just created the need for another path to get
+the new odd edge created.\\
+\end{enumerate}
+
+
+
+
+
+
+\item{\bf Recurrence Equations}\\
+\begin{enumerate}
+\item
+$a_n = 6a_{n-1} - 8a_{n-2}, \qquad a_0 = 4, a_1 = 10$
+$$ r^n = 6r^{n-1} - 8r^{n-2}$$
+Divide through by $r^{n-2}$
+$$ r^2 = 6r - 8$$
+$$ r^2 - 6r - 8 = 0$$\\
+$ (r - 2)(r - 4) $ giving roots of 2 and 4\\
+$$ a_n = \alpha_1{2^n} - \alpha_2{4^n}$$
+$$ a_0 = \alpha_1{2^0} - \alpha_2{4^0}$$
+$$ a_1 = \alpha_1{2^1} - \alpha_2{4^1}$$
+$$ a_n = 3({2^n}) + {4^n}$$
+
+\item
+$a_n = a_{n-1} + 2a_{n-2}, \qquad a_0 = 0, a_1 = 1$
+$$ r^n = r^{n-1} - 2r^{n-2}$$
+Divide through by $r^{n-2}$
+$$ r^2 = r - 2$$
+$$ r^2 - r - 2 = 0$$\\
+$ (r - 2)(r + 1) $ giving roots of -1 and 2.\\
+$$ a_n = \alpha_1{-1^n} + \alpha_2{2^n}$$
+$$ a_0 = \alpha_1{-1^0} + \alpha_2{2^0}$$
+$$ a_1 = \alpha_1{-1^1} + \alpha_2{2^1}$$
+$$ a_n = \fr{-1}{3}({2^n}) + \fr{1}{3}{4^n}$$\\
+
+\item
+$a_n = 7a_{n-1} - 10a_{n-2} + 3^n, \qquad a_0 = 0, a_1 = 1$
+$$a_n = 7a_{n-1} - 10a_{n-2} + p3^n$$
+
+$$p3^n = 7p3^{n-1} + 10p3^{n-2} + 3^n$$
+Divide through by $3^{n-2}$
+$$p3^2 = 7p3 - 10p + 3^2$$
+$$9p = 21p - 10p + 9$$
+$$-2p = 9$$
+$$ p = \fr{9}{-2}$$
+\\
+
+Substitute $\fr{9}{-2}$ in for p and get:
+$$a_n = 7a_{n-1} - 10a_{n-2} + \fr{9}{-2}3^n$$
+\\Solve for the Roots:\\
+$$ r^n = 7r^{n-1} - 10r^{n-2}$$\\
+Divide through by $r^{n-2}$
+\\
+
+$$ r^2 = 7r - 10$$
+$$ r^2 - 7r - 10 = 0$$\\
+$ (r - 5)(r - 2) $ giving roots of 2 and 5\\
+$$ a_n = \alpha_1{5^n} - \alpha_2{2^n} + 3^n$$
+$$ a_0 = \alpha_1{5^0} - \alpha_2{2^0} + 3^n$$
+$$ a_1 = \alpha_1{5^1} - \alpha_2{2^1} + 3^n$$
+$$ a_n = \fr{11}{6}({2^n}) - \fr{16}{6}{4^n}$$
+\\
+
+\item
+$a_n = 3 - 6a_{n-1} - 9a_{n-2}, \qquad a_0 = 0, a_1 = 1$
+$$a_n = 3 - 6a_{n-1} - 9a_{n-2} + p1^n$$
+
+$$p1^n = 3 - 6p1^{n-1} + 9p1^{n-2}$$
+Divide through by $1^{n-2}$
+$$p1^2 = 3 - 6p + 9p$$
+$$p = 3 - 6p + 9p$$
+$$p = 3 -  6p - 9p$$
+$$p = \fr{3}{16}$$\\
+
+
+
+
+
+Substitute $\fr{3}{16}$ in for p and get:
+$a_n = 3 - 6a_{n-1} - 9a_{n-2}, \fr{3}{16}1^n$
+\\Solve for the Roots:\\
+$$ r^n = - 6r^{n-1} + 9r^{n-2}$$
+
+Divide through by $r^{n-2}$\\
+
+$$ r^2 = - 6r + 9$$
+$$ r^2 - 6r + 9 = 0$$\\
+$ (r - 3)(r - 3) $ giving roots of -3 and -3\\
+$$ a_n = \alpha_1{-3^n} - \alpha_2{-3^n} + \fr{3}{16}$$
+$$ a_0 = \alpha_1{-3^0} - \alpha_2{-3^0} + \fr{3}{16}$$
+$$ a_1 = \alpha_1{-3^1} - \alpha_2{-3^1} + \fr{3}{16}$$
+
+$$a_n = \fr{-3}{16}-3^{n-1} - \fr{-1}{12}-3^{n-2} + \fr{9}{-2}3^n$$
+
+\end{enumerate}
+
+
+\item
+
+\begin{enumerate}
+\item
+
+
+$$T(n) = n^2 + T(n-1)$$
+$$T(n-1) = n^2 + (n-1)^2 + T(n-2)$$
+$$T(n-2) = n^2 + (n-1)^2 + (n-2)^2 + T(n-3)$$
+
+\item
+$$T(n) = n^2 + T(n-1)$$
+$$T(n) = T(n-1)$$
+
+$$r^n = r^{n-1}$$
+$$r = 1$$
+
+$$T(n) = \alpha_1{1^n} + n(p_1n^2 + p_2n^1 + p_3n^0)1^n$$\\
+$$p_1n^3 + p_2n^2 + p_3n^1 = n^2 + (n-1)(p_1(n-1)^2 + p_2(n-1)^1 +
+p_3(n-1)^0)$$\\
+$$p_1n^3 + p_2n^2 + p_3n = n^2 + p_1n^3 - 3p_1n^2 + 3p_1n + p_1 + p_2n^2 - 2p_2n + p_2  + p_3n -
+p_3$$\\
+$$0 = n^2(1  - 3p_1) + n(3p_1 - 2p_2) + (p_1 + p_2  - p_3)$$\\
+$$p_1 = \fr{1}{2}   \qquad p_2 = \fr{1}{3}   \qquad p_3 = \fr{1}{6}
+$$\\
+$$T(n) = \alpha_1{1^n} + n(\fr{1}{3}n^2 + \fr{1}{2}n^1 +
+\fr{1}{6})$$\\
+$$T(0) = 0$$\\
+$$T(n) = \fr{2n^3 + 2n^2 + n}{6}$$\\
+
+\item
+
+$$T(n) = \fr{2n^3 + 2n^2 + n}{6}$$
+        When you have a recurrance equation that is a straight polynomial all you do is look to the largest degree and that is the $\Theta$ the
+    degree.\\
+\end{enumerate}
+\item
+
+$$T(n) = T(n-1) + T(n-2)$$\qquad T(1) = 2 \qquad T(2) = 3 \\
+Notice this is a fibonacci series with this problem being n+2.
+Substitute as appropriate.
+$$ F(n) = (\fr{1}{\sqrt {5}})[(\fr{1}{2} + \fr{\sqrt{5}}{2})^{n+2} - (\fr{1}{2} -
+        \fr{\sqrt{5}}{2})^{n+2}]$$\\
+
+\item
+$$$$
+$$T(n)=7T(\fr{n}{2}) + n^2$$
+$$T(\fr{n}{2})=7T(\fr{n}{2^2}) + (\fr{n}{2})^2$$
+$$T(\fr{n}{4})=7T(\fr{n}{2^3}) + (\fr{n}{2^2})^2$$
+
+
+$$T(n)=7(7T(\fr{n}{2^2}) + \fr{n}{2})^2 + n^2$$
+
+$$T(n)=7^2(7T(\fr{n}{2^3}) + \fr{n}{2^2})^2 + (\fr{n}{2})^2 + \fr{n}{2})^2 + n^2 + n^2$$
+$$T(n)=7^kT(\fr{n}{2^k} + n^2\fr{1-(\fr{7}{4})^k}{1-(\fr{7}{4}}$$
+$$k = log_2n$$
+$$T(n)=7^(log_2n)T(\fr{n}{2^(log_2n)} +
+n^2\fr{1-(\fr{7}{4})^(log_2n)}{1-\fr{7}{4}}$$\\
+\item
+\begin{enumerate}
+\item
+$$$$
+$$T(n)=T(\fr{n}{2}) + C$$
+    According to the Master's Theorem the order of complexity is
+    $log_2(n)$.\\
+
+\item
+$$$$$$T(n)= 2T(\fr{n}{2}) + 1$$
+    According to the Master's Theorem the order of complexity is
+    $n$.\\
+
+\item
+$$$$$$T(n)= 4T(\fr{n}{4}) + 2(\fr{n}{4} + \fr{n}{4}) + (\fr{n}{2}\fr{n}{2})$$
+    According to the Master's Theorem the order of complexity is
+    $nlog_2(n)$.\\
+
+\end{enumerate}
+
+\item
+\item
+a b c d\\
+a b c d\\
+a b c d \\
+a b c d \\
+a b c d \\
+a b c d\\
+
+
+
+\end{enumerate}
+\end{document}

@@ -1,0 +1,227 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Preventing an Array-Index-Out-Of-Bound Error</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>Legal Moves in Go (ADU Feb 20)</title>
+</head>
+<body>
+<h2>Legal Moves in Go (ADU Feb 20)</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#25608">Legal Moves in Go</a>
+    <li><a href="#25610">How to solve it</a>
+    <li><a href="#25611">How do we determine the liberty of a group?</a>
+    <li><a href="#25613">Preventing an infinite loop</a>
+    <li><a href="#25614">Preventing an Array-Index-Out-Of-Bound Error</a>
+</ul><hr>
+    <a name="25608">
+    <h2>Legal Moves in Go</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Given a Go board, determine the legal moves of the next player.<li>
+Definition: The <i>Liberty</i> of a connected black or white group of stones is the number of empty fields adjacent to it.<li>
+If after the placement of a new stone the liberty of any group of stones is zero, the whole group dies.<li>
+A move is legal, if it kills at least one enemy group.<li>
+A move is also legal, if it doesn't kill any group.<li>
+A move is illegal, if it kills an own group, but no enemy group.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25610">
+    <h2>How to solve it</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Let's assume a black stone is placed on field X.
+    
+    
+    
+    
+    <ul>
+<li>If any adjacent field of X is empty, the move was legal.<li>
+So from now on we assume that all adjacent fields of X are occupied.<li>
+For each adjacent white stone, determine the liberty of the group this stone belongs to. If any of these liberties is 0, the move was legal. <li>
+If we are still not sure whether the move was legal, we determine the liberty of the group X belongs to. If it is 0, the move was illegal, otherwise legal.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25611">
+    <h2>How do we determine the liberty of a group?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    For our purposes, it suffices to determine whether the liberty is zero
+or positive. We don't care about the actual number. 
+    
+    
+    
+    
+    <ul>
+<li>Depth-First Search<li>
+Start the search on field X. Let's assume X is black.<li>
+If any adjacent field is empty, return positive.<li>
+If all adjacent fields are white, return zero.<li>
+If all adjacent fields are occupied, but some (or all) of them are black, recursively search the adjacent black fields.<li>
+If any of the recursive calls returns positive, return positive.<li>
+If all recursive calls return zero, return zero.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25613">
+    <h2>Preventing an infinite loop</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Before searching the adjacent fields recursively, mark the current field as visited!<li>
+Only search the adjacent fields that haven't been visited yet.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25614">
+    <h2>Preventing an Array-Index-Out-Of-Bound Error</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Instead of accessing the board matrix directly,
+use a wrapper function.
+<pre>
+char board[MAX_SIZE][MAX_SIZE];
+
+char get_color (int i, int j, char default)
+  if (i&gt;=0 && i&lt;n && j&gt;=0 && j&lt;0) {
+    return board[i][j];
+  } else {
+    return default;
+  }
+}
+</pre>
+Instead of accessing <code>board[i][j]</code>,
+call <code>get_color(i,j,default)</code>.
+    
+    
+    
+    
+    <ul>
+<li>The default color is always the opponent's color.<li>
+Example: If we are determining the liberty of a white group, we consider the board surrounded by black.  
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+<p><i>Last modified 2001-02-20</i>
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left>Mark Dettinger</td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

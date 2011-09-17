@@ -1,0 +1,34 @@
+
+CLASSFILES= \
+	sunw/demo/test/BridgeTester.class \
+	sunw/demo/test/BridgeTesterCustomizer.class \
+	sunw/demo/test/BridgeTesterBeanInfo.class \
+	sunw/demo/test/BridgeTesterListener.class \
+	sunw/demo/test/BridgeTesterEvent.class
+
+DATAFILES= \
+	sunw/demo/test/BridgeTesterIconColor16.gif \
+	sunw/demo/test/BridgeTesterIconColor32.gif \
+	sunw/demo/test/BridgeTesterIconMono16.gif \
+	sunw/demo/test/BridgeTesterIconMono32.gif
+
+JARFILE= ../jars/test.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/test/BridgeTester.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/test/*.class $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+clean:
+	/bin/rm -f sunw/demo/test/*.class
+	/bin/rm -f $(JARFILE)
+

@@ -1,0 +1,356 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Employee SpeechWorks">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+   <title>lecture13</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Software Development Cycle</h2>
+<p>
+Although in classes, one often works on individual projects, or in small
+autonomous teams on group projects, this is atypical of software development
+projects. Product development is an organizational activity (for better or
+worse). Usually a project will have several developers and a project manager
+who must work together to produce the product. In addition, there are external
+influences from marketing, other business and product groups, etc. Even in
+open source projects, several developers must cooperate and coordinate to
+develop larger systems, and there is usually someone coordinating the efforts
+to avoid redundent work and ensure consistency.
+<p>
+Although it has been going on for decades. Software development and project
+management is still an art and a mystery. Some 60% of projects are cancelled
+before completion (though it is impossible to tell how many should never
+have been started in the first place). This, in part, accounts for the 
+popularity of programming methodologies such as OOP, design methodolgies
+such as UML, design patterns, etc., and project management tools and systems.
+Managers and businesses are always looking for the magic bullet to make
+projects work all the time.
+<p>
+In my humble opinion, the real things you need are: A clear idea of what
+you are trying to build and why, and a small team of very good developers.
+Unfortunatly, both of these are scarce.
+<p>
+Stages in project development (and their outputs).
+<ul> 
+<li> Specification --> Product, module, and interface specs.
+<li> Implementation --> Class-level design, code plus documentation.
+<li> Testing --> Verify module and product behavior. Produce bug reports.
+</ul>
+[Note: Design, which might be considered a separate phase, is here split
+between specification and implementation. The design processes these phases
+is sometimes quite different, or at least performs by different groups.]
+<p>
+Although there is dependency in these phases. They are often running
+simultaneously. Especially once project is implemented, feature requests,
+design changes, and bug fixes are happening all continuously.
+<p>
+Each stage generally includes review processes.
+<h3>Specification</h3>
+The specification phase usually consist of deciding and documenting
+exactly what the product is supposed to do, and usually includes the
+high-level architecture of the system in terms of sub-system (modules,
+components, etc) and the interfaces between them. This phase typically
+solicits input from potential customers, users, marketing, sales, as well as
+other parts of the engineering organization.
+<p>
+The design and architecture aspects of this phase are beyond the scope of
+this course. The issues at this stage are the design and specification
+of the system architecture and the interfaces between both the sub-system
+of the product and between the product and the outside world. 
+<p>
+What makes this design phase particularly difficult is that
+<ul>
+<li> The specification must be at a fairly high level to avoid getting
+bogged down in implementation details, yet be precise enough so that
+there is no ambiguity.
+<li> This design must be essentially produced "open-loop". In general, it
+is difficult to tell if a design is correct, or at least sufficient, 
+without actualy building it. As a consequence, the specification phase
+usually has many design reviews, in which the design is presented for criticism
+by audiences not involved in its production. Simulations, or partial
+implementations can also be used to increase confidence in a system
+architecture. In the best of worlds, a mathematical analysis of your
+system can be used to point out problems or verify correctness.
+<li> Once a specification or interface is published and/or a product is
+shipped or put into use, you are stuck with it for a very long time!
+Customers will use your product or write systems using your interface
+specifications (no matter how lame in retrospect they appear). These users
+must be supported and kept happy until they can be pursuaded to ungrade
+to a newer, better version. This time span is measure in years is not decades.
+</ul>
+<p>
+Again, the problems of this phase are beyond the scope of this course.
+For this reason, in Problem Set 3, we are implementing an architecture
+in which most of the design work has been done. There is a published
+specification and several reference implementations to compare against.
+<h3>Implementation</h3>
+<p>
+The rest of the course has been above OOP design and programming and how
+to implement a given specification. Here we want to discuss the social 
+and organizational aspects of program development.
+We will only comment
+that there is that boundary between the design and implementation phases
+depends on the design moethodology, the properties of the team and manager,
+and the culture and policies of the larger organization. In some projects,
+the design phase is very detailed to the point of specifying every class
+and it's methods. Implementation is then a matter of coding. In other
+projects, the design is specified at a much higher level, and the detailed
+implementation left to developers. In either case, the high level modules
+and their interactions and interfaces should be worked out in the design
+phase. These can then be distributed among the development team for
+implementation.
+
+
+<p>
+Once a project reaches a certain size or includes more than one developer,
+a number of new issues arise.
+<ul>
+<li> With several people developing code, how does each developer get 
+up-to-date, yet stable versions of other developers modules.
+<li> How do developers cooperate in sharing files, fixed bugs in each others
+code, etc.
+<li> How is code backed up.
+<li> How are self-consistan versions of the code stored over time
+<li> How is the over-all system compiled and built from source? Does this
+have to happen for multiple platforms.
+</ul>
+<h4>Source Control</h4>
+<p>
+These days any non-trivial project uses some sort of source control system
+to coordinate multiple developers. There are a variety of popular systems,
+some proprietary, some public. Some a real hassle to use, some relatively
+painless.
+<p>
+CVS is a source control system that is relatively popular in both open-source
+and commercial projects, probably because it is open-source, free, reliable,
+available on many platforms, and relatively painless to use. CVS differs
+from some other systems in that developers do not explicitly lock the files
+that they are working on (which prevents other developers from changing them).
+rather each developer can check out a complete copy of the source tree and
+modify any or all of it. (This an important feature; it is very frustrating
+to find that the file you need to modify to continue has been locked by someone
+who has left for a long weekend.).
+<p>
+CVS maintains a central repository of source files and keeps a full version
+history so that any previous state of the project can be extracted. Developers
+interact with the repository through a series of commands (there are both 
+command-line and GUI interfaces to CVS, though they implement the same
+commands). Amount these commands are:
+<ul> 
+<li>checkout -- copy the projects source files into a working directory. By 
+default the most recent version is downloaded, though there are many options.
+<li>update -- incrementally download changes into a checked-out version of the
+project. Flags any files with potential conficts with repository versions.
+<li>commit -- incrementally upload changed to repository and increment version
+number on uploaded files. Asks for a comment describing the changes
+to keep in the log.
+<li>tag -- names a consistent set of source files.
+</ul>
+More on CVS can be found at www.cvs.com (???).
+<h4>Build process</h4>
+Compiling, linking and exprting a project may sound like a trivial task, but
+with a multi-person project involving tens to hundreds of files, it becomes
+less so. Particularly if multiple versions or multiple target platforms
+are required. Often building a project requires specifing many command options
+to compilers, linkers, resource compilers, etc. The problem becomes more 
+acute when the development group
+is not responsible for ongoing builds and maintainance, which is often the 
+case. If the project is open course, the build system must be also open
+(or at least widely available) and easy to use. Again there are several 
+systems to help automate this process.
+Most IDE's will provide some sort of build functionality (and many provide
+source control). Microsoft's Visual Studio is a capable effort in this area.
+The problem with many of these is that they are proprietary and non-portable.
+<p>
+The javac compiler purports to be a build system, but at present I believe
+it is insuffucient for many projects' needs. There is a project at Apache
+called ANT which claims to be a build system for Java.
+<p>
+One popular open build system is Make, developed originally for UNIX but now
+widely available, albeit in somewhat incompatable versions. Major properties
+of make:
+<ul>
+<li> It is a rule-based system. One describe the output files to be produced,
+the input files each depends on, and the process required to convert input
+to output.
+<li> The developer enters these rules in a text file, usually called 
+<code>Makefile</code>
+<li> Make checks all input files for modifications and only preforms those
+operations needed to compute the required outputs. In can keep intermediate
+files around (compiled modules) to speed incremental builds.
+<li> Make's rule system is quite powerful and allows for conditional
+compilation, building for multiple targets, and multi-stage processes
+to produce output from source. Makefile's often make extensive
+use of macros and substitution so can be hard to read.
+On the other hand, simple things are generally simple.
+<li> To build a system using make, one types
+<code>make -f Makefile target</code> where target is the output desired.
+If the rules file is indeed called Makefile, the '-f Makefile' can
+be omitted.
+</ul>
+<p>
+Sample make file.
+<pre>
+
+# Use variable to hold compile flags
+JFLAGS = -classpath mypath
+
+# Variable to hold the list of class files we need to produce
+CLASSES = Complex.class \
+          Polynomial.class \
+
+# main target, causes all files in CLASSES to be made
+all: $(CLASSES)
+
+# Rules to produce each Complex.class
+# Rules consist of target: dependencies
+#                          commands to execute
+#
+Complex.class: Complex.java
+       javac $(JFLAGS) Complex.java    
+
+# General rules to convert .class to .java
+%.class:%.java
+      javac  $(JFLAGS) @<
+
+# A target to remove non-source files
+clean:
+   rm *.class
+<p>
+Another build-related issue is how to organize source and object files.
+For a small project, everythings can live is one directory. However, for
+a larger project, this becomes cumbersome. There is no general rule for
+organizing files, though creating a separate directory for each module
+is usually a good idea.
+<p>
+<h5>Java packages</h5>
+Java intermingles class/method namespace issues with  directory organization
+(at least for class files). A classes in a package named 'foo' will be be
+expected in subdirectory 'foo' relative to the classpath. (This is probably
+due to an ill-concevied attempt to impose a Java-centric class oriented
+view on users and developers, it ends up being simply annoying until
+eliminated with .jar files.) At any rate, this imposes
+some constraint on how object files are organized. It is probably a good
+idea to keep source files in the same hierarchy.
+<p>
+<h5>Periodic builds</h5>
+In a large on-going project, it is generally a good idea to build the
+latest version of system (as it exists in the source repository)
+periodically (usually nightly). This is checks that no-one has check in code
+that is incompatible with the rest of the system (eg changed an interface).
+If the nightly build fails, a search ensues for the guilty party.
+<h3>Documentation</h3>
+Documentation is an integral part of the software development process. One
+can identify several classes of documentation depending on the intended
+audience and level of detail.
+<ul>
+<li>User documentation - This can be either user manuals if the product is
+stand-alone software, or API and usage documentation if the product is
+a library or component designed to be incorporated into a  larger system.
+<li>Installation documentation -- Don't forget this. Need to tell the
+end user how to build (if necessary), and install software so it is usable.
+<li>Module documentation -- The primary audience for this is developers. This
+describes the interfaces (API) and behavior of the major components of the
+system. This docuementation is (or should be)  produced as part of the
+design process and is both the primary reference on how to use the modules
+in question, and the primary specification that the implementers must program
+to. All external interfaces fall in this catagory.
+<li>Implementation documentation -- This is submodule class and method
+documentation. It's target audience is future maintainers of the codebase.
+</ul>
+<p> In general, user and installation documentation is written by professional
+tech-writers (if you are lucky) with input from the designers and developers,
+as well as marketing and sales. We will not discuss this further.
+<p>
+Module level documentation is critical both for successful project completion
+(as it specifying design and functionality) and future maintainance. It can
+also form the main body of User-level API documentation. It should include,
+at minimum, a description of each of the classes and interfaces, 
+what they are supposed to represent and do, and descriptions of each of 
+their methods. It should be suffient for a developer unfamiliar with the 
+project to user the module without examining the source code.
+<p>
+Implementation documentation is similar to module documentation but at
+a lower level. The degree of implementation documentation required is
+more flexible. In general, classes and important methods should be documented.
+An overview of the implementation should also be provided covering data
+representation and any algorithms used. As for in-line documentation, the
+code plus comments should be a readable description of what the code is doing;
+it should tell it's story (as well as compiling to a working program). If
+the code is straightforward and clear, minimal comments are required. If
+the implementation is in any way tricky or obscure (eg for optimization),
+provide an explanation of what is going on.
+<h3>Testing</h3>
+<ul>
+<li>Important aspect of project development cycle, should be planning from
+design onward.
+<li> In large projects, testing will be responsibility of QA engineer or group.
+<li> Testing should be multi-level: entire system/program level, module level,
+class/implementation level.
+<li>Program level: Should test all user-level functionality. Test both
+expected and unexpected usages. Technology: Testing GUI-based interfaces
+can be difficult. Ideally build some automated test harness to simulate user.
+<li> Module level: Test module functionality as defined by module
+documentation.
+<ul>
+<li>Test positive (expected) input for functionality
+<li>Test negative (unexpected) inputs for error handling
+<li>Test cases on the boundaries (large input, small input, null input).
+</ul>
+<li>Testing each module individually improves confidence in overall
+program correctness.
+<li>Module level testing complicated by module interactions and dependecies.
+Ideally dependency/calls graph should be a tree. Modules testing can then
+be performs bottom-up. Ex:
+<pre>
+Module 1, 2, and 3 don't depend on (call into) any other modules.
+Module 4 calls modules 1 and 2.
+Module 5 calls modules 3 and 4.
+</pre>
+In this case, Modules 1,2,and 3 can be tested independently. Then module 4
+tested using modules 1 and 2. Any errors found in testing this combination
+ should be confined to module 4 since then others have been already verified
+(knock on wood). Similarly 5 can be tested using verified versions of 1,2,3
+and 4.
+<p>
+If the dependency graph includes cycles, testing is more complex. Several
+modules may have to be tested as a unit.
+<li>Test plan:
+<ul>
+<li>specify what is to be tested (classes, methods, etc.)
+<li>specify the input vectors to be tested and the expected answers
+<li>specify how often tests are to be run and how results are to
+be evaluated, stored, and tracked.
+</ul>
+<li>Testing should be an on-going part of project development. As modules
+mature, new tests should be added to cover new functionality.
+<li>Testing should be incorporated into the nightly build process. Each time
+the current system is built. The current test set should be run to ensure
+nothing has broken. This allows the status of the system to be tracked
+over time. If mysterious behavior is noticed, one can trace backward
+through previous version to find when it first appeared.
+</ul>
+</ul>
+<h3>Debugging</h3>
+
+I would like to conclude this lecture with some hints on debugging.
+<ul>
+<li> Develop and test incrementally, the fewer things that change between
+tests, the easier it is to find bugs. 
+<li> Try to isolate the problem, comment out or disable parts of the code until
+the problem disappears, then added it back a one piece at a time until
+the bug reappears.
+<li> Don't randomly change things. Use science: Form a theory about what
+is going wrong. Then think of experiments (changes to code) to perform to
+test this theory. It is as important to understand what the bug was as to
+fix it. Bugs that mysteriously go away with being understood and explicitly
+fixed often return uninvited.
+<li> Document fixes to any particularly difficult bug, this keeps future
+developers from re-introducing into the code.
+</ul>
+
+</body>
+</html>
+

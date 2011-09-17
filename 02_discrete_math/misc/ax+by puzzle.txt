@@ -1,0 +1,70 @@
+Subject: Re: Doc files
+Date: Tue, 17 Oct 2000 03:50:12 EDT
+From: Michael B Greenwald <mbgreen@central.cis.upenn.edu>
+To: Shai Simonson <shai@stonehill.edu>
+CC: greenwald@central.cis.upenn.edu
+
+   Mon, 16 Oct 2000 19:44:00 -0400
+   Shai Simonson <shai@stonehill.edu>
+
+   Michael B Greenwald wrote:
+   >
+   >    Mon, 16 Oct 2000 15:45:56 -0400
+   >    Shai Simonson <shai@stonehill.edu>
+   >
+   >    Michael B Greenwald wrote:
+   >
+   >    > Some extra questions (trivial) you may want to pose: given a and b (5
+   >    > and 7 in your problem), what range of numbers are acheivable using
+   >    > only unique x and y?  In what range are you guaranteed that at least 2
+   >    > x,y pairs exist for every number n?
+   >
+   >    Trivial...?
+   >
+   >    Is your intention that these two questions are mutually exclusive?  Tha
+  t
+   >    is are you asking for a characterization of the unique case, versus the
+   >    2 or more case?  Or are you asking for some subset of the range in each
+   >    question?
+   >
+   > Sorry --- I guess I didn't phrase it very well.  Here's the answers I was
+   > aiming at -- that will help you understand the question I *meant* to ask.
+   > First answer was for (a-1)(b-1) <= n < ab, *all* n are guaranteed to be
+   > expressible as ax + by, with unique x and y.
+
+   Since my gut instinct here is to say "Are you sure?"  I dont call it
+   trivial... :-)
+
+Below (a-1)(b-1) not all n are expressible.  Above ab, at least one n is
+expressible in more than 1 way, so the question is whether any n between
+(a-1)(b-1) is expressible in 2 ways.
+
+Let n = ax'+by' = ax+by be such an n < ab.  Without loss of generality
+let x'<x and y < y'.  So b(y'-y) = a(x-x') ... both sides are positive and
+less than n. gcd(a,b) = 1, so a|(y'-y) but then l.h.s. is a multiple of ab,
+which is inconsistent with < n < ab.  So no n < ab can be expressed as
+ax+by in more than one way.
+
+   >    2nd question -  Is the set larger than the multiples of ab?
+   >
+   > I was asking for what range of n are *all* n expressible as ax+by in more
+   > than one way.  I thought the answer would be n>=ab+(a-1)(b-1).
+
+        I also don;t see that this obvious...
+
+   Knowing you, they are both likely true.... :-)
+
+Well, I was just guessing.
+
+Clearly, for n >= ab+(a-1)(b-1) you can express it in at least 2 ways.
+Consider n' = n-ab.  If n' = ax+by, then n = a(x+b)+by AND n = ax +(b+a)y.
+
+So the only question is whether n = ab+(a-1)(b-1) - 1 can be expressed in 2
+or more ways. First, note that there is no pair x and y, positive integers,
+s.t. (a-1)(b-1)-1 = ax+by.
+
+Let n = ab+(a-1)(b-1) - 1 = ax'+by' = ax+by.  x' and x must both be > b,
+else (x-b),y is a pair that expresses (a-1)(b-1)-1.  y' and y must both be
+> a, else x,(y-a) is a pair that expresses (a-1)(b-1)-1.  If all 4 x,x',y,
+and y' are that big, though, then n has to be greater than 2ab, but ab +
+(a-1)(b-1)-1 < 2ab.

@@ -1,0 +1,7 @@
+PROJECT source2html Acceptance Tests
+INDEX source
+HOME    Source2html Doc
+HOMEREF http://w3.one.net/~jweirich/tools/source2html/index.html
+BLURB accept.blurb
+HTML/KEYWORD  <b><font color="blue">%%%</font></b>
+HTML/COMMENT  <em><font color="red">%%%</font></em>

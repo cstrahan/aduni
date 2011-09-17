@@ -1,0 +1,143 @@
+-----------------------
+DATABASE TUNING PROJECT
+-----------------------
+
+( adapted from a problem set written by Mike Bryzek
+  mrbyzek@arsdigita.com )
+
+0. Groups and Logistics - Deadlines and such
+
+0.1 Groups
+This will be done in groups of 3.  Smaller groups are acceptable but you
+will still need to do all of the work.  Send one email per group to
+rusty@alumni.rice.edu.  You can use the peer-evaluation signup sheet for
+finding groups - if you are looking for a group note it next to your name.
+
+0.2 Deliverables
+ By Friday at 5pm you should turn in
+  a) the queries that you wrote
+  b) statistics and plans for the initial untuned query.
+  c) any sql you used to create indexes or find out more information
+     about your queries
+  d) your intermediate and final results, i.e. times, statistics and
+     plans.
+  e) a paragraph summarizing how you came about your final set of 
+     optimizations.
+
+ You should aim for 2-3 pages per group.  The late penalty is 25%, and we
+ will not accept projects after Monday of the following week.
+  
+1.
+First things first, you'll need  to be able to connect to the
+Oracle database.  If you already have an account on the database machine or
+already have an installation of your own, then move on to the section about
+loading data.
+
+1.1
+Basic instructions for connecting to the database machine:
+
+These instructions will work as long as you are willing to
+ssh to the file server first.  To run directly from your
+desktop machines (if you have Linux), you'll have to do a
+bit more, which will be discussed later.
+
+Log on to the file server:
+  ssh 10.11.0.10
+
+If you have not created a database account for yourself on the
+database machine, run the script /home/software/setup_user.sh.
+Make sure that it does not report any errors (and find Rusty
+if it does).
+
+You can now log into the database machine through sqlplus.  Log
+out of the file server, then log back in.  Run sqlplus, and
+log in as your regular login name.  If you were Doug, you would
+log in as danderso, and your password would be dbpw4danderso.
+That is, your password will be the concatenation of "dbpw4" and
+your username.
+
+1.2 Making it work from your own linux box:
+  It is possible to run sqlplus from your own local box, rather than
+  logging into the file server.
+  step 1: remote mount the necessary files on your linux box with the
+    following commands (as root):
+      mkdir /mnt/adu-fs
+      mount -t nfs 10.11.0.10:/home /mnt/adu-fs
+      ln -s /mnt/adu-fs/software /home/software
+  step 1(alternate): Copy /home/software in its entirety from 10.11.0.10
+      into /home/software on your local machine.
+  step 2: Run /home/software/setup_user.sh, and watch for any errors.
+
+  There are enough small ways in which people's machines are different that
+  this is not guaranteed to work.  If it does not work, try just ssh'ing to
+  the fileserver and running from there.
+
+  If you are using your own installation of Oracle, you will also have to
+  follow the directions in Philip's chapter on tuning (i.e. running the
+  plustrace and utlxplan files).
+  
+1.3 
+To make sure that you are properly connected, try the query
+  select sysdate from dual;
+
+Getting Oracle to reveal its plans:
+  
+  set timing on -- this will report a time after each statement processed
+  set autotrace on -- this will explain the plan and run the query
+                   -- you may get a warning that statistics are not enabled.
+  -- load the create table statement for plan_table
+
+  You will also need to create a plan table.  There is a sql file on the
+  fileserver in /usr/local/databases/plantable.sql, which you will need to
+  load into your tablespace.  
+
+
+    
+2. Getting the Data:
+  You'll first want to create the two tables, dbi_errors and
+  dbi_forms.  There is a SQL file on the fileserver in
+  /usr/local/databases/datamodel.sql with the relevant create table and
+  create sequence statements.
+
+  The data is in two sqlldr control files, on the file server in
+    /usr/local/databases/dbi_forms.ctl and
+    /usr/local/databases/dbi_errors.ctl
+  There are a number of misformatted entries in this file, so you'll
+  have to up the number of acceptable errors for sqlldr.  For example,
+  (from a shell prompt):
+  ----
+   [fileserver]$ sqlldr control=<control filename>
+      userid=<username>/<database password> errors=10000
+  ----
+  Depending on where you are running sqlldr from, it may try to create
+  "bad" and "log" files in a directory for which you do not have write
+  permissions.  If this is the case, you should use the log= and bad=
+  command line arguments to tell sqlldr to write these files elsewhere.
+  
+
+3. Write the queries
+  a) Display the state of the checks for one
+     form.  You should select the form based on a substring of the
+     form name, and display all of the information from dbi_errors
+     for that form.
+
+  b) The number of forms with errors in each error state
+
+  c) The number of approved vs unapproved forms.
+
+  d) A summary of activity by user (from the last_modifying_user column).
+     For example, we should be able to say that Joe Smith is our most
+     active user having modified 10,000 rows in dbi_errors.  Since you do
+     not have the users table to find user names from user ids, just show
+     numeric user ids.
+
+4. Tune the queries
+
+  You will be tuning the queries from sqlplus.  You may want to read 
+  http://photo.net/sql/tuning.html and
+  and http://photo.net/doc/lessons/sql-tuning-advanced.html
+
+  Time each of your queries.  Pick two relatively expensive queries that
+  you think will be tuneable and see how much faster you can get them to
+  run.  There are some tuning operations that you may not have permissions
+  for.  If you run into permissions problems let us know.

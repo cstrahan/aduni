@@ -1,0 +1,77 @@
+Quiz 2
+
+#1 [10.6 from the book]
+   Give examples of the following:
+    1. A linear hashing index and an extendible hashing index with the same
+       data entries such that the linear hashing index has more pages.
+    2. A linear hashing index and an extendible hashing index with the same
+       data entries such that the extendible hashing index has more pages.
+
+
+#2 Assume a relation with 100,000 pages, 4k bytes each.
+   50 buffer pages in RAM; 10 pages per block.
+   Average seek time=6ms;
+   Avg. Rotational delay=3ms;
+   Tranfer time 1ms/page
+
+   Calculate the time it takes to sort the file. Explain all reasoning.
+
+
+#3 Explain the two buffer replacement policies (LRU
+   and Clock). 
+
+#4 Describe the terms:
+   a) write ahead log
+   b) pinning of pages
+   c) Sequentional flooding
+   d) prefetching
+
+
+#5 No one method for evaluating a join is superior in all cases, and in
+   many cases there are subtle issues in tuning the parameters.
+
+   For a join between two relations R and S, having M and N pages
+   respectively.
+
+   Sort-merge join - at best, this takes M+N page I/Os in addition to the
+   sort cost.  Describe a data-set that would require more page I/Os than
+   this figure.
+
+   Hash-join - in many cases, we can scan R and S, generating a hash table
+   for each, and then scan each bucket of S while keeping an entire bucket
+   of R in memory.  For what sizes of R and/or S does the process get more
+   complicated (and generally not worth it)?
+
+   Blocked Nested Loops - by using many pages at a time to scan the outer
+   relation, this method achieves significant speedup over nested loops
+   join.  Given a limited number of buffer pages, why would one want to use
+   multiple pages for the inner relation, rather than making the blocks of
+   the outer relation as large as possible?
+
+#6 Consider the following relations and query:
+
+       student(_sname_,major,year)
+       class(_cnum_,building)
+       enrolled(_sname_,_cnum_,_time_)
+   
+   "The majors of students who take 
+    at least one class in the physics building"
+   
+   which could be written in SQL as:
+    select distinct major
+    from student S,class C,enrolled E
+    where S.sname = E.sname
+      and E.cnum = C.cnum
+      and C.building = 'physics'
+   
+   The RA could be written as
+   
+   PI_{major}( SIGMA_{building='physics'}((student JOIN
+   	enrolled) JOIN class)
+   
+   (where _{x} means subscripted x)
+   
+   Write three relational algebra trees showing different ways of
+   evaluating this query (you do not need to annotate your diagram with
+   choices of implementation for each operation, i.e. just draw the trees,
+   not full evaluation plans).

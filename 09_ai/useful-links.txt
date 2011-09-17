@@ -1,0 +1,6 @@
+MIT SCHEME
+http://www.swiss.ai.mit.edu/projects/scheme/7.5/
+
+usefull scheme stuff
+http://web.mit.edu/6.034/doc/scheme.html
+

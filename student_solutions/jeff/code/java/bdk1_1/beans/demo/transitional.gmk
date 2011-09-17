@@ -1,0 +1,30 @@
+
+CLASSFILES= \
+	sunw/demo/transitional/ButtonPushEvent.class \
+	sunw/demo/transitional/ButtonPushListener.class \
+	sunw/demo/transitional/Flipper.class \
+	sunw/demo/transitional/OurButton.class \
+	sunw/demo/transitional/TransitionalBean.class
+
+DATAFILES= 
+
+JARFILE= ../jars/transitional.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/transitional/TransitionalBean.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/transitional/*.class $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac -nowarn $<
+
+clean:
+	/bin/rm -f sunw/demo/transitional/*.class
+	/bin/rm -f $(JARFILE)
+

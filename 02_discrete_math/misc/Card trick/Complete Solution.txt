@@ -1,0 +1,72 @@
+Subject: read this
+Date: Tue, 28 Nov 2000 16:47:13 -0500 (EST)
+From: "Tara S. Holm" <tsh@math.mit.edu>
+To: Shai Simonson <shai@stonehill.edu>
+
+This explains more or less how to do the trick.  Do you want to try to
+show them the 3cards out of 8 version of this tomorrow in recitation?
+(Some people asked to see how it works...)
+
+Tara
+
+===============
+
+At 09:42 AM 6/2/99 -0700, William Fraser wrote:
+
+>
+> The magician's assistant hands a volunteer an ordinary deck of 52
+> cards.  The volunteer chooses any 5 cards and hands them to the
+> assistant.  The assistant hands 4 cards back, one by one, to the
+> volunteer, who announces which card it is. The magician, who has been
+> offstage, enters and names the 5th card. How is the trick done(without
+> chicanery)?
+>
+
+I'd prefer to make the problem slightly more challenging by increasing the
+size of the deck to 64 cards, and also having someone else in the audience
+flip a coin.  The magician now needs to announce BOTH the unannounced card
+and the result of the coin flip.
+
+OR, just take a single deck of 124 cards, numbered 0 to 124, but no coin
+flip.
+
+In all cases, the cards are numbered 0 to n-1.
+
+SOLUTION:
+
+The magician adds the value of the 5 cards, modulo 5, giving a remainder
+of r. He then hides the (r+1)st card in rank order among the 5.  That's
+the one the magician must pick.
+
+Once the other four cards are known, there will "a priori" be (n-4)/5
+possible values for the missing card.  These possibilities occur every
+fifth one if the four known numbers were deleted from the deck.  For
+example, suppose the 4 known numbers are 17, 19, 23, and 29, whose sum is
+3 mod 5.  Hence, if the missing number is in the 0th interval (below 17),
+it must be 2 mod 5; if it is in the first interval it would have to be 3
+mod 5; in the next interval, 4 mod 5; in the next interval, 0 mod 5; and
+above 29, 1 mod 5:
+
+0123456789012345678901234567890123456789012345678901...?
+  ?    ?    ?    X?X   X ?   X ?    ?    ?    ?    ?
+  0    1    2     3      4     5    6    7    8    9...
+
+If n = 124, there are exactly 24 question marks in this sequence; if n <=
+64, there are <=12.  The 24 permuations of 4 objects (best labelled
+0,1,2,3) are lexicographically ordered to correspond to the integers from
+0 through 23, or from 0 through 11 in the less significant field and 0 or
+1 (= H or T, again alphabetical, lexicographic order) in the more
+significant field.
+
+So, if the four known cards are revealed in the order 23, 17, 29, 19, then
+the magician converts to the permutation 2130.  Mod 24, this is the
+permutation number 16, (numbered from 0 upwards) = 12 + 4, so the coin is
+tails and the card is the one numbered 25.
+
+The conversion between permutations and their numbers isn't hard. In
+general, multiply the rank of the first number by 6 = 3!, then the
+residual rank of the next number by 2 = 2!, and finally, the residual rank
+of the next-to-last number by 1.  In the present case, 2x6 + 1x3 + 1x1 =
+16 = 1x 12 + 4, when converted to the two fields.
+
+============

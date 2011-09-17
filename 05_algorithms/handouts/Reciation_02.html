@@ -1,0 +1,587 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Abstract and Concrete Datatypes</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>Lists, Stacks and Queues</title>
+</head>
+<body>
+<h2>Lists, Stacks and Queues</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#24840">The Josephus Problem</a>
+    <li><a href="#24841">First attempt</a>
+    <li><a href="#24842">Linked Lists</a>
+    <li><a href="#24844">Elementary Operations</a>
+    <li><a href="#24847">Standard Operations</a>
+    <li><a href="#24848">Implementing a stack with a linked list</a>
+    <li><a href="#24849">Implementing a queue with a linked list</a>
+    <li><a href="#24876">Solving the Josephus Problem with a linked list</a>
+    <li><a href="#24853">Double Linked Lists</a>
+    <li><a href="#24854">Binary Trees</a>
+    <li><a href="#24850">Implementing a stack with an array</a>
+    <li><a href="#24851">Implementing a queue with an array</a>
+    <li><a href="#24852">Abstract and Concrete Datatypes</a>
+</ul><hr>
+    <a name="24840">
+    <h2>The Josephus Problem</h2>
+    <hr>
+    
+    
+    
+    
+    
+     
+    
+    
+    
+    
+    <ul>
+<li>N people, numbered from 1 to N, form a circle. Counting starts at person 1 and - proceeding around the circle - every Kth person has to leave, until only one is left.<li>
+Given N and K, who will be the last?
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24841">
+    <h2>First attempt</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+for (i=1 to N) circle[i] = true;
+position = 0;
+for i=1 to N-1 {
+  // move forward K steps
+  for j=1 to K {
+    position = (position mod N)+1;
+    while (circle[position]==false) {
+      position = (position mod N)+1;
+    }
+  }
+  // delete from circle
+  circle[position] = false;
+}
+for i=1 to N {
+  if (circle[i]==true) print(i);
+}
+</pre>   
+    
+    
+    
+    
+    <ul>
+<li>Very inefficient solution<li>
+Skipping over empty positions wastes time.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24842">
+    <h2>Linked Lists</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Like an array, a list also is a <b>container datatype</b>.<li>
+List elements consist of a value and a pointer to the next list element.<li>
+The list itself is represented by a pointer to the first list element.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24844">
+    <h2>Elementary Operations</h2>
+    <hr>
+    
+    
+    
+    
+    
+    If your language supports pointers and aggregate data structures
+(like C/C++), it will provide commands for the following basic operations. 
+
+    
+    
+    
+    
+    <ul>
+<li>Defining the shape of a list element.
+<pre>
+class ListElement {
+  int value;
+  ListElement* next;
+}
+</pre>
+<li>
+Creating a new (empty) list element.
+<pre>
+ListElement* p = new ListElement;
+</pre>
+<li>
+Setting the value and/or pointer of an element. 
+<pre>
+p->value = 42;
+p->next = NULL;
+</pre>
+<li>
+Destroying a list element.<pre>delete p;</pre>
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24847">
+    <h2>Standard Operations</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Using the elementary operations you can now implement
+the standard operations:
+
+    
+    
+    
+    
+    <ul>
+<li>Inserting an element into a list.                                <li>
+Removing an element from a list.                                  
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24848">
+    <h2>Implementing a stack with a linked list</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+ListElement* top_of_stack = NULL;
+
+void push (int x) {
+  ListElement* p = new ListElement;
+  p->value = x;
+  p->next = top_of_stack;
+  top_of_stack = p;
+}
+        
+int pop() {
+  ListElement* p = top_of_stack;
+  int x = p->value;
+  top_of_stack = top_of_stack->next;
+  delete p;
+  return x;
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24849">
+    <h2>Implementing a queue with a linked list</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+ListElement* head = NULL;
+ListElement* tail = NULL;
+
+void enqueue (int x) {
+  ListElement* p = new ListElement;
+  p->value = x;
+  p->next = NULL;
+  if (head==NULL)
+    head = p;
+  else
+    tail->next = p;
+  tail = p;
+}
+
+int dequeue (int x) {
+  ListElement* p = head;
+  int x = p->value;
+  head = head->next;
+  if (head==NULL) tail = NULL;
+  delete p;
+  return x;
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24876">
+    <h2>Solving the Josephus Problem with a linked list</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+for (i=1 to N) enqueue(i); 
+tail->next = head;
+position = tail;
+while (position->next != position) {
+  for (i=1 to K-1) position = position->next;
+  position->next = position->next->next;
+}
+print(position->value);
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24853">
+    <h2>Double Linked Lists</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+class ListElement {
+  int value;
+  ListElement* next;
+  ListElement* prev;
+}
+</pre>
+
+    
+    
+    
+    
+    <ul>
+<li>A second pointer that points to the previous element makes it possible to go forward and backward in the list. 
+
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24854">
+    <h2>Binary Trees</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+class TreeElement {
+  int value;
+  TreeElement* parent;
+  TreeElement* left;
+  TreeElement* right;
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24850">
+    <h2>Implementing a stack with an array</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+int stack[MAX_STACK_SIZE];
+int top_of_stack = 0;
+
+void push (int x) {
+  stack[top_of_stack] = x;
+  top_of_stack++;
+}  
+
+int pop () {
+  top_of_stack--;
+  return stack[top_of_stack];
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24851">
+    <h2>Implementing a queue with an array</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+int queue[MAX_QUEUE_SIZE];
+int head = 0;
+int tail = 0;
+
+void enqueue (int x) {
+  queue[tail] = x;
+  tail = (tail+1)%MAX_QUEUE_SIZE;
+}
+
+void dequeue () {
+  int x = queue[head];
+  head = (head+1)%MAX_QUEUE_SIZE;
+  return x;
+}
+</pre>
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24852">
+    <h2>Abstract and Concrete Datatypes</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Arrays, lists and trees are concrete datatypes. They are basic data structures typically provided by the computer language.
+<li>
+Stacks, queues and heaps are abstract datatypes. They are just ideas, i.e. "black boxes" with a defined behavior. To implement them, you have to choose a suitable concrete datatype.
+<li>
+In particular, stacks and queues can be implemented by arrays or linked lists.<li>
+A heap can be implemented by an array or a binary tree.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+<p><i>Last modified 2001-02-04</i>
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left><a href="mailto:mdettinger@arsdigita.com">Mark Dettinger</a></td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

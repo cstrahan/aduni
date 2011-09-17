@@ -1,0 +1,342 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture17</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>OOP in C and C++</h2>
+Although, Java is currently alive and well in server-side Web programming and
+making some inroads in the business middleware area, C and C++ are currently
+the languages of choice for high-performance and desktop software. Outside
+of the Web programming industry, C/C++ skills along with VB skills are still
+important in the job market. In this lecture, we give a brief overview
+of C and C++ concentrating on the differences between these and Java.
+Our main goal will be to explain how to use the OO design and implementation
+techniques we learned in Java to other environments.
+<p>
+Historically, C++ was developed as an OO extension to C. However, since we are
+already familiar with OOP principles, we will be working backward in history
+starting with C++ then discussing OOP in C.
+<h3>OOP C++</h3>
+The good news is most of the syntax we learned in Java applies directly to C++
+(the Java developers wisely copied C syntax rather than gratuituously invent
+something different). The main differences are in features, semantics,
+and terminology (C++ gives different names to things like instance variables,
+we will continue to use Java terminology here).
+<ul>
+<li> Global procedures. Unlike Java, in which all procedures (even main())
+must be methods in some class, C and C++ allow procedures to be defined
+ourside of classes. These are equivalent to <code>public static</code> methods
+in Java, though they do not require the Classname.methodName syntax to call
+them.
+<li> Hello World in C/C++. The follow program is Hello World in both C and C++
+(since C is a subset of C++, a program can be legitimate in both).
+<pre>
+#include <stdio.h>
+
+int main(int argc, char** argv){
+  printf("Hello World\n");
+}
+</pre>
+Some notable differences between this and Java
+<ul>
+<li> The #include directive: This causes the compiler to to look for a
+file called <code>stdio.h</code>. These <em>header</em> files are common
+in C/C++ and contain the declarations of classes and procedures without
+their implementations. They are somewhat similar to Java interface definitions
+or the definitions of pure abstract classes. This separation of definition
+and implementation of classes and methods is one of the differences between
+C/C++ and Java programming.
+<p>
+The header <code>stdio.h</code> defines procedures in the standard C IO
+library with includes <code>printf</code>, a formatting print utility.
+<li> The main() procedure is not enclosed in any class. Public static 
+procedures can be defines at top level (as can public static data, though this
+is almost always a bad idea).
+<li> The arguments to main() are an int, and a char**, rather than a
+String[] as in Java. C/C++ does not have a native String class (though C++
+has a library version). Strings are represented as character arrays
+terminated by a 0. For now, think of char** as representing an 
+array of character arrays, the int argument, argc gives the number of elements
+in the array of strings.
+<li> To compile this program, one runs the C or C++ compiler. The C compiler
+on UNIX is usually called CC, the various C++ compilers have different names.
+g++ is the gnu C++ compiler.
+<pre>
+g++ -o Hello Hello.c
+</pre>
+This should produce two files Hello.o, the object file corresponding to
+Hello.c (this is roughly analagous to the .class file), and Hello, an
+executable. Typing Hello on the command line should now invoke this
+program.
+<li> There are actually two things going on in the g++ command above,
+compiling, which converts the text .c file to a binary code .o file, and
+linking, which combines a number of .o files and libraries into an executable.
+In Java, the linking step usually happens while the program is running, in
+C/C++ it usually happens as a separate step.
+</ul>
+</ul>
+<h4>Defining Classes in C++</h4>
+<ul>
+<li> Class definition and implementation are similar in C++ and Java. One 
+difference is that the definition (instance variables and method declarations)
+are usually separated into a .h file 
+(the extensions .hpp or .hxx are also used, no meaning is attached to the 
+extension itself). For example, our Vect2D class in C++ would have a .h file
+like
+<pre>
+
+class Vect2D{
+  // instance vars, not different syntax for access specifier
+  private:
+     double x = 0;
+     double y = 0;
+  public:
+     // Constructor, has class name as in Java
+     Vect2D(double x, double y);
+     // A public instance method
+     double length();
+}
+</pre>
+<li> The implementation of the instance methods would be in a separate 
+file usually, but not necessarily called Vect2D.cpp (or .cxx or .C).
+The implementation of the constructor and length() would look like
+<pre>
+#include "Vect2D.h"   // We need to include the definitions
+
+// Constructor 
+Vect2D::Vect2D(double xx, double yy){
+   x = xx;
+   y = yy;
+}
+
+double Vect2D::length(){
+   return(sqrt(x*x) + y*y);
+}
+</pre>
+<li> Note use of the <code>::</code> scoping operator. This is how C++
+keeps track of which class' <code>length</code> methods you are trying
+to implement. In Java, this is not needed as implementations are always
+within the class definitions. In some ways, the C/C++ separation of
+definition and implementation gives you another level of encapsulation.
+<li> It is possible to implement the methods in the .h file as in Java.
+Often, short methods such as accessors and mutators are implemented there.
+The C++ compiler is smart enough to <em>in-line</em> function defined in
+the .h file and avoid the overhead of a function call.
+</ul>
+<h4>Using Classes in C++</h4>
+<ul>
+<li> Instantiating classes in C++ is slightly different than in Java. In Java,
+all class instances are allocated from the heap using <code>new</code>. In C++,
+instances can be allocated on the stack.
+<pre>
+Vect2D v1; // instantiate a Vect2D on the stack, calling default constructor
+Vect2D v2(2.0,3.0); // instantiate a Vect2D of stack calling constructor;
+</pre>
+Note in Java, that statements above would merely allocate references set to
+<code>null</code>, in C++ the instance itself is allocated from the stack.
+This is somtimes convenient as C++, unlike Java does not have GC, so
+all class instances must be explicitly reclaimed. Stack allocated instances
+follow stack allocation priniciples are are automaticly reclaimed when the
+stack frame is popped.
+<li> To access an instance methods on an instance, we use the Java-like syntax
+<pre>
+double len = v1.length();
+</pre>
+Note that although the syntax is identical, this is subtly different from
+Java as v1 is the instance itself, not a reference.
+<li> Reference access and heap allocation is so useful that C++ supports it
+as well. Unlike Java, which has only references to instances, C++ explicitly
+distinguishes references to objects with a '*':
+<pre>
+Vect2D v1; // instance of Vect2D
+Vect2D* vp = NULL; // reference (pointer) to instance of Vect2D 
+</pre>
+<li> Instances are allocated from the heap with <code>new</code> as in Java.
+<li> Instance variable and methods are accessed from reference (pointer)
+variables with the -&gt; syntax;
+<pre>
+vp = new Vect2D(2.0,3.0); // alloc a Vect2D from heap
+double len = vp-&gt;length(); // call length method through reference
+</pre>
+<li> Since we need to explicitly manage storage in C++, at some point we
+must free this instance. The syntax to do this is
+<pre>
+delete vp;  // delete instance pointed to by vp
+vp = NULL;  // A good idea, otherwise vp points randomly into heap.
+</pre>
+<li> There is an additional problem here. What if Vect2D as one of
+it's instance variables, held a reference to another heap object? The
+delete call only delete's the structure it is given, it does not explicitly
+recurse. To allow the cleanup and freeing of objects, C++ has a companion
+method to the constructor called the <em>destructor</em>. Like the
+constructor, the destructor for a class has a standard name. the class name
+preceded by '~', thus the destructor fro Vect2D would by ~Vect2D().
+<li> The destructor an called on an instance when the instance is about
+to be destroyed, either through an explicit call to delete, or when a stack
+allocated instance is freed due to a stack pop (ie procedure return).
+<li> Storage management in C/C++ is tedious and difficult and it is easy to
+make a mistake. Mistakes usualy manifest is crashes (if you try to use
+something you previously deleted), or leaks (you are not freeing everything
+you should) which cause the process to grow in size as it runs.
+</ul>
+<h4>Inheritance in C++</h4>
+<ul>
+<li> You can extend classes in C++ as in Java. Though the syntax uses ':'
+rather than 'extends'.
+<pre>
+class Complex: public Vect2D{
+}
+</pre>
+C++ has a complex syntax for calling the constructors of superclasses (as
+we did with super() in Java). Refer to C++ books if you are interested.
+<li> Unlike Java, multiple inheritance is allowed.
+<li> Public methods and instance vars are inherited from parent class as
+expected.
+</ul>
+<h4>Polymorphism in C++</h4>
+<ul>
+<li> Unlike in Java, inherited methods do not support polymorphism by default.
+This is to allow in-lining of methods and improve efficiency.
+<li> Methods can be explicitly declared to support polymorphism with
+the keywork virtual, as in
+<pre>
+class RFunc{
+  public:
+    virtual evaluate(double x);   // declare evaluate to support polymorphism.
+}
+</pre>
+<li> To indicate the equivalent of a Java <code>abstract</code> function,
+on that has no implementation on the parent class, the syntax
+<pre>
+class RFunc{
+  public:
+    virtual evaluate(double x) = 0;   // pure virtual function, no implementation on parent class
+}
+</pre>
+<li> A C++ class containing only pure virtual functions and no instance
+variables, is roughly equivalent to a Java interface (or pure abstract class).
+</ul>
+<h4>Other C++ Arcania</h4>
+<ul>
+<li> By default, C++ uses call-by-value as in Java and C. Instances and
+pointers to instances are passed by value. For instances, this means
+the instance is <em>copied</em> onto the call stack, modifications to
+an instance argument will NOT modify the original. Since it is
+occasionally useful to be able to support modification of instances passed
+as arguments without passing an explciti pointer, C++ also
+supports call by reference. This is never strictly required, but occasionally
+useful. See any C++ text for further explanation.
+<li> C++ also supports <em>templates</em>, which is essentially a way
+to parameterize and abstract classes and procedures by type. The syntax and
+usage of templates is fairly complex, refer to C++ texts for more (or better
+yet, stay away from templates all together).
+<li>Unlike Java, C++ allows classes to override operators 
+(+,-,*,[],-&gt;, etc.) as well as methods. This allows objects to be 
+manipulated with the language's expression syntax rather than explicit method
+calls. As neat as this sounds, it adds complexity and rarely improves clarity.
+<li> C++ does not have the extensive runtime class library the Java does
+for GUI, Stream io, networking, etc. These elements are external to the 
+language and are provided by thrid party librareis (unlike Java which is 
+a world unto itself). However, newer versions of C++ come with the 
+Standard Template Library (STL) that convers some of the functionality
+of the java.lang and java.utils packages. Unfortuately the STL makes use
+of all of the more complex and obscure feature of C++, and can render a program
+unreadable by all but STL adepts. In addition, there have been
+portability problems with STL-based programs. Although STL has it's devoted
+fans, my inclination is to avoid it.
+</ul>
+<h2>OOP in C </h2>
+<ul>
+<li>
+C is the ancestor of C++ (and in many ways Java). It was developed at Bell
+Labs in the 70's for system programming and has outlived many other languages
+of that era. The advantages of C is that it is minimal, reasonably portable,
+and transparent, it hides little of the underlying machine architecture.
+As a result, C programs can be made very efficient in CPU and memory, and
+can even by tuned to take advantage of particular memory or processor
+architectures (at the cost of portability).
+<li>
+C is a minimal procedural programming language. It does not support classes
+or method calls, there are no templates or call-by-reference. 
+All procedure are essentially public static.
+<li> C does, however, support structured data types called 
+<code>struct</code>s. These can be thought of as the data (instance variable)
+part of classes. No methods allowed.
+<li> For example we could represent the data part of Vect2D as
+<pre>
+struct Vect2D{
+   double x;
+   double y;
+}
+</pre>
+<li> Struct's can be allocated off either  the stack or heap as in C++.
+Although C has no <code>new</code> or <code>delete</code> keywords. Instead,
+low-level library calls are made to do the heap allocation.
+<pre>
+struct Vect2D *vp = NULL; // a variable to point to a Vect2D struct
+vp = calloc(1,sizeof(struct Vect2D)); // allocate from heap with lib call
+</pre>
+<li> C does not support access restriction on structs, all instance vars
+(sometimes called members) are public.
+<li> However, just because C does not support access restrictors, classes,
+etc, is no excuse for porr programming (although the opportunity is there).
+Programming in C should proceed along the same lines as in Java.
+<ul>
+<li> Determine the class types needed and their instance variable and
+methods (avoid polymorphism if possible as it is more difficult to implement).
+<li> Use struct's to hold class data. (it is possible to write C code so
+that the struct implementation is hidden from all users, almost as if it
+were private).
+<li> Implement methods on these data types by hand. Remember a method
+call (sans polymorphism) is mostly a procedure call with a hidden first
+argument. in C you must supply this argument explicitly. Furthermore,
+you must develop naming conventions that append the 'class' name to the
+method name (since C, unlike Java and C++, has a flat namespace for procedure).
+<li> A 'method' implementation for Vect2D might be
+<pre>
+Vect2D_length(Vect2D* vp){ /* pass in instance var explicitly, by pointer */
+   /* implement method functionality accessing instance vars on struct */
+   return(sqrt((vp->x)*(vp->x) + (vp->y)*(vp->y))));
+}
+</pre>
+<li> Despite all members of a struct being public, you should always implement
+and use accessors and mutators from outside your 'class' methods
+rather than directly touching the structure.
+<li> Inheritance can be emulated in C in several ways, although you may have 
+to get a little nasty with pointers and casting. However, many C-based window
+system Widget API's which use inheritance, do exactly this. (Though most
+have the grace to hide it.).
+<li> Even polymorphism can by implemented in C. Polymorphism in Java anc C++
+is implemented by associating with each instance a table of functions. 
+Polymorphic method names are converted to indexes into this function table.
+When a method call on a particular instance is executed, the function
+table for that instance (actually these tables are shared among the 
+instances of a class), used to find the proper functnio to execute.
+<p>
+Since C has teh ability to store pointers for functions as a basic data type,
+and the ability to calla function from such a function pointer. It is
+straightforward (though not always fun) to explicitly duplicate the function
+table mechanism and implement polymorphism by hand.
+</ul>
+</ul>
+<h4>Misc C facts</h4>
+<ul>
+<li>C does not have the extensive libraries of Java, nor the STL of C++.
+It's library has basic streamIO capabilities (buffered and unbuffered),
+formatted printing and input (very handy), simple string operators (which
+operate on byte arrays) and math operations. Almost everthing else must
+be built up by hand (although this sound overwhelming, in practice it is not
+so, for any given project only a few data structure are needed and these
+are straightforward, if tedious to implement.
+<li> Probably the most difficult thing about C/C++ programming compared to
+Java programming is the fact that heap storage must be explicitly
+managed. This is both concepually difficult and extremely tedious to get right
+in a complex program.
+</ul>
+</body>
+</html>
+
+
+

@@ -1,0 +1,160 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture19</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Internationalization and Localisation</h2>
+The is lecture is about Internationalization and Localisation, which
+are usually abbreviated I18N and L10N (count the letters) in the
+profession.
+<p>
+The motivation behind i18m and l10n is that not everyone in the world
+is an English-speaking American. And while this fact adds interest to life
+for the traveler and writer, it is a nuisance for programmers. Up until
+now we have been writing our programs for an american audiences. Some things
+that we would have to worry about to generalize our programs for an 
+international audience are.
+<ul>
+<li> Formats 
+<ul> 
+<li> Numbers 12,345.00 vs 12.234,00
+<li> Currency symbols
+<li> Dates 1/21/2001 vs 21/1/2001
+<li> Sorting (alphabetizing)
+</ul>
+<li> Character sets: Not all languages use roman characters
+<li> Language: All strings (messages, button labels, etc)
+presented to the user must be in the desired language. This means a
+copy of each string in each language!
+</ul>
+<h3>Languages and Locales</h3>
+To localize an application (instantiate a particular set of formats,
+characters,and messages) we need to know the language/locale pair we
+are targetting. Locale specifies place whereas language specifies,
+well, language. There are ISO standards (ISO 639 and ISO 3166)
+ which represent languages and locals as two character codes for 
+example, American English is en.US, British English is en.UK.
+<h3>Character Sets and Encodings</h3>
+Character sets and encodings are related but different concepts. A character
+set is a list of characters required for a language. An encoding is a mapping
+of characters into binary values. There are, unfortunately, a variety
+of character sets and encodings in use, some overlapping. Some of
+the more important are described below:
+<ul>
+<li> <bf>ASCII</bf>
+Most early computer work was done in English and the first character
+sets were mappings of the standard English typewriter characters. ASCII
+is a standard encoding of this character set. ASCII characters are encoded
+as 7-bit values; numbers from 0 to 127. This is because at one time,
+users interacted with computers via character terminals or teletypes
+connected to the processor by serial lines. These serial lines were noisy
+and occasionally corrupted bits. Therefore, each character was sent as 8-bit
+bytes, but only the lower seven were used to ancode the character. The
+upper bit was always set to make the number of 1's in the byte always
+even (or odd, depending on the convention). Thus an error in any one bit could
+be detected as any one bit error would produce a byte with an odd
+number of ones. (The error could not be corrected, but the character could be
+retransmitted).
+<li> <bf>ANSI, Latin-1, ISO 8859-1</bf>
+As hardware technology progressed, the upper bit was no longer needed for 
+parity checking and could be used for encoding. Several 8-bit character
+encoding arose in the 70's and 80's. Eventually one was blessed by standards
+organizations. This encoding is called Latin-1 or ISO 8859-1. This encoding
+is ASCII compatable as the first 128 encodings are exactly ASCII. The higher
+characters cover most Western European languages.
+<li> <bf>ISO 8859-X</bf>
+There are a number of other ISO 8859 encodings which append to the basic
+ASCII set, additional characters for other languages. These are ISO 8859-2
+through 15 or so and cover ASCII plus Eastern European languages, Cyrillic,
+Arabic, Hebrew, Modern Greek, etc.
+<li> <bf>Unicode and UCS-2 (ISO-10646)</bf>
+Eventually you get to languages with character sets that don't fit in
+8-bits, or one wnats to represent several languages simultaneously.
+Unicode is a character set that covers most alphabetic languages and
+most of the important characters in Chinese and Japanese. UCS-2 is a
+16-but encoding for this character set. The first 128 characters of
+Unicode are the ASCII characters. But in UCS-2 they are represented
+as two byte units with the upper byte always 0. This means using
+UCS-2 causes text data to swell by a factor of two in size if only
+ASNI characters are being represented.
+<p>
+A great advantage of both ASCII, 8859, and UCS-2 is that the characters
+are all the same size, 8 or 16 bits, so indexing into a string is
+easy. One problem with Unicode and UCS-2 is that it does not cover
+all Chinese characters, of which there and more than 64K.
+<li> <bf>UTF-8</bf>
+To both extend the encoding range and keep down the size of text, the
+UTF standards were developed. UTF-8 encodes characters using a variable
+number of bits. Again the first 128 characters correspond to ASCII and
+here they are represented in their original 8-bit form. Bytes with a high
+order bit of 1 represent the beginning of longer characters which are
+represented by more than 1 byte. This encoding scheme is good in that
+ACSII data take no extra space and can be read with no extra overhead 
+in computation (full backward compatability). On the other hand, it is
+now more difficult to index into a string as a character can start at
+any point. The string must be parsed from the beginning.
+<li> <bf>Others</bf>
+There are several other encodings, Some like UCS-4 and UTF-16 are designed
+to represent even more characters. Some like BIG5 are alternate encodings
+that developed pre-standard and persist (BIG5 is a Chinese character encoding
+poopular in Taiwan).
+</ul>
+One of the concerns around character encodings is to determine the format
+a text file (or XML) document is in so it can be translated into the
+native encoding of a programming language (UCS-2 Unicode in the case of Java).
+The format of files can either be guessed from the default format of
+the system (US Linix and Windows default to Latin-1). Alternatively
+the file tagged externally (for example in the HTTP header information
+for a file to be downloaded). Alternatively, the file could be self describing,
+with the first bytes of the file devoted to the encoding type.
+<h3>Support in Java</h3>
+Java has a number of facilities for l10n. As we saw in the stream IO
+lecture, The Java Reader and Writer classes attempt to deal
+with the character encoding issue and save the programmer much hassle
+on IO (at the price of more hassle for procesing ASCII).
+<p>
+Java has a Locale class which contains a number of locale specific
+utilities. To get a Locale for a given language/country pair, use
+the constructor.
+<pre>
+Locale loc = new Locale("da","DK"); // get the locale for Danish/Denmark
+</pre>
+This Locale object can be passed to factory methods on the
+Java NumberFormat and DataFormat classes to return NumberFormat
+and DateFormat objects targetted to the given local for numbers,
+currencies, dates, etc.
+<pre>
+// get localized currency formatter
+NumberFormat form = NumberFormat.getCurrencyInstance(loc);
+</pre>
+The Format classes have parse() and format() methods which will
+parse and print currency amounts in the local format.
+<h3>String localization</h3>
+The support for String localization is a little more primitive. 
+For each String in the UI you must assign a key or index, then produce
+all of the language variants for that string. Now we need a way to
+organize all of these strings and automatically load the correct set.
+<p>
+To do this, one must put all the strings for each language into a class
+that inherits from ResourceBundle. These classes should have methods that
+return the desired string given the key (ie a lookup method). These
+classes must be named according to the following scheme
+<code>MyResourceClass_language_country</code>. Now we have all of the strings
+(and images and whatever other resources need to be localized) for each
+language in a class, we just need to load the right one for the locale.
+Java has a support method to do just this.
+<pre>
+ResourceBundle bundle = ResourceBundle.getBundle("MyResourceClass",loc);
+</pre>
+where loc is our Locale var. This method will look for classes of the form
+<code>MyResourceClass_language_country</code>, then
+<code>MyResourceClass_language</code>, then
+<code>MyResourceClass</code>. In other words, it tries to load the most 
+specific resource bundle class it can find for that locale. Once the
+class is loaded, the lookup methods can be used to retrieve Strings based
+on their keys.
+
+</body>
+</html>

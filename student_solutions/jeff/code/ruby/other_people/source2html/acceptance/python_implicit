@@ -1,0 +1,8 @@
+#!/usr/bin/python
+
+class Parrot:
+  def echo(self, msg):
+    print msg, "World"
+
+p = Parrot()
+p.echo("Hello")

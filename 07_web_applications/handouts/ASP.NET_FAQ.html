@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://aduni.org/file-storage/download?version_id=7095 -->
+<HTML><HEAD><TITLE>ASP.NET FAQ</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 5.50.4208.1700" name=GENERATOR></HEAD>
+<BODY>
+<H1>ASP.NET FAQ </H1>
+<P>
+<OL>
+  <LI><B>Where can I find sample code?</B> <BR><BR>Check out <A 
+  href="http://www.gotdotnet.com/">GotDotNet</A> for some QuickStart tutorials. 
+  Another useful reference is <A href="http://www.ibuyspy.com/">IBuySpy</A> 
+  where they have a fully-documented sample store web site. 
+  <P></P>
+  <LI><B>Why does Internet Explorer ask to download a file when I try to view my 
+  aspx page?</B> <BR><BR>This is because IIS does not recognize aspx pages yet. 
+  To fix this: 
+  <OL>
+    <LI>Right click on My Computer and select Manage. 
+    <LI>Right click on Default Web Site and select properties. <BR>Services and 
+    Applications -&gt; Internet Information Services -&gt; Default Web Site 
+    <LI>Click on the Home Directory Tab 
+    <LI>Click the Configuration button. 
+    <LI>Click on Add. 
+    <LI>Browse and find the file called <B>xspisapi.dll</B>. It should be at 
+    C:\WINNT\Microsoft .NET\Framework\v1.0.2204\xspisapi.dll . Make sure you are 
+    looking for dll files and not exe files or you won't find it. 
+    <LI>Type aspx in the extension field and click Ok 
+    <LI>Ok everything and you should be all set! Happy coding. </LI></OL>
+  <P></P>
+  <LI><B>How do I create my first project?</B> <BR><BR>Under new projects, 
+  Visual C# Projects, select Web Application and type: 
+  <I>http://localhost/my-project-name </I>where my-project-name is whatever name 
+  you want. 
+  <P>To view your page, you need to <B>Build</B> it first. <BR>You can find your 
+  page at http://localhost/my-project-name/page-name.aspx in IE. </P>
+  <P></P>
+  <LI><B>How do I create index.html in my root folder using Visual Studio?</B> 
+  <BR><BR>If you followed the instructions above, you project will be in a 
+  folder under the root directory but won't the root directory itself. So in 
+  short you can't really do it in Visual Studio. However, you can easily make an 
+  index.html in notepad or any other text editor and create a link to a index 
+  page in your project directory. 
+  <P></P>
+  <LI><B>Why aren't my files in my project? Did I lose them?</B> <BR><BR>If you 
+  created a file outside of Visual Studio, you will need to add the file to your 
+  project in VS so that it can be built and used (applies only to aspx &amp; C# 
+  files). To see all the files in your project directory, just click on the Show 
+  All Files button in your Solution Explorer. If the file is grayed out then it 
+  is not included in the project. To include the files, right click on them and 
+  select Include in Project. Remember to build to see it work! 
+  <P></P>
+  <LI><B>How do I add new files to my project?</B> <BR><BR>Right click on your 
+  project name in Solution Explorer and then select Add. Generally you will want 
+  to create a new Web Form (.aspx) and remember to name it something. 
+  <P></P>
+  <LI><B>Do all my files have to have .aspx extensions?</B> <BR><BR>If your file 
+  has asp tags then your pages will need to have a .aspx extension. 
+  <P></P>
+  <LI><B>Where is my error log?</B> <BR><BR>You can find your log file here: 
+  c:\winnt\system\logfiles\w3svc\date.txt<BR>However this file only logs who has 
+  visited your site and not errors generated on your page. You can ignore this 
+  part for your problem set if you are working in .NET. 
+  <P></P>
+  <LI><B>How do I get the current date and time?</B> <BR><BR>.NET has a DateTime 
+  object. To see how it is used, check out the .NET reference documentation that 
+  can be found from your start menu. 
+  <P></P>
+  <LI><B>How do I pass form data between pages?</B> <BR>There are quite a number 
+  of ways to do this and depending on the task at hand, you would probably want 
+  to use a different method. If you are thinking of passing form data to another 
+  page for Ex 3 it's actually not necessary, you can place it all in one page. 
+  <OL>
+    <LI>QueryString - Put it in the URL <BR><BR>In the button onclick event, you 
+    can Response.Redirect to another page placing the variables in the URL. 
+    <BR><BR>
+    <TABLE bgColor=#ffffcc>
+      <TBODY>
+      <TR>
+        <TD>e.g. <BR>String strURL = String.Concat("results.aspx?name=", 
+          txtName.Text, "&amp;age=", 
+          txtAge.Text);<BR>Response.Redirect(strURL);<BR><BR>Then on your 
+          results.aspx page you can call Request.Params["name"] to get the name 
+          and Request.Params["age"] to get the parameters. 
+    </TD></TR></TBODY></TABLE><BR><BR>
+    <LI>Session - Save it a for awhile <BR><BR>In the button onclick event, you 
+    can save all your variables into the Session and then call Response.Redirect 
+    to another page that extracts the values from the Session again.<BR><BR>
+    <TABLE bgColor=#ffffcc>
+      <TBODY>
+      <TR>
+        <TD>e.g.<BR>Session["name"] = txtName.Text;<BR>Session["age"] = 
+          txtAge.Text;<BR>Response.Redirect("results.aspx");<BR><BR>Then on your 
+          results.aspx page you can create variables to retreive the value of 
+          the Session variables like:<BR>String strName = 
+          Session["name"].ToString();<BR>String strAge = 
+          Session["age"].ToString();<BR></TD></TR></TBODY></TABLE><BR><BR>
+    <LI>Server.Execute - Fake a page change <BR><BR>You can see an example of 
+    this at <A 
+    href="http://aduni.org/file-storage/testform.aspx">testform.aspx</A>. 
+    <BR>The second page testresult.aspx then calls Request.Params["txtName"] to 
+    recover the value. </LI></OL>
+  <P></P>
+  <LI><B>How do I screen scrape?</B> <BR><BR>For Ex 4 you will need to rip stuff 
+  off some other pages. <BR><BR>HttpWebRequest hwr = (HttpWebRequest) 
+  WebRequestFactory.Create(strUrl);<BR>StreamReader strm = new 
+  StreamReader(hwr.GetResponse().GetResponseStream()); <BR><BR>You can then 
+  parse the stream using a Regular Expression. </LI></OL>
+<P>&nbsp;</P>
+<P></P>
+<P></P>
+<P>
+<P>Copyright Eugene Chiu, Edmund Chou, Tien-Lok Lau, Yi-Fung Lin, Peter Weng, 
+Norimasa Yoshida, April 2001 </P></BODY></HTML>

@@ -1,0 +1,10 @@
+Menopause Group -- answers to PS on User registration
+
+Exercise 1
+             Q. Develop a data model for the content that you'll be storing on your site.
+	     A. Articles (with responses); and Discussions (with responses).
+	        We did show this to our teaching assistant and discussed with other students before proceeding. 
+
+Exercise 2
+             Q. Lay out the workflow for each content item that will be user-visible in your online learning community. 
+	     Done, and shown to our TA Dan Parker.

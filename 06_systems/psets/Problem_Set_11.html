@@ -1,0 +1,41 @@
+<html><head>
+<title>aD Uni System Course
+</title>
+</head>
+<body >
+<h2>Assignment handed out on Wednesday, March 14, 2001</h2>
+
+<h4>Due in Recitation on 3/15/2001:</h4>
+
+Read Chapter 12 from the text.  Focus on sections 12.2-12.4.  Also
+read <i>The Design and Implementation of a Log-Structured File
+System</i>. Your writing/discussion assignment:
+<blockquote>
+Suppose you were implementing transactions, for a banking system.  Due
+to the nature of the application, you assume that the read:write ratio
+on accounts will be close to 1:1 (e.g., deposits and withdrawals, the
+most common transactions, require reading the balance, then writing it
+back out.  Locks require a test and a set.).
+<br><br>
+You've read that a Log-Structured File System is supposed to increase
+write efficiency, so you decide to consider it as your system's file system.
+<br><br>
+One huge consideration is implementing your commit procedure.  For
+this procedure to work, you need to make sure that LFS won't lose your
+writes.  It looks like LFS has two recovery mechanisms - Checkpoints
+and Roll-Forwards.  Checkpoints appear to be more robust than
+Roll-Forwards.  Describe why this is, and the key tradeoff(s).  What
+system parameter could you alter to increase the granularity of
+checkpointing?  
+If relying solely on Checkpoints was not practical, how would you approach
+using Roll-Forwards to implement commit, so that your committed transactions will not
+disappear if the server unexpectedly shuts down? 
+
+<br><br> Hint: Consider at what point during a file write the data
+becomes recoverable under Roll-Forward.
+</blockquote>
+
+
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+Controlbit "bbypassed" 2 389 299
+Extract "Extract-68" 5 0 487 392
+Constant "Constant-1191" 27 519 57
+Controlbit "jumpfetch" 1 497 113
+Controlbit "bselbit" 1 214 317
+Constant "Constant-840" 31 601 248
+Mux "ra2mux" 2 386 192
+Controlbit "rfa3" 1 672 615
+Controlbit "reset" 1 262 102
+Controlbit "rfa2" 1 674 501
+Gate "Gate-414" xor 2 0 451 77
+Zerotest "Zerotest-549" 640 611
+Constant "Constant-327" 1 14 36
+Zerotest "Zerotest-540" 643 497
+Switch "bsel" 0 1 1 376 330
+Register "rdb2" 392 354
+Zerotest "Zerotest-210" 642 478
+Register "PC" 150 42
+Switch "stage2en" 0 1 0 49 342
+Controlbit "s2en" 1 87 403
+Mux "Mux-271" 4 152 13
+Zerotest "Zerotest-1185" 524 110
+Switch "ra2sel" 0 1 0 350 196
+Constant "Constant-276" 0x80000000 231 9
+Gate "Gate-548" xor 2 0 608 541
+Gate "Gate-547" xor 2 0 581 540
+Register "rda2" 312 354
+Controlbit "halt" 1 323 109
+Switch "hold" 0 1 0 40 196
+Mux "amux" 2 330 325
+Zerotest "Zerotest-1403" 233 98
+Switch "wasel" 0 1 0 476 584
+Controlbit "gizmoref" 1 438 603
+Controlbit "s0en" 1 85 90
+Gate "Gate-208" xor 2 0 608 431
+Gate "Gate-207" xor 2 0 581 432
+Controlbit "op1" 6 546 203
+Controlbit "op0" 6 361 122
+Extract "Extract-38" 16 5 459 159
+Switch "pcsel" 0 3 2 133 17
+Extract "Extract-413" 5 27 447 46
+Controlbit "ops3" 6 467 509
+Controlbit "ops2" 6 491 432
+Controlbit "holdbit" 1 71 196
+Controlbit "ais31" 1 682 329
+Switch "asel" 0 1 0 317 329
+Switch "clock" 0 1 8 552 25
+Memory "Memory-1" 260 33 189 499
+Controlbit "regwrite" 1 247 650
+Controlbit "aludata" 1 159 409
+Switch "useB" 0 1 0 194 317
+Switch "memop" 0 2 0 143 503
+Switch "useA" 0 1 0 189 298
+Zerotest "Zerotest-280" 364 313
+Zerotest "Zerotest-835" 652 346
+Zerotest "Zerotest-834" 651 325
+Switch "wdsel" 0 4 0 299 588
+Switch "aluop" 0 15 0 309 412
+Switch "rfen" 0 1 0 222 650
+Extend "Extend-692" 459 191
+Extract "Extract-15" 5 5 382 160
+Extract "Extract-14" 5 21 326 160
+Extract "Extract-13" 5 0 398 160
+Switch "stage3en" 0 1 0 48 444
+Controlbit "abypassed" 2 324 299
+Controlbit "s3en" 1 86 509
+Extract "Extract-1189" 6 26 499 49
+Register "ir3" 479 453
+Register "ir2" 479 354
+Register "ir1" 246 125
+Register "Register-317" 39 472
+RegFile "RegFile-10" 318 233 265 630
+Register "Register-316" 40 370
+Register "Register-315" 41 66
+Register "Register-314" 43 140
+Gate "Gate-833" xor 2 0 581 281
+Gate "Gate-832" xor 2 0 607 281
+Constant "Constant-416" 14 467 49
+Extract "Extract-1400" 6 26 340 104
+Switch "isALUop" 0 1 0 138 409
+Alu "Alu-28" 332 400
+Controlbit "aselbit" 1 213 298
+Switch "stage1en" 0 1 0 51 104
+Controlbit "s1en" 1 84 169
+Register "memD3" 255 453
+Register "memD2" 220 354
+Switch "trapaddr" 0 3 0 291 8
+Mux "Mux-1394" 2 505 580
+Switch "pcen" 0 1 0 53 31
+Extract "Extract-149" 5 0 501 499
+Extract "Extract-148" 6 26 445 479
+Extract "Extract-147" 6 26 468 392
+Adder "Adder-274" 212 251
+Switch "bypassB" 0 2 0 380 299
+Switch "bypassA" 0 2 0 315 300
+Controlbit "jmpop" 1 548 114
+Mux "Mux-49" 4 336 584
+Switch "go" 0 1 1 26 12
+Zerotest "Zerotest-1591" 292 105
+Switch "gizmoop" 0 2 0 493 524
+Controlbit "zero" 1 394 317
+Extract "Extract-1015" 1 30 412 585
+Gizmos "Gizmos-1711" 390 519
+Constant "Constant-1397" 30 521 557
+Adder "Adder-3" 168 90
+Extract "Extract-279" 6 26 529 169
+Adder "Adder-1388" 240 21
+Adder "Adder-1384" 395 104
+Zerotest "Zerotest-418" 471 109
+Controlbit "rfb3" 1 673 599
+Controlbit "rfb2" 1 674 482
+Constant "Constant-1385" 0xfc000000 381 114
+Mux "bmux" 2 410 326
+Gate "Gate-1184" xor 2 0 503 76
+Register "alu3" 342 453
+Controlbit "bis31" 1 683 350
+Register "pc3" 146 453
+Register "pc2" 146 354
+Register "pc1" 146 125
+Constant "pcincr" 1 168 70
+Zerotest "Zerotest-550" 638 595
+Mux "Mux-2482" 3 394 295
+Mux "Mux-2481" 3 330 296
+
+Wire "Wire-530" "Extract-148.out" "ops3.b" 453 513 - 
+Wire "Wire-69" "ir3.Q" "Extract-148.in" "Extract-149.in" 509 483 453 483 - - 
+Wire "Wire-9" "Adder-3.s" "pc1.D" "Mux-271.3" - 176 114 216 114 216 9 204 9 - 
+Wire "Wire-7" "Memory-1.Id" "ir1.D" "Extract-1189.in" "Adder-1384.a" "Extract-1400.in" "Zerotest-1591.in" - 276 96 435 96 435 37 507 37 - 276 96 399 96 - 276 96 348 96 - 276 113 - 
+Wire "Wire-5" "pcincr.Q" "Adder-3.a" - 
+Wire "Wire-60" "alu3.Q" "Mux-49.2" "Memory-1.Da" "Gizmos-1711.addr" "Extract-1015.in" - 372 523 - 372 543 - 372 569 420 582 - 
+Wire "Wire-2" "PC.Q" "Adder-3.b" "Zerotest-1403.in" "Memory-1.Ia" - 180 79 199 79 226 106 - 180 73 - 
+Wire "Wire-59" "Memory-1.Dd" "Mux-49.1" 323 561 356 561 - 
+Wire "Wire-58" "ir2.Q" "ir3.D" "Extract-147.in" "Extract-68.in" - 509 381 476 381 - 509 381 495 381 - 
+Wire "Wire-55" "Alu-28.out" "alu3.D" "Mux-271.1" "Mux-2481.1" "Mux-2482.1" - 372 441 113 441 113 4 132 4 172 4 - 372 441 458 441 458 287 350 287 - 372 441 458 441 458 287 414 287 - 
+Wire "Wire-53" "memD3.Q" "Memory-1.wD" "Gizmos-1711.wD" 285 484 323 484 - 285 484 406 484 - 
+Wire "Wire-1713" "Mux-49.out" "RegFile-10.wd" "Mux-2481.2" "Mux-2482.2" 364 614 402 614 402 654 - 364 614 464 614 464 284 366 284 - 364 614 464 614 464 284 430 284 - 
+Wire "Wire-1712" "Gizmos-1711.rD" "Mux-49.3" 406 579 388 579 - 
+Wire "Wire-51" "pc2.Q" "pc3.D" - 
+Wire "Wire-1017" "Extract-1015.out" "gizmoref.b" 420 607 - 
+Wire "Wire-1014" "gizmoop.Q" "Gizmos-1711.cmd" - 
+Wire "Wire-841" "Constant-840.Q" "Gate-832.0" "Gate-833.1" - - 
+Wire "Wire-145" "pcsel.Q" "Mux-271.s" - 
+Wire "Wire-142" "asel.Q" "amux.s" - 
+Wire "Wire-141" "bsel.Q" "bmux.s" - 
+Wire "Wire-328" "Constant-327.Q" "Register-316.en" "Register-317.en" 18 378 - 18 480 - 
+Wire "Wire-284" "Extract-279.out" "op1.b" 537 207 - 
+Wire "Wire-326" "Register-317.Q" "s3en.b" 69 513 - 
+Wire "Wire-47" "memD2.Q" "memD3.D" 250 414 285 414 - 
+Wire "Wire-282" "Zerotest-280.out" "zero.b" - 
+Wire "Wire-324" "Register-316.Q" "s2en.b" 70 407 - 
+Wire "Wire-322" "Register-314.Q" "s1en.b" 73 173 - 
+Wire "Wire-43" "stage2en.Q" "pc2.en" "rda2.en" "rdb2.en" "memD2.en" "ir2.en" "Register-316.D" 133 346 133 362 - 291 346 291 362 - 382 346 382 362 - 214 346 214 362 - 466 346 466 362 - 70 346 - 
+Wire "Wire-320" "Register-315.Q" "s0en.b" 71 94 - 
+Wire "Wire-839" "Gate-833.out" "Zerotest-834.in" 593 333 - 
+Wire "Wire-838" "Gate-832.out" "Zerotest-835.in" 619 354 - 
+Wire "Wire-837" "Zerotest-834.out" "ais31.b" - 
+Wire "Wire-836" "Zerotest-835.out" "bis31.b" - 
+Wire "Wire-138" "ra2sel.Q" "ra2mux.s" - 
+Wire "Wire-136" "rfen.Q" "RegFile-10.wren" "regwrite.b" - - 
+Wire "Wire-134" "wdsel.Q" "Mux-49.s" - 
+Wire "Wire-132" "memop.Q" "Memory-1.cmd" - 
+Wire "Wire-275" "Adder-274.s" "Mux-271.0" 220 277 123 277 123 9 156 9 - 
+Wire "Wire-39" "Extract-38.out" "Extend-692.in" - 
+Wire "Wire-36" "bmux.out" "rdb2.D" - 
+Wire "Wire-272" "Mux-271.out" "PC.D" - 
+Wire "Wire-35" "amux.out" "rda2.D" - 
+Wire "Wire-313" "stage1en.Q" "pc1.en" "Register-314.D" "ir1.en" 73 108 73 133 - 73 108 - 73 108 73 133 - 
+Wire "Wire-270" "Extract-149.out" "Gate-547.1" "Gate-548.0" "Mux-1394.0" 509 533 601 533 - 509 533 612 533 - - 
+Wire "Wire-34" "RegFile-10.rd1" "Mux-2481.0" - 
+Wire "Wire-311" "pcen.Q" "PC.en" "Register-315.D" 71 35 71 50 - 71 35 - 
+Wire "Wire-33" "RegFile-10.rd2" "Mux-2482.0" - 
+Wire "Wire-30" "rdb2.Q" "Alu-28.b" 422 384 396 384 - 
+Wire "Wire-829" "useB.Q" "bselbit.b" - 
+Wire "Wire-828" "useA.Q" "aselbit.b" - 
+Wire "Wire-827" "Extract-147.out" "ops2.b" 476 436 - 
+Wire "Wire-29" "rda2.Q" "Alu-28.a" 342 386 348 386 - 
+Wire "Wire-27" "pc1.Q" "pc2.D" "amux.0" "Adder-274.a" - 176 287 288 287 - 176 192 216 192 - 
+Wire "Wire-21" "ir1.Q" "Extract-14.in" "Extract-15.in" "Extract-13.in" "Extract-38.in" "ir2.D" "Extract-279.in" 276 154 334 154 - 276 154 390 154 - 276 154 276 154 406 154 - 276 154 467 154 - 276 154 509 154 - 276 154 537 154 - 
+Wire "Wire-20" "Extract-14.out" "RegFile-10.ra1" "Gate-207.0" "Gate-547.0" "Gate-833.0" - 334 226 573 226 573 374 585 393 - 334 226 573 226 573 403 573 458 585 477 - 334 226 573 226 573 247 585 267 - 
+Wire "Wire-19" "ra2mux.out" "RegFile-10.ra2" "Gate-208.1" "Gate-548.1" "Gate-832.1" - 398 221 639 221 639 375 628 393 - 398 221 639 221 639 407 639 459 628 480 - 398 221 639 221 639 248 627 267 - 
+Wire "Wire-18" "Extract-13.out" "ra2mux.1" - 
+Wire "Wire-1595" "hold.Q" "holdbit.b" - 
+Wire "Wire-17" "Extract-15.out" "ra2mux.0" - 
+Wire "Wire-1592" "Zerotest-1591.out" "halt.b" - 
+Wire "Wire-804" "go.Q" "Register-315.en" "Register-314.en" 30 74 - 30 148 - 
+Wire "Wire-1398" "Constant-1397.Q" "Mux-1394.1" - 
+Wire "Wire-1396" "wasel.Q" "Mux-1394.s" - 
+Wire "Wire-1395" "Mux-1394.out" "RegFile-10.wa" 517 638 - 
+Wire "Wire-421" "Zerotest-418.out" "jumpfetch.b" - 
+Wire "Wire-1392" "trapaddr.Q" "Adder-1388.b" 252 12 - 
+Wire "Wire-1390" "Constant-276.Q" "Adder-1388.a" 244 13 - 
+Wire "Wire-419" "Gate-414.out" "Zerotest-418.in" 463 117 - 
+Wire "Wire-417" "Constant-416.Q" "Gate-414.1" - 
+Wire "Wire-1389" "Adder-1388.s" "Mux-271.2" 248 43 226 43 226 4 188 4 - 
+Wire "Wire-415" "Extract-413.out" "Gate-414.0" - 
+Wire "Wire-1387" "Adder-1384.s" "Extract-413.in" 403 125 442 125 442 42 455 42 - 
+Wire "Wire-1386" "Constant-1385.Q" "Adder-1384.b" - 
+Wire "Wire-554" "Gate-547.out" "Zerotest-549.in" 593 619 - 
+Wire "Wire-553" "Gate-548.out" "Zerotest-550.in" 620 603 - 
+Wire "Wire-552" "Zerotest-550.out" "rfb3.b" - 
+Wire "Wire-551" "Zerotest-549.out" "rfa3.b" - 
+Wire "Wire-1192" "Constant-1191.Q" "Gate-1184.1" - 
+Wire "Wire-1190" "Extract-1189.out" "Gate-1184.0" - 
+Wire "Wire-694" "Extend-692.out" "Adder-274.b" "bmux.1" 467 216 224 216 - 467 293 442 293 - 
+Wire "Wire-2492" "bypassB.Q" "Mux-2482.s" "bbypassed.b" - - 
+Wire "Wire-2490" "bypassA.Q" "Mux-2481.s" "abypassed.b" - - 
+Wire "Wire-545" "Gate-207.out" "Zerotest-540.in" 593 505 - 
+Wire "Wire-544" "Gate-208.out" "Zerotest-210.in" 620 486 - 
+Wire "Wire-216" "Zerotest-210.out" "rfb2.b" - 
+Wire "Wire-541" "Zerotest-540.out" "rfa2.b" - 
+Wire "Wire-1188" "Zerotest-1185.out" "jmpop.b" - 
+Wire "Wire-1186" "Gate-1184.out" "Zerotest-1185.in" 515 118 - 
+Wire "Wire-211" "Extract-68.out" "Gate-208.0" "Gate-207.1" 495 422 612 422 - 495 422 601 422 - 
+Wire "Wire-2487" "isALUop.Q" "aludata.b" - 
+Wire "Wire-2484" "Mux-2482.out" "bmux.0" "memD2.D" - 414 314 250 314 - 
+Wire "Wire-2483" "Mux-2481.out" "Zerotest-280.in" "amux.1" - - 
+Wire "Wire-77" "clock.Q" "PC.clk" "pc1.clk" "ir1.clk" "pc2.clk" "memD2.clk" "rda2.clk" "rdb2.clk" "ir2.clk" "pc3.clk" "memD3.clk" "alu3.clk" "ir3.clk" "Memory-1.clk" "RegFile-10.clk" "Register-315.clk" "Register-314.clk" "Register-316.clk" "Register-317.clk" "Gizmos-1711.clk" 233 29 233 50 - 556 133 - 556 133 - 556 362 - 556 362 - 556 362 - 556 362 - 556 362 - 556 461 - 556 461 - 556 462 556 461 - 556 461 - 556 507 - 556 621 237 621 237 638 - 233 29 233 50 130 50 130 74 - 556 133 130 133 130 148 - 556 362 120 362 120 378 - 556 461 113 461 113 480 - 556 507 379 507 379 527 - 
+Wire "Wire-75" "aluop.Q" "Alu-28.op" - 
+Wire "Wire-73" "pc3.Q" "Mux-49.0" 176 567 340 567 - 
+Wire "Wire-72" "stage3en.Q" "pc3.en" "memD3.en" "alu3.en" "ir3.en" "Register-317.D" 137 448 137 461 - 241 448 241 461 - 331 448 331 461 - 467 448 467 461 - 69 448 - 
+Wire "Wire-1404" "Zerotest-1403.out" "reset.b" - 
+Wire "Wire-1401" "Extract-1400.out" "op0.b" 348 126 - 
+
+ControlRom "bypass" "aludata" "regwrite" "rfb2" "rfa2" "rfb3" "rfa3" "ais31" "bis31" 243 229
+bypassA= 0
+bypassB= 0
+
+
+
+
+
+ROMEND
+
+ControlRom "pcselrom" "zero" "op0" "s1en" "jmpop" "reset" 607 129
+pcsel= (op0>0 && op0<0x18) || reset ? 2 : jmpop ? 1 : (s1en && op0==0x1d && zero==1) ? 0 : (s1en && op0==0x1e && zero==0) ? 0 : 3
+trapaddr= reset ? 0 : 1
+ROMEND
+
+ControlRom "stageen" "holdbit" "jmpop" "s0en" "s1en" "s2en" "jumpfetch" 49 266
+pcen= 0
+stage1en= 0
+stage2en= 0
+stage3en= 0
+go= 1
+
+
+ROMEND
+
+ControlRom "rfbits" "op1" "ais31" "bis31" "abypassed" "bbypassed" 247 186
+ra2sel= op1==0x19 ? 1 : 0
+asel= op1==0x18 ? 1 : op1==0x19 ? 1 : op1==0x1b ? 1 : op1>=0x20 ? 1 : 0
+bsel= op1>=0x20 && op1<0x30 ? 0 : 1
+useA= 0
+useB= 0
+
+
+
+
+
+ROMEND
+
+ControlRom "holdrom" "halt" "aselbit" "bselbit" "s2en" "s3en" "rfa2" "rfa3" "rfb2" "rfb3" 63 229
+hold= 0
+
+
+ROMEND
+
+ControlRom "s3clken" "ops3" "s3en" "gizmoref" 121 597
+mem= s3en ? ((ops3==0x1f) || (ops3==0x18)) ? 1 : ops3==0x19 ? 2 : 0 : 0
+memop= mem>0 && gizmoref==0 ? mem : 0
+gizmoop= mem>0 && gizmoref ? mem : 0
+rfen= mem==2 ? 0 : s3en
+wdsel= ops3>=0x20 ? 2 : mem!=0 ? gizmoref ? 3 : 1 : 0
+wasel= ops3>0 && ops3<0x18
+
+
+ROMEND
+
+ControlRom "alurom" "ops2" 197 414
+aluop= ops2 > 0x20 ? (ops2 & 0xF) : 0
+isALUop= ops2 >= 0x20
+ROMEND
+
+END

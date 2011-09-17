@@ -1,0 +1,88 @@
+<!DOCTYPE BOOK PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!ENTITY GNOME-APPS SYSTEM "same-gnome.sgml">] >
+
+<book>
+  <title>Same GNOME player's guide</title>
+  <bookinfo>
+    <authorgroup>
+      <author>
+	<firstname>Miguel</firstname>
+	<surname>de Icaza</surname>
+      </author>
+    </authorgroup>
+    <releaseinfo>documentation in progress</releaseinfo>
+    <legalnotice>
+      <para>
+	This document can be freely redistributed according to the
+	terms of the GNU General Public License.</para>
+    </legalnotice>
+  </bookinfo>
+  
+  <chapter>
+    <title>Same GNOME player's guide</title>
+
+    <sect1 id="objective">
+      <title>Game objective</title>
+      <para>The objective of the game is to get a high score by
+      eliminating as many balls as possible in a single stroke.  If
+      you eliminate only two balls, you will score zero points.  If
+      you eliminate three balls, you will score one point. The more
+      balls you eliminate in a single mouse click the higher your
+      score will be.</para>
+
+      <para>To faciliate the task of spotting the ball clusters, Same
+      GNOME will animate the cluster of balls when the mouse is over
+      them (this also indicates that if you click on the cluster, it
+      will eliminate the balls)</para>
+
+      <para>Eliminating all of the balls on the board will grant you
+      an extra one thousand points</para>
+    </sect1>
+
+    <sect1 id="bugs">
+      <title>Reporting bugs and sending patches to enhance the
+      game</title>
+      
+      <para>You can contact the authors as
+      <symbol>miguel@gnu.org</symbol> and
+      <symbol>federico@nuclecu.unam.mx</symbol>.  General discussion
+      about this game is carried on the
+      <symbol>gnome-list@gnome.org</symbol> mailing list.</para>
+
+    </sect1>
+
+    <sect1 id="Authors">
+      <title>Authors and history.</title>
+
+      <para> This GNOME game was originally implemented by Miguel de
+      Icaza and Federico Mena at early days of the GNOME project.  It
+      was inspired by KDE's samegnome game which in turn was inspired
+      by a Macintosh game of a similar name.</para>
+      
+      <para>A number of tiles were originated from the KDE
+      project. The planets tile was rendered by Federico in his
+      copious spare time to show the world his masterful control of
+      povray command language.</para>
+
+    </sect1>
+
+  </chapter>
+
+  <chapter id="newthemes">
+    <title>Making new themes for Same GNOME</title>
+      <para>Making new animation themes for Same GNOME is very simple.
+      Each tile should measure forty by forty pixels.  You need to
+      provide a graphic image that contains at least 3 rows of 40
+      pixels each (for the three different tile colors) and a variable
+      number of frames to do your animation (this animation will be
+      shown when the mouse cursor is over a cluster of tiles of the
+      same color).</para>
+
+      <para>To allow Same-GNOME to pick up your tile set you need to
+      install this on the $prefix/pixmaps/same-gnome directory (where
+      $prefix stands for the installation prefix used to configure the
+      GNOME environment, you can find this out by running the command
+      <symbol>gnome-config --prefix</symbol>).</para>
+
+  </chapter>
+</book>

@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>JellyBeanBeanInfo.java Color-Annotated Source</title>
+</head>
+<body BGCOLOR=#C0C0C0>
+<h1><center>JellyBeanBeanInfo.java Color-Annotated Source</center></h1>
+<hr>
+
+<p>
+This example (JellyBeanBeanInfo.java) illustrates how make a Bean's
+custom icon appear in 
+toolboxes. 
+ <a href="JellyBean.html">JellyBean.java</a>
+ illustrates constrained and bound properties.
+</p>
+<p>
+Icons may be 16x16 color, 32x32 color, 16x16 mono, or 32x32 mono.
+If a Bean is to support only one icon, it should support 16x16 color.
+</p> 
+<pre>
+
+<font color=white>
+package sunw.demo.jelly; </font>
+
+import java.beans.*;
+
+public class JellyBean<font color=white>BeanInfo extends SimpleBeanInfo </font>{
+
+    <font color=white>public java.awt.Image getIcon(int iconKind)</font> {
+	if (iconKind == BeanInfo.ICON_COLOR_16x16) {
+	    java.awt.Image img = loadImage("JellyBeanIconColor16.gif");
+	    return img;
+	}
+	if (iconKind == BeanInfo.ICON_COLOR_32x32) {
+	    java.awt.Image img = loadImage("JellyBeanIconColor32.gif");
+	    return img;
+	}
+	if (iconKind == BeanInfo.ICON_MONO_16x16) {
+	    java.awt.Image img = loadImage("JellyBeanIconMono16.gif");
+	    return img;
+	}
+	if (iconKind == BeanInfo.ICON_MONO_32x32) {
+	    java.awt.Image img = loadImage("JellyBeanIconMono32.gif");
+	    return img;
+	}
+	return null;
+    }
+
+}
+</pre>
+<hr>
+<center>
+<p>
+<font size=1>
+Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems Inc.
+<p>
+Copyright &#169;
+1996 Sun Microsystems, Inc., 2550 Garcia Ave., Mtn. View, CA 94043-1100 USA.
+<br>All rights reserved.
+</font>
+</center>
+</body>
+</html>
+

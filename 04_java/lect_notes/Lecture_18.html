@@ -1,0 +1,283 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture18</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Software Patterns </h2>
+(or how not to re-invert the wheel)
+<p>
+One of the things that make experience developers more productive than
+novices is have seen and solved many problems before. After seeing the
+same problems over and over again, one builds a library of solutions
+that work. The Design Pattern movement (if one can call it such) is
+an attempt to write down and diseminate the well-known techniques and
+patterns. one of the seminal works in the area is <em>Design Patterns
+Elements of Reusable Object-Oriented Software</em> by Erich Gamma, 
+Richard Helm, Ralph Johnson, and John Vlissides (The Gang of Four). 
+<p>
+This lecture covers rapidly a number of common solutions or models for
+program development. Some of these are reflected in the Design Pattern
+book, other represent higher-level architecture models. The purpose is
+to give a survey of some of the tools in an experienced developers
+toolkit.
+<h3>Data Structures</h3>
+We will start with a brief survey of basic data structures. The efficient
+implementation of data  structures is a topic for an algorithm course.
+What we are concerned with here in the interfaces the structures
+represent. If you have a situation that calls for one of these interfaces,
+you are in luck. Many man-years of effort has been put into efficient
+solutions.
+<ul>
+<li> <b>Dictionary</b>
+Dictionary semantics support storage and retrival of information and object
+by key, often, but not always a string. Examples of data structures with
+dictionary semantics are HashTables and A-Lists. The basic dictionary interface
+is:
+<ul>
+<li> insert(String (or Object) key, Object o);
+<li> Object o = lookup(String (or Object) key);
+<li> delete(String (or Object) key);
+</ul>
+<li> <b>Array Semantics</b>:
+Objects are accessed by index (actually a subtype of dictionary with
+integer keys). Examples are arrays, lists. Interface:
+<ul>
+<li> Object o = get(int i);
+<li> set(int i, Object o);
+</ul>
+<li> <b>Stack</b>:
+A stack is a data stucture that support last-in first-out semantics.
+the basic interface is
+<ul>
+<li> push(Object o);  // push object on top of stack
+<li> Object o = pop(); // remove and return object on top of stack
+<li> Object o = tos(); // return object on top of stack WITHOUT removing
+</ul>
+Stack data structures and important for implementing recursion, parameter
+and return value passing, and procedure calling along other things.
+<li> <b>Set Semantics</b>:
+Sets semantics are sometimes useful for manipulating collections of
+objects. Basic interface:
+<ul>
+<li> Set s = createSet(Object[] members);
+<li> Set s = union(Set s1, Set s2); // both unique and simple are useful
+<li> Set s = intersection(Set s1, Set s2);
+<li> boolean member(Set s, Object o);
+</ul>
+<li> <b>Trees</b>:
+Trees are data structure consisting on nodes. Each node can have any
+number of daughter nodes. All daughter nodes have a unique parent.
+Trees are useful for representing searches, hierarchies, inclusion, etc.
+Basic operations on tree(nodes) are:
+<ul>
+<li> Node n = getParent(Node t);
+<li> int n = numChildren(Node t);
+<li> Node n = getChild(Node t,int i);
+<li> Node n = getNextSibling(Node t);
+<li> Object t = getValue(Node n);
+</ul>
+<li> <b>FIFO Queue</b>:
+These are data structure that have first-in, first-out semantics. That is
+the structure remembers the order in which object were entered and serves
+them in the same order. Uses of FIFO queues include event lists and
+packet queues. This paradigm is also useful for passing streamed data
+between two parts of a program (that might be consuming or producing
+data at different rates).
+<p>
+A common implementation of FIFO queues
+are circular buffers: an array is used to hols the data, and a write pointer
+and read pointer are maintained. These pointers are incremented as
+data is stored and removed respectively. When either pointer reaches
+the end of the array, it wraps around to the beginning. The trick is to
+make sure the write and read pointers never lap each other. To enforce
+this, the reader and/or writer might occasionally block when trying to
+access the buffer.
+<p>
+Another common implementaion is doubly linked lists.
+<p>
+The FIFO interface is quite simple
+<ul>
+<li> insert(Object o); // insert into tail
+<li> Object o = remove(); // remove from head
+</ul>
+<li> <b>Priority Queue</b>:
+We saw priority queues in PS1. The are data structures into which data
+is inserted in any order, but it is removed in sorted order. These
+are useful in schedulers (always remove highest prioiity job first).
+The interface is standard queue:
+<ul>
+<li> insert(Object o); // insert 
+<li> Object o = remove(); // remove largest (smallest)
+</ul>
+<li> <b>Graphs</b>:
+There are many interesting algorithms based around graphs, and graphs
+are a natural representation of many sorts of data (map data for examples).
+Graphs are basicly a set of circles connected by lines. The circles are
+called nodes, the lines are called edges. There is a subclass of graphs
+called Directed Graphs or Digraphs. These are circles connected by arrows.
+<ul>
+<li> Node[2] nodes = getNodes(Edge e);
+<li> Edge[] edges = getEdges(Node n);
+</ul>
+</ul>
+<h3>Creation Patterns</h3>
+Creation patterns deal with how to create and assemble objects. Some examples
+<ul>
+<li> <b>Factory</b>:
+We are used to creating objects with <code>new</code>. Sometimes this
+is either not available or not the best way. Factories are objects (or
+collections of methods) whose sole job is to create other objects. One
+example of a factory is the collection of static creation methods on
+the Java Box class. 
+<li> <b>Builder</b>:
+Builders are collections of methods used to build complex data structures
+from simpler ones. Builders are useful for data structures with lots
+on HAS-A reletionships, espcially when these are not fixed, but rather
+data dependent (for example when trying to construct a complex graphical
+or 3D model from some stored description).  It is often easier to write
+and use a mini-language, in the form of builder methods, capable 
+of constructing any structure, than to try to compose things in an ad-hoc
+manner.
+</ul>
+<h3>Interface Patterns</h3>
+<ul>
+<li> <b>Adapter</b>:
+An adapter pattern makes object type of object follow the interface of
+another. It is useful when trying to glue together legacy systems, or
+use an existing library in situations where it does not quite match
+the rest of the application. An adapter (sometime called wrapper), is
+also useful for converting libraries and object in one language (say C)
+to another (say Java).
+<li> <b>Proxy</b>:
+The proxy pattern we saw in connection with distribured objects. Proxies
+act as stand-ins for other objects. The support the same interfaces an
+the objects they represent, but do not usually implement any of the 
+functionality. Instead, the forward methods to another entity (local or remote)
+that performs the actual computation.
+</ul>
+</ul>
+<h3>Control Patterns</h3>
+<ul>
+<li> <b>Finite State Machines (FSMs)</b>:
+Finite state machines are a computational paradigm with a great deal of
+theory behind them. They are often useful for capturing the state of simple
+computations and organizing control flow. Especially in event-driven,
+re-entrant, or multi-threaded environments when the state of a computation
+must be explicitly stored (rather than implicitly in the call stack and PC).
+<p>
+Finite state machines can be represented as circles (the states) with
+arrows between them the transitions). Typically a transition from state
+to state is trigger by some event ( a mouse click, the arrival of a tpye
+of packet, etc). FSMs are particularly useful for implementing network
+protocols (or any communication protocol), call-flow in telephony 
+applications, and hardware controllers. The theory and uses of
+FSMs and related models is extensive and worth some study. Many useful
+algorithms (such as the string matching in <code>grep</code> depend
+on FSMs
+<li> <b>Interpreters</b>:
+You studied interpreters in the course on scheme. Many times, the natural
+structure of a program is the interpretation of some language. In this
+case the programmer must construct an interpreter by hand. In doing so
+it is important to remember the ideas from programming language interpretation.
+<ul>
+<li>Environments: A structured way to organize variable binding and resolution.
+You studied stack-based environments. Many other schemes are possible.
+Binding environments can be implemented simply with hash tables or
+some other dictionary structure.
+<li>Stack disccipline: Parameter passing, return values, and subroutine
+calls. These can all be implemented by hand with auxilliary data structure
+if the main language call stack is not available (for whatever reason)
+for that purpose. For example, tree search that operated off of a background
+timer event and could only proceed a few steps before have to return to the
+event loop. A stack structure could be used to emulate the recursive natiure
+of the algorithm
+</ul>
+</ul>
+<h3>String Processing</h3>
+<ul>
+There are two very useful, but non-trivial, string processing paradigms.
+Fortunately libraries and tools exist to support both.
+<li> <b>Regular Expression Matching</b>:
+Regular expressions are a formal language class useful in many applications.
+It is a powerful extension of the *-matching that the UNIX command
+shell provides. Regular expression packages let you match a string against
+an (almost) arbitrary pattern, and bind specific portions of a matching
+string to variables. Very useful for text transformations and test
+file processing, address, data, and email addres parsing, URL manipulation,
+etc. Perl has very strong regular expression facilies. These have
+recently been ported into a Java library available on the net.
+<li> <b>Parsers</b>:
+A parser transforms a string into a tree structure. The particulars
+of the transformation are specified by a grammar; a set of rules governing
+the expansion of symbols. Parser are useful for complex test processing,
+computer language processing (compiling and interpretation), natural language
+processing, XML processing. There is a great deal of theory associating
+with parsing and writing a good parser is very difficult (as is writing
+a good grammar). Fortunately there are many tools, called parser generators,
+that will generate a parser given a grammar (which some restrictions).
+The UNIX tools YACC (Yes Another Compiler Compiler) and LEX are examples
+of these tools.
+</ul>
+<h3>Arctitectural Patterns:Small Scale</h3>
+<ul>
+There are some recurrent patterns that are useful ways to organize programs.
+<li> <b>Model-View-Controller</b>:
+Our old friend. This pattern separates a program into
+an underlying data model, code that displays (or stores it),
+and code that modifies it. The model often leads to very clear
+and well organized programs.
+<li> <b>Pipeline</b>:
+A pipeline architecture organizes processing into a series of steps,
+each performing a transformation on the objects in a stream. The stages
+of the pipeline are processing methods, and between the stages there
+are FIFO buffers for data (objects) into are out of the stages. These buffers
+allow the pipeline stages to operate at (slightly) different speeds.
+Often the stages of a pipeline are each operated in a separate thread.
+<p>
+Although it might not seem like it at first, the pipeline architecture
+is perfect for the early stages of network processing. For example,
+we can have a pipeline stage that reads bytes out of the network,
+assembles them into packets and puts the competed packets on a queue
+for further processing. Symmetricly we could have another pipeline
+stage (operating in parallel with the first and not sharing buffers)
+that read packets off of an output queue and write them to the network.
+The rest of the application can then operate using a packet stream
+abtraction, reading packet object from input queues and processing them,
+and when network output is required, assembling a packet object (a perfect
+use for a factory), and placing it on the write queue. The packet
+read and write stages are conceptually running in their own threads
+(though if writes never block, the main program thread can handle write duty).
+This makes for a network interface design that is not only flexible and
+elegent, but very straightforward to implement.
+</ul>
+<h3>Arctitectural Patterns:Large Scale</h3>
+<ul>
+<li> <b>Client-Server</b>:
+We have seen this before. There is a client process or machine that
+(usually) handles the UI and makes requests on a server. The server
+contains the application logic and data. (The X-Windows architecture is
+a non-intuitive examples of client server. In X, the server is actually
+controlling the screen and catching the state of the mouse and keyboard;
+the client is the application program which is making requests on the
+server for UI functionality. The consequence of this clever though
+non-intutive design, is that X programs operate transparently over a network,
+whereas programs on most other window systems do not.
+<li> <b>3-Tier Architecture</b>:
+This architecure is popular today in business and Webb applications.
+The client remains the same as in client-server (though perhaps becomes
+weaker in the case of Web applications. The server-side is split into
+two tiers, a database (or transaction manager) that keeps persistant
+data and supports multiple readers and writers, and a middle tier that
+implements the logic and control flow of the application.
+</ul>
+<h3>PostScript</h3>
+This is a sampling of the more useful design patterns and programming
+paradigms in common use. The best way to learn more is to study theory,
+read programs, and write programs. The books on design patterns are of 
+some use, but there is no substitute for trying things out.
+</body>
+</html>
+
+

@@ -1,0 +1,83 @@
+Unix Problem Set 1 Solutions
+[Todd Sjoblom & Rusty Holleman]
+
+Transcript of the solutions:
+
+Problem 1
+  [rchris@samsenior unix]$ mkdir /tmp/unix-course
+  [rchris@samsenior unix]$ cd /tmp/unix-course
+  [rchris@samsenior unix-course]$ su
+  Password: ......
+  [root@samsenior unix-course]# touch "I am owned by root"
+  [root@samsenior unix-course]# ls
+  I am owned by root
+  [root@samsenior unix-course]# exit
+  [rchris@samsenior unix-course]$ echo "Sweet potatoes" > I\ am\ owned\ by\ root
+  bash: I am owned by root: Permission denied
+  [rchris@samsenior unix-course]$ mv I\ am\ owned\ by\ root i_am_owned_by_root
+  [rchris@samsenior unix-course]$ ls -l
+  total 0
+  -rw-r--r--    1 root     root            0 jui  9 13:34 i_am_owned_by_root
+  [rchris@samsenior unix-course]$ ls -ld .
+  drwxr-xr-x    2 rchris   adustaff     4096 jui  9 13:35 ./
+
+This is possible since rchris owns the directory, and while file contents
+cannot be changed, the filename is a property of the file's entry in that
+directory.  Since rchris can modify the directory, the name of the file in
+that directory can also be modified.
+
+Problem 2
+  [rchris@samsenior unix-course]$ mkdir A
+  [rchris@samsenior unix-course]$ mkdir A/B
+  [rchris@samsenior unix-course]$ chmod 711 A
+  [rchris@samsenior unix-course]$ ls -l
+  total 4
+  drwx--x--x    3 rchris   adustaff     4096 jui  9 13:36 A/
+  -rw-r--r--    1 root     root            0 jui  9 13:34 i_am_owned_by_root
+  [rchris@samsenior unix-course]$ su
+  Password: ......
+  [root@samsenior unix-course]# su nobody
+  [nobody@samsenior unix-course]$ ls
+  A  i_am_owned_by_root
+  [nobody@samsenior unix-course]$ ls A
+  ls: A: Permission denied
+  [nobody@samsenior unix-course]$ cd A
+  [nobody@samsenior A]$ ls
+  ls: .: Permission denied
+  [nobody@samsenior A]$ cd B
+  [nobody@samsenior B]$ ls
+  [nobody@samsenior B]$ pwd
+  /tmp/unix-course/A/B
+  [nobody@samsenior B]$ exit
+
+
+Problem 3
+  [rchris@samsenior unix-course]$ touch -- -\\\\\\\\
+  [rchris@samsenior unix-course]$ ls
+  -\\\\  A/  i_am_owned_by_root
+It's not possible to create a filename with internal forward slashes, since
+these are the builtin directory separator.
+
+  [rchris@samsenior unix-course]$ mv -- -\\\\\\\\ \~cannot_do_it
+  [rchris@samsenior unix-course]$ ls
+  A/  i_am_owned_by_root	~cannot_do_it
+  
+
+Problem 4
+  [rchris@samsenior unix-course]$ cd ~/january
+  [rchris@samsenior january]$ ls
+  p1/  p2/  p3/
+  [rchris@samsenior january]$ ls p1
+  CosFunc.class		 FuncTest3.class     PQueue.java	  RFunc.class	      SinFunc.java~
+  CosFunc.java		 Function.class      PQueue.java~	  RFunc.java	      TestClass.tar
+  FuncTest$ExpFunc.class	 Function.java	     PQueueTest.class	  RFunc.java~	      doc/
+  FuncTest$LogFunc.class	 Function.java~      Poly.class		  RFuncLib.class      notes
+  FuncTest$SinFunc.class	 FunctionTest.class  Poly.java		  RFuncLib.java       notes~
+  FuncTest.class		 FunctionTest.java   Poly.java~		  RFuncLib.java~      orig-FuncTest2.class
+  FuncTest2.class		 FunctionTest.java~  PolyTest.class	  RFuncLibTest.class  prob3/
+  FuncTest3$ExpFunc.class  MyPolyTest.java     PolyTest.java	  RFuncTest.class     prob4/
+  FuncTest3$LogFunc.class  PQueue$lnode.class  PolyTest.java~	  SinFunc.class       prob5/
+  FuncTest3$SinFunc.class  PQueue.class	     PriorityQueue.class  SinFunc.java	      tmp/
+  [rchris@samsenior january]$ wc -l `find ./ -name "*.java"` | tail -1
+     3700 total
+  [rchris@samsenior january]$ 

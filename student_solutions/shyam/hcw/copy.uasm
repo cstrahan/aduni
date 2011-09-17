@@ -1,0 +1,86 @@
+.include "../shared/beta"
+
+main:
+  MOVC(stack, sp)       | set the stack pointer
+
+  MOVC(from, R1)        | get starting address
+  MOVC(to, R2)          | get the to address
+  LD(n, R3)             | get length of list
+
+  PUSH(R3)              | push arguments in reverse
+  PUSH(R2)              | reverse order
+  PUSH(R1)
+  BR(copy, lp)          | call copy
+
+  DEALLOCATE(3)         | clean-up args
+  HALT()
+
+copy:
+  PUSH(lp)              | stack contract
+  PUSH(bp)              | ...
+  MOV(sp, bp)           | ...
+  
+  PUSH(R1)              | save registers
+  PUSH(R2)              | ...
+  PUSH(R3)              | ...
+
+  LD(bp, -3, R1)        | load args
+  LD(bp, -4, R2)        | ...
+  LD(bp, -5, R3)        | ...
+  
+loop:
+  BZ(R3, endcopy)       | if length = 0 goto copyend
+  LD(R1, 0, R0)         | move value to r0 from memory
+  ST(R0, 0, R2)         | copy value to memory
+  ADDC(R1, 1, R1)       | increment from address
+  ADDC(R2, 1, R2)       | increment to address
+  SUBC(R3, 1, R3)       | decrement length
+  BR(loop)
+
+endcopy:
+  POP(R3)               | restore registers
+  POP(R2)               | ...
+  POP(R3)               | ...
+
+  MOV(bp, sp)           | stack contract
+  POP(bp)               | ...
+  POP(lp)               | ...
+  JMP(lp)               | return
+
+
+n: 6
+from:
+1
+2
+3
+4
+5
+6
+to:
+0
+0
+0
+0
+0
+0
+
+stack:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

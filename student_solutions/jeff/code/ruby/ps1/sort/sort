@@ -1,0 +1,141 @@
+#!/usr/local/bin/ruby
+
+#--------------------------------------------------- 
+#                       sort
+#
+# various simple sorts, written in ruby
+# Jeffrey Radcliffe (Fri Feb  2, 2001 11:06 PM)
+#
+# This program will sort an array of numbers, using a
+# particular algorithm
+#
+# TODO:
+#	* a way to time the running time of an
+#	  algoritm
+#
+#--------------------------------------------------- 
+
+# first, load up the algorithm classes, 
+# conviently placed in separate files
+
+require 'algorithm/sort'
+
+def main()
+  array = []
+
+  pos = 0			# position in ARGV
+
+
+  # check for silent mode
+  if ARGV[pos] == "--silent"
+    @silent = true
+    pos += 1
+  end
+  # check for a string flag
+  if ARGV[pos] == "--string" or ARGV[pos] == "-s"
+    puts "string comparison selected"
+    @string = true
+    pos += 1
+  end
+
+  if ARGV[pos] == "--verbose" or ARGV[pos] == "-v"
+    puts "verbose mode enabled"
+    @verbose = true
+    pos += 1
+  end
+
+  # parse the command line arguments for sort algoritm
+  if ARGV[pos] == "--type" or ARGV[pos] == "-t"
+    pos += 1
+    if ARGV[pos] == "merge"
+      message =  "using merge sort"
+      sort = MergeSort.new
+      pos += 1
+    elsif ARGV[pos] == "bubble"	
+      message =  "using bubble sort"
+      sort = BubbleSort.new
+      pos += 1
+    elsif ARGV[pos] == "insertion"
+      message =  "using insertion sort"
+      sort = InsertionSort.new
+      pos += 1
+    elsif ARGV[pos] == "heap"
+      message =  "using heap sort"
+      sort = HeapSort.new
+      pos += 1
+    elsif ARGV[pos] == "quick"
+      message =  "using quick sort"
+      sort = QuickSort.new
+      pos += 1
+    elsif ARGV[pos] == "radix"
+      message =  "using radix sort"
+      sort = RadixSort.new
+      pos += 1
+    elsif ARGV[pos] == "max"
+      message =  "using max sort"
+      sort = MaxSort.new
+      pos += 1
+    elsif ARGV[pos] == "counting"
+      message = "using counting sort"
+      sort = CountingSort.new
+      pos += 1
+    end
+  else
+    message =  "using default sort (merge)"
+    sort = MergeSort.new
+  end
+  # check for type of input.
+  if ARGV[pos] == "--file" or ARGV[pos] == "-f"
+    pos += 1
+    # read numbers from a file
+    File.open(ARGV[pos], "r") do |aFile|
+      aFile.each_line do |i|
+	array += i.split(" ")
+      end
+    end
+    pos += 1
+  elsif ARGV[pos] == "--array"	or ARGV[pos] == "-a"
+    pos += 1
+    # read the numbers from the command line
+    array = ARGV[pos].split(" ")
+    pos += 1
+  else				
+    # use the default array
+    puts "using default array" if not @silent
+    array = [12, 10, 3, 37, 57, 2, 23, 9]
+  end
+  # convert the array into numbers, if needed
+  if @string != true
+    for j in 0..(array.length - 1)
+      array[j] = array[j].to_i 
+    end
+  end
+  if ARGV[pos] == "--outfile" or ARGV[pos] == "-o"
+    pos += 1
+    # write results to a file
+    @outFileName = ARGV[pos]
+    @writeOutput = true
+    pos += 1
+  end
+
+  puts message if not @silent  
+  print "sorting..." if not @silent
+  sort.sort(array)		# do the sort
+  print "done\n" if not @silent
+
+  # write output to the right place
+  if @writeOutput == true
+    out = File.new(@outFileName, "w")
+    array.each do |i|
+      out.write("#{i} ")
+    end
+    out.write("\n")
+    out.close
+    print "output written to file #{@outFileName}\n" if not @silent
+  else
+     display(array) if not @silent	# display results
+  end
+end
+
+print "[this is sort]\n"	# pithy start message
+main				# start the program

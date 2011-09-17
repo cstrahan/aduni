@@ -1,0 +1,18 @@
+Ye old Bug list.
+---------------
+
+JMR Mon Jan 29, 2001  8:48 AM
+** Disconnecting a connection from the GUI doesn't seem to *really* close
+the connection. (think I fixed this Tue Jan 30, 2001  9:50 AM)
+
+JMR Tue Jan 30, 2001  9:50 AM
+** Sometimes download hangs at 99% ... 
+
+JMR Tue Jan 30, 2001 10:40 AM
+** Weird things sometimes with PingThread not reailizing there is no one to ping.
+
+JMR Wed Jan 31, 2001 12:04 PM
+** Download Doesn't seem to stop when cancelled from GUI (fixed Wed Jan 31, 2001 12:18 PM)
+
+JMR Wed Jan 31, 2001 12:19 PM
+** GUI Hangs in QueryPanel when there are queries there

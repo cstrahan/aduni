@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="Ben Krupp">
+   <META NAME="GENERATOR" CONTENT="Microsoft FrontPage 4.0">
+   <TITLE>Problem Set 6</TITLE>
+</HEAD>
+<BODY>
+<h1 align="center">How Computers Work</h1>
+<h1 align="center">Problem Set 6</h1>
+<B><h2>Problem 1: Explicit Parallelism</h2>
+</B>After two straight all-nighters spent working on his Beta design, Ben Bitdiddle
+rushes off to his final ADU lecture. Only moments into his discussion
+the professor’s lecture wonders off onto some tangent about how the Ferengi
+from Star Trek would be the ideal cache managers. Ben’s concentration suddenly
+to fails him. Within seconds Ben falls into a deep sleep.
+<P>Ben awakens to find that 20 years and, more importantly,
+40 semesters have passed since he last made his way to class. As his head
+clears he realizes that he is still sitting in an ADU lecture. Even stranger,
+Ben comes to recognize the both the stale jokes and thinning curly locks
+of the esteemed lecturer&frac34; Professor (now
+Emeritus) Pratt.
+<P>Little has changed. The canonical programming example
+used is still a recursive factorial routine. However, the implementation
+is slightly different than Ben remembers.
+<DIR>
+<DIR>
+  <dl>
+    <dd>
+      <pre><font face="Courier New">int factorial(int n) </font></pre>
+    </dd>
+    <dd>
+      <pre><font face="Courier New">{</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">    return facthelp(1, n);</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">}</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">parallel int facthelp(int from, int to) </font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">{</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">    int mid;</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">    if (from >= to)</font></pre>
+    </dd>
+    <dd>
+<pre>   <font face="Courier New">     return from;</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">    mid = (from + to)/2;</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">    return (facthelp(from, mid) * facthelp(mid+1, to));</font></pre>
+    </dd>
+    <dd>
+<pre><font face="Courier New">}</font></pre>
+    </dd>
+  </dl>
+</DIR>
+</DIR>
+
+<DL>
+<DT>
+A.&nbsp;&nbsp;&nbsp;&nbsp; Ignoring the parallel keyword,
+how many times is the facthelp( ) function called for a given value of
+n? How does this compare to the version from twenty years earlier (shown
+below)?</DT>
+
+<BR>&nbsp;
+<pre>int factorial(int n) </pre>
+<pre>{</pre>
+<pre>	if (n > 0)</pre>
+<pre>		return n*fact(n-1);</pre>
+<pre>	else</pre>
+<pre>		return 1;</pre>
+<pre>}</pre>
+<P>Ben soon realizes that the new factorial routine is intended
+for an explicitly parallel machine. The professor explains that the parallel
+functions are assigned to processors and executed in parallel with the
+function that calls them. The caller function is considered the parent
+processor and the parallel functions are its children. When the parent
+requires the result of one or more children to make further progress it
+automatically stalls and waits.
+<P>B.&nbsp;&nbsp;&nbsp; Ben remembers that the old version
+of the factorial function that he was taught ran in O(n) cycles. What is
+the execution-time complexity of the new parallel&nbsp;&nbsp; factorial
+function?
+<P>C.&nbsp;&nbsp;&nbsp; Is the factorial algorithm given
+suited for implementation on a SIMD processor? Explain.
+<P>D.&nbsp;&nbsp;&nbsp; Is the programming language extension
+described best suited for implementation on a SIMD or MIMD parallelism?
+Explain.</DL>
+
+<h2>
+Problem 2: Designing a Parallel Machine</h2>
+In this problem we will design a parallel machine for sorting numbers.
+<p>Each processor has N input connections and N output connections.
+<p>Each processor runs a single function called <b>run()</b>
+once per communication clock cycle.&nbsp; (Note: the communication
+clock cycle is the frequency at which messages can be sent or received.&nbsp;
+It is significantly slower than the processor clock cycle.)&nbsp;
+For each communications cycle <b>run</b> is called with an array
+of inputs, containing one value for each of the input connections.&nbsp;
+As the function runs it can send one message out along each
+of its N output connections.&nbsp; (Note: The outputs messages are collected
+and sent out all at once at the beginning of the next communication
+cycle.&nbsp; In other words, all communication is synchronous.)
+<p>When the parallel machine is turned on, the value for
+the variable <b>CURRENT</b> is initialized to an integer.&nbsp; (Note:
+Every processor has its own independent value of <b>CURRENT</b>.)&nbsp;
+On the first communication cycle the function&nbsp; <b>first_cyle</b> is run.&nbsp;
+From then on the function <b>run</b> is called for each subsequent cycle.
+<p>You are given the following definitions:
+<pre>int CURRENT;</pre>
+<pre>run(int *inputs)
+{
+&nbsp;&nbsp;&nbsp; int i;
+&nbsp;&nbsp;&nbsp; int *sorted;</pre>
+<pre>&nbsp;&nbsp;&nbsp; sorted = sort_ints(inputs);</pre>
+<pre>&nbsp;&nbsp;&nbsp; CURRENT = sorted[N/2];</pre>
+<pre>&nbsp;&nbsp;&nbsp; for (i = 0; i&lt;N; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; send(i, sorted[i]);
+}
+&nbsp;</pre>
+<pre>first_cycle(int *inputs)
+{
+&nbsp;&nbsp;&nbsp; int i;
+&nbsp;&nbsp;&nbsp; for (i = 0; i&lt;N; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; send(i, CURRENT);
+}</pre>
+<p>Note: the variable N is set to the number of connections.&nbsp;
+The expression N/2 yields the largest integer less than or
+equal to N/2.
+<p>You are told that these functions are useful for building
+a parallel machine that can sort integers quickly.&nbsp; (Note:
+<b>sort_ints</b>
+takes an array of ints and returns an array which is sorted
+smallest to largest.)
+<p>A) You are given 5 processors labeled A through E, each
+with 3 inputs and 3 outputs.&nbsp; Based on the definitions above,
+draw a connection diagram so that the parallel system will eventually sort
+the numbers initially stored in <b>CURRENT</b> (the smallest value
+should appear in A, the largest value in E).
+<p>B) Place the values 3 in A, 4 in B, 2 in C, 1 in D, and
+5 in E.&nbsp; Show values for <b>CURRENT</b> and the messages on the second
+cycle.&nbsp; Show the values for <b>CURRENT</b> and the message on the 10th
+cycle.
+<p>C) In the general case where there are M processors and
+M integers arranged in this fashion, how many communication cycles
+are required to sort the numbers?  Please use "theta" notation.
+<p>E) Ben Bitdiddle shows up and suggests that instead we
+build our machine with processors that have M+1 connections.&nbsp;
+"That would make the machine really fast!", he says.&nbsp; Could the programs
+given above be used to wire up a machine with M processors, M+1 inputs
+connections, and M+1 output connections?&nbsp; Describe how this would work.&nbsp;
+How many communication cyles are required to sort the numbers?
+<p>F) Does Ben's idea make any sense?&nbsp; Is this really
+going to save anything over a serial implementation.
+<p>G) (Extra Credit) Alyssa shows up and suggests that it
+might be better to build a machine with 4 input connections and 4 outputs.&nbsp;
+Can you propose a wiring scheme for such a machine?&nbsp; How
+would it work?&nbsp; Would it work better than the original 2 input design?
+<p>Problem on Cache Coherence:<o:p>
+</o:p>
+</p>
+<p>The diagram below shows a multiprocessor system with two separate data busses
+connected by a bus coupler so that they can communicate with each other. <o:p>
+</o:p>
+</p>
+<p>&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" align="center" style="text-align:center"><!--[if gte vml 1]><v:shapetype id="_x0000_t75"
+ coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe"
+ filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" alt="" style='width:240pt;
+ height:180pt'>
+ <v:imagedata src="ps6.ht1.gif"
+  o:href="file:///D:/usr/gill/arsdigita/problem_sets/ps6/img008.gif"/>
+</v:shape><![endif]-->
+<img src="ps6.ht1.gif" v:shapes="_x0000_i1025" width="320" height="240"><o:p>
+</o:p>
+</p>
+<p>&nbsp;<o:p>
+</o:p>
+</p>
+<p>The Bus Coupler’s job is to allow local memory on each bus to respond to
+requests from the remote bus, as well as to local requests. Just like the
+memory, each bus is a shared resource. At any given time only one request,
+whether local or remote, can be handled because only one set of data values can
+be driven on the bus at a time. The bus coupler handles the task of arbitration.
+If a request from Processor A comes in to access Processor B’s memory, the
+coupler first checks to see if B is using the bus. If not, it asserts its BUS
+OWNER flag and takes control. If B is using the bus, the coupler must wait until
+B de-asserts its BUS OWNER flag. As far as Processor A is concerned, this is all
+transparent. It looks like a variable latency memory access – somewhat similar
+to a disk read or write, although still faster. Obviously, the transfer process
+is the same for B accessing A’s local memory. In order to speed things up,
+write-back caches are installed as shown.<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo1;tab-stops:list .5in">A.<span style="font-style: normal; font-variant: normal; font-weight: normal">
+</span>It is found that the above configuration doesn’t function properly. Why
+not?<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo1;tab-stops:list .5in">B.<span style="font-style: normal; font-variant: normal; font-weight: normal">
+</span>If the caches are changed to the write-through type, the system works
+better than before, but the processors each still read incorrect data some of
+the time. What is the problem now? What part of the original problem was solved
+by using write-through caches?<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo1;tab-stops:list .5in">C.<span style="font-style: normal; font-variant: normal; font-weight: normal">
+</span>In order to maintain consistency, the following additional changes are
+investigated:<o:p>
+</o:p>
+</p>
+<ul type="disc">
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l0 level1 lfo2;tab-stops:list .5in">Have each processor broadcast
+    a message to the other when it updates a value in its cache/memory. <o:p>
+    </o:p>
+  </li>
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l0 level1 lfo2;tab-stops:list .5in">Have each processor read the
+    remote cache to see if the addressed (local) data is there and is
+    &quot;dirty&quot;. If so, bring over the new value and update local
+    cache/memory.<o:p>
+    </o:p>
+  </li>
+</ul>
+<p>Write procedures (in C code, pseudocode, b assembly language, English, or
+COBOL) that are required for load and store operations to function properly. In
+writing the procedures, think of the extra things that need to happen, in
+addition to asserting control of the bus or waiting for it to become available,
+when one processor has to access local or remote memory. Clearly the bus coupler
+is involved in each case since it is the only means of communicating between the
+two systems. Feel free to make it do some work. Also, bear in mind that for a
+broadcast message to have effect, somebody has to be listening. Make any
+necessary assumptions, but state them clearly in your writeup. There are many
+possible solutions to this question. So, help the graders give you points by
+writing clear explanations of why your procedures are correct. Which do you
+think is the simpler strategy, or are they both about the same?<o:p>
+</o:p>
+</p>
+<p>D. After all that work, there is still a problem with consistency. You know
+your procedures are correct (because you tested them in betasim). What now is
+going wrong?</p>
+<H2>
+Problem 4: Virtual Memory</H2>
+(a) We are to design a simple (single level) page map (from virtual addresses to physical addresses) for a
+system with 32 bit address space and up to 2^24 bytes of physical
+memory. We are constrained to use no more than 2Mbyte of memory for the mapping table.&nbsp; What is the smallest page
+size we can use in the design? (Assume that you can pack the
+bits into the mapping table memory without waste or padding).
+<P>(b) To implement page replacement, we also need the inverse of the above table --- a mapping from physical addresses
+to virtual addresses.&nbsp; How large is that table, based
+on the above design?
+<P>(c) For the design above using the smallest possible page
+size, what is the largest physical memory we can handle using
+2Mbyte of storage for the paging table?
+<P>(d) A two-level page map for a system with a 32 bit address space uses pages of 1024 bytes.&nbsp; The first level
+mapping table has to always be accessible. How large is it?
+<P>(e) A paging system has space only for 4 user pages. Suppose that the user pages are accessed in the order
+<BR>0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, ... Using a FIFO replacement strategy, how many cache
+entries are replaced during each cycle of 8 page accessed, once steady state has been&nbsp; reached?
+Repeat for the LRU replacement strategy. Does FIFO replacement or LRU replacement work better
+for this particular access pattern.
+<P>(f) Repeat part (e) for the following access pattern: 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, ...
+</BODY>
+</HTML>

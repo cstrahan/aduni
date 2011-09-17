@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>Problem on Cache Coherence:</TITLE>
+</HEAD>
+<BODY>
+
+<FONT SIZE=5><P>Problem on Cache Coherence:</P>
+
+<P>The diagram below shows a multiprocessor system with two separate data busses connected by a bus coupler so that they can communicate with each other. </P>
+
+<P>&nbsp;</P>
+<center>
+<IMG SRC="img008.gif" width="320" height="240">
+<br>
+</center>
+<P>&nbsp;</P>
+
+<P>The Bus Coupler’s job is to allow local memory on each bus to respond to requests from the remote bus, as well as to local requests. Just like the memory, each bus is a shared resource. At any given time only one request, whether local or remote, can be handled because only one set of data values can be driven on the bus at a time. The bus coupler handles the task of arbitration. If a request from Processor A comes in to access Processor B’s memory, the coupler first checks to see if B is using the bus. If not, it asserts its BUS OWNER flag and takes control. If B is using the bus, the coupler must wait until B de-asserts its BUS OWNER flag. As far as Processor A is concerned, this is all transparent. It looks like a variable latency memory access – somewhat similar to a disk read or write, although still faster. Obviously, the transfer process is the same for B accessing A’s local memory. In order to speed things up, write-back caches are installed as shown.</P>
+
+<OL TYPE="A">
+
+<LI>It is found that the above configuration doesn’t function properly. Why not?</LI>
+
+<LI>If the caches are changed to the write-through type, the system works better than before, but the processors each still read incorrect data some of the time. What is the problem now? What part of the original problem was solved by using write-through caches?</LI>
+
+<LI>In order to maintain consistency, the following additional changes are investigated:</LI></OL>
+
+
+
+<UL>
+<LI>Have each processor broadcast a message to the other when it updates a value in its cache/memory. </LI>
+<LI>Have each processor read the remote cache to see if the addressed (local) data is there and is &quot;dirty&quot;. If so, bring over the new value and update local cache/memory.</LI></UL>
+
+
+<P>Write procedures (in C code, pseudocode, </FONT><FONT FACE="Symbol" SIZE=5>b</FONT><FONT SIZE=5> assembly language, English, or COBOL) that are required for load and store operations to function properly. In writing the procedures, think of the extra things that need to happen, in addition to asserting control of the bus or waiting for it to become available, when one processor has to access local or remote memory. Clearly the bus coupler is involved in each case since it is the only means of communicating between the two systems. Feel free to make it do some work. Also, bear in mind that for a broadcast message to have effect, somebody has to be listening. Make any necessary assumptions, but state them clearly in your writeup. There are many possible solutions to this question. So, help the graders give you points by writing clear explanations of why your procedures are correct. Which do you think is the simpler strategy, or are they both about the same?</P>
+
+<P>
+
+D. After all that work, there is still a problem with consistency. You know your procedures are correct (because you tested them in betasim). What now is going wrong?<br>
+</FONT></BODY>
+</HTML>

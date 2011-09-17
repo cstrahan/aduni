@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+\title{Card Trick Problem Set Solutions}
+\usepackage{fullpage}
+\usepackage[dvips]{graphicx}
+\author{Michael Allen}
+
+\begin{document}
+\maketitle
+
+\section*{1-4 Lower Bounds}
+
+With the given procedure, we can establish a lower bound for the
+size of the deck for which we can perform the card trick for a
+given number of cards. These results are shown below.
+
+$$\begin{array}{c|c}
+    hand&   deck \\\hline
+    2   &   3 \\
+    3   &   6 \\
+    4   &   15 \\
+    5   &   52 \\
+    6   &   245 \\
+    n   &   2(n-1)! + (n-1)
+  \end{array}$$
+
+\section*{5-6 Upper Bounds}
+
+Our procedure, however, is not optimal, and it is theoretically
+possible to perform the trick with a larger deck. We can set our
+upper bound at a size which makes maximal use of the information
+available to us.
+
+$$\begin{array}{c|c}
+    hand&   deck \\\hline
+    2   &   3 \\
+    3   &   8 \\
+    4   &   24 \\
+    5   &   124 \\
+    6   &   725 \\
+    n   &   n! + (n-1)
+  \end{array}$$
+
+\newpage
+\section*{7}
+
+For the following, assume we have a deck of $d$ cards from which
+the accomplice chooses a hand of size $n$.
+
+{\bf a.} The number of ways the accomplice can choose a hand is
+$C(d,n)$.
+
+{\bf b.} The number of different permutations of the n-1 cards the
+accomplice can show is $n!$.
+
+{\bf c.} The number of different strategies available to the
+accomplice and magician are $n!^{C(d,n)}$
+
+\section*{8a}
+
+We can verify that a strategy is successful by showing that each
+possible hand maps to a different ordering chosen by the
+accomplice. The table below shows how this can be done for a deck
+with two suits ($a$ and $b$) of three cards each where three cards
+are chosen .
+
+$$\begin{array} {ccc c ccc | ccc c ccc}
+    &hand& &\rightarrow& 1&2&hide & &hand& &\rightarrow& 1&2&hide\\ \hline
+    1a&2a&3a &\rightarrow& 1a&3a&2a & 2a&3a&1b &\rightarrow& 2a&1b&3a \\
+    1a&2a&1b &\rightarrow& 1a&1b&2a & 2a&3a&2b &\rightarrow& 2a&2b&3a \\
+    1a&2a&2b &\rightarrow& 1a&2b&2a & 2a&3a&3b &\rightarrow& 2a&3b&3a \\
+    1a&2a&3b &\rightarrow& 1a&3b&2a & 2a&1b&2b &\rightarrow& 1b&2a&2b \\
+    1a&3a&1b &\rightarrow& 3a&1b&1a & 2a&1b&3b &\rightarrow& 3b&2a&1b \\
+    1a&3a&2b &\rightarrow& 3a&2b&1a & 2a&2b&3b &\rightarrow& 2b&2a&3b \\
+    1a&3a&3b &\rightarrow& 3a&3b&1a & 3a&1b&2b &\rightarrow& 1b&3a&2b \\
+    1a&1b&2b &\rightarrow& 1b&1a&2b & 3a&1b&3b &\rightarrow& 3b&3a&1b \\
+    1a&1b&3b &\rightarrow& 3b&1a&1b & 3a&2b&3b &\rightarrow& 2b&3a&3b \\
+    1a&2b&3b &\rightarrow& 2b&1a&3b & 1b&2b&3b &\rightarrow& 1b&3b&2b
+  \end{array}$$
+
+\section*{8b}
+
+If we try to add another card to our deck, say $4a$, we find that
+there is no way to encode the hands, $(1a,3a,$[any b]$)$ and
+$(2a,4a,$[any b]$)$ with the rules we are given. Specifically, we
+cannot hide the higher of two consecutive cards (where the lowest
+is one greater than the highest) of the same suit because the two
+$a$ cards are not consecutive.
+
+\newpage
+\section*{9}
+
+We can represent strategies for the card trick in the form of an
+$(n-1)$-dimensional table which shows the magician how to decode
+the hidden card. Then, developing a strategy is just a matter of
+fitting one of the permutations of every possible hand into the
+table. The $n=3,d=7$ case can be computed by hand. The table for
+the $n=3,d=8$ case is shown below.
+
+$$\begin{array} {c|cccccccc}
+     & 0&1&2&3&4&5&6&7 \\
+     \hline
+    0&  &3&4&5&5&2&2&2 \\
+    1& 2& &4&5&6&6&3&3 \\
+    2& 3&3& &5&6&7&7&4 \\
+    3& 4&4&4& &6&7&7&4 \\
+    4& 1&5&5&5& &7&7&1 \\
+    5& 1&2&6&6&6& &7&1 \\
+    6& 1&2&3&0&0&0& &1 \\
+    7& 1&2&3&0&0&0&0&
+  \end{array}$$
+
+\section*{10}
+
+Generating strategies for each size of hand and deck can be
+accomplished by a brute force search with a computer, but there is
+also a clever closed form solution. It is possible (though
+difficult) to prove that for any hand size $n$, the upper bounds
+as specified in {\em problems 5-6} can be met.
+
+\end{document}

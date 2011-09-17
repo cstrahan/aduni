@@ -1,0 +1,249 @@
+<html>
+<head>
+<title>ADUni - Theory of Computation - Problem Set 04 Solutions</title>
+</head>
+
+<body fgcolor=black bgcolor=white>
+<center>
+A R S D I G I T A &nbsp V N I V E R S I T Y<br>
+<font size=+2>Month 8: Theory of Computation</font><br>
+Problem Set 4 Solutions - Rusty Chris, Dimitri Kountourogiannis, and Mike Allen
+</center>
+
+<ol>
+<li><font size=+1>Context Free or Not</font><p>
+
+	<ol type=a>
+
+	<li><b>CF</b>. Here is a grammar that will generate the language.
+	<pre>
+	S -> 1A0
+	A -> 1A0 | B
+	B -> CC
+	C -> 0D1
+	D -> 0D1 | e
+	</pre>
+
+	<li> <b>Not CF</b>. Assume for the purpose of contradiction that it is. Then let the pumping length be p. Consider the string s=0<sup>p</sup>1<sup>p</sup>#0<sup>p</sup>1<sup>p</sup>, which is in the language. If we decompose s into s=uvwxy as in the statement of the pumping lemma, there are three cases to consider.
+
+	<ol>	<li>If vwx is contained in the first half of the string s, then pumping up even once (that is, taking the string uv<sup>2</sup>wx<sup>2</sup>y) will give us a string where the first half is longer than then second half, which means it can't be a substring of the second half.
+		<li>If vwx is contained completely in the second half, then when we pump down (that is, take the string uwy). Then the second half will be shorter than the first half (since |vwx|>=1) and so the pumped down string will not be in the language.
+		<li>If vwx overlaps with the symbol #, then it must be the case that the # is contained in w, or else pumping up would give too many # symbols. So either the v will be a string of 1's or the x will be a string of 0's or both (We need the fact that |vwx| <= p here). If v is a nonempty string of 1's then pumping up will give the left half more 1's then the right side, so the left side will not be a subset of the right side. If x is a nonempty string of zeros then pumping down will give the right side fewer zeros than the left so the left side will not be a subset of the right side.
+	</ol>
+	In any case we come to the conclusion that no matter how we choose the decomposition, the conditions of the pumping lemma will be violated. So the language cannot be regular.<p>
+ 
+	<li><b>Not CF</b>. Suppose it is. Then let the pumping length be p. Consider the string s=0<sup>p</sup>1<sup>p</sup>01<sup>p</sup>, which is in the language. If we decompose s into s=uvwxy as in the statement of the pumping lemma, then an argument like the previous one shows that if vwx is anything but the lone zero between the ones, then pumping up will give you something that is not in the language. On the other hand if vwx is the lone zero, then pumping down will give you. 0<sup>p</sup>1<sup>p</sup>1<sup>p</sup>, which is not in the language. This contradicts the pumping lemma, so therefore the language is not context free.<p>
+
+	<li><b>CF</b>. Here is a grammar that generates the language, with some comments on the side to explain what each non-terminal represents.
+	<pre>
+	S -> ABA |
+	A -> e | AC
+	C -> 01 | 0C1     ; 0^n1^n
+	B -> 0B1 | D | F  ; 0^m1^nm!=n
+	D -> 0 | 0D       ; one or more 0s
+	F -> 1 | 1F       ; one or more 1s
+	</pre>
+	Why this works: Since R=(00*11*)(00*11*)* is regular, the complement ~R	includes all strings which are not even of the correct form. We can Union 0*1* complement... nondeterministically guess which pair mismatches.<p>
+	</ol>
+
+
+<li><font size=+1>Decision Algorithms</font><p>
+
+	<ol type=a>
+
+	<li>If it were a non-deterministic machine, then the problem would be undecidable, but since Deterministic machines are closed under complement, we can do this. Complement the machine. Then form a grammar from the machine. Then check whether the start symbol is useless. If the start symbol is useless then the complemented machine has an empty language and so the original machine generates every string. If the start symbl is not useless, then the original machine does not generate everything.<p>
+
+	<li>Convert the grammar to Chomsky Normal Form. Check all possible derivations of 2n-1 steps, where n is the length of the string z in the language.<p>
+
+	<li>We need to see if the language has any intersection with 1*. Convert the CFG into a PDA called M.Since 1* is regular and Context Free Languages are closed under intersection with regular languages, we can intersect the DFA that generates 1* with M. Convert the resulting machine back to a Grammar. Check if the resulting language is empty by testing whether the start symbol is useless. Another way to do this is to put the grammar in Chomsky Normal form, and then compute all derivations of length less than or equal to 2<sup>|V|+1</sup>, where |V| is the number of nonterminal variables in the CNF grammar. If no 1* is derivable in this many steps, then none will ever be.<p>
+
+	</ol>
+
+<li><font size=+1>Closure Problems of CFLs</font><p>
+
+	<ol type=a>
+
+	<li>The intersection of a PDA M1 and an FSM M2 is constructed in a manner analogous to how two FSMs are intersected. The stack of the constructed PDA is used to simulate the stack of M1.<p><img src="Problem_Set_04_Files/3a.gif"><p>
+	Note the accept state is not reachable in this case, which is good since the intersection of the two languages is empty.<p>
+
+	<li>This is trivial because we can take any CFL that is not regular and intersect in with any Regular language that contains it, for example we can let L= {0<sup>n</sup>1<sup>n</sup> | n >=0} and R = (0+1)*. Then L intersected with R is just L again, which we know to be non-regular.<p>
+
+	<li> We modify the DFA for L so that the stack to supplies the input to the machine and to each state we add a gizmo that reads in string input and pushes it onto the stack 3 characters at a time.<p><img src="Problem_Set_04_Files/3c.gif"><p>
+
+	</ol>
+
+ 
+<li><font size=+1>Parsing and the CYK Decision Algorithm</font><p>
+
+	<ol type=a>
+
+	<li>The CYK parse table for 00000
+	<pre>
+	   |   1     2     3     4     5 
+	---|---------------------------------------
+	 1 |  A,C   A,C   A,C   A,C   A,C
+	 2 |   B     B     B     B
+	 3 | S,A,C S,A,C S,A,C
+	 4 |   B     B 
+	 5 | S,A,C
+	</pre>
+	Here we conclude that 00000 is derivable from the start symbol. Since S is in the fifth row, first column of the table.<p>
+
+	The CYK parse table for 000000
+	<pre>
+	   |   1     2     3     4     5     6
+	---|--------------------------------------------- 
+	 1 |  A,C   A,C    A,C   A,C   A,C   A,C 
+	 2 |   B     B     B     B     B
+	 3 | S,A,C S,A,C S,A,C S,A,C 
+	 4 |   B     B     B
+	 5 | S,A,C S,A,C
+	 6 |   B
+	</pre>
+	Here we conclude that 000000 is <i>not</i> derivable from the start symbol. Since S is not in the sixth row, first column of the table. It's not so hard to see that all strings of zeros of odd length >= 3 are derivable from this grammar.<p>
+
+	<li>An NPDA for the grammar above.<br><img src="Problem_Set_04_Files/4b.gif"><p>
+
+	</ol>
+
+<li value=6><font size=+1>Turing Machine Basics</font><p>
+
+	<ol type=a>
+
+	<li>(text 3.1a) Run M<sub>2</sub> on "0"
+	<pre>
+	q<sub>1</sub>0-
+	-q<sub>2</sub>-
+	--q<sub>accept</sub>
+	</pre>
+
+	<li>(text 3.1c) Run M<sub>2</sub> on "000"
+	<pre>
+	q<sub>1</sub>000-
+	-q<sub>2</sub>00-
+	-xq<sub>3</sub>0-
+	-x0q<sub>4</sub>-
+	-x0-q<sub>reject</sub>
+	</pre>
+
+	<li>(text 3.2a) Run M<sub>1</sub> on "11"
+	<pre>
+	q<sub>1</sub>11-
+	-q<sub>3</sub>1-
+	-1q<sub>3</sub>-
+	reject
+	</pre>
+
+	<li>(text 3.2d) Run M<sub>1</sub> on "10#11"
+	<pre>
+	q<sub>01</sub>10#11-        -q<sub>09</sub>0#11-
+	-q<sub>03</sub>0#11-        -0q<sub>09</sub>#11-
+	-0q<sub>03</sub>#11-        -0#q<sub>11</sub>11-
+	-0#q<sub>05</sub>11-        -0q<sub>12</sub>#x1-
+	-0#1q<sub>05</sub>1-        -q<sub>12</sub>0#x1-
+	-0#11q<sub>05</sub>-        q<sub>12</sub>-0#x1-
+	-0#1q<sub>07</sub>1-        -q<sub>13</sub>0#x1-
+	-0#q<sub>07</sub>11-        -xq<sub>08</sub>#x1-
+	-0q<sub>07</sub>#11-        -x#q<sub>10</sub>x1-
+	-q<sub>07</sub>0#11-        -x#xq<sub>10</sub>1-
+	q<sub>07</sub>-0#11-        reject
+	</pre>
+
+	</ol><p>
+
+
+<li><font size=+1>Turing Machine Design<font><p>
+
+	<ol type=a>
+
+	<li>To accept odd-valued binary strings, we only have to look at the last bit. The TM moves right until it reads a blank, moves left one space and accepts if and only if there is a 1 on the tape.<p>
+
+	<li>Simulate adding a and b, marking the digits right to left as we go and verifying the digits of c.</p>
+	<ol>	<li>Add a $ to the beginning of the tape and shift the rest of the input.
+		<li>Move right past the input string, write another # and a 0. This is the carry bit. Move left until you hit the $.
+		<li>Move right to the first #, then move left until you find an unmarked digit.
+		<li>Remembering this digit, move right past a #.
+		<li>Move right to the second #, move left until you find an unmarked digit.
+		<li>Remembering this second digit, move right past the second #.
+		<li>Move right past the last #.
+		<li>If the two bits read, plus the carry bit, are equal 2 or 3, write a one  to the carry bit.
+		<li>Move left past the # and stop at the first unmarked bit. If the the remembered bits plus the old carry bit are equal to 1 or 3, check for a 1 under the head, and mark it. Otherwise, check for a zero, and mark it. Reject if the check fails.
+		<li>Move left to the $, and repeat from 3.
+		<li>When there are no unmarked digits in a and b, move to the carry bit.
+		<li>If the carry bit is 1, check for an unmarked 1 in c. Accept as long as there are no unmarked 1s in c. 
+	</ol><p>
+
+	<li>This solution is a bit non-intuitive, because it does not construct the odds by adding one each time, but by constructing all possible odd-valued n-bit strings by prepending 0 and 1 to all odd-valued n-1-bit strings. The resulting machine, though, is considerably simpler.
+	<ol>	<li>Write $*1* to the tape
+		<li>Move to the left pass a * and until you hit another *.
+		<li>Moving right, copy symbols to the end of the tape, replacing the first * with *0, and #s with #0. Stop when you encounter a second *. Don't copy it.
+		<li>Move left back past two stars and stop on the third.
+		<li>Copy the string between the stars again to the end of the tape, this time prefixing each bit with a 1. Also, this time write a # instead of a leading *. Stop when you get to the second *, but copy it to the end of the tape.
+		<li>From the end of the tape, repeat back to step 2.
+	</ol><p>
+</ol>
+
+
+<li><font size=+1>Turing Decidability and Recognition</font><p>
+
+Show that the set of decidable languages is closed under...<p>
+
+	<ol type=a>
+
+	<li>(text 3.14a) UNION.<p>
+
+	Create a TM M from the two input machines M<sub>1</sub> and M<sub>2</sub> where:<p>
+
+	M = "On input w:
+	<ol>	<li>Run M<sub>1</sub>. If it accepts, accept.
+		<li>Run M<sub>2</sub>. If it accepts, accept.
+		<li>Otherwise, reject."
+	</ol><p>
+
+	Since M<sub>1</sub> and M<sub>2</sub> are decidable, we are guaranteed that they will accept or reject in finite time (ie they will not loop forever). So, TM M will be decidable.<p>
+
+	<li>(text 3.14d) COMPLEMENTATION.<p>
+
+	We again create a TM M from the input machine M<sub>1</sub> where:<p>
+
+	M = "On input w:
+	<ol>	<li>Run M<sub>1</sub>. If it accepts, reject.
+		<li>Otherwise, accept."
+	</ol><p>
+
+	</ol>
+
+Show that the set of recognizable languages is closed under...<p>
+
+	<ol type=a>
+
+	<li value=3>(text 3.15a) UNION.<p>
+
+	Create a TM M from the two input machines M<sub>1</sub> and M<sub>2</sub> where:<p>
+
+	M = "On input w:
+	<ol>	<li>Run M<sub>1</sub> and M<sub>2</sub>
+	 in parallel. If either accepts, accept.
+		<li>Otherwise, reject."
+	</ol><p>
+
+	Since M<sub>1</sub> and M<sub>2</sub> might not ever reject, we must run them in parallel to guarantee that if either of them accepts, we can accept. Note that step 2 might never be reached, but that is okay, since if we only recognize the language, we do not have to reject.<p>
+
+	<li>(text 3.15c) STAR. <p>
+
+	Create a TM M from the input machine M<sub>1</sub> where:<p>
+
+	M = "On input w:
+	In parallel:
+	<ol>	<li>Enumerate all the strings that M<sub>1</sub> accepts onto a list L1
+		<li>Create a list L2 which contains the * of all the items in L1. If w appears on L2, accept."
+	</ol><p>
+
+	We know that we can enumerate all the strings that M<sub>1</sub> accepts to create L1, but creating the * of that list is much trickier. We must choose an ordering that reaches any string in finite time. One possible ordering would be to include the strings made by repeating the first n strings of L1 up to n times letting n go from 0 to infinity. Since all strings in the *'d language will eventually appear on L2, we can accept w if it is in the language.<p>
+
+	</ol>
+
+</ol>
+
+</body>
+</html>

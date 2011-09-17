@@ -1,0 +1,160 @@
+\documentclass[10pt]{amsart}
+ 
+\setlength{\parsep}{3pc}
+\setlength{\itemsep}{0.2in}
+
+
+\usepackage{fullpage}
+\usepackage{psfig}
+
+
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\to}{\rightarrow}
+
+\newtheorem{thm}{Theorem}[section] 
+\newtheorem{theorem}[thm]{Theorem} 
+\newtheorem{corollary}[thm]{Corollary} 
+\newtheorem{lemma}[thm]{Lemma} 
+\newtheorem{prop}[thm]{Proposition} 
+\newtheorem{definition}[thm]{Definition} 
+\newtheorem{remark}[thm]{Remark}  
+\newtheorem{fact}{Fact}[section]
+
+\newenvironment{EG}[1]{{\vspace{1 ex}}\noindent {\sc Example.}{#1}{\hfill{$\diamondsuit$}}\\{\vspace{1 ex}}}
+
+
+
+\title[\hskip 0.2inExam 1\hfill Name:\hskip 2in]{Exam 1:  Differential calculus}
+
+\begin{document}
+
+\begin{figure}[h]
+\centerline{
+\psfig{figure=logo.ps}
+}
+\end{figure}
+
+\centerline{\Large{\sc{Month 0: Mathematics for Computer Science}}}
+\medskip
+
+\maketitle
+
+\vfill
+
+
+\centerline{\LARGE{September 9, 2000}}
+
+\vskip 1in
+
+\hskip 2in\Large{Name:}
+
+\vskip 1in
+
+\noindent You may consult your paper containing trigonometric
+identities, but you may not consult any other books or papers.  You
+may use a calculator (or the calculator on your computer), but you may
+not use any other computing or graphing device other than your own
+head! 
+
+\vfill\pagebreak
+\begin{enumerate}
+
+\item Differentiate the following functions.
+\begin{enumerate}
+\item $f(x)=\cos(x^3+4)$
+\vfill
+\item $f(x)=e^{x}+3x^2+7$
+\vfill
+\item $f(x)=(x^2+2x)^{50}\cdot(x-3)$
+\end{enumerate}
+
+\vfill\pagebreak
+
+\item Graph the following function, using the first and second
+derivatives: 
+$$
+f(x)=\frac{x^3-3x^2+2x-6}{x-3}=\frac{(x-3)\cdot(x^2+2)}{(x-3)}.
+$$
+
+\vfill 
+
+\begin{figure}[h]
+\psfig{figure=graphPaper.ps,width=5in}
+\end{figure}
+
+
+
+\pagebreak
+
+\item A farmer wants to fence off a rectangular garden next to his
+barn, using the barn as one of the walls. (See figure below.)  He goes
+to Agway, and buys 240m of fencing.  What is the biggest garden he can 
+fence off?
+
+\begin{figure}[h]
+\hfill\psfig{figure=barn.ps,width=2in}
+\end{figure}
+
+\vfill\pagebreak
+
+\item When Mike Allen (the kicker for his MIT intramural football
+team) kicks the football,
+the ball goes up in the air and  reaches a height of
+$s(t)=2t-\frac{t^2}{8}$ meters after $t$ seconds. (See figure below
+for a rough sketch of this.)
+
+\begin{figure}[h]
+\centerline{
+\psfig{figure=football.ps,width=3in}
+}
+\end{figure}
+
+\begin{enumerate}
+\item What is the velocity of the ball when $t=2$seconds?
+\vfill
+\item What is the maximum height of the ball?
+\vfill
+\item What is the acceleration of the ball at $t=4$seconds?
+\end{enumerate}
+
+
+\vfill\pagebreak
+
+\noindent {\sc{Extra problem -- A maximization puzzler.}} Only do this
+problem if you completed and checked over your exam, and feel like
+taking a look at this!  It will not count
+towards your exam grade, but is meant to be a fun problem to think
+about!
+
+For your birthday, the king decides to give you as much land as you can
+claim in one day.  He gives you some wooden posts.  You are free to place
+these posts in the ground wherever you want, and at the end of the day the
+land contained in the convex hull of the posts will be yours. (That
+is, the king will send out men to wrap string around all the posts you 
+have planted in the ground, and you get to keep the land inside.)
+
+\begin{itemize}
+\item You have exactly 24 hours (1440 minutes).
+\item It takes you exactly 1 minute to pound a post into the ground.
+\item You walk at at a constant speed.
+\item You must end to your initial starting point.
+\end{itemize}
+What do you do? (We are assuming, of course, that you want to get as
+much land as possible!  The full solution to this problem probably
+requires the use of a computer to find the exact answer.  Try to write 
+down the function that you are trying to maximize, though.)
+
+
+\end{enumerate}
+
+
+
+
+
+\end{document}

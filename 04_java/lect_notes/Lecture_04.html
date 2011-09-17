@@ -1,0 +1,242 @@
+<html>
+<head>
+  <title>
+   Lecture 4
+  </title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Interfaces</h2>
+<h3>Lecture</h3>
+<ul>
+<li>Introduction: What are interfaces.
+  <ul>
+  <li>Essentially abstract classes with no instance vars or concrete methods
+  </li>
+  <li>Cannot be instantiated. Only classes that implement interfaces can
+be instantiated. However, variables can be defined to interface types.
+  </li>
+  <li>Why not just use abstract classes? Java doesn't permit multiple 
+inheritance from classes, but permits implementation of multiple interfaces.
+  </li>
+   </ul>
+</li>
+<li> Interfaces: General
+    <ul>
+    <li>A collection of method (of function) with specific signatures and
+behavior.
+    </li>
+    <li>Specifies what a datatype "looks like" to callers: the 'contract'
+the between the implementor and caller.
+    </li>
+    <li>Completely separates specification/behavior from implementation.
+    </li>
+    <li>Implementation can be in different language or on different machine.
+    </li>
+    <li>Easy to substitute implementations.
+    </li>
+    <li>Easy to use multiple implementations.
+    </li>
+    <li>Useful for implementing callbacks.
+    </li>
+    <li>Technology of choice for specifying modules (highest level of program
+structure) since it abstracts all implementation.
+    </li>
+    </ul>
+</li>
+<li>Java Interfaces
+  <ul>
+  <li>To define: 'interface' keyword instead of 'class', define methods
+without implementations.
+  </li>
+  <li>Interfaces and inherited from parent classes (parent's implementation
+is used by default).
+  </li>
+  <li>Interfaces can be 'extend'ed just like classes: same syntax.
+  </li>
+  <li>Classes must specify which interface (if any) they implement.
+<pre>
+class Foo extends Bar 
+   implements Interface1, interface2{
+
+   Foo();
+
+   .. code for Interface1 methods
+
+   .. code for Interface2 methods
+
+}
+</pre>
+  </li>
+  </ul>
+</li>
+<pre>
+
+Using interfaces.
+
+Example: Suppose we want to provide a general re-useable method that
+returns the maximum element from an array. For positive integer arrays it
+would look like
+
+   public int amax(int[] arr){
+      int max = 0; 
+      for(int i=0;i < arr.length;i++){
+         if(arr[i] > max) max = arr[i];
+      }
+      return(max);
+   }
+
+Note that the only properties of int's this routine uses is the ability
+to compare with '>'. If we can abstract this operation, we can abstract the
+method. We could define a class of things that could be compared, but lots
+of very different object have order relations, numbers, Strings, points, etc.
+Since Java only supports single inheritance, A Comparable type would
+mess up a lot of hierarchies. Instead we use an interface.
+
+public interface Comparable{
+     int compareTo(Comparable a);  returns -1,0,1 iff this <,=,> a
+}
+
+[Java actually defines the Comparable interface, so we don't have to. In fact,
+Java defines many useful interfaces and provides many classes that 
+both use and/or implement them. Look in the java.util package for many 
+examples]
+
+Our general routine now can be written.
+
+   public Comparable amax(Comparable[] arr){
+      Comparable max = null; 
+      for(int i=0;i < arr.length ;i++){
+        if(max == null) || (arr[i].compareTo(max) > 0 )
+           max = arr[i];
+      }
+      return(max);
+   }
+
+Interfaces behave in many ways like class types. You can type a variable to an
+interface, cast to an interface type, etc. One thing you cannot do is
+instantiate an interface. To get an instance, you need an actual class.
+
+Implementing interfaces. Say we want to use our max routine on arrays
+of our Complex type which we will order by real part (X coord) then by
+imag part (Y value).
+
+   class Complex extends Vect2D implements Comparable{
+     .. other stuff
+
+     public int compareTo(Comparable c){
+        Complex com = (Complex)c;  // downcast, will cause error if not Complex
+        if(getX() <  com.getX()) return(-1);
+        if(getX() >  com.getX()) return(1);
+        if(getX() ==  com.getX()){
+            if(getY() <  com.getY()) return(-1);
+            if(getY() >  com.getY()) return(1);
+            return(0);   // equals
+        }
+     }
+
+   }
+
+That's all there is to it. Now we can use Complex in our amax method. And
+also in the Java utility classes and methods that require comparable.
+
+</pre>
+
+<h4>Interfaces vs Classes</h4>
+
+<pre>
+Often there is a choice between specifying some functionality as a class,
+an abstract class, or an interface. There are no hard and fast
+rules for this. Here is some advice:
+
+Java supports only single inheritance, so class hierarchies are strict.
+Interfaces are useful for general functionality across a variety of class
+types when it would be impossible to represent them in a single hierarchy.
+
+Interfaces are useful for specifying the behavior of high-level modules in
+a design as it provides maximum separation of specification and implementation.
+
+Interface can be a nuisance, since one must eventually define classes to
+instantiate. You will see this in the Java GUI system.
+
+Class hierarchies should follow 'is-a' relationships. Interfaces follow
+'behaves-like-a' relationships.
+
+</pre>
+
+<h4>Documentation: JavaDoc</h4>
+<pre>
+
+Since you are to use it in the problem sets. We will introduce JavaDoc.
+
+Javadoc is a system for helping generate API documentation (of the sort you can
+find at java.sun.com). Javadoc help unify the coding and documentation 
+processes. Javadoc can document, Classes, Interfaces, instance vars and
+methods. [Note: by default it only generates doc of public classes and
+interfaces, so be careful in your specification]
+
+To use Javadoc, you write code as usual, but comment your code in a particular
+format. The basic Javadoc comment looks like
+/**
+ * This class sucks.
+ */
+
+It is invoked by the /** opening line. The first paragraph after that
+is taken as the documentation for the class,interface,method it preceeds;
+
+/**
+ * A class implementing complex numbers.
+ */
+ public class Complex extends Vect2d{
+    /**
+     * Returns the absolute value.
+     *
+     * @return Commentary on the return value.
+     */
+     public double abs(){
+
+     }
+
+ }
+
+Javadoc allows plain text or HTML in comments.
+
+Javadoc also allows a set of special fields indicated in the comment by @
+
+Some examples
+
+@author -- tags the author
+@param -- associates following text with a method argument in doc
+@return -- associates following text with return value in doc
+@see -- references another class or method
+
+See online Javadoc documentation for more:
+
+
+</pre>
+
+
+
+</ul>
+<h3>Recitation: Inner classes</h3>
+<ul>
+<li>Review lecture and answer questions
+</li>
+</ul>
+<ul>
+<li> Inner classes
+</li>
+<li> Anonymous Inner classes
+</li>
+<li> Callbacks with inner classes
+</li>
+<li> Added interface wrappers with inner classes
+</li>
+<li>Static inner classes, local inner classes, and more exotica if you 
+have time.
+</li>
+</ul>
+
+</body>
+
+
+

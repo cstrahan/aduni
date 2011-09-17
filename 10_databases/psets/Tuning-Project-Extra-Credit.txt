@@ -1,0 +1,12 @@
+For 10% extra credit and that extra bit of satisfaction:
+
+Remove the unique constraint from dbi_errors:
+  alter table dbi_errors disable constraint de_form_id_check_id_un;
+
+Insert a tuple or several tuples which violate this constraint.  At
+least one of them should be for a form that is approved.
+
+Write a query that returns the form_ids of any forms that have been
+approved but have more than one entry in dbi_errors with the same
+check_id.
+

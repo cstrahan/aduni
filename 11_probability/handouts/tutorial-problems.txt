@@ -1,0 +1,20 @@
+Tutorial 1 Applied Probability some problems sourced from textbook.
+
+1> Prove the following relations using the axioms of the algebra of events. 
+
+	A	If Phi is the null set, Phi'=U
+	B	A + B = A + A'B + ABC
+
+2> A four-sided die labeled {1,2,3,4} is roled 2 times.
+   Create a simple notation denoting the events:
+   	A	The first roll is a 3.
+   	B 	The second roll is a 4.
+        C	The first roll is a 3 and the second roll is a 4.
+
+3> P(A) = .4  P(B') = .7  P(A+B) = .7
+   determine 
+   	A	P(B)
+	B	P(AB)
+	C	P(A'|B')
+
+ 

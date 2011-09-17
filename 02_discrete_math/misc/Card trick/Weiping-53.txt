@@ -1,0 +1,47 @@
+Subject: card puzzle
+Date: Tue, 21 Nov 2000 15:11:48 -0600 (CST)
+From: Weiping Shi <wshi@ee.tamu.edu>
+To: shai@stonehill.edu
+
+Shai,
+
+Here is how you can do it with 52+1 cards.
+Name the extra card as spade 14.
+Then the 5 cards
+can be in one of the following cases:
+
+case 1. at least 2 cards in suit not spade.
+case 2. 3 or more spades.
+case 3. 2 spades, 1 each heart, diamond, and club.
+
+For case 1, use the same algorithm.
+
+For case 2, use the same algorithm except that
+we shoose two spades of distance not 7 to show.
+This is always possible with 3 spades.
+
+For case 3, we can use the same algorithm except
+the two spades are distance 7 apart, say A and 8.
+If we have spade A and 8, then
+show both spades, with one being the first.
+If my acomplice sees two spades of distance 7,
+then it has to be case 3. So he'll know the suit
+of the missing card is the missing suit.
+
+The number of ways we have at this time is
+3*2*3!=36, (3 for choosing the missing suit,
+2 for picking the first spade, and 3! for ordering
+the rest), if we don't fix the missing suit.
+Here is one way to do it:
+Assume for the worse case at least two non-spade
+cards are in [A,...,7], since the other interval
+[8,...,K] is smaller.
+Then we show spade A as the first card.
+
+Now min{X-Y, Y-X} (mod 7) has to be less
+than or equal to 3. Use one card in the
+permutation to identify the offset.
+If all three non-spade cards are in [A,...,7],
+choose the highest two.
+
+Weiping

@@ -1,0 +1,7 @@
+ANSWERS TO PROBLEM 8
+
+Java does not like it at all when I try to insert Integers and Strings
+into the same PQueue, let alone remove them! This is not a very good
+thing at all, and such an abstraction is not a good thing. Using a
+TreeMap should solve these problems, as the Comparator in the TreeMap
+can be taught to deal with variance of type.

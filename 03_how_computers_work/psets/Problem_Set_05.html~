@@ -1,0 +1,740 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+   <TITLE>6</TITLE>
+   <META HTTP-EQUIV="Content-Language" CONTENT="en-us">
+   <META NAME="GENERATOR" CONTENT="Microsoft FrontPage 4.0">
+   <META NAME="ProgId" CONTENT="FrontPage.Editor.Document">
+</HEAD>
+<body bgcolor=ffffff>
+
+<H1 ALIGN=CENTER>How Computers Work</H1>
+
+<H1 ALIGN=CENTER>Problem set 5</H1>
+
+<H2><B>Lab Assignment</B> - Pipelining the BETA!</H2>
+
+
+<P><B><FONT FACE="Arial,Helvetica,Sans-serif" size=+1>This lab is hard, and you will have
+to <i>think</i> in order to complete it! We really
+mean it! Start early and work hard.</FONT></B></P>
+
+<P><B><FONT SIZE=+1>Introduction:  What's up with the ugly picture?</FONT></B></P>
+
+<P><b><font color=ff0000>In this lab we're going to write the control logic for the pipelined
+BETA.</font> We'll produce a BETA that is dramatically faster than our original
+implementation, but we'll pay for that speed with extra logic and complexity.</b></P>
+
+<img src="pset_05_html_files/lab5small.gif" border=3 align=right width="354" height="343">
+
+<p>If you're feeling really macho, go ahead and load up the lab in Betasim, and
+knock yourself out programming the ROMs.  Once you've looked at the datapath
+and come to your senses, come back here for the full explanation of what's going
+on.</p>
+
+<p>On the right is a shrunk-down version of the entire datapath.  The red lines
+mark the stages of the pipeline.  You'll notice that each red line goes through a
+bunch of registers.  Those registers mark the boundaries of the stage.  If you look
+closely, you might be able to spot some familiar items from Lab 2.  Unfortunately,
+pipelining the BETA requires the addition of a whole lot of extra circuitry.<p>
+
+<p>Below, we'll go over each of the stages in detail, one at a time.<p>
+
+<p>The other thing you might notice about the datapath is that there are a <i>lot</i>
+of control ROMs lying around.  Why did we break up the control into a bunch of ROMs,
+instead of just having one big rom?</p>
+
+<p>There are almost 40 bits of input information that we need in the control ROM to
+handle all of the logic.  If we were to make a real ROM table out of this, the table
+would need 2<sup>40</sup> lines of information.  That's about 1 trillion lines.</p>
+
+<p>Fortunately for us, there is a ton of redundancy in that table.  We can take just a few
+input bits to produce an intermediate value in one ROM.  Another ROM can take that
+intermediate value and a few more input bits to compute some more values, and
+so on.  In the BETA datapath at right, there are seven ROMs, none of which take more
+than 12 bits of input (4096 lines).  Ah, abstraction!</p>
+
+<br clear=all>
+
+<h2><font face="Arial,Helvetica,Sans-serif">The stages</font></h2>
+
+<p>Each of the pictures below starts with one set of registers, shows the logic of one
+stage, and ends with another set of registers.  The names of the
+<font color=e00000>control ROMs</font> have been highlighted in
+<font color=e00000>red</font>, the <font color=008000>switches</font> are
+indicated in <font color=008000>green</font>, and the <font color=6000d0>input
+bits</font> to the control ROMs are shown in <font color=6000d0>purple</font>.</p>
+
+<h3>Stage 0: Instruction Fetch</h3>
+
+<p>This stage reads the instruction from the instruction memory, and does as much
+interpretation of the instruction as it can -- we want as much information as we can
+get as soon as possible.</p>
+
+<p><img src="pset_05_html_files/stage0.gif" border=2 width="707" height="161"></p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s0en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction in this stage?</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">reset</font></td> 
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">pc is 0, means user just reset</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">halt</font></td> 
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction word is 0: HALT</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">op0</font></td> 
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode from instruction word</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">jumpfetch</font></td> 
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode is BRZ or BRNZ</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">jmpop</font></td> 
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode is JMP</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>At the very top is the <b>pcsel</b> mux.  This mux selects the source of the new PC:
+PC+1+constant for a branch, a register for a jump, some trap address for a trap,
+or PC+1.  You folks were all over this problem in Lab2, so we've already coded up
+the <b>pcselrom</b> shown here to pick the correct <b>pcsel</b> for you.  Aren't we nice?</p>
+
+<p>There are a bunch of things we can tell from the instruction word without looking
+at anything else.  These are listed in the table on the right.</p>
+
+<p>The register and switches on the far left are something new.  The <b>pcen</b> switch
+enables the pc register, and also is the data input to the first register.  Thus the
+output of the register, <b>s0en</b>, records whether we latched something in the
+instruction fetch stage.  In other words, when <b>s0en</b> is true, there is an instruction
+being processed in this stage.  This technique appears in every stage.  Making this work
+is your first assignment in part 1 of this lab.</p>
+<br clear=all>
+
+<h3>Stage 1: Register File</h3>
+
+This stage looks up the values for Ra and Rb (and possibly Rc) in the register file, and
+prepares the inputs for the ALU stage.
+
+<p><img src="pset_05_html_files/stage1.gif" border=2 width="707" height="274"></p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s1en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction in this stage?</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">holdbit</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">hazard in the pipe!</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">aselbit</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is in use (part 3)</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bselbit</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb is in use (part 3)</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">abypassed</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">bypassing for Ra (part 4)</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bbypassed</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">bypassing for Rb (part 4)</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">zero</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is zero</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">op1</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode from instruction word</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">ais31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is R31 (part 3)</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bis31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb is R31 (part 3)</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>There is a bit more going on in this stage than you're probably used to.  The 
+<b>asel</b> and <b>bsel</b> muxes, which should be familiar, are each preceeded by a
+bypass mux.  You will use these muxes in part 4 of the lab.  Don't worry about them
+until then.</p>
+
+<p>There also appears to be an extra adder in the middle of this stage.  It's adding the
+constant to the PC+1, and feeding the result back to the pcsel mux in Stage 0.  This line
+gets used during a BRZ or BRNZ instruction.  As part of the lab checkout, you'll have to
+answer the following questions about this adder:
+<ul>
+<li> The adder is missing in the unpipelined BETA.  Where was the functionality in the
+unpipelined beta to add the PC+1 to the constant?
+<li> Why didn't we just leave well enough alone?  In other words, what benefit can we
+get by adding this extra hardware?
+<li> If it's so good having this adder in the Register Fetch stage, why didn't we put it
+in the Instruction Fetch stage?  (There are two reasons for this -- you'll need both for
+the checkout.)
+</ul>
+Some of the answers may not be obvious right away, but should become clearer as you
+do the lab.
+<br clear=all>
+
+<h3>Stage 2: ALU</h3>
+
+<p>This stage should be old hat by now</p>
+
+<p><img src="pset_05_html_files/stage2.gif" border=2 width="707" height="183"></p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s2en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction in this stage?</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">aludata</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">result is calculated in this stage<br>
+i.e. this is an ALU opcode</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">ops2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode from instruction word</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination matches Rb in Stage 1</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>This stage is pretty boring.  In fact, the <b>alurom</b> is something you did back in
+Lab 2, so we've written it for you.  (All right!)</p>
+
+<p>The two XOR gates on the far right are used in detecting hazards (which you'll worry
+about in Part 2 of the lab). <b>rfa2</b> is true when the destination register being
+computed in this stage matches the Ra being looked up in the Register File stage.
+<b>rfb2</b> tests for the similar case on Rb.</p>
+<br clear=all>
+
+<h3>Stage 3: Memory / Write back</h3>
+
+<p>This stage performs memory reads (LD / LDR) and also performs memory and register
+file writes.  Also included in this stage is the special I/O gizmo box we hid from you
+on Lab 2.  The gizmo box acts just like a memory, but it is selected <i>instead of</i>
+the memory when the address is a small negative number (when bit 30 of the address is set --
+see <a href="pset_05_html_files/gizmomem.html">an explanation</a> of why we chose bit 30, if you're
+interested).</p>
+
+<p><img src="pset_05_html_files/stage3.gif" border=2 width="707" height="235"></p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s3en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction in this stage?</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">ops3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode from instruction word</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">gizmoref</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">read/write address for gizmos</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">regwrite</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">register file write is enabled</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination matches Rb in Stage 1</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>It may look at first glance like this stage doesn't have a set of registers at its end.
+Think again!  The registers are actually the write ports of the memory and the register
+file.  In fact, we've called the ROM for this stage <b>s3clken</b> which seems really
+cryptic, until you realize that its main purpose is to enable the write clock on the
+appropriate destination box in this stage.</p>
+
+<p>Once again, you've done all of this stuff in Lab 2, so we've filled in <b>s3clken</b>
+for you.  (Phew!)
+<br clear=all>
+
+<h2><font face="Arial,Helvetica,Sans-serif">The Nitty Gritty (Doing the Lab)</font></h2>
+
+<table border=5 cellpadding=4 bgcolor=ffffff bordercolorlight=a0a0ff
+bordercolordark=6060a0 align=left>
+<tr><td>
+<APPLET CODEBASE="http://www.ai.mit.edu/courses/6.004/Spr99/betasim/"
+	CODE="Betasim.class" height=280 width=276>
+    <PARAM NAME="SOURCE" VALUE="Lab5start">
+</APPLET>
+</td></tr></table>
+<table border=0 cellpadding=4>
+<tr><td>
+<hr>
+<h1><font face="Ariel,Helvetica">Betasim on the Web</font></h1>
+<hr>
+<p>Enter your name and password in the appropriate spaces, then click the
+"<font face="Ariel,Chicago,Helvetica" size=-1>Log in</font>" button.</p>
+
+<p>(If you don't have an account, you can use the name "guest" with
+password "guest", but you won't be able to save any changes.)</p>
+
+<p>If this is your first time logging in, you'll want to set up your own
+password, instead of the one we gave you.  Use the
+<a href=http://www.ai.mit.edu/courses/6.004/Spr99/betasim/admin1.html>administration page</a> to change your
+password.  (Internet Explorer only for now...)</p>
+</td></tr></table>
+
+<br clear=all>
+
+<h3>Part 1 -- The Pipelined BETA, one instruction at a time.</h3>
+
+<p>Part 1 is just for practice:  you only need to edit one ROM, and the resulting
+pipeline isn't all that smart, but it will help you understand a bit better what's
+going on.</p>
+
+<p>To make the pipelined BETA work (really stupidly), we'll force the pipeline to stall
+until each instruction has made it individually through the entire pipeline.  You should
+be gasping in disgust right now, but trust us on this, you don't want to go straight to
+Part 2.</p>
+
+<p>Log into Betasim with lab 5 selected (it should be the default if you use this page
+to log in).  Before you do anything else, choose "Save as" from the file menu and rename
+the path file "Lab5p1.path".</p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for stageen</b></font></td></tr>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s0en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 0</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s1en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s2en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 2</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">halt</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">the instruction word is HALT</font></td></tr>
+</table></td></tr>
+</table>
+
+
+<p>To make this thing work, you'll need to edit the <b>stageen</b> ROM.  Double-click
+on the <b>stageen</b> ROM to open the ROM edit window.  You'll need to write expressions
+for the following switches:</p>
+<blockquote>
+<dl>
+<dt><b>pcen</b></dt>
+<dd>Enables the PC register, and starts a new instruction flowing through the pipe.</dd>
+<!--holdbit==0 && (s0en || s1en || s2en)==0-->
+<dt><b>stage1en</b></dt>
+<dd>Enables the Stage 1 (Register file) registers</dd>
+<dt><b>stage2en</b></dt>
+<dd>Enables the Stage 2 (ALU) registers</dd>
+<dt><b>stage3en</b></dt>
+<dd>Enables the Stage 3 (Mem/WB) registers</dd>
+<dt><b>go</b></dt>
+<dd>Enables the registers that keep track of which instruction is in which stage.
+Leave this as 1 for now.  You'll use this in Part 2.</dd>
+</dl>
+</blockquote>
+
+<p>The expression for <b>pcen</b> should be pretty straightforward.  You don't want to
+enable the PC until the current instruction has made it to the Mem/WB stage.  You
+should use the <b>s0en</b>, <b>s1en</b> and <b>s2en</b> inputs to enforce this.</p>
+
+<p>When should the Stage 1 registers be enabled (<b>stage1en</b>)? They should be
+enabled when there is some data ready to be latched, of course.  Look at the schematic
+and figure it out... it's pretty easy.  <b>stage2en</b> and <b>stage3en</b> are frightfully
+similar.</p>
+
+<p>If you've followed the directions exactly, you might notice that your processor now
+executes programs correctly, but doesn't seem to want to halt.  Fix your <b>pcen</b> 
+definition to account for halting.</p>
+
+<p><font size=-1><b>TIP:</b></font> Sometimes, it's easier to work in negative logic.
+Instead of writing an expression for <b>pcen</b>, it might be easier to write an expression
+for something like <b>pcdisable</b>, and then write <tt>pcen= (pcdisable==0)</tt> (There
+is no unary ! operator in Betasim.)  Go ahead and do it.  The Betasim ROM parser regards
+any name that doesn't match a switch name as a local variable.</p>
+
+<p>When you're done, SAVE YOUR WORK!</p>
+
+<p>The default code runs the fractal code from Lab 1 at a depth of 4.  You can double-click
+the gizmo box (next to the memory in the Mem/WB stage) to open the terminal window and
+watch the BETA draw the fractal.  In the control panel (under the "Clock" menu), hit the
+reset button twice.  Click the grey words "Click here to enter an expression", type "clock",
+and hit return.  The value is the number of clock ticks that have elapsed since you hit
+the reset button.  Hit "Go" and "go fast".  When the program halts, write down the number
+of clock ticks elapsed (you may have to click the value to change it from hexidecimal to
+decimal).  This is your benchmark number.
+
+<h3>Part 2 -- Naive pipelining</h3>
+
+<p><font color=600000>This is the tricky part.  Think carefully, and be patient while
+you are debugging.</font></p>
+
+<p>Before you start this section, load your work from Part 1, choose "Save As..." from the
+"File" menu, and save the path as "Lab5p2.path".</p>
+
+<p>In Part 1, you created a working pipelined BETA, but a pretty stupid one.  It was as if
+you were doing your laundry, and waited until you took your first batch of clothes out
+of the dryer before you put your second batch into the washing machine.</p>
+
+<p>We'd like to be able to start the execution of a second instruction while the first one
+is still in the pipeline.  We can do this, but there are some dangerous situations we have
+to be careful about.</p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for holdrom</b></font></td></tr>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s2en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 2</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s3en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 3</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 2 matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 2 matches Rb in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 3 matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 3 matches Rb in Stage 1</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>The first problem is pipeline hazards.  If Instruction B attempts to use the result of
+a previous Instruction A <i>before</i> Instruction A has written its result
+into the register file, then Instruction B will execute with the wrong value for its argument.
+We need to be able to <i>hold</i> an instruction at the Register File stage while
+instructions later in the pipe continue to execute.</p>
+
+<p>The first step is to figure out when we need to hold the pipe.  Double click the
+<b>holdrom</b> ROM, and write a new expression for <b>hold</b>.  You should only
+need to use <b>s2en</b>, <b>s3en</b>, <b>rfa2</b>, <b>rfb2</b>, <b>rfa3</b>
+and <b>rfb3</b>.  Think carefully about what each of these mean.</p>
+<br clear=all>
+
+<p>Now we need to rewrite <b>stageen</b>.  <b>pcen</b> at this point should be ridiculously
+easy.  Don't worry.  It'll get more complicated in a few paragraphs.</p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for stageen</b></font></td></tr>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s0en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 0</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s1en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s2en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 2</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">halt</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">the instruction word is HALT</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">holdbit</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is a hazard in the pipe</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">jmpop</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">the instruction word is JMP</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">jumpfetch</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">the instruction word is BRZ or BRNZ</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>What does it really mean to hold the pipe?  "<i>We need to be able to hold an
+instruction at the Register File stage while instructions later in the pipe continue
+to execute.</i>"  What does this involve?</p>
+
+<p>Obviously, we can't update the PC.  We've taken care of that with <b>pcen</b>.  But
+if there's an instruction in the RF stage (Stage 1), we can't let it go on to Stage 2 until
+the hold is released.  Therefore, we can't enable the registers for Stage 2.  But we can't
+let go of the instruction waiting in Stage 1, so we can't enable the Stage 1 registers
+either.  Think about this carefully, and then rewrite the expressions for <b>stage1en</b>
+and <b>stage2en</b>.</p>
+
+<p>If you run the simulator now, you'll get a nasty hold-related bug that's really tough
+to track down.  The reason is the following: we've just disabled the registers for Stage 1
+by setting <b>stage1en</b> to 0.  But we still need to remember that there's an
+instruction waiting in Stage 1 (indicated by <b>s1en</b>).  But if we let the register
+that holds <b>s1en</b> clock, we'll lose that knowledge.  Look carefully at what <b>go</b>
+does, and write the expression for <b>go</b>.</p>
+
+<p>Okay, here's where <b>pcen</b> gets complicated.  There is one more kind of hazard
+that can give you problems: Jumps and Branches.  If we have fetched a JMP instruction
+(indicated by <b>jmpop</b>), or a BRZ or BRNZ instruction (indicated by <b>jumpfetch</b>),
+then we can't know where the next instruction is coming from until the JMP, BRZ, or
+BRNZ instruction makes it into the Register File stage (Stage 1).  Think <i>very hard</i>
+(this is tricky), and rewrite <b>pcen</b> to account for branches and jumps.</p>
+
+<p>SAVE YOUR WORK!</p>
+
+<p>If everything checks out, run the fractal code again, and record the number of clock ticks.
+Nice, no?</p>
+
+<h3>Part 3 -- Smarter scheduling</h3>
+
+<p>If you were watching the pipeline carefully in Part 2, you may have noticed that it was
+being stupid about some pipeline conflicts.  In particular, register 31 is always zero, so
+there can't be a hazard that depends on r31.</p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for rfbits</b></font></td></tr>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">op1</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode from instruction word in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">ais31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is 31 in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bis31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb is 31 in Stage 1</font></td></tr>
+</table></td></tr>
+
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for holdrom</b></font></td></tr>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s2en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 2</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">s3en</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">there is an instruction in Stage 3</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 2 matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 2 matches Rb in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 3 matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 3 matches Rb in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">aselbit</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is required from RF</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bselbit</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb is required from RF</font></td></tr>
+</table></td></tr>
+</table>
+
+<p>Double click the <b>rfbits</b> ROM.  You'll be rewriting the expressions for <b>useA</b> and
+<b>useB</b>.  <b>useA</b> should be true only when the value coming out of the A side of the
+register file is being used in the computation.  Obviously, the A side is only in use when
+<b>ais31</b>==0 (Ra is not 31).  The A side is in use when <b>asel</b> is 1 (selecting Ra instead
+of PC+1)... but it is also in use in other cases.  Figure out what they are and rewrite <b>useA</b>.
+Similarly, the B side is in use when <b>bsel</b> is 0 (Rb instead of the constant), but there are
+other cases... Rewrite <b>useB</b>.</p>
+
+<p>Note that the <b>useA</b> and <b>useB</b> switches go directly into the <b>aselbit</b> and
+<b>bselbit</b> bits.  The <b>holdrom</b> can use these bits to be more careful about when
+to <b>hold</b> the pipeline.  Rewrite <b>hold</b> in the <b>holdrom</b>.
+
+<p>SAVE YOUR WORK!</p>
+
+<p>Once again, run the fractal code and record the number of clock ticks.</p>
+<br clear=all>
+
+<h3>Part 4 -- Bypassing</h3>
+
+<p>Before you start this section, load your work from Part 3, choose "Save As..." from the
+"File" menu, and save the path as "Lab5p4.path".</p>
+
+<table border=1 bgcolor=e0f0ff align=right cellpadding=3>
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for bypass</b></font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">aludata</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction in ALU (Stage 2) will produce a result</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">regwrite</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">instruction in Mem/WB (Stage 3) will write result to RF</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 2 matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb2</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 2 matches Rb in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfa3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage3 matches Ra in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">rfb3</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">destination in Stage 3 matches Rb in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">ais31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is 31 in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bis31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb is 31 in Stage 1</font></td></tr>
+
+</table></td></tr>
+
+<tr><td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan=3 align=center><font size=-1 face="Arial,Helvetica,Sans-serif"><b>Input bits for rfbits</b></font></td></tr>
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">op1</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">opcode from instruction word in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">ais31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra is 31 in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bis31</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb is 31 in Stage 1</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">abypassed</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Ra came from bypassing, not RF</font></td></tr>
+
+<tr><td align=right><font size=-1 face="Arial,Helvetica,Sans-serif">bbypassed</font></td>
+<td>&nbsp;&nbsp;</td>
+<td><font size=-1 face="Arial,Helvetica,Sans-serif">Rb came from bypassing, not RF</font></td></tr>
+</table></td></tr>
+</table>
+
+<P>Now we'll implement our super-performance feature, bypassing. While
+this isn't all that complicated, it's generally costly in terms of area
+(think of all the wires), so bypassing didn't arrive untill second generation
+RISCs.</P>
+
+<p>By this point, you're all experts at this stuff, so we aren't going to give you any help on
+writing <b>bypassA</b> and <b>bypassB</b> in the <b>bypass</b> ROM.  Just think hard, and
+be careful.</p>
+
+<p>Once you've written <b>bypassA</b> and <b>bypassB</b>, you can take advantage of the
+bypassing to make your <b>useA</b> and <b>useB</b> bits even smarter.  Rewrite <b>useA</b>
+and <b>useB</b> in the <b>rfbits</b> ROM to include the new information from <b>abypassed</b>
+and <b>bbypassed</b>.
+
+<p>SAVE YOUR WORK!</p>
+
+<p>Run the fractal code yet again.  If you turn off the "go fast" option, you can actually see
+how often the bypassing wires are in use (they turn red when the bypassing is used).  Record
+the number of clock ticks, and prepare to be amazed.</p>
+<br clear=all>
+
+<h3>Part 5 -- Assessing the gain</h3>
+
+<P>So how good is this pipelining idea? Let's examine some real numbers.
+&nbsp;We have four stages: IF, RF, ALU and MEM/WB. </P>
+
+<P>We have the following times for each pipeline stage:</P>
+
+<UL>
+<LI>IF -- 4ns</LI>
+
+<LI>RF -- 4ns</LI>
+
+<LI>ALU -- 2ns</LI>
+
+<LI>MEM/WB -- 5ns</LI>
+</UL>
+
+<P>Assuming the added delay of the pipeline registers and extra control
+logic is negligible, how fast could we clock the pipielined BETA? How fast
+could we clock it without pipelining, assuming we used the same hardware
+for each stage? What's the latency of an operation for the pipelined and
+unpipelined BETAs?</P>
+
+<P>Grab that scrap of paper on which you jotted the clock times for the
+fractal program running on your BETA for parts 1, 2, 3, and 4.  Since the
+BETA for part 1 took exactly 4 cycles per instruction, you can divide the
+number for part 4 to figure out how many clock ticks it would have taken
+an unpipelined BETA to run the code.  Or, you can rerun Betasim with the
+betapath option from Lab 1 and calculate the time directly.</P>
+
+<P>Now, compute the time it would have taken an unpipelined BETA and each
+of your four BETAs to execute our sample code. What is the speedup of the
+fully bypassed pipelined BETA over the unpipelined vanilla BETA?</P>
+
+<p>Cool, no?</p>
+
+<P><B><FONT COLOR="#FF0000">A note on working with Betasim:&nbsp; Save
+early, and save often!&nbsp; If the program crashes and you lose your work,
+we can't recover it. &nbsp; To save code that you type in the code window,
+use the File&gt;Save menu command in the code window.&nbsp; To save your
+Beta schematic and ROM code, use the File&gt;Save menu command in the schematic
+window.&nbsp; Saving your code does NOT save the schematic; saving the
+schematic does NOT save any changes you've made to the code.</FONT></B></P>
+
+</BODY>
+</HTML>

@@ -1,0 +1,64 @@
+README for Space Monkeys game
+
+# Monkeys software Copyright 2001 by Kevin B. Smith
+#     Released under GPL 2.0
+# Original Space Monkeys game rules (C) 1999 Stephen Glenn,
+#     used by permission of the author
+
+This game is based on rules created by Stephen Glenn, which can 
+be found at: http://pages.about.com/pbemesis/spacemonkeys.html
+
+At this time, Monkeys differs from the original rules as follows:
+- The computer automatically places all planets
+- Players do not start with a ship (you must build it yourself)
+- No technologies are available
+- There is no limit to the number of ships of each type that a 
+  player can have at the same time
+- Planet values are not revealed until the planet has been 
+  successfully colonized
+
+Planet value is indicated by the shape of the planet. A full 
+circle is a home planet, worth 5 victory points. A 3/4 circle 
+is worth 3, semi-circle is worth 2, and a quarter-circle is 
+worth 1.
+
+Planet ownership is indicated by a horizontal color band. Ships 
+are shown as a vertical bar, in the color of their owner. For 
+more information on a planet or ship, do a left mouse click on 
+the square they occupy.
+
+The human player is always red, and the computer plays the three 
+other colors. Each turn, you must select a command and press the 
+OK button in the bottom-right corner of the screen. If you 
+attempt an illegal move, nothing will happen.
+
+The Build command requires you to choose a ship type. Once you 
+have started building a ship of a certain type, you cannot change 
+types until that ship has been completed and launched.
+
+The Launch and Defense commands require you to select one of the 
+planets that you own. To select a planet, first highlight it by 
+left-clicking the mouse on that planet. Then press the "Select" 
+button in the planet section of the command window.
+
+The Colonize, Invade, Move, and Attack commands require you to 
+select one of your ships. The Move and Attack commands also 
+require you to specify a direction.
+
+To select a ship, first highlight it by left-clicking the mouse 
+on that ship. Then press the "Select" button in the ship section 
+of the command window.
+
+If you have multiple ships, be careful to select the correct 
+ship before you press OK. Particularly after a new ship is 
+launched, it is easy to move the wrong ship.
+
+The computer will automatically detect when a player has lost or 
+won. However, it will not automatically close the game window 
+or bring up a dialog. It will print a message on the console 
+that was used to launch the game. Illegal moves are also shown 
+on that console.
+
+If you have feedback, please email your comments to:
+monkeys@qualitycode.com
+

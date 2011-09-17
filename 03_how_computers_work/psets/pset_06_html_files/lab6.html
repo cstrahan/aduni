@@ -1,0 +1,776 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Jason Woolever">
+   <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+   <title>Lab 6 - Virtual Memory Handler</title>
+</head>
+<body>
+
+<h1>
+Lab 6: Controlling a VM system</h1>
+In this lab, you are responsible for writing a virtual memory controller.
+You will be designing the interrupt handler for page faults. This includes
+maintaining a two level hierarchical page table and swapping pages into
+and out of memory. The end goal is to use your code to control an actual
+system using the FPGA kits. To ease debugging, however, we provide you
+with beta code that simulates a machine which is described in detail later.
+For parts I-III, you will be using Betasim to develop and test your handler.
+Once your code is working, in part IV you will use a FPGA kit to execute
+your code and see the effects of page faults.
+<h2>
+</h2>
+<table border=5 cellpadding=4 bgcolor=ffffff bordercolorlight=a0a0ff
+bordercolordark=6060a0 align=left>
+<tr><td>
+<APPLET CODEBASE="http://www.ai.mit.edu/courses/6.004/Spr99/betasim/"
+	CODE="Betasim.class" height=280 width=276>
+    <PARAM NAME="SOURCE" VALUE="betapath">
+</APPLET>
+</td></tr></table>
+<table border=0 cellpadding=4>
+<tr><td>
+<hr>
+<h1><font face="Ariel,Helvetica">Betasim on the Web</font></h1>
+<hr>
+<p>Enter your name and password in the appropriate spaces, then click the
+"<font face="Ariel,Chicago,Helvetica" size=-1>Log in</font>" button.</p>
+
+<p>(If you don't have an account, you can use the name "guest" with
+password "guest", but you won't be able to save any changes.)</p>
+
+<p>If this is your first time logging in, you'll want to set up your own
+password, instead of the one we gave you.  Use the
+<a href=http://www.ai.mit.edu/courses/6.004/Spr99/betasim/admin1.html>administration page</a> to change your
+password.  (Internet Explorer only for now...)</p>
+</td></tr></table>
+
+<br clear=all>
+
+Part I - Creating the page table:
+The target machine has 1K RAM and a 4K disk. Each is segmented into 16-word
+pages. To use the entire disk as a swap space, at least ten bits are required
+for addressing. The goal of this exercise is to create a two-level page
+table with 12-bit addressing. The easiest way to do this is to resolve
+four bits at a time, using the four least significant bits as the index
+into the page. A TLB is provided to you which maintains dirty and valid
+bits for each page in memory, so you don't have to worry about them. However,
+you will probably want to use resident bits or something equivalent.
+<p>Before proceeding with the implementation, take a minute to create a
+diagram of how you would perform an address translation, with reference
+to the data in the tables. Once you know how to do this, the next step
+is to add this design to <a href="vmtemplate.uasm">vmtemplate.uasm</a>.
+Load the file in Betasim and browse through the beginning of the file.
+At the top of the file are macro definitions corresponding to the virtual
+versions of Beta instructions. Next are the initial contents of memory.
+You will be adding your fault hander code here later, part of which is
+written for you. Memory page 15 is designated as the level one lookup table.
+If you decide to move this to another page, it is essential that you physically
+move the table to the new page slot, since the page labels must point to
+increasing memory addresses for the simulator to work properly.
+<p>Immediately following this is the disk.&nbsp; Put second level address
+translation tables here making sure that each page consists of exactly
+16 words and is not offset. You should create a page for the kernel code
+and pages for the remainder of the disk. There is a program and data preloaded
+that performs a heapsort on 32 numbers. You should ensure that the program
+has a contiguous address space. Once you have finished this, go back and
+update the top-level translation table to point to the second level tables.
+Keep your address translation diagram handy...you will need it for the
+next part. There is no checkoff for this part.
+<h2>
+Part II - Writing the fault handler:</h2>
+The remainder of vmtemplate.uasm is code provided to you to emulate the
+effects of branching, jumping, loading, and storing using virtual addresses.
+If you wish, you may look through the code, but you should not modify any
+of it. Each of the new opcodes are 0x20 less than the original with a 'V'
+appended to the name (LDV, JMPV, ...).&nbsp; LDV and STV also provide a
+few extra functions that provide disk communication using negative I/O
+addresses.
+<p>By performing a STV instruction to address -1, a page is copied from
+disk to memory. The least significant four bits refer to the target memory
+page. The next eight refer to the physical disk page (only six are used,
+however, since you only have 4K). Finally, the next 12 refer to the virtual
+page number of the selected page. This is loaded into an internal TLB that
+compares
+the virtual page number against the address of any memory access to determine
+which physical memory page contains the data. Thus, if you write 0x0000E127
+to location -1, disk page 18 will be copied to memory page 7 and contains
+the data represented by addresses of the form 0x00E?. When the page is
+loaded, the valid bit is set and the dirty bit is cleared.
+<p>Similarly, a STV instruction to address -2 performs a copy from memory
+to disk. The data is segmented in the same fashion, so storing 0x0000E127
+to location -2 would copy the page above back to the disk. When the page
+is saved, the dirty bit is cleared.
+<p>A STV to address -3 clears the valid bit of the page referred to by
+the four least significant bits.
+<br>A STV to address -4 clears the dirty bit of the page referred to by
+the four least significant bits.
+<p>A LDV of address -0xP1 returns the valid bit of page P.
+<br>A LDV of address <B>-0xP2</B> returns the dirty bit of page P.
+<B>CORRECTION!</B>
+<p>Now you are equipped to begin writing the page fault handler. Recall
+that an interrupt causes PC+1 to be stored in XP and the PC to be set to
+2. It is important that you begin your code there. Remember that the address
+in XP will be a virtual address, not a physical one. If you want to access
+memory at that location, you must use the virtual instructions...LD will
+return garbage. Beware, the reason the interrupt was generated in the first
+place may be because XP-1 points to a page on disk, so performing a LDV
+would fail.
+<p>Thus, the first thing needs to be done is determining if the interrupt
+was caused by a LDV or STV to a page not in memory, or if a BRV or JMPV
+instruction caused the PC to move to a page not in memory. If XP-1 is not
+in memory, the PC was on a page not in memory and must be loaded. If it
+is, the target address for the LD/LDR/ST instruction needs to be calculated,
+and the corresponding page loaded. Since this is not the focus of the assignment,
+we provide you with code to do this.
+<p>This code will provide a "savedxp" of a virtual address that needs to
+be translated. Fill in the function resolvexp to dereference this address
+to a physical location. If it is in memory, return to the provided code.
+If it is not, load the page and branch to RestoreState. Call loadpage whenever
+you need to load a page from disk.
+<p>Now you must write loadpage to complete the handler. First, choose some
+page in memory to replace, and copy the new page from disk to memory. Remember
+that if the replaced page is dirty, it must be written back to disk first.
+You should ensure that it is returned to the same location on disk from
+which it was read. The easiest page replacement strategy to use is FIFO.
+You are not expected to implement anything fancier than this.
+<p>To run your code, update any affected page tables, change the first
+line to jump to the appropriate (virtual) address, and provide the virtual
+address of the start of the data to the heapsort program. These are initially
+marked as errors, marked in yellow.
+<p>It may be helpful to take the basic translation diagram you created
+in part I and expand it with the different cases that can occur (i.e. the
+second level translation page is not in memory, etc.) Break things down
+into smaller steps and do each individually. This part can become very
+complicated and difficult to debug if you take on everything at once. Once
+everything is working, running your program should cause two immediate
+page faults: one to load the appropriate second level page and one for
+the first page of code. If the simulator doesn't branch to the first page
+properly, make sure you provide the appropriate virtual address tag to
+the TLB as described in STV -1.
+<p>Once everything is working, try running the program. Branching to main
+should immediately generate two page faults, to load the first page of
+the program. If everything works properly, pages will be swapped in and
+out of memory as necessary. Add a HALT() after the first section of the
+heapsort (update the virtual pointer to data if necessary). The data should
+be rearranged as:
+<p>3F 3C 3D 35 37 30 3A 0A 1C 1E 2B 20 1B 1F 34 08 03 11 16 00 09 12 19
+10 13 07 0F 15 04 2D 28 05
+<p>or
+<table COLS=16 WIDTH="160" >
+<tr>
+<td COLSPAN="32">
+<center>3F</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="16">
+<center>3C</center>
+</td>
+
+<td COLSPAN="16">
+<center>3D</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="8">
+<center>35</center>
+</td>
+
+<td COLSPAN="8">
+<center>37</center>
+</td>
+
+<td COLSPAN="8">
+<center>30</center>
+</td>
+
+<td COLSPAN="8">
+<center>3A</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="4">
+<center>0A</center>
+</td>
+
+<td COLSPAN="4">
+<center>1C</center>
+</td>
+
+<td COLSPAN="4">
+<center>1E</center>
+</td>
+
+<td COLSPAN="4">
+<center>2B</center>
+</td>
+
+<td COLSPAN="4">
+<center>20</center>
+</td>
+
+<td COLSPAN="4">
+<center>1B</center>
+</td>
+
+<td COLSPAN="4">
+<center>1F</center>
+</td>
+
+<td COLSPAN="4">
+<center>34</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<center>08</center>
+</td>
+
+<td COLSPAN="2">
+<center>03</center>
+</td>
+
+<td COLSPAN="2">
+<center>11</center>
+</td>
+
+<td COLSPAN="2">
+<center>16</center>
+</td>
+
+<td COLSPAN="2">
+<center>00</center>
+</td>
+
+<td COLSPAN="2">
+<center>09</center>
+</td>
+
+<td COLSPAN="2">
+<center>12</center>
+</td>
+
+<td COLSPAN="2">
+<center>19</center>
+</td>
+
+<td COLSPAN="2">
+<center>10</center>
+</td>
+
+<td COLSPAN="2">
+<center>13</center>
+</td>
+
+<td COLSPAN="2">
+<center>07</center>
+</td>
+
+<td COLSPAN="2">
+<center>0F</center>
+</td>
+
+<td COLSPAN="2">
+<center>15</center>
+</td>
+
+<td COLSPAN="2">
+<center>04</center>
+</td>
+
+<td COLSPAN="2">
+<center>2D</center>
+</td>
+
+<td COLSPAN="2">
+<center>28</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>05&nbsp;</center>
+</td>
+
+<td COLSPAN="31"></td>
+</tr>
+</table>
+
+<p>If this works properly, remove the HALT() and attempt the full sort.
+Be patient it...it may take a minute in fast mode. Next change elements
+to 64 and try the larger sort.&nbsp; Again, the constructed heap should
+appear as follows:
+<br>&nbsp;
+<table COLS=32 WIDTH="160" >
+<tr>
+<td COLSPAN="64">
+<center>3F</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="32">
+<center>3E</center>
+</td>
+
+<td COLSPAN="32">
+<center>3D</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="16">
+<center>35</center>
+</td>
+
+<td COLSPAN="16">
+<center>3C</center>
+</td>
+
+<td COLSPAN="16">
+<center>3B</center>
+</td>
+
+<td COLSPAN="16">
+<center>3A</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="8">
+<center>33</center>
+</td>
+
+<td COLSPAN="8">
+<center>2C</center>
+</td>
+
+<td COLSPAN="8">
+<center>37</center>
+</td>
+
+<td COLSPAN="8">
+<center>38</center>
+</td>
+
+<td COLSPAN="8">
+<center>30</center>
+</td>
+
+<td COLSPAN="8">
+<center>32</center>
+</td>
+
+<td COLSPAN="8">
+<center>39</center>
+</td>
+
+<td COLSPAN="8">
+<center>34</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="4">
+<center>29</center>
+</td>
+
+<td COLSPAN="4">
+<center>1D</center>
+</td>
+
+<td COLSPAN="4">
+<center>1C</center>
+</td>
+
+<td COLSPAN="4">
+<center>17</center>
+</td>
+
+<td COLSPAN="4">
+<center>26</center>
+</td>
+
+<td COLSPAN="4">
+<center>24</center>
+</td>
+
+<td COLSPAN="4">
+<center>25</center>
+</td>
+
+<td COLSPAN="4">
+<center>2B</center>
+</td>
+
+<td COLSPAN="4">
+<center>2F</center>
+</td>
+
+<td COLSPAN="4">
+<center>2E</center>
+</td>
+
+<td COLSPAN="4">
+<center>1B</center>
+</td>
+
+<td COLSPAN="4">
+<center>31</center>
+</td>
+
+<td COLSPAN="4">
+<center>22</center>
+</td>
+
+<td COLSPAN="4">
+<center>36</center>
+</td>
+
+<td COLSPAN="4">
+<center>2D</center>
+</td>
+
+<td COLSPAN="4">
+<center>28</center>
+</td>
+</tr>
+
+<tr>
+<td COLSPAN="2">
+<center>0A</center>
+</td>
+
+<td COLSPAN="2">
+<center>08</center>
+</td>
+
+<td COLSPAN="2">
+<center>03</center>
+</td>
+
+<td COLSPAN="2">
+<center>0B</center>
+</td>
+
+<td COLSPAN="2">
+<center>0E</center>
+</td>
+
+<td COLSPAN="2">
+<center>11</center>
+</td>
+
+<td COLSPAN="2">
+<center>16</center>
+</td>
+
+<td COLSPAN="2">
+<center>14</center>
+</td>
+
+<td COLSPAN="2">
+<center>00</center>
+</td>
+
+<td COLSPAN="2">
+<center>1E</center>
+</td>
+
+<td COLSPAN="2">
+<center>09</center>
+</td>
+
+<td COLSPAN="2">
+<center>1A</center>
+</td>
+
+<td COLSPAN="2">
+<center>12</center>
+</td>
+
+<td COLSPAN="2">
+<center>21</center>
+</td>
+
+<td COLSPAN="2">
+<center>0C</center>
+</td>
+
+<td COLSPAN="2">
+<center>19</center>
+</td>
+
+<td COLSPAN="2">
+<center>10</center>
+</td>
+
+<td COLSPAN="2">
+<center>20</center>
+</td>
+
+<td COLSPAN="2">
+<center>13</center>
+</td>
+
+<td COLSPAN="2">
+<center>23</center>
+</td>
+
+<td COLSPAN="2">
+<center>07</center>
+</td>
+
+<td COLSPAN="2">
+<center>06</center>
+</td>
+
+<td COLSPAN="2">
+<center>0F</center>
+</td>
+
+<td COLSPAN="2">
+<center>2A</center>
+</td>
+
+<td COLSPAN="2">
+<center>15</center>
+</td>
+
+<td COLSPAN="2">
+<center>1F</center>
+</td>
+
+<td COLSPAN="2">
+<center>04</center>
+</td>
+
+<td COLSPAN="2">
+<center>02</center>
+</td>
+
+<td COLSPAN="2">
+<center>27</center>
+</td>
+
+<td COLSPAN="2">
+<center>01</center>
+</td>
+
+<td COLSPAN="2">
+<center>18</center>
+</td>
+
+<td COLSPAN="2">
+<center>0D</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>05</center>
+</td>
+
+<td COLSPAN="63">
+<center>.</center>
+</td>
+</tr>
+</table>
+
+<p>Remove the breakpoint and try the entire program.&nbsp; If the data
+is sorted properly, your code works - congratulations! To assist you in
+debugging, you may want to see how <a href="heapsort.uasm">heapsort.uasm</a>
+works.
+<h2>
+Part III - Analysis</h2>
+Once you have everthing working, compare the number of page faults for
+having 3, 4, and 5 swapable pages.&nbsp; If your kernel code and data exceeds
+11 pages, you can cheat by not labelling some of the pages.&nbsp; Also,
+try it for 32 and 64 elements.&nbsp; What trends do you notice?&nbsp; Why?
+<br>&nbsp;
+<table BORDER COLS=5 WIDTH="100%" >
+<tr>
+<td ROWSPAN="2">
+<center>&nbsp;Swapable pages</center>
+</td>
+
+<td COLSPAN="2">
+<center>32 elements</center>
+</td>
+
+<td COLSPAN="2">
+<center>64 elements</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>Read faults</center>
+</td>
+
+<td>
+<center>Write faults</center>
+</td>
+
+<td>
+<center>Read faults</center>
+</td>
+
+<td>
+<center>Write faults</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>3</center>
+</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+<center>4</center>
+</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+<center>5</center>
+</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+</tr>
+</table>
+
+<h2>
+Part IV - Hardware (optional)</h2>
+More information will be posted on this part as it becomes available.
+<h2>
+Appendix - Hints:</h2>
+You should attempt the lab before reading this section. Some of these points
+address subtle issues that will likely just confuse you if you haven't
+thought about details of the implementation. Also, some of the concerns
+addressed may not affect your implementation, so don't be alarmed if something
+doesn't make sense in conjunction with your approach.
+<br>&nbsp;
+<table WIDTH="100%" >
+<tr VALIGN=TOP>
+<td>Q.</td>
+<td>When I check the dirty bit, it returns the dirty bit for the wrong page.
+</td></tr>
+<tr><td>A.</td>
+<td>There has been a correction made regarding the address that LDV takes.
+Use -0xP2 instead of -0xP0. (Thanks to Chris Cheng for catching this)</td></tr>
+<td>Q.</td>
+
+<td>Debugging is taking a long time, how can I speed it up?</td>
+</tr>
+
+<tr>
+<td>A.</td>
+
+<td>Monitor the variable <i>clock</i> in the control panel. If you know
+everything works up to time <i>t</i>, set "go fast" mode and start and
+stop quickly until this value is close to <i>t</i>.</td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>Q.</td>
+
+<td>After adding my kernel code, I only have 3 (or fewer) swappable pages.
+What do I do?</td>
+</tr>
+
+<tr>
+<td>A.</td>
+
+<td>For the software simulator, you may cheat and not give all the kernel
+pages labels. This won't work in hardware, though. You should be able to
+reduce your code size to allow 4 or 5 swappable pages.</td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>Q.</td>
+
+<td>How can loadpage clear the resident bit of a page it swaps out if the
+corresponding page table has been swapped out already?</td>
+</tr>
+
+<tr>
+<td>A.</td>
+
+<td>You can have loadpage call itself or resolvexp recursively or pack
+all the resident bits into eight words you always keep in memory.</td>
+</tr>
+
+<tr>
+<td>Q.</td>
+
+<td>What does it mean to make a second level page for the kernel?</td>
+</tr>
+<tr>
+<td>A.</td>
+<td>The kernel code occupies the lowest part of the address space. Since it
+is up to 16 pages in size, leave all addresses starting with 0x0?? untouched.
+There is no need to create a second level page table for these addresses. If
+you had a copy of the kernel code on disk, you could map 0x000 through 0x0FF
+to that location on disk.  Instead, put main at 0x100 or some higher address.
+If you try to put main at 0x000, things will not work properly.</td></tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+</table>
+
+</body>
+</html>
+
+

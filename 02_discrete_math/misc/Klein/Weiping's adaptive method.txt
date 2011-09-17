@@ -1,0 +1,50 @@
+Subject: Re: A new puzzle
+Date: Thu, 15 Jun 2000 10:54:44 -0500 (CDT)
+From: Weiping Shi <wshi@silo.csci.unt.edu>
+To: Shai Simonson <shai@stonehill.edu>
+
+> > Example (assume all yes answer. no is symmetric)
+> > S0={1,...,8}, S1={9,...,16} ->
+> > S0={1,...,4}, S1={9,...,12}, S2={5,...,8} ->
+> > S0={1,2}, S1={9,10}, S2={5,6}, S3={3,4} ->
+> > S0={1}, S1={9}, S2={5}, S3={3}, S4={2}
+>
+> That is a clever idea.  So if he tells the truth the whole time, the answer is in
+> S0.
+> If he lies at step i, then the "range" is held by the set Si, which eventually
+> holds  the correct value.
+>
+>
+> But I have no idea how to tell WHEN he lies.  Why is that so transparent?
+> Adding the  XOR "Did you lie in question i" is a little hard for me to analyze.
+> Does the addition of this FORCE him to lie at some particular time?  It seems that
+> he can always answer yes, and you still don't at which i, he has lied....
+>
+>
+
+To tell when he lied, I'll have to add another set of questions.
+If he lied at 1,2,3,4 questions, then he can't lie again.
+So two questions can tell us where he lied.
+Did you lie at {1,2,3}?
+        yes(truth) -> {1,2,3}
+        yes(lie) -> {0}
+        no(truth) -> {0,4}
+        no(lie) -> {}
+
+For "yes" answer, since he lied, so he has to tell
+the truth here on.
+Therefore two more questions are sufficient
+to identify {0,1,2,3}.
+For "no" answer, we ask did you lie at {4}?
+        yes(truth) -> {4}
+        yes(lie) -> {0}
+        no(truth) -> {0}
+        no(lie) -> {}
+
+For "no" answer, the puzzle is solved.
+For "yes" answer, one more solves the puzzle.
+
+So adaptive algorithm uses 6 queries if he
+never lies, and 7 if he lies once.
+Non-adaptive algorithm (such as Hamming code)
+always need 7.

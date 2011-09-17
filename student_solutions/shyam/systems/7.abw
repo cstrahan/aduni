@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Date: 9 March 2001</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Use of DNS versus Grapevine for name resolution</c></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">DNS and Grapevine use a dual-store name-resolution system. The authoritative DNS servers and the registration servers of Grapevine provide authoritative name resolution services. Similarly, the caching servers in the DNS system and the inbox caches of the message servers in Grapevine cache recently resolved name queries and increase the performance of the system.</c></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">In Grapevine, the registration servers truly implement a distributed system for name resolution: any registration server can be used for updating registration information and the update is actively propagated by the server where the change was made to other appropriate servers where the information needs to be changed. As a result, changes to the registration database propagate within minutes to all concerned registration servers. This is, however, achieved at a cost. Every registration server has to maintain information about the existence of other registration servers in the network and keep this information updated.</c></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">In DNS there is a single primary or root server where changes to IP addresses can be made; secondary authoritative servers then update themselves by periodically polling the primary server. Thus, the server where the change is made by the administrator is not responsible for actively propagating the update to other authoritative servers. As a result, updates take longer to propagate, often hours to days, on the Internet. This is offset by the fact that none of the servers have to actively propagate any changes and hence do not have to know about the existence of downstream name servers.</c></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">In the scenario of a network administrator entering a wrong IP address, in Grapevine the wrong information is propagated within minutes to all registration servers. This implies that when the administrator corrects the error, the new information as propagated as fast. In addition, when a message server in Grapevine tries to send a message using outdated information from its cache, it receives a message from the destination server to flush its cache. Thus, caches generally will not provided the same outdated information more than once. In the case of DNS, the error and a future correction, will propagate everywhere much more slowly - taking hours to days. The effect on the caching servers will be more erratic since the cached information is flushed on the basis of the TTL parameter. If the administrator sets a long TTL for the IP address, then the caches obtaining that information will server the wrong IP address for a long time and the protocol provides no way of automatically flushing a cache if a client thinks that the IP address being served is wrong. Thus, on the Internet, an administrator's error is likely to persist longer in the system and cause more havoc than in Grapevine.</c></p>
+</section>
+</abiword>

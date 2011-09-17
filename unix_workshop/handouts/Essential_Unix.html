@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+<TITLE>
+Essential UNIX/LINUX
+</TITLE>
+</HEAD>
+
+<BODY bgColor=#ffffff link=#0000ff text=#3f3f3f vLink=#00007f>
+
+<FONT color=#00007f size=+2>Essential UNIX/LINUX</FONT><BR>
+<HR noShade>
+
+<b>Directory Commands</b><p>
+
+<tt>ls [directory]</tt><br>
+Lists all the files in the specified directory. If no directory is specified, it defaults to the current directory.<p>
+
+<tt>cd [directory]</tt><br>
+Changes the current directory to the specified directory. If no directory is specified, it brings you to your home directory.<p>
+
+<tt>mkdir [directory]</tt><br>
+Creates a new directory.<p>
+
+<tt>rmdir [directory]</tt><br>
+Removes the specified (empty) directory. To remove a non-empty directory, use <tt>rm -r [directory]</tt> at your own risk.<p>
+
+<tt>pwd</tt><br>
+Tells you the name of the current directory.<p>
+
+<b>File Commands</b><p>
+
+<tt>rm [filename(s)]</tt><br>
+Deletes the specified file(s). Once a file is deleted, it is gone forever. Be especially careful when using wildcards with this command.<p>
+
+<tt>cp [filename(s)] [directory]</tt><br>
+Copies the specified file(s) to the specified directory. Keeps the originals intact.<p>
+
+<tt>cp [filename] [newname]</tt><br>
+Creates a copy of the specified file with a new name.<p>
+
+<tt>mv [filenames(s)] [directory]</tt><br>
+Moves the specified file(s) to the specified directory. The originals are destroyed.<p>
+
+<tt>mv [filename] [newname]</tt><br>
+Renames the specified file to the given new name. You can also "rename" a file into another directory by specifying a name in that directory.<p>
+
+<b>Filenames and Directories</b><p>
+
+<tt>~</tt><br>
+The tilde is always the name of your home directory, so typing <tt>"cd ~"</tt> will bring you to your home directory.<p>
+
+<tt>/</tt><br>
+The forward slash is used as the top directory for the system and also to separate the names of subdirectories. For instance, <tt>"cd /user/mallen"</tt> says to start from the top of the directory tree (<tt>"/"</tt>), go into the subdirectory <tt>"user"</tt> and then into the subdirectory <tt>"mallen"</tt>.
+<p>
+
+<tt>*</tt><br>
+The asterisk is used as a wildcard when naming files. For instance, <tt>*.scm</tt> will match all the filenames that end with <tt>".scm"</tt>.
+
+<HR noShade>
+</BODY>
+</HTML>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Date: 4 March 2001</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Could the Therac-25 accidents been precluded if the software team had followed Lampson's hints?</c></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">The Therac-25 was a computerized radiation therapy machine and the accidents associated with its use were system accidents resulting from complex interactions between the various components and activities. In addition to the software that had major design flaws, there were serious problems with other components of the system. The manufacturer of the Therac-25 had inadequate procedures for following through on reported accidents, over confidence in the software and made unrealistic risk assessments. Also, the regulatory agencies responsible for overseeing the safety of radiation machines and the users of Therac-25 had inadequate experience with such complex systems.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">The design of the Therac-25 software suffered from three major flaws. First, there was poor documentation both about the software design and in the instructions for the users of the machine. Since the software development and its testing was poorly documented, it was almost impossible for reviewers to analyze the limitations of the software and the kind of testing it had undergone. It may also have contributed to the manufacturer's reluctance to test the software extensively when they received reports of Therac-25 malfunction. The error codes in the user documentation conveyed no information to the user; hence the technologists routinely ignored them. There was no way to know if a particular error code meant that an improper radiation dose had been delivered by the machine - this information would have been critical for deciding to terminate use of the machine by the radiation technologist.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">A second flaw was code reuse without proper testing from previous versions of the software which presumably had similar flaws as the Therac-25 software. The reuse of code provide a false sense of security that it was well debugged and this could have led to inadequate testing and documentation of reused code.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">The biggest flaw was inadequate testing of the software. Modules of a software should be tested independently and overall software should undergo repeated testing. Also, software for safety-critical applications should have not only the normal cases tested but the worst case tested extensively. The design of the Therac-25 computer system had undergone a paradigm shift from previous versions of the system, since the software was responsible for many of the safeguards that had been previously implemented in hardware. This should have led to rigorous and repeated testing of the safeguards implemented in software.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Lampson, in his article, provides many heuristics that are useful in the design of computer systems. Presumably, the Therac-25 software team did not follow many of these hints and if they had done so, could have designed better software. However, there is very little information available about the Therac-25 software design to judge if the team followed any of Lampson's hints at all. The major software problems that were identified - poor documentation, improper code reuse and inadequate testing - are not specifically addressed by Lampson. Hence incorporation of these hints would not necessarily have prevented the Therac-25 accidents, if the other problems in the system had not been addressed.</p>
+</section>
+</abiword>

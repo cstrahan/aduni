@@ -1,0 +1,205 @@
+\documentclass[10pt]{amsart}
+ 
+\setlength{\parsep}{3pc}
+\setlength{\itemsep}{0.2in}
+
+
+\usepackage{fullpage}
+\usepackage{psfig}
+
+
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\to}{\rightarrow}
+
+\newtheorem{thm}{Theorem}[section] 
+\newtheorem{theorem}[thm]{Theorem} 
+\newtheorem{corollary}[thm]{Corollary} 
+\newtheorem{lemma}[thm]{Lemma} 
+\newtheorem{prop}[thm]{Proposition} 
+\newtheorem{definition}[thm]{Definition} 
+\newtheorem{remark}[thm]{Remark}  
+\newtheorem{fact}{Fact}[section]
+
+\newenvironment{EG}[1]{{\vspace{1 ex}}\noindent {\sc Example.}{#1}{\hfill{$\diamondsuit$}}\\{\vspace{1 ex}}}
+
+
+
+\title[\hskip 0.2inExam 3\hfill Name:\hskip 2in]{Exam 3:  Linear algebra}
+
+\begin{document}
+
+%\renewcommand{\arraystretch}{2}
+
+\begin{figure}[h]
+\centerline{
+\psfig{figure=logo.ps}
+}
+\end{figure}
+
+\centerline{\Large{\sc{Month 0: Mathematics for Computer Science}}}
+\medskip
+
+\maketitle
+
+\vfill
+
+
+\centerline{\LARGE{September 24, 2000}}
+
+\vskip 1in
+
+\hskip 2in\Large{Name:}
+
+\vskip 1in
+
+\noindent You may  not consult any books or papers.  You may use a
+calculator (or the calculator on your computer), but you may not use
+any other computing or graphing device other than your own head!
+
+\vfill\pagebreak
+
+
+\begin{enumerate}
+
+\item Consider the following matrices and vectors.
+$$
+\begin{array}{ccc}
+A=\left[\begin{array}{rrr}1&3&-4\\2&-2&0\\3&-1&0\end{array}\right] &
+B=\left[\begin{array}{rrr}-2&1&3\\1&4&0\end{array}\right] &
+C=\left[\begin{array}{rr}1&2\\0&3\\-1&4\end{array}\right]
+\end{array}
+$$
+$$
+\begin{array}{cc}
+v=\left[\begin{array}{r}1\\3\\-1\end{array}\right] &
+w=\left[\begin{array}{r}-1\\6\end{array}\right]
+\end{array}
+$$
+What are all of the matrix multiplications (of two matrices or one matrix
+and one vector) that you can do?  Do two (2) of these multiplications
+(your choice which ones).
+
+\vfill\pagebreak
+
+
+\item Consider the following matrices.
+$$
+\begin{array}{cc}
+A=\left[\begin{array}{rrrr}1&2&-1&0\\0&1&0&1\\
+			   1&2&0&1\\0&2&1&-4\end{array}\right]  &
+B=\left[\begin{array}{rrr}1&-1&2\\2&0&1\\2&3&-3\end{array}\right] 
+\end{array}
+$$
+\begin{enumerate}
+\item Compute $\det(A)$.
+\vfill
+\item Compute $B^{-1}$, the inverse of $B$.
+\end{enumerate}
+
+
+
+\vfill\pagebreak
+
+\item Find the complete solution to the following linear system of
+equations.
+$$
+\begin{array}{cccc}
+	\left[\begin{array}{rrrrr}
+		1&2&-1&-2&1\\
+		1&2&0&0&3\\
+		2&4&1&2&9
+	\end{array}\right] &
+	\left[\begin{array}{c}x_1\\x_2\\x_3\\x_4\\x_5\end{array}\right] &
+	= &
+	\left[\begin{array}{r}0\\-1\\-4\end{array}\right]
+\end{array}
+$$
+
+
+
+
+\vfill\pagebreak
+
+\item Which of the following are vector spaces?  Why or why not?
+
+\begin{enumerate}
+\item For an $m\times n$ matrix $A$, the nullspace $N(A)=\{ v\in\R^n\
+|\ A\cdot v=0\}$.
+\vfill
+\item $V=\{ (x_1,x_2,x_3)\ |\ x_1,x_2,x_3\in\R\mbox{ and }
+x_1+x_2+x_3=0\}$.
+\vfill
+\item $\mathcal{F}_3=\{ f:\R\to\R\ |\ f(0)=3\}$.
+\vfill
+\item $W=\{ (x,|x|)\ |\ x\in\R\}$.
+\end{enumerate}
+
+
+\vfill\pagebreak
+
+%\item Factor the matrix
+%$$
+%\left[\begin{array}{rrr}1&0&3\\2&1&4\\0&2&6\end{array}\right],
+%$$
+%into the form $A=L\cdot U$, the product of a lower triangular matrix
+%$L$ and an upper triangular matrix $U$.
+%
+%\vfill\pagebreak
+
+\item At a local movie theater, three groups of people are in line to
+buy tickets.  The first group buys three adult tickets and three child 
+tickets, for \$39.  The second group buys three adult tickets and four 
+senior tickets for \$44.  The third group has just come from the
+restaurant next door.  They buy two discount tickets and two child
+tickets for \$22.  If senior tickets are the same price as child
+tickets, then how much does each type of ticket cost?
+
+
+\end{enumerate}
+
+
+\vfill\pagebreak
+
+\noindent {\sc{Extra problem.}} Only do this
+problem if you have completed and checked over your exam, and feel like
+taking a look at it! It will not count
+towards your exam grade, but is meant to be a fun problem to think
+about!
+
+Given four points $P_1$, $P_2$, $P_3$ and $P_4$ in the plane ($\R^2$), 
+there are six distances between pairs of points (i.e. the distance
+from $P_1$ to $P_2$, from $P_1$ to $P_3$, etc.).  How many ways are
+there of placing the points in the plane so that there are exactly two 
+distinct distances among the six?  An example of such is the square
+shown in the figure below.  (Two identical pictures with the vertices
+relabelled do not count as distinct pictures!)
+
+
+\begin{figure}[h]
+\flushright{
+\parbox{3in}{
+\psfig{figure=square.ps,width=2in}
+}}
+\flushright{
+\parbox{3in}{
+\caption[square]{This show the square.  The two distinct distances are
+the side length and the diagonal length.}
+}
+}
+\end{figure}
+
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,13 @@
+#!/usr/local/bin/wish
+wm title . "Yooooooooohoooo!"
+
+button .hello -text Hello \
+	-command Run
+pack .hello -padx 20 -pady 10
+
+#run the program!
+proc Run {} {
+    [catch {exec xdvi 2> /dev/null} input]
+}
+
+

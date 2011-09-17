@@ -1,0 +1,67 @@
+Aol server install V1
+Do these commands as root 
+
+$ groupadd nsadmin
+$ useradd -g nsadmin -d /usr/local/aolserver nsadmin
+$ su - nsadmin
+$ scp <yourloginname>@10.11.0.68:/tmp/aolserver.tar .
+$ tar -xvf aolserver.tar
+$ mkdir /opt/web
+$ mkdir /opt/web/<yourservername>
+
+Copy  oracle-bash.txt into nsadmin's .bash_profile
+$ emacs oracle-bash.txt &
+$ emacs ~/.bash_profile &
+
+Copy every thing from oracle-bash.txt and paste it into the bottom
+of .bash_profile.
+
+Save and close both emacs
+
+
+Open nsd.tcl
+
+$ emacs nsd.tcl &
+
+Update nsd.tcl 
+Change all the <...> at the top to the values for your server.
+Example:
+change <db_username>  dan
+change <db_password>  danpassword
+change <youservername> danserver
+change <your ip address>  10.11.0.XX
+change <port>         8080
+
+Save as <yourservername>.tcl
+
+Make sure that you have a new tablespace and new user.
+
+
+make your first html page
+$ mkdir /opt/web/<yourservername>/www
+$ emacs /opt/web/<yourservername>/www/index.html &
+
+Make a simple page.  for example one line . . . 
+test
+
+save the file and close emacs
+
+Test out your server
+
+$ source ~/.bash_profile
+$ /usr/local/aolserver/bin/nsd -ft /usr/local/aolserver/<youservername>.tcl
+
+Open up netscape and point it to 
+http://<your ip address>:<port>
+
+if this works add the startup command to /etc/inittab
+
+it should look something like this . . .
+
+s11:5:respawn:/usr/local/aolserver/bin/nsd -u nsadmin -ikt /usr/local/aolserver/anthserver.tcl 
+
+
+
+
+
+

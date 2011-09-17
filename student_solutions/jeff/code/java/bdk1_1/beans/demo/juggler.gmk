@@ -1,0 +1,38 @@
+
+CLASSFILES= \
+	sunw/demo/juggler/Juggler.class \
+	sunw/demo/juggler/JugglerBeanInfo.class
+
+DATAFILES= \
+	sunw/demo/juggler/Juggler0.gif \
+	sunw/demo/juggler/Juggler1.gif \
+	sunw/demo/juggler/Juggler2.gif \
+	sunw/demo/juggler/Juggler3.gif \
+	sunw/demo/juggler/Juggler4.gif \
+	sunw/demo/juggler/JugglerIcon.gif
+
+JARFILE= ../jars/juggler.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/juggler/Juggler.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/juggler/*.class $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+
+# Run the Juggler as an applet inside AppletViewer.
+view: all
+	appletviewer html/juggler.html
+
+clean:
+	/bin/rm -f sunw/demo/juggler/*.class
+	/bin/rm -f $(JARFILE)
+

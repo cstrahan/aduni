@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-indent:0.0000in">Date: 13 March 2001</p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:center; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:center; text-indent:0.0000in"><c props="font-weight:bold">Distributed file systems</c></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">NFS, AFS and Echo are three examples of distributed file systems, of which NFS is the simplest and most widely used one.</c></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">In NFS, caches are used both in the client and the server modules to improve read and write performance. The client module caches file blocks used by read and write operations in order to reduce the number of requests transmitted to servers. Since client caching can cause different versions of portions of files to exist at different client leading to consistency problems, the clients poll the server at fixed intervals of time to check for newer versions of the file being used by a client and updates the local version if necessary. Thus, the clients have to perform validity checks for every read or write which can generate lot of server requests in a large network. In case of writes, modifications are made to the locally cached page, which is then flushed asynchronously to the server by the bio-daemon. The NFS also provides a separate mechanism for easy accessibility of read-only files by replicating them o multiple servers on the network.</c></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">The AFS differs from the NFS in that whole files (or 64kb chunks in case of large files) are transferred to the client cache. Thus, clients have to maintain large permanent caches and if large files are being modified, they have to be transferred as a whole across the network. Cache consistency is maintained by use of callback promises which are tokens issued by a server and sent along with a requested file to the client. When a client modifies a file during a write operation, it notifies the server via callback and the server, in turn, notifies all other clients that have cached that file. This mechanism is more efficient than the polling used by the NFS clients since the serve handles far fewer requests. On the other hand, the server has to maintain information about which clients have requested which files; in the event of a server crash restoring the state information is more difficult and complex. In the case of NFS since the server is stateless, server crashes are easier to handle.</c></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">The Echo file system uses local caches, like the other two systems, for both reads and writes. It tries to optimize write performance by delaying the write-behind as much as possible. The trade-off is that it uses a complex mechanism for guaranteeing that writes are actually committed to the disk. The Echo file servers issue tokens for each requested file: multiple read tokens can be issued (so that multiple clients can simultaneously read a file) but only a single write token can be issued for a file. Thus, when a client requests a file for writing, the server revokes all the read tokens issued on that file from other clients and then issues a single write token. Though this scheme is efficient for most purposes, it turns out to be inefficient if a single file is being updated frequently by multiple clients.</c></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"></p>
+<p props="margin-left:0.0000in; margin-right:0.0000in; text-align:left; text-indent:0.0000in"><c props="font-weight:normal">I would recommend the AFS file system for a new small software company. Such a company will probably have a group of programmers working on a single project. Usually, each programmer will be editing one or two files extensively and rarely will 2 or more programmers be simultaneously editing the same file. AFS is efficient for this purpose since it generates the least amount of traffic on the network devoted to maintaining cache consistency. Also, AFS will can be scaled more easily as the company grows and requires a larger network.</c></p>
+</section>
+</abiword>

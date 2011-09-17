@@ -1,0 +1,176 @@
+.include "../shared/beta"
+
+        BR(main)
+
+x1= -3                          | x1 is at offset bp-3
+y1= -4                          | y1 is at offset bp-4
+x2= -5                          | x2 is at offset bp-5
+y2= -6                          | y2 is at offset bp-6
+level=-7                        | level is at offset bp-7
+xdist= 0                        | xdist is at offset bp+0
+ydist= 1                        | ydist is at offset bp+1
+
+|||||||||||||||||||||||||||||||||||||
+drawLine:
+|        PUSH(lp)                | standard stack stuff
+|        PUSH(bp)                | ...
+|        MOV(sp, bp)             | ...
+
+dodraw:
+        ST(r31, OUTPUTDATA)     | signal start of line with 0 byte
+        ST(r1, OUTPUTDATA)      | send x1 to terminal
+        ST(r2, OUTPUTDATA)      | send y1 to terminal
+        ST(r3, OUTPUTDATA)      | send x2 to terminal
+        ST(r4, OUTPUTDATA)      | send y2 to terminal
+
+|        MOV(bp,sp)              | standard stack stuff
+|        POP(bp)                 | ...
+|        POP(lp)                 | ...
+        JMP(lp)                 | return
+
+||||||||||||||||||||||||||||||||||||||
+| You write the code for fractal, based on the C code:
+| void fractal(int x1, int y1, int x2, int y2, int level) {
+|    if (level==0) {
+|       drawLine(x1, y1, x2, y2);
+|    } else {
+|       int xdist= (x2-x1)/2;
+|       int ydist= (y2-y1)/2;
+|       fractal(x1, y1, x1+ydist, y1-xdist, level-1);
+|       fractal(x1+ydist, y1-xdist, x1+ydist+xdist, y1-xdist+ydist, level-1);
+|       fractal(x1+ydist+xdist, y1-xdist+ydist, x2+ydist, y2-xdist, level-1);
+|       fractal(x2+ydist, y2-xdist, x2, y2, level-1);
+|     }
+| }
+
+
+fractal:
+        PUSH(lp)                | standard stack stuff
+        PUSH(bp)                | ...
+        MOV(sp, bp)             | ...
+        PUSH(r1)                | save regs
+        PUSH(r2)        
+        PUSH(r3)
+        PUSH(r4)
+        PUSH(r5)
+        PUSH(r6)
+        PUSH(r7)
+	PUSH(r8)
+	PUSH(r9)
+	PUSH(r10)
+	PUSH(r11)
+	PUSH(r12)
+	PUSH(r13)
+
+        LD(bp, level, r7)       | r7 <- level
+        LD(bp, x1, r1)
+        LD(bp, y1, r2)
+        LD(bp, x2, r3)
+        LD(bp, y2, r4)
+        
+        BNZ(r7, recursion)      | goto recursion if r7 is not 0 
+        BR(drawLine, lp)        | call drawLine
+        BR(endfractal)          | go to endfractal
+
+recursion:
+        SUB(r3, r1, r5)
+        DIVC(r5, 2, r5)         | xdist
+        SUB(r4, r2, r6)
+        DIVC(r6, 2, r6)         | ydist
+        SUBC(r7, 1, r7)         | level - 1
+
+        ADD(r1, r6, r8)
+        SUB(r2, r5, r9)
+        ADD(r3, r6, r10)
+        SUB(r4, r5, r11)
+        ADD(r8, r5, r12)
+        ADD(r9, r6, r13)
+
+                | first recursive call to fractal
+        PUSH(r7)
+        PUSH(r9)
+        PUSH(r8)
+        PUSH(r2)
+        PUSH(r1)
+
+        BR(fractal, lp)         | call fractal
+        DEALLOCATE(5)
+
+                | second recursive call to fractal
+        PUSH(r7)
+        PUSH(r13)
+        PUSH(r12)
+        PUSH(r9)
+        PUSH(r8)
+
+        BR(fractal, lp)         | call fractal
+        DEALLOCATE(5)
+
+                | third recursive call to fractal
+        PUSH(r7)
+        PUSH(r11)
+        PUSH(r10)
+        PUSH(r13)
+        PUSH(r12)
+
+        BR(fractal, lp)         | call fractal
+        DEALLOCATE(5)
+
+                | fourth recursive call to fractal
+        PUSH(r7)
+        PUSH(r4)
+        PUSH(r3)
+        PUSH(r11)
+        PUSH(r10)
+
+        BR(fractal, lp)         | call fractal
+        DEALLOCATE(5)
+
+endfractal:
+        POP(r13)
+        POP(r12)
+        POP(r11)
+        POP(r10)
+        POP(r9)
+        POP(r8)
+        POP(r7)
+        POP(r6)
+        POP(r5)
+        POP(r4)
+        POP(r3)                 | restore registers
+        POP(r2)                 | ...
+        POP(r1)                 | ...
+        
+        MOV(bp, sp)             | standard stack stuff
+        POP(bp)                 | ...
+        POP(lp)                 | ...
+        JMP(lp)                 | return
+
+|||||||||||||||||||||||||||||||||||||||
+main:
+        MOVC(stack, sp)         | initialize the stack
+
+getlevel:
+        LD(INPUTDATA, r0)       | get key from keyboard
+        BRZ(r0, getlevel)       | repeat if key wasn't typed
+
+        ST(r0, OUTPUTDATA)      | display key typed
+        SUBC(r0, '0', r0)       | subtract from char '0' to get value
+
+        PUSH(r0)                | push level
+        MOVC(192, r4)           | 192 = y2
+        PUSH(r4)
+        MOVC(192, r3)           | 192 = x2
+        PUSH(r3)
+        MOVC(192, r2)           | 192 = y1
+        PUSH(r2)
+        MOVC(64, r1)            | 64 = x1
+        PUSH(r1)
+
+        BR(fractal, lp)         | call fractal
+        DEALLOCATE(5)           | dump arguments off the stack
+
+        HALT()                  | halt when done
+
+stack:
+

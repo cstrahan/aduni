@@ -1,0 +1,46 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>Example Beans</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<center><a NAME="top"></a></center>
+
+<center>
+<h1>
+Example BeanContext Services</h1></center>
+The BeanBox provides 2 example services to demonstrate the use of the JavaBeans
+Extensible Runtime Containment &amp; Services Protocol.
+<br>&nbsp;
+<ol>
+<h3>
+<a NAME="tracer"></a><a href="javadoc/sunw/demo/methodtracer/MethodTracer.html">MethodTracer</a></h3>
+This service can be requested by a MethodTracer aware BeanContextChild
+bean.&nbsp; It is a simplistic debugging utility for logging method trace
+statements and text strings.
+<h3>
+<a NAME="infobus"></a>InfoBus support</h3>
+The BeanBox includes InfoBus version 1.2 support.&nbsp; The support is
+currently minimal.&nbsp; However, the upcoming release of InfoBus, version
+2.0, contains helper methods for joining an InfoBus instance provided as
+a BeanContext Service. Drop that infobus.jar into the beanbox\lib directory
+and the BeanBox will automatically provide an InfoBus service (available
+under name javax.infobus.InfoBus.class). Use the BeanBox menu item Services+InfoBus
+Support to obtain information about instantiated beans which use the InfoBus
+service. Note: The InfoBus 2.0 release will contain some example BeanContextChild/BeanContextServicesListener
+beans.</ol>
+
+<p><br>
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

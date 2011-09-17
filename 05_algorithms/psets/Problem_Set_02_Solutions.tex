@@ -1,0 +1,143 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{epsfig}
+
+\title{Algorithms - Problem Set 2 Solutions}
+\author{by Michael Allen}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+\item {\bf Practice with Red-Black Trees}
+
+\begin{enumerate}
+\item The successive Red-Black trees that are constructed by
+adding the keys 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 into an
+initially empty tree are shown in figure \ref{2-1a}.
+
+\begin{figure}[htbp]
+  \centerline{\psfig{file=2-1a.eps}}
+  \caption{building a red-black tree}
+  \label{2-1a}
+\end{figure}
+
+\item The results of deleting the values 60, 70, and 90 are shown
+in figure \ref{2-1b}. On the left are the results if we do not
+maintain the red-black property, and the right shows if we do.
+
+\begin{figure}[htbp]
+  \centerline{\psfig{file=2-1b.eps}}
+  \caption{after elements are deleted}
+  \label{2-1b}
+\end{figure}
+\end{enumerate}
+
+\item {\bf Practice with Graph Algorithms}
+\begin{enumerate}
+\item The graph shown in figure \ref{2-2a} will yield incorrect
+results using Dijkstra's algorithm.
+
+\begin{figure}[htbp]
+  \centerline{\psfig{file=2-2a.eps}}
+  \caption{Dijkstra can't handle this graph}
+  \label{2-2a}
+\end{figure}
+
+\item The depth-first search tree  with back edges for the interval graph
+containing \{[1,3], [2,4], [6,9], [5,10], [8,9], [8,11], [3,6],
+[1,4], [3,7] \} is shown in figure \ref{2-2b}.
+
+\begin{figure}[htbp]
+  \centerline{\psfig{file=2-2b.eps}}
+  \caption{interval graph DFS tree}
+  \label{2-2b}
+\end{figure}
+
+\item The shortest path tree using Dijkstra's algorithm, and the
+breadth first search tree for the graph on page 499 of the text
+are shown in figure \ref{2-2c}.
+
+\begin{figure}[htbp]
+  \centerline{\psfig{file=2-2c.eps}}
+  \caption{shortest path and search trees}
+  \label{2-2c}
+\end{figure}
+\end{enumerate}
+
+\item {\bf Shortest Path Algorithm}
+
+The BFS-scanning shortest path algorithm will go into an infinite
+loop on a graph with a negative cost cycle. Nodes that are a part
+of the cycle will be repeatedly explored as the distances are
+relaxed more and more.
+
+\item{\bf Topological Sorting}
+
+{\it no code yet}
+
+\item {\bf Finding a Cycle in an Undirected Graph}
+
+The algorithm below can be used to find and print a cycle in an
+undirected graph. Works very much like DFS, except that when it
+encounters a node it has already searched (which only happens when
+a cycle is present), it prints out the cycle.
+
+\begin{verbatim}
+FindCycle(G)
+1. for each vertex u in V[G]
+2.   do color[u] <- white
+3.      parent[u] <- nil
+3. depth <- 0
+4. for each vertex u in V[G]
+5.   do if color[u] = white
+6.        then FC-Visit(u)
+
+FC-Visit(u)
+1. color[u] = gray
+2. for each v in Adj[u]
+3.   do if color[v] = gray and v != parent[u]
+4.        then parent[v] = u
+5.             FC-PrintOut(v)
+6.      if color[v] = white
+7.        then parent[v] = u
+8.             FC-Visit(v)
+9. color[u] = black
+
+FC-PrintOut(v)
+1. w <- v
+2. do w <- parent[w]
+3.    print w
+3.   while w != v
+4. end
+\end{verbatim}
+
+\item {\bf Depth First Search}
+
+{\it no code yet}
+
+\item {\bf The Circus Problem}
+
+Given the heights and weights of a number of performers, the
+following algorithm will find the tallest stack that can be built
+with no performer standing on the shoulders of another who is
+lighter or shorter.
+
+\begin{enumerate}
+\item Add a node to the graph for each performer.
+\item Examine each pair of nodes and add a directed edge from A to
+B if A can stand of B's shoulders.
+\item Add a "start" node with a directed edge to every other node
+in the graph.
+\item Find the longest path starting at the start node. (This can
+be accomplished by assign each edge a weight of -1 and finding the
+shortest path, since we are guaranteed not to get a negative
+cycle.)
+\item Find the farthest node and rebuild the path by following the
+appropriate edges backwards.
+\end{enumerate}
+
+\end{enumerate}
+\end{document}

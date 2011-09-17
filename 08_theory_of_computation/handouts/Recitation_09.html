@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>
+Recitation 9 Notes
+</title>
+</head>
+<body bgcolor="#ffffff">
+
+<center><h2> Ars Digita University <br> Theory of Computation <br>
+ Recitation 9, 05/15/01 </h2></center>
+
+<h2>Topics</h2>
+<ul>
+<li>How many languages are there? 
+<li>Nondeterministic Pushdown Automata.
+<li>Deterministic Pushdown Automata.
+<li>Converting Context Free Grammars to Pushdown Automata.
+</ul>
+
+<h2> Problems to work on </h2>
+<ol>
+
+<h2>Languages</h2>
+
+<li> Could I ever write a computer program that enumerated (listed)
+all the possible languages? What about one that enumerated all the
+regular languages?  What about one that enumerated all the
+context-free languages?
+
+
+<h2>Pushdown Automata Warmup</h2>
+
+<li> What is the difference between a Nondeterministic Pushdown
+Automaton and a Deterministic Pushdown Automaton. Do you think they
+generate the same languages?
+
+
+<li> (Warm up) Construct a PDA that accepts the language {0,1}*.
+
+
+<li> (Warm up from last time:) Construct a PDA that accepts the language
+{0<sup>n</sup>1<sup>n</sup> | n >= 0}. Is your answer deterministic or not?
+
+<li> Construct a PDA that accepts the language
+{0<sup>n</sup>1<sup>n</sup> | n >= 2}. 
+
+<h2>More Pushdown Automata </h2>
+
+<li> Construct a PDA that accepts the language 
+{ 0<sup>m</sup>1<sup>n</sup> |  n > m >= 0}
+
+<li> (From last time:) Construct a PDA that accepts the language
+{0<sup>n</sup>1<sup>m</sup>0<sup>m</sup>1<sup>n</sup> | n,m >= 0}.
+
+<li> Construct a PDA that accepts the language { w | w is not a palindrome} 
+
+<h2>And/Or</h2>
+
+<li> Construct a PDA that accepts the language { w | w is not a palindrome and w ends with a zero}
+
+<li> Give a PDA that accepts the language  {a<sup>i</sup> b<sup>j</sup> | i <= j <= 2i}
+
+<h2> Deterministic vs Nondeterministic PDA's</h2>
+
+<li>  Construct a NPDA that accepts the language of strings with
+the same number of zeros and ones.
+
+<li>  Construct a DPDA that accepts the language of strings with 
+the same number of zeros and ones.
+
+
+<h2>Converting Grammars to PDA's</h2>
+
+
+<li>Convert the following Grammar to a PDA.
+
+<pre>
+S --> AB
+A -->  0
+B -->  1
+</pre>
+
+
+
+
+<li>Convert the following Grammar to a PDA.
+
+<pre>
+
+A --> BAB | B | epsilon
+B --> 00 | espilon
+
+</pre>
+
+</ol>
+<hr>
+Dimitri Kountourogiannis, <a href="mailto://dimitrik@alum.mit.edu">dimitrik@alum.mit.edu</a>
+</html>

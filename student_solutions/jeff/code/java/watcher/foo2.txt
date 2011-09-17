@@ -1,0 +1,599 @@
+Date: Wed, 17 Jan 2001 19:53:46 GMT
+Server: Apache/1.3.12 (Unix) mod_perl/1.24
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html
+content-length: 43708
+----------
+getContentType: text/html
+getContentLength: 43708
+getContentEncoding: null
+getDate: 979761226000
+getExpiration: 0
+getLastModified: 0
+----------
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML><HEAD><TITLE>Slashdot: News for nerds, stuff that matters</TITLE>
+ </HEAD>
+<BODY bgcolor="#000000" text="#000000" link="#006666" vlink="#000000">
+<CENTER>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR><TD WIDTH=2><SCRIPT LANGUAGE="JAVASCRIPT">
+<!--
+now = new Date();
+tail = now.getTime();
+document.write("<IMG SRC='http://images2.slashdot.org/Slashdot/pc.gif?/index.shtml,");
+document.write(tail);
+document.write("' WIDTH=1 HEIGHT=1 BORDER=0>");
+document.write("<IMG SRC='http://images.slashdot.org/pagecount.gif?/index.shtml,");
+document.write(tail);
+document.write("' WIDTH=1 HEIGHT=1 BORDER=0><BR>");
+//-->
+</SCRIPT>
+<NOSCRIPT>
+<IMG SRC="http://images2.slashdot.org/Slashdot/pc.gif?/index.shtml,979761226" WIDTH=1 HEIGHT=1 BORDER=0>
+<IMG SRC="http://images.slashdot.org/pagecount.gif?/index.shtml,979761226" WIDTH=1 HEIGHT=1 BORDER=0><BR>
+</NOSCRIPT></TD></TR></TABLE>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR><TD WIDTH=468><SCRIPT LANGUAGE="JAVASCRIPT">
+<!--
+now = new Date();
+tail = now.getTime();
+AltText = "\"Click Here!\"";
+document.write("<A HREF='http://images.slashdot.org/cgi-bin/adlog.pl?index,tkgk0118en' TARGET=_top>");
+document.write("<IMG SRC='http://images.slashdot.org/banner/tkgk0118en.gif?");
+document.write(tail);
+document.write("' WIDTH=468 HEIGHT=60 BORDER=0 ALT=");
+document.write(AltText);
+document.write("></A><BR>");
+//-->
+</SCRIPT>
+<NOSCRIPT>
+<A HREF="http://images.slashdot.org/cgi-bin/adlog.pl?index,tkgk0118en" TARGET=_top><IMG SRC="http://images.slashdot.org/banner/tkgk0118en.gif?979761226" WIDTH=468 HEIGHT=60 BORDER=0 ALT="Click Here!"></A><BR>
+</NOSCRIPT></TD></TR></TABLE>
+
+</CENTER>
+<P>
+<TABLE bgcolor="#FFFFFF" cellpadding=0 cellspacing=0 border=0 width="99%" align=center>
+ <TR>
+  <TD valign=top align=left valign=top><A HREF="http://slashdot.org/"><IMG
+   src="http://images.slashdot.org/title.gif" width=275 height=72 border=0
+   alt="Welcome to Slashdot"></A></TD>
+   	<TD><A HREF="http://slashdot.org/search.pl?topic=patents"><IMG
+		SRC="http://images.slashdot.org/topics/topicpatents.gif" WIDTH="75" HEIGHT="54"
+		BORDER="0" ALT="Patents"></A>
+	</TD>
+
+	<TD><A HREF="http://slashdot.org/search.pl?topic=news"><IMG
+		SRC="http://images.slashdot.org/topics/topicnews.gif" WIDTH="60" HEIGHT="66"
+		BORDER="0" ALT="News"></A>
+	</TD>
+
+	<TD><A HREF="http://slashdot.org/search.pl?topic=intel"><IMG
+		SRC="http://images.slashdot.org/topics/topicintel.gif" WIDTH="68" HEIGHT="35"
+		BORDER="0" ALT="Intel"></A>
+	</TD>
+
+	<TD><A HREF="http://slashdot.org/search.pl?topic=movies"><IMG
+		SRC="http://images.slashdot.org/topics/topicmovies.gif" WIDTH="50" HEIGHT="50"
+		BORDER="0" ALT="Movies"></A>
+	</TD>
+
+	<TD><A HREF="http://slashdot.org/search.pl?topic=money"><IMG
+		SRC="http://images.slashdot.org/topics/topicmoney.gif" WIDTH="76" HEIGHT="70"
+		BORDER="0" ALT="The Almighty Buck"></A>
+	</TD>
+
+
+</TR></TABLE>
+<TABLE width="99%" align=center cellpadding=0 cellspacing=0
+  border=0 bgcolor="#FFFFFF"><TR>
+<TD valign=top rowspan=5><NOBR><FONT size=2><B>
+&nbsp;<A href=/faq/>faq</A> <BR>
+&nbsp;<A href=/code.shtml>code</A> <BR>
+&nbsp;<A href=http://www.osdn.com/>osdn</A> <BR>
+&nbsp;<A href=/awards.shtml>awards</A> <BR>
+&nbsp;<A href=http://osdn.com/privacy.shtml>privacy</A> <BR>
+&nbsp;<A href=http://slashnet.org>slashNET</A> <BR>
+&nbsp;<A href=/search.pl>older stuff</A> <BR>
+&nbsp;<A href=http://cmdrtaco.net>rob's page</A> <BR>
+&nbsp;<A href=/users.pl?op=preferences>preferences</A> <BR>
+&nbsp;<A href=/submit.pl>submit story</A> <BR>
+&nbsp;<A href=/advertising.shtml>advertising</A> <BR>
+&nbsp;<A href=/supporters.shtml>supporters</A> <BR>
+&nbsp;<A href=/pollBooth.pl>past polls</A> <BR>
+&nbsp;<A href=/topics.shtml>topics</A> <BR>
+&nbsp;<A href=/about.shtml>about</A> <BR>
+&nbsp;<A href=/jobs.shtml>jobs</A> <BR>
+&nbsp;<A href=/hof.shtml>hof</A>
+
+</B></FONT></NOBR>
+ <P>
+
+<!-- begin section index block -->
+
+<TABLE border=0 cellpadding=1 cellspacing=0 align=center bgcolor="#CCCCCC"><TR>
+  <TD><FONT size=2 color="#000000"><B> Sections</B></FONT></TD></TR>
+ <TR><TD><TABLE border=0 cellspacing=1 cellpadding=1 bgcolor="#FFFFFF" width="100%"><TR><TD><FONT color="" size=2><NOBR>
+1/16<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=apache">apache</A></B><BR>
+
+1/17 (11)<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=askslashdot">askslashdot</A></B><BR>
+
+1/27<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=awards">awards</A></B><BR>
+
+1/16 (2)<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=books">books</A></B><BR>
+
+1/15<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=bsd">bsd</A></B><BR>
+
+1/16 (2)<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=features">features</A></B><BR>
+
+1/12<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=interviews">interviews</A></B><BR>
+
+1/9<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=radio">radio</A></B><BR>
+
+1/14<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=science">science</A></B><BR>
+
+1/16 (2)<BR>
+<B><A HREF="http://slashdot.org/index.pl?section=yro">yro</A></B><BR>
+ </NOBR></FONT></TD></TR></TABLE>
+
+<!-- end section index block -->
+
+<TR> <TD><A href=http://www.osdn.com/><FONT size=2 color=#000000><B>OSDN</B></FONT></A></TD></TR><TR><TD><TABLE border=0 cellspacing=1 cellpadding=1 bgcolor=#FFFFFF><TR><TD><FONT color=#000000 size=2><NOBR><A href=http://www.freshmeat.net/>freshmeat</A><BR><A href=http://www.linux.com/>Linux.com</A><BR><A href=http://www.sourceforge.net/>SourceForge</A><BR><A href=http://www.thinkgeek.com/>ThinkGeek</A><BR><A href=http://www.questionexchange.com/>Question<BR>&nbsp;Exchange</A><BR><A href=http://www.newsforge.com/>NewsForge</A><BR></NOBR></FONT></TD></TR></TABLE></TD></TR></TABLE></P>
+ <P><!-- andovermenu --></P>
+</TD><TD valign=top align=left><FONT color="#000000">
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>			<A HREF="http://slashdot.org/science/"><FONT COLOR="#FFFFFF">Science</FONT></A>: Researchers Claim TO Produce Stem Cells From Adult Cells
+</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=science"><IMG SRC="http://images.slashdot.org/topics/topicscience.gif" WIDTH="62" HEIGHT="75"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Science">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @02:40PM</B><BR>
+<FONT size=2><B>from the major-major-breakthrough dept.</B></FONT><BR>
+<A HREF="mailto:coljac(@)coljac.net">coljac</A> writes <I>"An <A HREF="http://www.thetimes.co.uk/article/0,,2-68170,00.html">article</A> in <A HREF="http://www.thetimes.co.uk/">The Times</A> on Monday details the claims of British researcher Ilham Abuljadayel who says she can produce stem cells from adult cells (in this case, white blood cells). Stem cells, the main source of which is currently human embryos, are undifferentiated cells which under the right biochemical conditions can grow into any kind of tissue cell. Stem cell research promises breakthroughs in many areas of disease (and even aging) research, but until now has been dogged by controversy because of the use of human embryos. If verified, this is a pretty exciting development."</I>
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/science/01/01/17/1840251.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1840251&mode=thread&threshold=1">4</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1840251&mode=thread&threshold=-1">10</A> </B>comments | <A HREF="http://slashdot.org/science/">Science</A>
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>Hacking Acer's Set-Top Box</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=hardware"><IMG SRC="http://images.slashdot.org/topics/topichardware.gif" WIDTH="57" HEIGHT="57"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Hardware">
+</A> <B>Posted by <A HREF="http://www.monkey.org/~timothy">timothy</A>  on  Wednesday January 17, @01:36PM</B><BR>
+<FONT size=2><B>from the add-eye-of-newt-and-stir dept.</B></FONT><BR>
+<A HREF="mailto:equant@azstarnet.com">Buell Smelt</A> writes: <I>"I found this site about these set top boxes out there, and it seems kind of cool, now that I'm bored with my iopener... <A HREF="http://www.phoenixgarage.net/">http://www.phoenixgarage.net/</A>  Seems like a bigger challenge than the iopener in some ways, but maybe not.  I just like the fact that it has NTSC/PAL out, so I can use it as a home MP3 player in my livingroom and don't have to haul a monitor out there.  It also has the same form factor as most home stereos.  It's a lot less expensive than the iopener, that's a plus.  There are some floating around in the 'Internet Appliance' area of eBay.  I guess you can also turn an old VGA monitor into a TV with these things.  That's kind of handy too."</I>
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/1737203.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1737203&mode=thread&threshold=1">27</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1737203&mode=thread&threshold=-1">53</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>Cracking All The Live Long Day & RH6/7 Worms</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=encryption"><IMG SRC="http://images.slashdot.org/topics/topicencryption.gif" WIDTH="80" HEIGHT="63"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Encryption">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @01:36PM</B><BR>
+<FONT size=2><B>from the carrot-juice-and-get-yourself-a-new-tatoo dept.</B></FONT><BR>
+BoomMike writes <I>"While the popular media <A HREF="http://news.cnet.com/news/0-1005-200-4494907.html">drools</A> over <A HREF="http://www.eweek.com">eWEEK</A> magazine's contrived <A HREF="http://www.openhack.com">Open Hack Challenge</A>, which offers modest cash prizes for cracking a carefully arranged network, real geeks can compete in the Honeynet Project's new <A HREF="http://project.honeynet.org/challenge/">Forensic Challenge</A>, and pick up the trail of a hacker who cracked one of the project's Linux-based honeypots last November.  Mount the file system images and pour through the IDS logs to figure out the who, what, where, when, why and how of the attack, and you can win a book. <A HREF="http://www.securityfocus.com">SecurityFocus</A> has <A HREF="http://www.securityfocus.com/news/137">the story</A>."</I>  In a much related vein to the Honeynet crack RH6.2/7 there's a <a href="http://news.cnet.com/news/0-1003-201-4508359-0.html?tag=st.ne.1002.thed.sf
+">story on C|Net</a> concerning the "worm" that's a new popular exploit set with the script kiddies on RH 6/7 servers.
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/1836235.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1836235&mode=thread&threshold=1">28</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1836235&mode=thread&threshold=-1">38</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>Altavista's Planned Patent Lawsuits</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=patents"><IMG SRC="http://images.slashdot.org/topics/topicpatents.gif" WIDTH="75" HEIGHT="54"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Patents">
+</A> <B>Posted by <A HREF="http://CmdrTaco.net">CmdrTaco</A>  on  Wednesday January 17, @11:34AM</B><BR>
+<FONT size=2><B>from the oh-thats-just-peachy dept.</B></FONT><BR>
+caledon wrote in to tell us a story about AltaVista <A HREF="http://www.internetworld.com/011501/01.15.01interview.jsp">planning a bunch of lawsuits</A> to enforce patents on things like Spidering and Indexing.  In the article,
+ David Wetherell of CMGI says <I>"If you index a distributed set of databases-what the Internet  is-and even within intranets, corporations, that's one of the patents. We did a <A HREF="http://www.cmgi.com/news/press_release_full.jhtml?_DARGS=%2Fnews%2Fpress_release_summary.jhtml.9_A&_DAV=%2Frepositories%2Fpress_release_data%2FALTAVISTA_WINS_PATENTS_FOR_SEARCH_TECHNOLOG.dcr">press release on this</A> with a list of six or ten of the key areas that the patents cover."</I>  I guess patent lawsuits are their best corporate strategy since they no longer can make a good search engine.
+There's a few other bits in there about CMGI, but who cares about CMGI?
+
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/1534254.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1534254&mode=thread&threshold=1">116</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1534254&mode=thread&threshold=-1">173</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>Is the Net The Cause of California's Power Problems?</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=news"><IMG SRC="http://images.slashdot.org/topics/topicnews.gif" WIDTH="60" HEIGHT="66"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="News">
+</A> <B>Posted by <A HREF="http://CmdrTaco.net">CmdrTaco</A>  on  Wednesday January 17, @09:57AM</B><BR>
+<FONT size=2><B>from the it-sure-isn't-my-rice-maker dept.</B></FONT><BR>
+<A HREF="mailto:ken  @ firestone net">kenf</A> writes <I>"<A HREF="http://salon.com">Salon Magazine</A> has an <A HREF="http://salon.com/tech/feature/2001/01/17/net_power/index.html">article</A> about folks from the power companies blaming the internet for their power shortage woes."</I>  Well, the net does consume a huge percentage of the nations electricity.  The article makes a lot of good points.  I'm glad I don't live in CA, but how long before it
+affects the rest of us?
+
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/141211.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/141211&mode=thread&threshold=1">347</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/141211&mode=thread&threshold=-1">457</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>Integrated Intel Chipset Lineup</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=intel"><IMG SRC="http://images.slashdot.org/topics/topicintel.gif" WIDTH="68" HEIGHT="35"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Intel">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @09:30AM</B><BR>
+<FONT size=2><B>from the what-makes-the-most-sense-to-use dept.</B></FONT><BR>
+<A HREF="http://www.tweaktown.com">Mr.Tweak</A> writes: <I>"<A HREF="http://www.tweaktown.com">TweakTown</A> have posted an
+11-page article concerning <A HREF="http://www.tweaktown.com/articles/intel_integrated/">"value"
+Integrated Intel chipsets</A>, included chipsets in the lineup is the
+SiS 630E, VIA PM133 and the Intel 815E. The article includes
+information about how integration works, with lots of benchmarks
+testing FPU, ALU, Memory bandwidth, D3D, OpenGL and so on. They used
+the following motherboards for testing each chipset Jetway 630CF (SiS
+630E), VIA VT5278F PM133 Reference Board (VIA PM133) and EPOX 3S25A
+(Intel 815E)."</I>
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/1231220.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1231220&mode=thread&threshold=1">27</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1231220&mode=thread&threshold=-1">42</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>DivX Going Open Source - Updated</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=movies"><IMG SRC="http://images.slashdot.org/topics/topicmovies.gif" WIDTH="50" HEIGHT="50"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Movies">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @08:06AM</B><BR>
+<FONT size=2><B>from the where's-my-client dept.</B></FONT><BR>
+<A HREF="mailto:stingraven@yahoo.com">JimRay</A> writes <I>"According to this <A HREF="http://www.cnet.com">C|Net</A> <A HREF="http://news.cnet.com/news/0-1004-200-4501328.html?tag=st.ne.1002.thed.ni">article</A>, the DivX program will soon be open source. NOTE, this is not Circuit City's failed out DVD rental plan, but a set of programs for lossy compression of digital video. Is this the mp3 for video or what?"</I>  DivX is based on MPG4 - and contrary to earlier submissions, Project Mayo has stated they own all copyrights to the code - it is not a knocked off version of Microsoft's MPG4.<B>Update: 01/17 02:52 PM</B> by <B><A HREF="http://hemos.net">H</A></B>:Thanks to paradigm from Mayo for sending this update/correction: "This is a release of our codebase as it stands now, we have cvs, mailing
+lists, bug tracking, everything set up.  We are working towards our current
+goal of releasing Divx ;-) Deux which will, of course, rock.  This code
+works, but we are making it better.  We are developing this code still, not
+just throwing it to the open source world for the hype, we just thought
+others would want in...all of our developers are on the mailing lists and
+activly post in our forums.</i>"
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/1226236.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1226236&mode=thread&threshold=1">105</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1226236&mode=thread&threshold=-1">161</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>France Retracts Computer Tax Proposal</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=money"><IMG SRC="http://images.slashdot.org/topics/topicmoney.gif" WIDTH="76" HEIGHT="70"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="The Almighty Buck">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @07:21AM</B><BR>
+<FONT size=2><B>from the good-idea-bad-idea dept.</B></FONT><BR>
+<A HREF="mailto:jdoe@dev.null">ovidus naso</A> writes <I>" Minister Tasca decided not to go forward with her computer tax project. My impression is that this was just political play (her strongest enemies are fellow socialists, naturally!).
+
+<A HREF="http://www.liberation.fr/quotidien/semaine/20010117mero.html">The Liberation is carrying the story</a> with the retracation.  "</I>  As always with non-fluent speakers, <a href="http://babelfish.altavista.com">the fish</a> is your friend.  Remember:  You get a twofold benefit with Babelfish:  The translation to the story to get the main gist of the story, and the actual translation has so many laughable areas, you have an entry to a bad poetry competition.
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/1221227.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/1221227&mode=thread&threshold=1">49</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/1221227&mode=thread&threshold=-1">76</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>			<A HREF="http://slashdot.org/askslashdot/"><FONT COLOR="#FFFFFF">Ask Slashdot</FONT></A>: Will Browser-Neutral Web Soon Become Thing Of  Past?
+</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=netscape"><IMG SRC="http://images.slashdot.org/topics/topicnetscape.gif" WIDTH="64" HEIGHT="64"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Netscape">
+</A> <B>Posted by <A HREF="http://exit118.com/">Cliff</A>  on  Wednesday January 17, @06:26AM</B><BR>
+<FONT size=2><B>from the history-repeats-itself dept.</B></FONT><BR>
+Psychotic Venom asks: <I>"I do ASP development as a part-time job during school.  ASP's not my first love or anything, but I don't have a great deal against it.  I recently went to an ASP site and got <A HREF="http://www.aspalliance.com/dagon/rejectNS/rejectNS.html">this message</A> and I just wonder what's really going on.  I mean, I LIKE Netscape. I like having an option...and I thought that was part of the reason behind a server side scripting language. So are we all slowly being pushed out to the point that we really DON'T have a choice if we want to really do Web surfing?  Are we going to have to keep IE on our machines to view anything Pro-Microsoft and Netscape for everything against it?"</I> And after reading this, I suddenly found the words "Netscape-specific tags" on the tip of my tongue. Yes, the bad karma finally catches up with Netscape, but the browser market is a hell of a lot larger now than it was in 1995. Pretty soon we may see e-Commerce sites silently echoing this sentiment, upgrading perfectly valid HTML forms to ones that depend on client-side components that will only work on Microsoft (or Microsoft sanctioned) operating systems. If a few major players on the Web adopt similar practices, the standards-compliant Web, as we know it, will die. Can this be prevented?
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/askslashdot/01/01/16/2357207.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/16/2357207&mode=thread&threshold=1">422</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/16/2357207&mode=thread&threshold=-1">562</A> </B>comments | <A HREF="http://slashdot.org/askslashdot/">Ask Slashdot</A>
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>NASA To Shoot Comet With Copper Projectile</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=space"><IMG SRC="http://images.slashdot.org/topics/topicspace.gif" WIDTH="73" HEIGHT="59"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Space">
+</A> <B>Posted by <A HREF="http://www.monkey.org/~timothy">timothy</A>  on  Wednesday January 17, @06:18AM</B><BR>
+<FONT size=2><B>from the cupid-should-be-so-equipped dept.</B></FONT><BR>
+<A HREF="mailto:maximum_entropy@hotmail.com">Max Entropy</A> writes: <I>"I can't make this up, guys.  NASA plans to shoot a comet with a copper missile according to this <A HREF="http://dailynews.yahoo.com/h/nm/20010116/sc/space_chile_dc_1.html">article</A> from Reuters' Chilean bureau.  It says:  'In January 2004, a rocket would launch from Cape Canaveral, Florida, a spacecraft that would orbit the sun. In July 2005 the spacecraft would separate from a battery-powered, copper projectile that would collide with the comet 24 hours later at a velocity of 6 miles (10 km) per second....It would produce a crater the width of a football field and up to 100 feet (30 meters) deep.'  They say that using copper will help get more accurate readings."</I>
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/0019224.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/0019224&mode=thread&threshold=1">102</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/0019224&mode=thread&threshold=-1">132</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>Open Source Developer Lab Looking For Board Members</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=internet"><IMG SRC="http://images.slashdot.org/topics/topicinternet.gif" WIDTH="70" HEIGHT="73"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="The Internet">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @04:31AM</B><BR>
+<FONT size=2><B>from the get-yer-voice-in dept.</B></FONT><BR>
+A reader writes: <i>"I noticed that the <a href="http://www.osdlab.org">Open Source Development Lab</a> is looking for nominations and commentary on the <a href="http://www.osdlab.org/article.pl?sid=00/12/01/1945237
+">Community Nominations</a> to the Board.  They've got some of the usual suspects on there, but will also take other suggestions.  The organization was profiled by Nick Petreley a <a href="http://special.northernlight.com/linux/scott_mcneil.htm
+
+">while back</a> as well."</i>
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/17/0242216.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/17/0242216&mode=thread&threshold=1">8</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/17/0242216&mode=thread&threshold=-1">24</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>GNUPedia Project Starting</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=gnu"><IMG SRC="http://images.slashdot.org/topics/topicgnu.jpg" WIDTH="50" HEIGHT="76"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="GNU is Not Unix">
+</A> <B>Posted by <A HREF="http://hemos.net">Hemos</A>  on  Wednesday January 17, @12:30AM</B><BR>
+<FONT size=2><B>from the new-use-of-gnu dept.</B></FONT><BR>
+<A HREF="mailto:hf@gnu.org">Hector Facundo Arena</A> writes: <I>"The <A HREF="http://www.gnu.org/encyclopedia">Free Universal Encyclopedia and Learning Resource (GNUPedia)</A> Web page is online today.  GNUPedia is a project for the development of a free encyclopedia. You can read more in the Richard Stallman's <A HREF="http://www.gnu.org/encyclopedia/announcement.html">project announcement</A> document. We invite you to participate in the project and <A HREF="http://www.gnu.org/encyclopedia/#mailinglists">join the mailing lists</A>"</I>
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/articles/01/01/16/2031215.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/16/2031215&mode=thread&threshold=1">136</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/16/2031215&mode=thread&threshold=-1">188</A> </B>comments
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+<TABLE width="100%" cellpadding=0 cellspacing=0 border=0><TR><TD
+    valign=top bgcolor="#006666"><IMG
+    src="http://images.slashdot.org/slc.gif" width=13 height=16 alt="" align=top><FONT 
+    size=4 color="#FFFFFF" face="arial,helvetica"><B>			<A HREF="http://slashdot.org/askslashdot/"><FONT COLOR="#FFFFFF">Ask Slashdot</FONT></A>: Is Mac OS X Threatening Linux?
+</B></FONT></TD>
+</TR></TABLE><A HREF="http://slashdot.org/search.pl?topic=apple"><IMG SRC="http://images.slashdot.org/topics/topicapple.gif" WIDTH="60" HEIGHT="64"
+	BORDER="0" ALIGN="RIGHT" HSPACE="20" VSPACE="10" ALT="Apple">
+</A> <B>Posted by <A HREF="http://www.monkey.org/~timothy">timothy</A>  on  Tuesday January 16, @09:34PM</B><BR>
+<FONT size=2><B>from the are-there-pope-bears? dept.</B></FONT><BR>
+An unnamed correspondent asks: <I>"Does anyone think that the release of Mac OS X will threaten Linux?  A UNIX-based OS that XFree86, the GIMP, Apache, etc. run on, and is easy to use and maintain for a beginner, might not bode too well for the little OS that could.  I'm not talking about techies -- I'm talking about people who might use Linux on their desktop (companies who are deploying it, etc.).  Why would they want to use Linux instead of OS X?"</I> It's not a new question, but it won't go away, either. Anyone out there planning to jump to Mac OS X from Linux or one of the (other) BSDs?
+
+<!-- begin story_link block -->
+<P><B>( </B>
+<!-- end story_link block -->
+<A HREF="http://slashdot.org/askslashdot/01/01/16/230234.shtml"><B>Read More...</B></A> | <B><A HREF="http://slashdot.org/article.pl?sid=01/01/16/230234&mode=thread&threshold=1">524</A> of <A HREF="http://slashdot.org/article.pl?sid=01/01/16/230234&mode=thread&threshold=-1">754</A> </B>comments | <A HREF="http://slashdot.org/askslashdot/">Ask Slashdot</A>
+
+<!-- begin story_trailer block -->
+				<B>)</B></P>
+<!-- end story_trailer block -->
+</TD><TD width=210 align=center valign=top><TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B><A HREF="http://slashdot.org/index.pl?section=interviews"><FONT COLOR="#FFFFFF">Interviews</FONT></A></B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><LI><A HREF="http://slashdot.org/article.pl?sid=01/01/12/1628215">Learn From Robert Watson Of FreeBSD And TrustedBSD</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=01/01/10/1427235">Andre Hedrick On Hard Drive Copy Protection</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=01/01/08/1344235">Ask Andre Hedrick About Hard Drive Copy Protection</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=01/01/05/1622252">Jason Haas on LinuxPPC -- and Drunk Drivers</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=01/01/02/1429246">Ask LinuxPPC Co-Founder Jason Haas</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=00/12/29/140210">The Ordinary Slashdot User Answers</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=00/12/26/1429202">Ask An Ordinary Teenage Slashdot User</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=00/12/21/150204">Answers From 'They Might Be Giants'</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=00/12/13/1848257">Martin Garbus Lecture/Interview Responses</A></LI>
+<LI><A HREF="http://slashdot.org/article.pl?sid=00/12/12/1645203">Ask Kevin Lawton About Plex86</A></LI>
+</FONT></TD>
+</TR>
+</TABLE><P>
+<TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B><A HREF="/users.pl"><FONT COLOR="#FFFFFF">Slashdot Login</FONT></A></B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><FORM action=/users.pl METHOD=POST>
+<B>Nickname:</B><BR>
+<INPUT type=text name=unickname size=20 value=""><BR>
+<B>Password:</B><BR>
+<INPUT type=hidden name=returnto value=index.pl>
+<INPUT type=password name=upasswd size=20><BR>
+<INPUT type=submit name=op value=userlogin>
+</FORM>
+Don't have an account yet?  <A href=/users.pl>Go
+Create One</A>.  A user account will allow you to
+customize all these <A href=/cheesyportal.shtml>nutty little boxes</A>,
+tailor the stories you see, as well as remember your comment viewing
+preferences.</FONT></TD>
+</TR>
+</TABLE><P>
+<TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B>Older Stuff</B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><P><B><A HREF="http://slashdot.org/index.pl?section=&issue=730866&mode=thread">
+<FONT SIZE="4">Tuesday</FONT></A> January 16</B></P>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/175201.shtml">'Rendezvous With Rama' - The Movie</A> (192)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/0129258.shtml">Slashback: Pronouns, Acronyms, Abbreviations</A> (201)</LI>
+<LI><A HREF="http://slashdot.org/apache/01/01/16/1854229.shtml">Slashcode 2.0 "Bender" Starts Beta</A> (183)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1730206.shtml">Interviews at Linux Conference Australia</A> (55)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/211256.shtml">New Security Group Hedges Bets And Builds Hedges</A> (175)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1855253.shtml">MySQL FS</A> (285)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1817200.shtml">mSQL:  It's Baaaccckkkkk</A> (105)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1659234.shtml">Jobs Plays It Frank</A> (385)</LI>
+<LI><A HREF="http://slashdot.org/features/01/01/05/1923236.shtml">The Tightening Net: Part Two</A> (347)</LI>
+<LI><A HREF="http://slashdot.org/books/01/01/07/0423217.shtml">Web Development With JSP</A> (169)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1333248.shtml">Internet Ad Network Commentary</A> (257)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1331224.shtml">Norway Bans Spam</A> (312)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/1314253.shtml">ResierFS In Latest 2.4.1 Prepatches</A> (236)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/132235.shtml">Infiltration</A> (195)</LI>
+<LI><A HREF="http://slashdot.org/articles/01/01/16/0535248.shtml">Microsoft Critiques Australian IT Policies</A> (258)</LI>
+<P><B><A HREF="http://slashdot.org/index.pl?section=&issue=730865&mode=thread">
+<FONT SIZE="4">Monday</FONT></A> January 15</B></P>
+<LI><A HREF="http://slashdot.org/articles/01/01/15/231259.shtml">SETI@home Explained, From Inside</A> (221)</LI>
+<LI><A HREF="http://slashdot.org/yro/01/01/16/0036225.shtml">France To Tax Blank Computer Media</A> (490)</LI>
+<P ALIGN="RIGHT"><BR><A HREF="http://slashdot.org/search.pl?section=&min=30">
+<B>Older Articles</B></A>
+<BR><A HREF="http://slashdot.org/index.pl?section=&mode=thread&issue=730866">
+<B>Yesterday's Edition</B></A>
+</FONT></TD>
+</TR>
+</TABLE><P>
+<TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B>Slashdot Poll</B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><FORM ACTION="http://slashdot.org/pollBooth.pl">
+	<INPUT TYPE="hidden" NAME="qid" VALUE="holidaypresents">
+<B>Best Christmas Present</B>
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="1">Clothes
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="2">Hardware
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="3">Software
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="4">Wetware
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="5">Syphilis
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="6">CowboyNeal
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="7">Weapons
+<BR><INPUT TYPE="radio" NAME="aid" VALUE="8">This poll offends my religion (or lack therof).  Also it is unfair to non-americans.  And vegans.  And Samurai.  Can I have a sandwich?
+<BR><INPUT TYPE="submit" VALUE="Vote"> [ <A HREF="http://slashdot.org/pollBooth.pl?qid=holidaypresents&aid=-1"><B>Results</B></A> | <A HREF="http://slashdot.org/pollBooth.pl?"><B>Polls</B></A>  ] <BR>
+Comments:<B>467</B> | Votes:<B>42203</B>
+</FORM>
+</FONT></TD>
+</TR>
+</TABLE><P>
+<TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B><A HREF="/index.pl?section=books"><FONT COLOR="#FFFFFF">Book Reviews</FONT></A></B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><p>Peter Wayner has written <a href="http://slashdot.org/books/00/08/24/1434210.shtml">Free For All</a> a book that explores Free Software, the history, and where it's going.
+<p>If you are trying to learn the the ideas behind digital security, check out <a href="http://slashdot.org/article.pl?sid=00/09/17/1311241&mode=nested">Secrets & Lies</a>, the latest book by Bruce Schneier.
+<p>Danny Yee did reviews <a href="http://slashdot.org/books/00/08/31/137234.shtml">of a couple PHP</a> books.  With so many people using PHP, it always pays to know more.
+<P>Lastly, Jon Lasser has written <a href="http://slashdot.org/article.pl?sid=00/09/10/0013219&mode=nested">Think Unix</a>, a book designed around making people understand the concepts behind Unix.
+<P>Visit <A href="/index.pl?section=books">Our Book Reviews Section</A> for
+more.
+<br>
+<B>Update: 9/21 13:19</B> by <B><A href=mailto:hemos@slashdot.org>H</A></B>:</FONT></TD>
+</TR>
+</TABLE><P>
+<TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B>Quick Links</B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><B>Cool Sites:</B>
+<LI><A href=http://www.animefu.com>AnimeFu</A> (Addicted to Anime?)
+<LI><A href=http://www.penny-arcade.com>Penny Arcade</A> (The First one is always Free)
+<LI><A href=http://bigempire.com/filthy/>The Filthy Critic</A> (He Hates Everything)
+<LI><A href=http://everything2.com>Everything</A> (Blow your Mind)
+<LI><A href=http://www.oldmanmurray.com/>Old Man Murray</A> (Games... Sorta)
+<LI><A href=http://themes.org>Themes.org</A> (Make X Perty)
+
+<P><B>Support Slashdot:</B>
+<LI><A href=http://www.thinkgeek.com>ThinkGeek</A> (Clothe Yourself in Slashdot)
+</FONT></TD>
+</TR>
+</TABLE><P>
+<TABLE cellpadding=1 cellspacing=0 border=0 width="200" align=center>
+<TR bgcolor="#006666">
+ <TD valign=top><FONT size=4 color="#FFFFFF" face="arial,helvetica"><B><A HREF="http://freshmeat.net"><FONT COLOR="#FFFFFF">Freshmeat</FONT></A></B></FONT></TD>
+</TR><TR><TD bgcolor="#CCCCCC"><FONT color="#000000" size=2><P><FONT size=4 color="#006666"><B>January 17th 2001</B></FONT><BR>
+<LI><A href="http://freshmeat.net/projects/compwork/">CompWork 1.1.f.1</A>
+<LI><A href="http://freshmeat.net/projects/ticketsmith/">Ticketsmith 0.3.1</A>
+<LI><A href="http://freshmeat.net/projects/asplinux/">ASPLinux RC3</A>
+<LI><A href="http://freshmeat.net/projects/siege/">Siege 1.03</A>
+<LI><A href="http://freshmeat.net/projects/newspost/">Newspost 1.1</A>
+<LI><A href="http://freshmeat.net/projects/dnews/">DNews 5.5a2</A>
+<LI><A href="http://freshmeat.net/projects/statistx/">StatistX 0.2.4</A>
+<LI><A href="http://freshmeat.net/projects/whois/">whois 4.5.2</A>
+<LI><A href="http://freshmeat.net/projects/intelp6microcodeupdateutility/">Intel IA32 Microcode Update Utility 1.04</A>
+<LI><A href="http://freshmeat.net/projects/ucpp/">ucpp 1.0</A>
+
+<FORM METHOD="get" ACTION="http://freshmeat.net/search.php3">
+<FONT size=3 color=#006666><B>Search Freshmeat:</B></FONT><BR>
+<INPUT TYPE="hidden" NAME="link" VALUE="freshmeat.net">
+<INPUT TYPE="text" NAME="q">
+</FORM>
+<P align=right><A href="http://freshmeat.net"><B>More Meat...</B></A></FONT></TD>
+</TR>
+</TABLE><P>
+</FONT></TD>
+         </TR>
+        </TABLE><TABLE cellpadding=0 cellspacing=0 border=0 width="99%"
+                align=center    bgcolor="ffffff">
+            <TR>
+             <TD colspan=4 align=center><IMG src="http://images.slashdot.org/greendot.gif"
+                alt="" width="80%" height=1 hspace=10 vspace=30></TD>
+            </TR><TR>
+             <TD align=center><FONT size=2 face="arial,helvetica">
+  <FORM method=GET action="http://slashdot.org/search.pl">
+         <INPUT type=name name=query value="" width=20 size=20 length=20>
+        <INPUT type=submit value="Search">
+  </FORM>
+  </FONT>
+  </TD>
+  <TD bgcolor="#ffffff" width=25>  &nbsp; </TD>
+  <TD align=center>
+    <FONT size=2 face="arial,helvetica"><I>Despite all appearances, your boss is a thinking, feeling, human being.</I></FONT>
+    </FONT>
+  </TD></TR>
+  <TR><TD colspan=4 align=center>
+  <FONT size=1 color="#006666" face="arial,helvetica">
+
+ All trademarks and copyrights on this
+  page are owned by their respective owners.  Comments
+  are owned by the Poster.
+  The Rest © 1997-2001 <A href="http://www.osdn.com/">OSDN</A>.
+</FONT></CENTER>
+             </TD>
+            </TR>
+           </TABLE>
+        <CENTER>
+          <FONT size=2 color="#006666">
+
+         [ <A href="http://slashdot.org/"><Font color="#ffffff">home</FONT></A> |
+         <A href="http://slashdot.org/awards.shtml"><Font color="#ffffff">awards</FONT></A> |
+         <A href="http://slashdot.org/supporters.shtml"><FONT color="#ffffff">supporters</FONT></A> |
+         <A href="http://CmdrTaco.net"><FONT color="#ffffff">rob's homepage</FONT></A> |
+         <A href="http://slashdot.org/submit.pl"><FONT color="#ffffff">contribute story</FONT></A> |
+         <A href="http://slashdot.org/search.pl"><FONT color="#ffffff">older articles</FONT></A> |
+         <A href="http://www.osdn.com/"><FONT color="#ffffff">OSDN</FONT></A> |
+         <A href="http://slashdot.org/advertising.shtml"><FONT color="#ffffff">advertising</FONT></A> |
+         <A href="http://slashdot.org/pollBooth.pl"><FONT color="#ffffff">past polls</FONT></A> |
+         <A href="http://slashdot.org/about.shtml"><FONT color="#ffffff">about</FONT></A> |
+         <A href="http://slashdot.org/faq/"><FONT color="#ffffff">faq</FONT></A> ]
+           </FONT>
+          </CENTER>
+</BODY>
+</HTML>

@@ -1,0 +1,47 @@
+Subject: Oh!
+Date: Wed, 29 Nov 2000 19:56:52 -0500
+From: Shai Simonson <shai@stonehill.edu>
+To: "Tara S. Holm" <tsh@math.mit.edu>
+CC: ADUstudents <aduni-students@arsdigita.org>,
+     Shai Simonson <shai@stonehill.edu>,
+     Dimitri Kountourogiannis <dimitri@math.mit.edu>,
+     Michael S Allen <mallen@MIT.EDU>, Weiping Shi <wshi@cs.unt.edu>,
+     Andrew Latto <andy.latto@pobox.com>
+
+So I guess you meant this today -- but I did not parse the
+implications...
+
+If the bipartite graph on two sets of C(n!+n-1, n) nodes, is regular
+where each node has degree n!, then clearly it satisfies Hall's
+theorem's condition.
+
+(In fact, any regular bipartite graph must satisfy the conditions for
+Hall's theorem; namely that any subset of k nodes has edges to at least
+k other nodes)
+
+Proof:
+Take any subset size k of the nodes on either side of the graph, the
+number of edges coming out of these nodes is exactly kn!.  If the number
+of nodes incident to these edges on the other side of the graph is less
+than k, then by the extended Pigeonhole principle one of the nodes on
+the other side of the graph must have strictly more than kn!/k = n!
+edges incident to it, but we know that every node in the graph has
+exactly degree n!, hence this is a contradiction and it is therefore
+impossible for a subset of nodes of size k to connect to fewer than k
+nodes on the other side.
+
+Hence, by Hall's theorem there is a perfect matching -- as we all now
+know.
+
+--
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн----
+        Shai Simonson, Professor
+        ArsDigita University
+        141 Portland St. (Use 80 Prospect St. for mailing)
+        Cambridge, MA 02139
+
+Voice Mail:     (617) 386-4236
+Fax:            (617) 494-8174
+Email:          shai@stonehill.edu
+Home Page:      http://academics.stonehill.edu/compsci/SHAI.HTM
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-----

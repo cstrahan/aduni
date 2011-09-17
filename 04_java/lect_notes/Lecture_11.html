@@ -1,0 +1,339 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Employee SpeechWorks">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+   <title>lecture10</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Threads</h2>
+
+<h3>Background: Processes</h3>
+<p>
+      To understand threads, we start with processes. Processes are the
+       operating system's notion of 'program'. A process is best characterized
+       by considering it's 'state', that is, all of the information required
+       to store, restart, and continue executing the process. [Note: This
+       notion of the state of a computation is a very general and important
+       one. The notion of process it the operating system's view of a generic
+       computation. It is occasionally useful for the programmer to keep the
+       state of some algorithm or computation explicitly so it can
+       be stopped and started within the program. Computations built with
+       this property are often called 're-entrant' and are important in 
+       system programming and distributed or asynchronour programming.]
+       The state of a process includes:
+<ul>
+  <li> The program code -- often called the text segment
+  <li> Global data -- including the heap
+  <li> Program counter, address of current instruction
+  <li> Stack and stack pointer -- call frames holding local variables,
+	     arguments and return points.
+  <li> open file descriptors and memory management resources,
+</ul>
+<p>
+<ul>
+<li>     Modern operating systems manage multiple processes. Each process in
+       effect sees it's own version of the computer and is isolated from
+       the other processes. Computing resources and shared via 'time-slicing'.
+
+<li>       A module in the OS, called the scheduler, runs each process in 
+       turn for a certain amount of time. Then the state of that process is
+       stored, and the next process is run (storing process state and swapping
+       processes involve major programming magic). 
+<li>
+There are two types of schedulers, pre-emptive and non-pre-emptive. 
+<ul>
+<li>In non-pre-emptive scheduling, a process runs until it blocks or 
+surrenders control.
+<li> In pre-emptive scheduling, the OS enforces time limits on running
+       times and can interrupt a process in the middle of computation and
+       let others run.
+</ul>
+</ul>
+<h3>
+Threads: Motivation
+</h3>
+<p>
+  Most programs we have seen so far had a single thread of control. In
+    these programs, execution starts at main and follows sequentially,
+    branching via control structures and method calls. Even in event-based 
+    programs, where control follows the event loop,  extracting events and
+    calling handlers, there is still a single control thread.
+    This is clear when an event handler loops forever, the program locks up.
+<p>
+  However, it is often convenient to have multiple threads of control; to
+    have the program doing more than one thing at once. For example:
+<ul>
+     <li> Blocking on network, while still processing user input.
+     <li> Performing background computation while still processing user input
+     <li> Processing multiple parallel input streams, ie downloading multiple
+       files simultaneously.
+</ul>
+<p>
+  There are several ways to accomplish this:<br>
+      Use a variation on event-based programming in which control loops
+        over all of the task is the systems, running each until it blocks
+        or surrenders control. For I/O based programs where we are waiting
+	for multiple channels, we can sleep on a timer and periodically
+	check all sourcesfor something to do. This is called "polling".
+	These approaches in essences require building a mini operating
+	system into the program. The scheme has some disadvantages: the
+	tasks must remember to surrender control or other tasks are starved,
+	and the handler routines for each task cannot use the call stack
+	and local variables to store task state.
+<p>
+
+      Since this is a common programming circumstance, most programming systems
+       now provide a capability to address these issues, usually called 
+       threads.
+<p>
+
+<h3>
+Threads
+</h3>
+<ul>
+    <li> Threads are similar in spirit to processes, but more lightweight.
+    <li> A thread consists of the Program Counter and Call Stack portion of
+      a process state.
+    <li> These portions of the process state determine where the control is
+      in the process and what the program is doing,
+    <li> These portions of the process state can be replicated allowing 
+         multiple simultaneous control threads.
+    <li> The processes code, global data, and heap are all shared between the
+      various threads. (The prosents some issues we'll address later).
+    <li> Memory picture:
+</ul>
+<h3>
+Threads in Java
+</h3>
+<ul>
+    <li>Threads are supported in Windows, various UNIX flavors, and in Java. All
+     of these work basiclly the same, though the Java system is of course 
+     Object-Oriented rather than procedure-based.
+    <li> Java threads are based on one class and one interface.
+    <ul>
+      <li> Thread class - object that represents a thread of control
+      <li> Runnable interface - abstracts thread code.
+        <li> consist of run() method.
+    </ul>
+    <li> To run a task in a new thread, there are two choices.
+    <ul>  
+       <li> Inherit from Thread object and override run() method with
+         task code.
+       <li> Create a new object that implements Runnable() with again run()
+         containing the task code. Create a new Thread with this object
+	 as an argument.
+    </ul>  
+    <li> Starting threads.
+    <ul>
+      <li> Creating the Thread object does not start it running. One
+        must call the start() method to start execution.
+    </ul>
+    <li> Thread state.
+    <ul>
+      <li> Threads have several states and transition based on method calls
+        or OS events (unblocking).
+      <li> Thread state diagram.
+    </ul>
+    <li> Killing threads
+    <ul>
+      <li> die naturally when run() returns. Can be externally killed.
+    </ul>
+    <li>Example: Inheriting
+<pre>
+       class Worker extends Thread{
+           // .. Worker instance vars here
+           run(){
+           // .. Worker  code here
+           }
+       }
+       class Test{
+           public static void main(String[] args){
+              // .. init code
+	      Worker worker = new Worker();
+	      worker.start();
+              // .. Main thread continues here
+           }
+       }
+</pre>
+    <li>Example: Implementing Runnable
+<pre>
+       class Worker implements Runnable{
+           // .. Worker instance vars here
+           run(){
+           // .. Worker  code here
+           }
+       }
+       class Test{
+           public static void main(String[] args){
+              // .. init code
+	      Worker worker = new Worker();
+	      Thread mythread = new Thread(worker);
+	      mythread.start();
+              // .. Main thread continues here
+           }
+       }
+</pre>
+<li> Some more methods on thread
+<ul>
+<li> <code>sleep(int n )</code> -- puts the thread to sleep (ie temporarily stops computation
+for n milliseconds. Allows other threads/processes to run).
+<li> <code>yield( )</code> -- Allows other threads to run. A way for threads to be
+polite in when running with non-pre-emptive scheduling.
+</ul>
+</ul>
+<h3>
+Thread Scheduling in Java
+</h3>
+<ul>
+    <li> Java threads NOT necessarily pre-emptively scheduled. Depends on
+      platform.
+    <li> Threads should call sleep() or yield() to allow other threads to run.
+      A portable implementation should plan for worst case. (This is pretty
+      lame IMHO.)
+    <li> Threads have priorities. Higher priority thread run before lower.
+      Don't rely on this for anything, implementation is spotty. 
+</ul>
+
+<h3>
+Thread Synchronization
+</h3>
+<ul>
+   <li> Problem: Since program data can be shared among threads, we need to
+     be careful if two threads try to access the same data. Especially
+     in the case of pre-emptive scheduling.
+   <li> Example:
+<pre>
+        a = a + 1; // simple increment of a
+</pre>
+     <li> Increment consist of 2 steps (different instructions),
+<ol>
+<li> read old value into processor and increment
+<li> write back new value.
+</ol>
+     <li> With pre-emptive scheduling a thread can be interrupted after step
+       1 and the other thread runs. There are sever possible orders of execution 
+       of these 2 step by the 2 thread. Here are two:
+<pre>
+T1I1 T1I2 T2I1 T2I2 
+T1I1 T2I1 T1I2 T2I2 
+</pre>
+      <li> if initally <code>a == 3</code> these execution sequences
+      end up with a == 5 and 4 respectively.
+     <li> When we program, we often want the same answer all of the time,
+regardless of the quirks of scheduling. In other word we want our
+program to be deterministic.
+     <li> Solution: synchronize thread execution. There are several technologies for doing
+this:
+<ul>
+       <li> Critical sections
+       <li> mutexes
+       <li> semaphores
+       <li> monitor      
+</ul>
+     <li> The basic idea of all of them is to lock a section of code or piece of data
+so that only one thread has access at at time.
+     <li> If the resource (code or data) is currently unlocked, the first thread requesting
+get access and simultaneously locks the resource.
+     <li> All subsequent threads that request that resource, must wait (sleep) until it
+becomes free again.
+     <li> Which the locking thread is done with the resource, it releases (unlocks) it and
+other threads can then get access. Waiting threads are woken up and continue execution.
+     <li> At the lowest level implementation of these,  OS itself must intervene.
+    <li> Different systems support different combinations of mechanisms. MS Window, for example,
+supports Critical Sections, Mutexes, and Semaphores.
+</ul>
+<h3>
+Java Synchronization
+</h3>
+Java does not support mutexes or semaphores. Instead it has a mechanism that integrates
+nicely with OO programming.
+<ul>
+     <li> Java supports an keyword on method, <code>synchronized</code>, that
+indicates that this method can only be run by one thread at a time.
+     <li> In fact, when a thread calls a synchronized method, the entire
+        object instance is locked by that thread. Any other thread attempting 
+	to call ANY other synchronized method on that object will block until 
+	the first thread exits. 
+     <li> Unsynchronized methods may still be called al any time and will execute normally.
+     <li> Example:
+<code>
+   class Test{
+      int a=3;
+      public synchronized void inc(){
+         a = a + 1;  // synchronize increment
+      }
+   }
+</code>
+    <li> In the fragment above, only one thread allowed in inc() at a time.
+      Results are therefore deterministic (a good thing).
+   <li> Threads can lock multiple objects by through nested calls to synchronized
+     routines.
+   <li> threads can lock the same object twice through nested calls. Object is not
+     freed until last call returns.
+   <li> In systems other than Java, it is important to make sure Exception 
+     handlers and all return paths unlock all objects. In Java this is 
+     automatic.
+</ul>
+<h3>
+Deadlock
+</h3>
+Attempts to make program execution deterministic can lead to other problems
+if done naively.
+<ul>
+   <li> For example, two synchronized routines a() and b() on different
+objects.
+<pre>
+      Thread 1 calls a() then b();
+      Thread 2 calls b() then a();
+</pre>
+     <li> If scheduling is such that each thread 1st call happens before the
+       second, each thread is waiting on the other and will wait forever!
+       This is known as deadlock and is a classic problem with locking
+       multiple resources. Be careful.
+   <li> Cultural note: A classic problem in synchronization and deadlock avoidance is
+the Dining Philosopher Problem. There are 5 philosophers sitting around a round table.
+In front of each is a plate of noodles, and in between each is a fork. Now to eat noodles,
+a philosopher needs TWO forks (poor hand-eye coordination I guess). When any philosopher
+gets two forks, they eats for a short period, then put down both forks. The problem is to
+come up woth an algorithm to synchronize the philosophers so the all get to eat.
+A naive algorithm has each philosopher grab the fork to their right, then wait for the
+fork on their left. This of course, leads to disaster, as everyone ends up waiting for
+their neighbor to the left to release a fork. Can you come up with
+a better scheme?
+   <li> There is a straightforward principle for avoiding dealock: If threads must
+      lock multiple objects, they always request them in the same order.
+      If both threads in example call a() first, one succeed the the other 
+      waits. The winner also gets b(), no deadlocks.
+   <li> Another thing to avoid: blocking on I/O in synchronized methods, unless you really want this.
+   This locks the resource until some external IO event happens. Could lock up all threads for
+   an unbounded time.
+   <li> One other problem that can arise with multi-threaded programs is starvation. This is really
+a scheduling issue. Is can happen that even though a thread is not deadlocked or waiting for something
+is could never run or rarely run simply because other threads are hogging all of the CPU. This is
+particularly important in non-pre-emptive scheduling where it is up to the programmer to ensure
+that no thread hogs the processor excessively. It can also occur under pre-emptive scheduling if
+the OS is not careful to ensure that all threads or equal prioirty get equal processing time.
+</ul>
+
+<h3>
+Final Thread Notes;
+</h3>
+<ul>
+  <li> Synchronized methods in Java are high overhead. Use sparingly.
+  <li> Swing is in general NOT sychronized. Designate one thread to update GUI
+  <li> Many of the Java container classes are NOT synchronized. Be aware.
+  <li> There are other Java mechanisms for thread to directly signal each other
+and control each others execution. Refer to the book or doc for usage.
+</ul>
+  
+<h3>Common Thread Patterns</h3>
+<ul>
+  <li> Parallel - multiple instance of common activity (eg file download)
+  <li> Pipeline - multi-stage computation with sources, sink, filters, data-flow
+  <li> I/O Handling - file download/processing while still responding to GUI
+  <li> Worker/Background - background computation while responding to GUI and 
+    networks
+</ul>
+

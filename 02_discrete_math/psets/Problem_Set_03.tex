@@ -1,0 +1,206 @@
+%&LaTeX
+\documentclass{article}
+\usepackage{hyperref}
+\def\R2Lurl#1#2{\mbox{\href{#1}{\tt #2}}}                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+\newcommand{\tab}{\makebox[4em]{}}
+
+
+\begin{document}
+
+
+\begin{center}
+\textbf{ArsDigita University}
+
+
+\end{center}
+
+\begin{center}
+\textbf{Month 2: Discrete Mathematics - Professor Shai Simonson}
+
+
+\end{center}
+
+
+\begin{center}
+\textbf{Problem Set 3 -- Recursion and Induction}
+
+
+\end{center}
+
+1.\tab 
+Solve the Chinese Rings Puzzle, also called the Patience Puzzle, 
+(\R2Lurl{http://johnrausch.com/PuzzleWorld/patience.htm }{http://johnrausch.com/PuzzleWorld/patience.htm}). 
+This will prepare you for recursion, recurrence equations, proofs 
+by induction and graph representations.
+
+
+2.\tab 
+Consider the variation of the Towers of Hanoi Problem where you 
+have four pegs instead of three. Sloppy Joe designs this \textit{solution:}
+
+
+
+In order to move \textit{n} disks from \textit{From} to \textit{To}, using \textit{Using1} and 
+\textit{Using2}: 
+
+
+If \textit{n} equals 1, then move a disk from \textit{From} to \textit{To,} otherwise 
+do the three recursive steps:
+
+
+Move \textit{n/2} disks from \textit{From} to \textit{Using1}, using \textit{To} and \textit{Using2;}
+
+
+Move \textit{n/2} disks from \textit{From} to \textit{To}, using \textit{Using2} and \textit{Using1;}\\
+Move \textit{n/2} disks from \textit{Using1} to \textit{To}, using \textit{From} and \textit{Using2;}\\
+a.\tab 
+Explain why Sloppy Joe's solution does not work.\\
+b.\tab Fruity Freddie suggests changing the second line: 
+
+
+Move \textit{n/2} disks from \textit{From} to \textit{To}, using \textit{Using2} and \textit{Using1;} to\\
+Move \textit{n/2} disks from \textit{From} to \textit{To}, using \textit{Using1} and \textit{Using2;}
+
+
+Explain why the algorithm still does not work.\\
+c.\tab 
+Code the algorithms in Scheme and report what happens for \textit{n} = 
+3, and \textit{n =} 4.\\
+d.\tab If either one of the solutions above really worked, then set 
+up a recurrence equation for the number of moves it takes to 
+solve the problem.\\
+e.\tab Solve this recurrence equation by repeated substitution.
+
+
+3.\tab 
+Fix Joe and Freddie's failures.\\
+a.\tab 
+Construct a correct solution to the Towers of Hanoi problem with 
+four pegs. \\
+b.\tab Code your solution in Scheme and show the result for \textit{n 
+=} 3 and \textit{n =} 4\textit{.}\\
+c.\tab Construct a recurrence equation for your solution and solve 
+it.
+
+
+4.\tab 
+Make a picture of the Towers of Hanoi graph for \textit{n =} 4. Recall 
+that this graph is composed of three copies of the Hanoi graph 
+for 3 disks.
+
+
+5.\tab 
+In the original Towers of Hanoi problem, alternately color the 
+disks black and white as you go from the bottom to the top of 
+the starting tower. Then in addition to the standard rules, add 
+the constraint that only disks of different colors can be placed 
+on top of one another.
+
+
+a.\tab 
+Show the path of the solution in the Towers of Hanoi graph for \textit{n 
+=} 4. Show that aside from going backwards, there is no choice 
+for each subsequent move.\\
+b.\tab Prove by induction on the number of disks \textit{n}, that the solution 
+implied by this new rule, is identical to the standard recursive 
+solution. Hint: First prove the following lemma by induction: 
+In the Hanoi graph on \textit{n} disks, the rightmost occurrence of \textit{a} and \textit{b,} in 
+any node on the solution path from node \textit{a}$^{\mathit{n}}$ to \textit{b}$^{\mathit{n}}$\textit{,} occur 
+in odd numbered slots counting from right to left. \\
+6.\tab 
+In the original Towers of Hanoi problem, add the constraint that 
+no direct moves from the \textit{From} peg to the \textit{To} peg are allowed.
+
+
+a.\tab 
+Prove by induction, that following this new rule, will take you 
+through every legal configuration of the game. Hint: Use the 
+graph representation.\\
+b.\tab Write a recurrence equation for the smallest number of moves 
+it takes to solve the problem under the new constraint.\\
+c.\tab Solve the equation.
+
+
+7.\tab 
+Double-disk Hanoi has three pegs and \textit{n} disks but there are 
+two identical copies of each disk stacked on top of each other. 
+The goal is the same as before, but we allow disks of the same 
+size to reverse their order.
+
+
+a.\tab 
+Describe a method to solve this problem.\\
+b.\tab Write and solve a recurrence equation for the number of moves 
+implied by your solution.
+
+
+8.\tab 
+Consider the standard Gray code sequence for binary numbers of 
+length 4.
+
+
+a.\tab 
+Write down the standard Gray codes in order for binary numbers 
+of length four.\\
+b.\tab Draw a four-dimensional hypercube, labeling the vertices appropriately, 
+and show that the Gray code ordering is a Hamiltonian Circuit 
+through the Hypercube.
+
+
+9.\tab 
+Prove by induction that the \textit{reverse} method for generating \textit{n-}bit 
+Gray codes from \textit{n-1} bit Gray codes is a Hamiltonian Circuit 
+through the \textit{n}-dimensional hypercube. 
+
+
+10.\tab 
+ Make a table of the \textit{2}$^{\mathit{n}}$ Gray codes for some \textit{n,} by 
+writing them in order starting from \textit{0}$^{\mathit{n}}$, one underneath 
+the other. 
+
+
+a.\tab 
+Conjecture a theorem regarding the patterns of the bits in the \textit{i}th 
+column of your chart. \\
+b.\tab 
+Prove your theorem.
+
+
+11.\tab 
+Converting Gray codes.
+
+
+a.\tab 
+Write a Scheme program that takes a binary number \textit{n} and outputs 
+the \textit{n}th Gray code.\\
+b.\tab Write a Scheme program that does the inverse of (a).
+
+
+12.\tab 
+Consider the algorithm for computing \textit{a}$^{\mathit{n}}$ where \textit{a} and \textit{n} are 
+integers. If \textit{n} = 0, then return 1. If \textit{n} is even then compute \textit{a}$^{\mathit{n/2}}$ recursively, 
+and square it. Otherwise, compute \textit{a}$^{\mathit{n-1}}$ recursively and 
+multiply the result by \textit{a.}
+
+
+a.\tab 
+How many multiplications does this method use when \textit{n} is a 
+power of two?\\
+b.\tab How many multiplications when \textit{n} is one less than a power 
+of two?\\
+c.\tab What exactly determines the number of multiplications for general \textit{n.} Be 
+as specific as possible.
+
+
+
+
+\end{document}

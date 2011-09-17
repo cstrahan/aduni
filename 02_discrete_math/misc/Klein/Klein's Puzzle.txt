@@ -1,0 +1,120 @@
+Subject: Re: Hamming Codes
+Date: Mon, 12 Jun 2000 09:46:23 -0700 (PDT)
+From: "Samuel J. Klein" <sjklein4913@yahoo.com>
+To: Shai Simonson <shai@stonehill.edu>
+
+I have never heard of Hamming Codes, but the approach
+appears to be correct.
+
+The first four questions are:
+
+"Is the first binary digit a 0?"
+
+"Is the second binary digit a 0?"
+
+"Is the third binary digit a 0?"
+
+"Is the fourth binary digit a 0?"
+
+We are left with five possible integers, the integer
+we get if all of the answers are truthful and the four
+integers we get if the first, the second, the third or
+the fourth answer, respectively, is a lie.
+
+Assume that player "B" has lied once to the first four
+questions.  Then he must answer the remaining
+questions truthfully.  Use the next two questions to
+reduce the four possibilities to one, and use the last
+question to
+confirm the remaining possibility.
+
+If the last answer confirms, then that is the number.
+If it contradicts, then the assumption that "B" lied
+once during the first four questions is false, and the
+fifth possibility - the one that assumes that "B"
+answered the first four questions truthfully - is the
+number chosen.
+
+___________________________
+
+To get an upper bound on the span for n questions,
+note  that there are 2^n possible strings of yes-no
+answers to your n questions, and that any number
+chosen gives rise to (n+1) strings, the string
+corresponding to the truthful sequence and the n
+strings corresponding to a lie to any one of the n
+questions.
+
+No two strings of yes-no answers can be the same,
+otherwise "A" cannot uniquely determine "B's" integer.
+
+So an upper bound for Span(n) is (2^n)/(n+1).
+
+In the case n=7 we have Span(7) = or < 16.
+
+Since we have shown above that Span(7) = or > 16, we
+have Span(7) = 16.
+
+It can easily be shown that, if n = 2^k - 1, then
+Span(n) = 2^(n-k).
+
+Now on to the harder question:  what is Span(n) for
+general n ?
+
+___________________________
+
+Can you give me references for Hamming Codes?
+
+ Shai Simonson <shai@stonehill.edu> wrote:
+>
+> So yes...
+>
+> I am convinced that I can just use Hamming (single
+> error correction)
+> Codes to get the span of 7 to be 16.
+>
+> I ask the 4 regular binary questions, and then I ask
+> the person to
+> compute the 3 extra parity check bits for the "true"
+> answers to the 4
+> questions I asked him, as called for by Hamming's
+> theory.  (I ask him
+> whether the bit is 0 or 1)
+>
+> If he lied about one of the first 4 questions, then
+> I know that the 3
+> bits at the end are computer correctly, hence I can
+> recover his lie.
+> If he lies about one of the parity checks, then I
+> can recover that too,
+> and still I know the answer.
+>
+> But I am still not convinced that an "adaptive"
+> strategy cannot do
+> better.
+>
+>
+>
+> --
+>
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+> Shai Simonson, Professor
+> ArsDigita University
+> 80 Prospect St.
+> Cambridge, MA
+>
+> Department of Mathematics and Computer Science
+> Stonehill College, North Easton, MA 02357
+> Voice: (508) 565-1008 Fax: (508) 565-1444
+> Email: shai@stonehill.edu
+> Home Page:
+> http://academics.stonehill.edu/compsci/SHAI.HTM
+>
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-
+>
+>
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Photos -- now, 100 FREE prints!
+http://photos.yahoo.com

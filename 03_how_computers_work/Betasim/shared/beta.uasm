@@ -1,0 +1,266 @@
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+||| 6.004 BETA Macro package -                          3/10/94 SAW  |||
+|||  This version defines our 32-bit Alpha-like RISC.                |||
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+|| bare numbers must appear as LONG(n)
+.macro LONG(x) {
+        .align 1
+        x}                      | assemble this as a long
+.macro STORAGE(NWORDS)  . = .+(NWORDS)| Reserve NWORDS words of RAM
+
+
+| register designators
+| this allows symbols like r0, etc to be used as
+| operands in instructions. Note that there is no real difference
+| in this assembler between register operands and small integers.
+
+r0 = 0
+r1 = 1
+r2 = 2
+r3 = 3
+r4 = 4
+r5 = 5
+r6 = 6
+r7 = 7
+r8 = 8
+r9 = 9
+r10 = 10
+r11 = 11
+r12 = 12
+r13 = 13
+r14 = 14
+r15 = 15
+r16 = 16
+r17 = 17
+r18 = 18
+r19 = 19
+r20 = 20
+r21 = 21
+r22 = 22
+r23 = 23
+r24 = 24
+r25 = 25
+r26 = 26
+r27 = 27
+r28 = 28
+r29 = 29
+r30 = 30
+r31 = 31
+
+bp = 27                 | frame pointer (points to base of frame)
+lp = 28                 | linkage register (holds return adr)
+sp = 29                 | stack pointer (points to 1st free locn)
+xp = 30                 | interrupt return pointer (lp for interrupts)
+
+
+|| understand upper case, too.
+R0 = r0
+R1 = r1
+R2 = r2
+R3 = r3
+R4 = r4
+R5 = r5
+R6 = r6
+R7 = r7
+R8 = r8
+R9 = r9
+R10 = r10
+R11 = r11
+R12 = r12
+R13 = r13
+R14 = r14
+R15 = r15
+R16 = r16
+R17 = r17
+R18 = r18
+R19 = r19
+R20 = r20
+R21 = r21
+R22 = r22
+R23 = r23
+R24 = r24
+R25 = r25
+R26 = r26
+R27 = r27
+R28 = r28
+R29 = r29
+R30 = r30
+R31 = r31
+XP = xp
+LP = lp
+BP = bp
+SP = sp
+
+| Global instruction definition conventions:
+|  * DESTINATION arg is LAST
+
+| Instruction set summary.  Notation:
+| ra, rb, rc: registers
+|          C: 16-bit signed constant
+|      label: statement/location tag (becomes PC-relative offset)
+
+.macro betaop(OP,RA,RB,RC) {
+      LONG((OP<<26)+((RA%32)<<21)+((RB%32)<<5)+(RC%32)) }
+
+.macro betaopc(OP,RA,CC,RC) {
+      LONG((OP<<26)+((RA%32)<<21)+((CC&0xFFFF)<<5)+(RC%32)) }
+
+|| ALU macros
+.macro ADD(RA, RB, RC)          betaop(0x20,RA,RB,RC)   |> ADD rRA, rRB -> rRC
+.macro ADDC(RA, C, RC)          betaopc(0x30,RA,C,RC)   |> ADD rRA, C -> rRC
+.macro AND(RA, RB, RC)          betaop(0x28,RA,RB,RC)   |> AND rRA, rRB -> rRC 
+.macro ANDC(RA, C, RC)          betaopc(0x38,RA,C,RC)   |> AND rRA, C -> rRC
+.macro DIV(RA, RB, RC)          betaop(0x23,RA,RB,RC)   |> DIV rRA, rRB -> rRC
+.macro DIVC(RA, C, RC)          betaopc(0x33,RA,C,RC)   |> DIV rRA, C -> rRC
+.macro MUL(RA, RB, RC)          betaop(0x22,RA,RB,RC)   |> MUL rRA, rRB -> rRC
+.macro MULC(RA, C, RC)          betaopc(0x32,RA,C,RC)   |> MUL rRA, C -> rRC
+.macro OR(RA, RB, RC)           betaop(0x29,RA,RB,RC)   |> OR rRA, rRB -> rRC
+.macro ORC(RA,  C, RC)          betaopc(0x39,RA,C,RC)   |> OR rRA, C -> rRC
+.macro SHL(RA, RB, RC)          betaop(0x2C,RA,RB,RC)   |> SHL rRA, rRB -> rRC
+.macro SHLC(RA, C, RC)          betaopc(0x3C,RA,C,RC)   |> SHL rRA, C -> rRC
+.macro SHR(RA, RB, RC)          betaop(0x2D,RA,RB,RC)   |> SHR rRA, rRB -> rRC
+.macro SHRC(RA, C, RC)          betaopc(0x3D,RA,C,RC)   |> SHR rRA, C -> rRC
+.macro SRA(RA, RB, RC)          betaop(0x2E,RA,RB,RC)   |> SRA rRA, rRB -> rRC
+.macro SRAC(RA, C, RC)          betaopc(0x3E,RA,C,RC)   |> SRA rRA, C -> rRC
+.macro SUB(RA, RB, RC)          betaop(0x21,RA,RB,RC)   |> SUB rRA, rRB -> rRC
+.macro SUBC(RA, C, RC)          betaopc(0x31,RA,C,RC)   |> SUB rRA, C -> rRC
+.macro XOR(RA, RB, RC)          betaop(0x2A,RA,RB,RC)   |> XOR rRA, rRB -> rRC
+.macro XORC(RA, C, RC)          betaopc(0x3A,RA,C,RC)   |> XOR rRA, C -> rRC
+
+|| ALU compare macros
+.macro CMPEQ(RA, RB, RC)        betaop(0x24,RA,RB,RC)   |> CMPEQ rRA, rRB -> rRC
+.macro CMPEQC(RA, C, RC)        betaopc(0x34,RA,C,RC)   |> CMPEQ rRA, C -> rRC
+.macro CMPLE(RA, RB, RC)        betaop(0x26,RA,RB,RC)   |> CMPLE rRA, rRB -> rRC
+.macro CMPLEC(RA, C, RC)        betaopc(0x36,RA,C,RC)   |> CMPLE rRA, C -> rRC
+.macro CMPLT(RA, RB, RC)        betaop(0x25,RA,RB,RC)   |> CMPLT rRA, rRB -> rRC
+.macro CMPLTC(RA, C, RC)        betaopc(0x35,RA,C,RC)   |> CMPLT rRA, C -> rRC
+
+|| branch build macro: calculates offset between . and label
+.macro BETABR(OP,RA,RC,LABEL)   betaopc(OP,RA,(LABEL-.)-1, RC)
+
+|| branch if RA is zero synonyms:
+.macro BEQ(RA, LABEL, RC)       BETABR(0x1D,RA,RC,LABEL)        |> if RA==0, pc->RC, LABEL -> pc
+.macro BEQ(RA, LABEL)           BETABR(0x1D,RA,r31,LABEL)       |> if RA==0, LABEL -> pc
+.macro BF(RA, LABEL, RC)        BEQ(RA,LABEL,RC)
+.macro BF(RA,LABEL)             BEQ(RA,LABEL)
+.macro BRZ(RA, LABEL, RC)       BEQ(RA,LABEL,RC)
+.macro BRZ(RA,LABEL)            BEQ(RA,LABEL)
+.macro BZ(RA, LABEL, RC)        BEQ(RA,LABEL,RC)
+.macro BZ(RA,LABEL)             BEQ(RA,LABEL)
+
+|| branch if RA is not zero synonyms:
+.macro BNE(RA, LABEL, RC)       BETABR(0x1E,RA,RC,LABEL)        |> if RA!=0, pc->RC, LABEL -> pc
+.macro BNE(RA, LABEL)           BETABR(0x1E,RA,r31,LABEL)       |> if RA!=0, LABEL -> pc
+.macro BT(RA,LABEL,RC)          BNE(RA,LABEL,RC)
+.macro BT(RA,LABEL)             BNE(RA,LABEL)
+.macro BRNZ(RA,LABEL,RC)        BNE(RA,LABEL,RC)
+.macro BRNZ(RA,LABEL)           BNE(RA,LABEL)
+.macro BNZ(RA,LABEL,RC)         BNE(RA,LABEL,RC)
+.macro BNZ(RA,LABEL)            BNE(RA,LABEL)
+
+|| branch always
+.macro BR(LABEL,RC)             BEQ(r31, LABEL, RC)                             |> pc->RC, LABEL -> pc
+.macro BR(LABEL)                BR(LABEL, r31)                                  |> LABEL -> pc
+
+|| jump
+.macro JMP(RA, RC)              betaopc(0x1B,RA,0,RC)                   |> pc->RC, RA -> PC
+.macro JMP(RA)                  betaopc(0x1B,RA,0,r31)                  |> RA -> pc
+
+|| memory macros
+.macro LD(RA, CC, RC)           betaopc(0x18,RA,CC,RC)  |> [RA+CC] -> RC
+.macro LD(CC, RC)               betaopc(0x18,R31,CC,RC)         |> [CC] -> RC
+.macro ST(RC, CC, RA)           betaopc(0x19,RA,CC,RC)  |> RC -> [RA+CC]
+.macro ST(RC, CC)               betaopc(0x19,R31,CC,RC)         |> RC -> [CC]
+.macro LDR(CC, RC)              BETABR(0x1F, 0, RC, CC)         |> [pc+CC] -> RC
+
+|| register macros
+.macro MOVE(RA, RC)             ADD(RA, R31, RC)
+.macro MOV(RA, RC)              ADD(RA, R31, RC)
+
+|| constant macros
+.macro CMOVE(CC, RC)            ADDC(R31, CC, RC)
+.macro MOVC(CC, RC)             ADDC(R31, CC, RC)
+.macro MOVEC(CC, RC)            ADDC(R31, CC, RC)
+
+|| stack macros
+.macro PUSH(RA)         ADDC(SP,1,SP)  ST(RA,-1,SP)
+.macro POP(RA)          LD(SP,-1,RA)   ADDC(SP,-1,SP)
+.macro ALLOCATE(N)      ADDC(sp, N, sp)
+.macro DEALLOCATE(N)    SUBC(sp, N, sp)
+
+| Calling convention:
+|       PUSH(argn-1)
+|       ...
+|       PUSH(arg0)
+|       CALL(subr, nargs)
+|       (return here with result in R0, args cleaned)
+
+|| function call macros
+.macro CALL(label)      BR(label, LP)
+.macro RTN()            JMP(LP)
+.macro XRTN()           JMP(XP)
+.macro CALL(S,N)        BR(S,lp) SUBC(sp, N, sp)
+
+| Conventional stack frames look like:
+|       arg[N]
+|       ...
+|       arg[1]
+|       <saved lp>
+|       <saved bp>
+|  BP-> locals[1]
+|       ...
+|       locals[N]
+|       <other saved regs>
+|  SP-> (first unused location)
+
+|| handy-dandy bp macros: first argument/local is number 1
+.macro LDARG(NTH, REG)          LD(bp, -2-(NTH), REG)
+.macro STARG(REG, NTH)          ST(REG, -2-(NTH), bp)
+.macro LDLOCAL(NTH, REG)        LD(bp, (NTH)-1, REG)
+.macro STLOCAL(REG, NTH)        ST(REG, (NTH)-1, bp)
+
+
+|--------------------------------------------------------
+| Gizmo memory-mapped locations
+|--------------------------------------------------------
+
+TIMER= -16
+TIMERDATA= TIMER+0              | # of instructions between interrupts
+TIMERCMD= TIMER+1               | enable/clear interrupts
+
+OUTPUT= -24
+OUTPUTDATA= OUTPUT+0    | data written here gets sent to output
+OUTPUTCMD= OUTPUT+1             | enable/clear transmission line ready interrupt
+
+INPUT= -32
+INPUTDATA= INPUT+0              | data read here gets key from keyboard
+INPUTCMD= INPUT+1               | enable/clear keyboard interrupt
+
+INTERRUPT_ENABLE= 0x8000        | set this bit in CMD registers to
+                                                        | enable interrupts; clear this bit
+                                                        | to acknowledge an interrupt.
+
+|--------------------------------------------------------
+| Privileged mode instructions
+|--------------------------------------------------------
+
+.macro PRIV_OP(FNCODE)          betaopc (0x00, 0, FNCODE, 0)
+
+|| stops the processor.  You don't ordinarily find this in a
+|| real ISA, but it's useful for timing algorithms.
+.macro HALT() PRIV_OP (0)
+
+|| SVC calls; used for OS extensions
+.macro SVC(code)                betaopc (0x01, 0, code, 0)
+
+| Trap and interrupt vectors
+VEC_RESET       = 0             | Reset (powerup)
+VEC_II          = 1             | Illegal instruction (also SVC call)
+VEC_CLK         = 2             | Clock interrupt
+VEC_KBD         = 3             | Keyboard interrupt
+VEC_OUT         = 4             | Output queue interrupt
+
+| constant for the supervisor bit in the PC
+PC_SUPERVISOR      = 0x80000000         | the bit itself
+PC_MASK            = 0x7fffffff         | a mask for the rest of the PC

@@ -1,0 +1,464 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Examples</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>Floyd-Warshall (ADU Feb 15)</title>
+</head>
+<body>
+<h2>Floyd-Warshall (ADU Feb 15)</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#25497">All-Pairs Shortest Paths</a>
+    <li><a href="#25499">Transitive Hull</a>
+    <li><a href="#25501">Minimax Distance</a>
+    <li><a href="#25504">Maximin Distance</a>
+    <li><a href="#25505">Safest Path</a>
+    <li><a href="#25506">What else can you solve with Floyd-Warshall?</a>
+    <li><a href="#25507">The Rules of the Game</a>
+    <li><a href="#25508">Examples</a>
+</ul><hr>
+    <a name="25497">
+    <h2>All-Pairs Shortest Paths</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Given a directed graph, the Floyd-Warshall algorithm 
+computes the shortest paths between each pair of nodes
+in O(n<sup>3</sup>).
+<p>
+w : edge weights <br>
+d : distance matrix <br>
+p : predecessor matrix
+<p>
+w[i][j] = length of direct edge between i and j<br>
+d[i][j] = length of shortest path between i and j<br>
+p[i][j] = on a shortest path from i to j, p[i][j] is
+          the last node before j, i.e. i -> ... -> p[i][j] -> j
+<h4>Initialization</h4>
+<pre>
+for (i=0; i&lt;n; i++) {
+  for (j=0; j&lt;n; j++) {
+    d[i][j] = w[i][j];
+    p[i][j] = i;
+  }
+}
+for (i=0; i&lt;n; i++) {
+  d[i][i] = 0; 
+}
+</pre>
+<h4>The Algorithm</h4>
+<pre>
+for (k=0; k&lt;n; k++)
+  for (i=0; i&lt;n; i++)
+    for (j=0; j&lt;n; j++)
+      if (d[i][k] + d[k][j] &lt; d[i][j]) {
+        d[i][j] = d[i][k] + d[k][j];
+        p[i][j] = p[k][j];
+      }
+    }
+  }
+}
+</pre>
+<h4>Note</h4>
+In the k-th iteration of the outer loop, we try to improve
+the currently known shortest paths by considering k as an
+intermediate node. Therefore, after the k-th iteration we 
+know those shortest paths that only contain intermediate 
+nodes from the set {0, 1, 2,...,k}. After all n iterations
+we know the real shortest paths.
+<h4>Constructing a Shortest Path</h4>
+<pre>
+print_path (int i, int j) {
+  if (i!=j) {
+    print_path(i,pred[i][j]);
+  }
+  print(j);
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25499">
+    <h2>Transitive Hull</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Given a directed graph, the Floyd-Warshall algorithm 
+can compute the transitive hull in O(n<sup>3</sup>).
+<p>
+w : adjacency matrix<br>
+d : transitive hull <br>
+<p>
+w[i][j]  = edge between i and j (0=no edge, 1=edge)<br>
+d[i][j]  = 1 if and only if j is reachable from i<br>
+<h4>Initialization</h4>
+<pre>
+for (i=0; i&lt;n; i++) {
+  for (j=0; j&lt;n; j++) {
+    d[i][j] = w[i][j];
+  }
+}
+for (i=0; i&lt;n; i++) {
+  d[i][i] = <b>1</b>; 
+}
+</pre>
+<h4>The Algorithm</h4>
+<pre>
+for (k=0; k&lt;n; k++)
+  for (i=0; i&lt;n; i++)
+    for (j=0; j&lt;n; j++)
+      d[i][j] = d[i][j] <b>||</b> (d[i][k] <b>&&</b> d[k][j]);
+    }
+  }
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25501">
+    <h2>Minimax Distance</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Given a directed graph with edge lengths, the Floyd-Warshall algorithm 
+can compute the minimax distance between each pair of nodes in O(n<sup>3</sup>).
+<p>
+w : edge weights <br>
+d : minimax distance matrix <br>
+p : predecessor matrix
+<p>
+w[i][j] = length of direct edge between i and j<br>
+d[i][j] = length of minimax path between i and j<br>
+<h4>Initialization</h4>
+<pre>
+for (i=0; i&lt;n; i++) {
+  for (j=0; j&lt;n; j++) {
+    d[i][j] = w[i][j];
+  }
+}
+for (i=0; i&lt;n; i++) {
+  d[i][i] = <b>0</b>; 
+}
+</pre>
+<h4>The Algorithm</h4>
+<pre>
+for (k=0; k&lt;n; k++) {
+  for (i=0; i&lt;n; i++) {
+    for (j=0; j&lt;n; j++) {
+      d[i][j] = <b>min</b>(d[i][j], <b>max</b>(d[i][k], d[k][j]));
+    }
+  }
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25504">
+    <h2>Maximin Distance</h2>
+    <hr>
+    
+    
+    
+    
+    
+    You can also compute the maximin distance with the Floyd-Warshall algorithm.
+<p>
+w : edge weights <br>
+d : maximin distance matrix <br>
+p : predecessor matrix
+<p>
+w[i][j] = length of direct edge between i and j<br>
+d[i][j] = length of maximin path between i and j<br>
+<h4>Initialization</h4>
+<pre>
+for (i=0; i&lt;n; i++) {
+  for (j=0; j&lt;n; j++) {
+    d[i][j] = w[i][j];
+  }
+}
+for (i=0; i&lt;n; i++) {
+  d[i][i] = <b>0</b>; 
+}
+</pre>
+<h4>The Algorithm</h4>
+<pre>
+for (k=0; k&lt;n; k++) {
+  for (i=0; i&lt;n; i++) {
+    for (j=0; j&lt;n; j++) {
+      d[i][j] = <b>max</b>(d[i][j], <b>min</b>(d[i][k], d[k][j]));
+    }
+  }
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25505">
+    <h2>Safest Path</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Given a directed graph where the edges are labeled with survival probabilities, you can compute the safest path between two nodes
+(i.e. the path that maximizes the product of probabilities along
+the path) with --- try to guess --- Floyd-Warshall!
+<p>
+w : edge weights <br>
+p : probability matrix <br>
+<p>
+w[i][j] = survival probability of edge between i and j<br>
+p[i][j] = survival probability of safest path between i and j<br>
+<h4>Initialization</h4>
+<pre>
+for (i=0; i&lt;n; i++) {
+  for (j=0; j&lt;n; j++) {
+    p[i][j] = w[i][j];
+  }
+}
+for (i=0; i&lt;n; i++) {
+  p[i][i] = <b>1</b>; 
+}
+</pre>
+<h4>The Algorithm</h4>
+<pre>
+for (k=0; k&lt;n; k++) {
+  for (i=0; i&lt;n; i++) {
+    for (j=0; j&lt;n; j++) {
+      p[i][j] = <b>max</b>(p[i][j], p[i][k] <b>*</b> p[k][j]);
+    }
+  }
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25506">
+    <h2>What else can you solve with Floyd-Warshall?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    There are 5 parameters in the algorithm:
+    
+    
+    
+    
+    <ul>
+<li><b>S</b> = the set of values that edges can have<li>
+<b>seq</b> = the sequential operator for combining two paths<li>
+<b>par</b> = the parallel operator for combining two paths<li>
+<b>0</b> = the value that represents a missing edge<li>
+<b>1</b> = the value that represents an empty path
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25507">
+    <h2>The Rules of the Game</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Floyd-Warshall works, if ...
+    
+    
+    
+    
+    <ul>
+<li><b>S</b> is closed under <b>par</b> and <b>seq</b>.<li>
+<b>par</b> is associative, commutative and idempotent (a par a = a).<li>
+<b>seq</b> is associative. <li>
+<b>seq</b> distributes over <b>par</b> (a seq (b par c) = (a seq b) par (a seq c).<li>
+<b>0</b> is an annihilator for <b>seq</b> (a seq 0 = 0 seq a = 0).<li>
+<b>0</b> is an identity for <b>par</b> (a par 0 = 0 par a = a).<li>
+<b>1</b> is an identity for <b>seq</b> (a seq 1 = 1 seq a = a).
+
+    
+    </ul>
+    
+    
+    
+    A proof is given in CLR, page 570.
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25508">
+    <h2>Examples</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Guaranteed Intermediate Stops (Floyd-Warshall works)<li>
+Resistor Networks (Floyd-Warshall fails)
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+<p><i>Last modified 2001-02-15</i>
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left>mdettinger@arsdigita.com</td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

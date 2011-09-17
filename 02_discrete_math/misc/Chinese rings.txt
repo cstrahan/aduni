@@ -1,0 +1,52 @@
+Subject: Re: Prob question
+Date: Thu, 01 Jun 2000 10:10:51 -0400
+From: Shai Simonson <shai@stonehill.edu>
+Organization: Stonehill College and ArsDigita University
+To: Michael Cohen <mcohen@u-aizu.ac.jp>
+CC: Weiping Shi <wshi@cs.unt.edu>,
+     Michael Greenwald <mbgreen@central.cis.upenn.edu>,
+     Bob Sloan <sloan@eecs.uic.edu>
+
+Michael Cohen wrote:
+
+> Speaking of puzzles, please recreate for me the recurrence
+> calculations you did for the Chinese Rings puzzle.  I was
+> too tired to fully appreciate or remember the back-of-the-envelope
+> figuring you did (at the ice cream parlor).
+
+The basic idea is that
+
+T(n) = T(n-1) + 2T(n-2) + 1
+
+This is because we first recursively remove the leftmost  ring, which is
+done by a sequence
+of removing n-2 rings, a single move, and putting n-2 rings back on.
+
+Then we repeat recursively to remove the next n-1 rings.
+
+Once you have this recurrence relationship, you can make a chart bottom
+up ...
+
+T(1) = 1     T(2) = 2    T(3)= 5    T(4)= 10    T(6) = 21    T(7) = 42
+etc
+
+From this chart, most people can guess the recurrence:
+
+T(n) = 2T(n-1) + 1, n odd            2T(n-1), n even.
+
+This is NOT easy to derive directly from the original recurrence by
+substitution but can be proved pretty easily by induction on n.
+
+    (it makes  a great example of the power of guessing and proof by
+induction)
+
+These equations then imply a single substitutuion, that T(n) = 4T(n-2) +
+2 , n even     4T(n-2) + 1, n odd
+
+and these two equations can be solved easily by repeated substituion
+(the most intituive method for recurrence solutions)
+
+to give a closed form T(n) = 2/3 (2^n -1), n even        1/3 (2^(n+1)
+-1)  n odd.
+
+Does that help?

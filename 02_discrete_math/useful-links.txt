@@ -1,0 +1,25 @@
+
+Textbook site
+
+http://www.mhhe.com/math/advmath/rosen/
+
+General Math Resources
+
+http://www.cut-the-knot.com/
+
+The Euclidean Algorithm
+
+http://aleph0.clarku.edu:80/~djoyce/java/elements/bookVII/propVII1.html
+
+Online Towers of Hanoi
+
+one of many no doubt:
+http://www.techinfo.rwth-aachen.de/Lehre/mmt/Ergebnisse/mmt_praktSS99/mmt7/hanoi
+
+MIT discrete math site
+
+The following page has notes, problem sets
+and quizzes with solutions for 6.042 -
+the MIT discrete math course. http://theory.lcs.mit.edu/classes/6.042/fall00/handouts/homepage.html
+
+

@@ -1,0 +1,114 @@
+|| beta definitions
+.include beta
+
+.macro MyMUL(ra, rb, rc) betaop(0x07, ra, rb, rc)
+.macro MyMULC(ra, c, rc) betaopc(0x0F, ra, c, rc)
+
+|| start:
+BR(main) 
+|| illegal op:
+BR(IllegalOp)
+
+SavedRegs:
+        .= .+32
+
+.macro SAVE(Rn)  ST(Rn, SavedRegs+Rn, r31)
+.macro RSTR(Rn)  LD(r31, SavedRegs+Rn, Rn)
+
+IllegalOp:
+        | save state
+        SAVE(r0)  SAVE(r1)  SAVE(r2)   SAVE(r3)
+        SAVE(r4)  SAVE(r5)  SAVE(r6)   SAVE(r7)
+        SAVE(r8)  SAVE(r9)  SAVE(r10)  SAVE(r11)
+        SAVE(r12) SAVE(r13) SAVE(r14)  SAVE(r15)
+        SAVE(r16) SAVE(r17) SAVE(r18)  SAVE(r19)
+        SAVE(r20) SAVE(r21) SAVE(r22)  SAVE(r23)
+        SAVE(r24) SAVE(r25) SAVE(r26)  SAVE(r27)
+        SAVE(r28) SAVE(r29) SAVE(r30)  SAVE(r31)
+
+        LD(xp, -1, r0)          | load [xp-1] (illegal instruction) into r0
+        SHRC(r0, 26, r0)        | shift right to get the actual opcode
+        LD(r0, optable, r0)     | load trap address from table into r0
+        JMP(r0)
+
+UNK = UnknownOp
+
+optable:
+        UNK UNK UNK UNK UNK UNK UNK Mult
+        UNK UNK UNK UNK UNK UNK UNK MultC
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+        UNK UNK UNK UNK UNK UNK UNK UNK
+
+UnknownOp:
+        HALT()
+
+Mult:
+        || get Rb into r2
+        LD(xp, -1, r0)          | load illegal instruction into r0
+        SHRC(r0, 5, r2)         |
+        ANDC(r2, 31, r2)        | r2 now holds Rb
+        LD(r2, SavedRegs, r2)   | r2 now holds <Rb>
+        BR(GetRa)
+
+MultC:
+        || fetch constant into r2
+        LD(xp, -1, r0)          | load illegal instruction into r0
+        SHLC(r0, 32-16-5, r2)   | shove constant up to high end
+        SRAC(r2, 16, r2)        | bring constant back arithmetically
+
+GetRa:
+        | get Ra into r1
+        LD(xp, -1, r0)          | load illegal instruction into r0
+        SHRC(r0, 21, r1)        |        
+        ANDC(r1, 31, r1)        | r1 now holds Ra
+        LD(r1, SavedRegs, r1)   | r1 now holds <Ra>
+
+
+DoMult:                 || r0 will be product
+                        || r1 will be multiplier
+                        || r2 will be multiplicand
+                        || r3 will be testing value
+        CMPLTC(r1, 0, r3)
+        BF(r3, propersign)
+        SUB(r31, r1, r1)
+        SUB(r31, r2, r2)
+propersign:
+        MOVC(0, r0)     || initialize product
+loop:   
+        ANDC(r1, 1, r3)
+        BZ(r3, shift)
+        ADD(r2, r0, r0)
+shift:  SHRC(r1, 1, r1)
+        SHLC(r2, 1, r2)
+        BNZ(r1, loop)
+
+|| answer is now in r0
+
+        LD(xp, -1, r1)          | load illegal instruction into r0
+        ANDC(r1, 31, r1)        | r1 now holds Rc
+        ST(r0, SavedRegs, r1)   | save value into saved regs
+
+RestoreState:
+        RSTR(r0)  RSTR(r1)  RSTR(r2)   RSTR(r3)
+        RSTR(r4)  RSTR(r5)  RSTR(r6)   RSTR(r7)
+        RSTR(r8)  RSTR(r9)  RSTR(r10)  RSTR(r11)
+        RSTR(r12) RSTR(r13) RSTR(r14)  RSTR(r15)
+        RSTR(r16) RSTR(r17) RSTR(r18)  RSTR(r19)
+        RSTR(r20) RSTR(r21) RSTR(r22)  RSTR(r23)
+        RSTR(r24) RSTR(r25) RSTR(r26)  RSTR(r27)
+        RSTR(r28) RSTR(r29) RSTR(r30)  RSTR(r31)
+        JMP(xp)
+
+main:
+        MOVC(stack, sp)
+        MOVC(10, r0)
+        MOVC(-5, r5)
+        MyMUL(r0, r5, r7)
+        MyMULC(r0, -5, r8)
+        HALT()
+
+stack:

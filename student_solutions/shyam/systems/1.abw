@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<abiword version="unnumbered">
+<!-- =====================================================================  -->
+<!-- This file is an AbiWord document.                                      -->
+<!-- AbiWord is a free, Open Source word processor.                         -->
+<!-- You may obtain more information about AbiWord at www.abisource.com     -->
+<!-- You should not edit this file by hand.                                 -->
+<!-- =====================================================================  -->
+
+<!--         Build_ID          = (none) -->
+<!--         Build_Version     = unnumbered -->
+<!--         Build_Options     = LicensedTrademarks:Off Debug:Off Gnome:Off -->
+<!--         Build_Target      = /home/vince/rpm/BUILD/abi-0.7.9/src/Linux_2.2.14-1mdkmosix_i386_OBJ/obj -->
+<!--         Build_CompileTime = 16:09:14 -->
+<!--         Build_CompileDate = May  5 2000 -->
+
+<section>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Systems Assignment 						Shyam Visweswaran</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Date: 2 March 2001</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"><c props="font-weight:bold">Architecture of Complexity - use of Abstraction and Hierarchy to manage complexity.</c></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">A software is a complex system; hence design and implementation of software systems requires one or more methods to manage complexity. Complex systems are characterized by, among other things, a large number of elementary components and multiple interactions among them. Abstraction involves combining numerous elementary components into a single module with a well-specified set of behaviors, with the implementation details are hidden behind well-defined interfaces. Abstraction, thus, reduces the number of components that have to be considered at a particular level. Hierarchy, in contrast, involves reducing the number of interactions by organizing the components into a tree-like structure and limiting the interactions of components to their parents, siblings and offspring.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">A software system designed without using either of these methods for controlling complexity would be hard to implement since the programmer has to keep in mind the details of all the functionality of the software at any given time. It would be even harder to maintain it without an organizing structure.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Abstraction is useful for data structures and procedures that are repeatedly used in the software. The code is written once at one place in the program and can be debugged as a single module. Once debugged, it can be used repeatedly without having to worry about the details of its implementation. For example, in my implementation of the Gnutella client, various packets like Pings, Pongs, Queries etc were designed as abstract data with 2-3 simple properties. I could then write procedures that would handle these data as single units without worrying about the implementation. However, abstraction reduces performance since the final compiled code is much larger than if the whole program had been written as a single module without any abstraction barriers.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">Hierarchy is helpful in reducing the number of components to interact with when coding a particular module of a software system. For example, in my Gnutella client, the module listening to the network interacted with the network and the parser only - the packets that it picked up were passed on to the parser that sorted the packets and passed them on to modules that dealt with specific types of packets. A possible downside in the use of hierarchy is that we may be locked into certain relationships between modules that would be hard to change in future versions of the software without completely redesigning the software.</p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in"></p>
+<p props="margin-left:0.1250in; margin-right:0.1250in; text-indent:0.0000in">In my opinion, however, abstraction and hierarchy are not mutually exclusive and use of one usually implies the use of the other, since the two techniques reduce complexity in complementary ways. Thus, if a software can be thought of as a graph, abstraction reduces the number of nodes (each node representing a module) and hierarchy reduces the number of edges (each edge representing an interaction between two modules) - both ultimately reducing the size of the graph and hence the complexity of the software system represented by it. However, if the abstraction or the organization of the hierarchy is done poorly it could lead to software that cannot be extended or scaled easily.</p>
+</section>
+</abiword>

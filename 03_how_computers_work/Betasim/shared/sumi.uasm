@@ -1,0 +1,49 @@
+.include "../shared/beta"
+
+        MOVC(stack,sp)
+
+main:   MOVC(7,R3)
+        MOVC(25,R4)
+
+        PUSH(R4)
+        PUSH(R3)
+        BR(sumi,lp)
+        DEALLOCATE(2)
+
+        HALT()
+
+sumi:
+        PUSH(lp)
+        PUSH(bp)
+        MOV(sp,bp)
+        PUSH(R1)
+        PUSH(R2)
+
+        LD(bp,-3,R1)    |a
+        LD(bp,-4,R2)    |b
+
+        CMPEQ(R1,R2,R0)
+        BT(R0,base)
+
+        PUSH(R1)
+        ADDC(R1,1,R1)
+
+        PUSH(R2)
+        PUSH(R1)
+        BR(sumi,lp)
+        DEALLOCATE(2)
+
+        POP(R1)
+        ADD(R1,R0,r0)
+        BR(return)
+
+base:   MOV(R2,R0)
+
+return: POP(R2)
+        POP(R1)
+        MOV(bp,sp)
+        POP(bp)
+        POP(lp)
+        JMP(lp)
+
+stack:

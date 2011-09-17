@@ -1,0 +1,120 @@
+<html>
+<head></head>
+<body bgcolor=white>
+<pre>
+-- Todd Sjoblom 11 apr 2001
+--Problem Set4?? Metadata for Patients & Doctors
+
+--The set of registered users has subsets of patients and doctors. 
+--Note that it is possible for a user-doctor to be a user-patient of
+-- another user-doctor!  Thus prescribing and undergoing treatment.
+
+--Patients may attend meetings of perhaps 10-15, led by 1 or more doctors.
+
+
+drop table patient_doctor_map;
+drop table doctors;
+drop table patients;
+
+-- users:
+        address_line1           varchar(100),
+        address_line2           varchar(100),
+        city                    varchar(50),
+        state                   char(50),
+        postal_code             varchar(20),
+        country                 char(2),         -- ISO country code    
+
+
+
+create table patients (
+        patients_id             not null references users primary key,
+        birthdate               date not null,
+        age_at_menarche         integer,        -- Age first menses
+        age_at_first_live_birth integer,        -- Age first live birth (None -> 0)
+        age_at_menopause        integer,        
+        therapy                 clob,
+        total_cholesterol       number,         -- mg per dL [mmol per L]
+        hdl_cholesterol         number,         -- mg per dL [mmol per L]
+        systolic_pressure       integer,        -- mm Hg
+        diabetes_p              char(1),        -- fasting glucose > 140 mg per dL [7.8 mmol per L]
+        smoker_p                char(1),        -- any smoking in the past month
+        rel_breast_cancer_n     integer,        -- # sisters+daughters+mother had breast cancer?
+        -- Have you ever had breast cancer? (t/f):
+        breast_cancer_p         char(1) check (breast_cancer_p in ('t','f')),
+        biopsy                  char(1),        -- Have you ever had a breast biopsy ("bb")
+        -- Have you ever had bb showing ...carcinoma... (?->'f'):
+        biopsy_carcinoma_p      char(1) check (biopsy_carcinoma_p in ('t','f')),
+        biopsy_n                integer,        -- bb -> # previous breast biopses
+        -- bb -> did doctor say atypical hyperplasia (t/f/?):
+        biopsy_hyperplasia_p    char(2)  check (biopsy_hyperplasia_p in ('t','f','?')), 
+        race                    char(2),        -- White/Black/Asian
+        -- monthly breast self-exams
+        monthly_check_p         char(1)  check (monthly_check_p in ('t','f')),
+        last_md_visit           date,           -- to doctor's office
+        next_md_visit           date,           -- to doctor's office
+        last_mammogram          date,           -- last performed
+        next_mammogram          date            -- next scheduled
+);
+select * from patients;
+
+create table doctors (
+       doctor_id                not null references users primary key,
+       med_school               varchar(100),
+       md_degree_date           date,
+       interests                varchar(4000)
+);
+select * from doctors;
+
+create table patient_doctor_map (
+        patient_id              not null references patients,
+        doctor_id               not null references doctors,
+        unique(patient_id, doctor_id)
+);
+select * from patient_doctor_map;  
+create table patients (
+        patients_id             not null references users primary key,
+        birthdate               date not null,
+        age_at_menarche         integer,        -- Age first menses
+        age_at_first_live_birth integer,        -- Age first live birth (None -> 0)
+        age_at_menopause        integer,        
+        therapy                 clob,
+        total_cholesterol       number,         -- mg per dL [mmol per L]
+        hdl_cholesterol         number,         -- mg per dL [mmol per L]
+        systolic_pressure       integer,        -- mm Hg
+        diabetes_p              char(1),        -- fasting glucose > 140 mg per dL [7.8 mmol per L]
+        smoker_p                char(1),        -- any smoking in the past month
+        rel_breast_cancer_n     integer,        -- # sisters+daughters+mother had breast cancer?
+        -- Have you ever had breast cancer? (t/f):
+        breast_cancer_p         char(1) check (breast_cancer_p in ('t','f')),
+        biopsy                  char(1),        -- Have you ever had a breast biopsy ("bb")
+        -- Have you ever had bb showing ...carcinoma... (?->'f'):
+        biopsy_carcinoma_p      char(1) check (biopsy_carcinoma_p in ('t','f')),
+        biopsy_n                integer,        -- bb -> # previous breast biopses
+        -- bb -> did doctor say atypical hyperplasia (t/f/?):
+        biopsy_hyperplasia_p    char(2)  check (biopsy_hyperplasia_p in ('t','f','?')), 
+        race                    char(2),        -- White/Black/Asian
+        -- monthly breast self-exams
+        monthly_check_p         char(1)  check (monthly_check_p in ('t','f')),
+        last_md_visit           date,           -- to doctor's office
+        next_md_visit           date,           -- to doctor's office
+        last_mammogram          date,           -- last performed
+        next_mammogram          date            -- next scheduled
+);
+select * from patients;
+
+create table doctors (
+       doctor_id                not null references users primary key,
+       med_school               varchar(100),
+       md_degree_date           date,
+       interests                varchar(4000)
+);
+select * from doctors;
+
+create table patient_doctor_map (
+        patient_id              not null references patients,
+        doctor_id               not null references doctors,
+        unique(patient_id, doctor_id)
+);
+select * from patient_doctor_map;  
+</pre>
+</body></html>

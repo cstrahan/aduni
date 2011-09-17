@@ -1,0 +1,16 @@
+1
+Polynomial: 1x^0 + 1x^1
+Polynomial: 5x^0 + 5x^1
+Polynomial: -1x^0 + -1x^1
+Polynomial: 0x^0 + 0x^1
+Polynomial: 1x^0 + 1x^1 + 2x^2 + 4x^3 + 8x^4
+Polynomial: 1x^0 + -1x^1 + 0x^2 + 3x^3 + 8x^4
+Polynomial: 1x^0 + -1x^1 + 0x^2 + 3x^3 + 8x^4
+Polynomial: 2x^0 + 0x^1 + 0x^2 + 3x^3 + 8x^4
+Polynomial: 2x^0 + 2x^1 + 2x^2 + 4x^3 + 8x^4
+Polynomial: 3x^0 + 3x^1 + 2x^2 + 4x^3 + 8x^4
+Polynomial: 1x^0 + 2x^1 + 1x^2
+Polynomial: 1x^0 + 3x^1 + 3x^2 + 1x^3
+Polynomial: 1x^0 + 4x^1 + 6x^2 + 4x^3 + 1x^4
+Polynomial: 1x^0 + 8x^1 + 28x^2 + 56x^3 + 70x^4 + 56x^5 + 28x^6 + 8x^7 + 1x^8
+8

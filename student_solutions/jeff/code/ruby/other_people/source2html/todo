@@ -1,0 +1,14 @@
+TODO
+
+o Add C/C++ module
+
+Done in 0.9.3
+* Added color for keywords and comments
+
+Done in 0.9.2
+* Add a Python module (29/Nov/00)
+* Add a Perl module (29/Nov/00)
+* Add a shell module (29/Nov/00)
+* Get linking working correctly for non-Java code (29/Nov/00)
+* Add a blurb area to the index file. (29/Nov/00)
+* Consolidate with Eiffel version.

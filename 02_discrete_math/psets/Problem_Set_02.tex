@@ -1,0 +1,196 @@
+%&LaTeX
+\documentclass{article}
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+\newcommand{\tab}{\makebox[4em]{}}
+
+
+\begin{document}
+
+
+\begin{center}
+\textbf{ArsDigita University}
+
+
+\end{center}
+
+\begin{center}
+\textbf{Month 2: Discrete Mathematics - Professor Shai Simonson}
+
+
+\end{center}
+
+\begin{center}
+\textbf{Problem Set 2 -- Sets, Functions, Big-O, Rates of Growth}
+
+
+\end{center}
+
+1.\tab 
+Prove by formal logic:\\
+a.\tab 
+The complement of the union of two sets equals the intersection 
+of the complements.\\
+b.\tab The complement of the intersection of two sets equals the union 
+of the complements.\\
+c.\tab (\textit{B} \ensuremath{-}\textit{A}) \ensuremath{\cup} (\textit{C} \ensuremath{-} \textit{A}) = (\textit{B} \ensuremath{\cup} \textit{C}) 
+-- \textit{A}. \\
+d.\tab If two sets are subsets of each other then they are equal.
+
+
+2.\tab 
+Generalize De Morgan's laws for \textit{n} sets and prove the laws 
+by induction.
+
+
+3.\tab 
+Prove by induction on the size of the set, that the power set \textit{P(A)} has 
+cardinality \textit{2}$^{\mathit{{\textbar}A}}$$^{{\textbar}}$.
+
+
+\textit{4.\tab }
+\textit{A} \ensuremath{\oplus} \textit{B} is defined to be the set of all elements 
+in \textit{A} or \textit{B} but not in both \textit{A} and \textit{B.} \\
+a.\tab 
+Determine whether or not \ensuremath{\oplus} is commutative. Prove your 
+answer. \\
+b.\tab Determine whether \ensuremath{\oplus} is associative. Prove your answer.\\
+c.\tab Determine whether \ensuremath{\oplus} can be distributed over union. 
+Prove your answer.\\
+d.\tab Determine whether \ensuremath{\oplus} can be distributed over intersection. 
+Prove your answer.
+
+
+5.\tab 
+Assume a universal set of 8 elements. Given a set \textit{A = a}$_{\mathit{7}}$\textit{a}$_{\mathit{6}}$\textit{a}$_{\mathit{5}}$\textit{a}$_{\mathit{4}}$\textit{a}$_{\mathit{3}}$\textit{a}$_{\mathit{2}}$\textit{a}$_{\mathit{1}}$\textit{a}$_{\mathit{0}}$\textit{,} 
+represented by 8 bits, explain how to use bitwise and/or/not 
+operations, in order to:\\
+a.\tab 
+Extract the rightmost bit of set \textit{A}.\tab b. Extract the odd numbered 
+bits. 
+
+
+c.\tab Make bits 4-6 equal to 1.
+
+
+Given another set \textit{B,} explain how to:\tab a. Determine if A \ensuremath{\subseteq} 
+B.\tab b. Extract A \ensuremath{-} B.
+
+
+6.\tab 
+Given a set of 29 students, where 8 need housing and financial 
+aid; 12 need housing, financial aid, and an e-mail account; 17 
+need an e-mail account and financial aid; 23 need housing, 26 
+need financial aid, 19 need e-mail accounts, and 4 students don't 
+need anything. How many students need both housing and financial 
+aid?
+
+
+7.\tab 
+How many numbers are there between 1 and 10000, which are either 
+even, end in 0, or have the sum of its digits divisible by 9? 
+Hint: Use inclusion/exclusion.
+
+
+8.\tab 
+Prove that \textit{f(x)} = \textit{x}$^{3}$ -- 1000\textit{x}$^{2}$ + \textit{x} -- 1 is \ensuremath{\Omega}(\textit{x}$^{\mathit{3}}$\textit{)} 
+and O(\textit{x}$^{\mathit{3}}$).
+
+
+9.\tab 
+Prove that 1$^{k}$ + 2$^{k}$ + 3$^{k}$ + \dots  + n$^{k}$ is \ensuremath{\Omega}(\textit{n}$^{\mathit{k+1}}$\textit{)} 
+and O(\textit{n}$^{\mathit{k+1}}$), for any constant \textit{k.} 
+
+
+10.\tab 
+Order the following functions in order of their growth rate. 
+If \textit{f(x)} is O(\textit{g(x))}, but \textit{g(x)} is not O(\textit{f(x)),} then 
+put \textit{f(x)} above \textit{g(x).} If they are each big-O of each other, 
+then place them on the same level.
+
+
+
+\textit{x}$^{\mathit{2}}$ \textit{+ x}$^{\mathit{3}}$ \tab \tab \textit{3}$^{\mathit{x}}$\tab \textit{x!\tab x/log}$_{\mathit{2}}$\textit{x 
+\tab x}$^{\mathit{2}}$\textit{+ 2}$^{\mathit{x}}$\tab \tab \tab \textit{xlog}$_{\mathit{2}}$\textit{x\tab \tab 2}$^{\mathit{xlogx}}$\tab \textit{logx}$^{\mathit{2}}$\\
+\textit{log}$_{\mathit{2}}$\textit{x!\tab \tab log}$_{\mathit{2}}$\textit{x,\tab lnx,\tab 2}$^{\mathit{x\tab \tab }}$\textit{x(1+2+\dots + 
+x)\tab \tab loglogx\tab \tab 2}$^{\mathit{x}}$$^{\mathit{2}}$\tab $^{\mathit{log}}$$^{\mathit{2}}$$^{\mathit{x}}$
+
+11.\tab 
+Compute the sum of the infinite series below.\\
+a.\tab 
+1 + 1/4 + 1/16 + 1/64 + \dots \\
+b.\tab 1 + 2/4 + 3/16 + 4/64 + \dots 
+
+
+12.\tab 
+ Telescoping Series.\\
+a.\tab 
+Using the identity 1/(\textit{k)(k+1) =} 1\textit{/k --} 1\textit{/(k+1),} find 
+the value of the infinite sum 1/(1*2) + 1/(2*3) + 1/(3*4) + \dots .\\
+b.\tab The \textit{n}th triangle number is defined to be the sum of the 
+first \textit{n} positive integers. What is the value of the infinite 
+sum of the reciprocals of the triangle numbers.
+
+
+13.\tab 
+Countability Proofs.\\
+a.\tab 
+Prove that the positive odd numbers have the same cardinality 
+as the positive even numbers.\\
+b.\tab Prove that the set of all integer points in the positive quadrant 
+of 3-dimensional space are countable. \\
+c.\tab Prove by induction that the set of all vectors in \textit{k} dimensions 
+with positive integer values is countable.\\
+d.\tab Prove that the number of Scheme programs is countable. Hint: 
+Order them by the number of characters each contains.
+
+
+14.\tab 
+The following is a version of Russell's Paradox for sets, described 
+in your text (Rosen) in problem 26, on page 45. Consider any 
+computer program that takes other programs as input, and outputs \textit{yes} or \textit{no} 
+based on some criterion. (A compiler or interpreter, for example). 
+It is possible for such a program to be fed back into itself, 
+and depending on the program it might either say \textit{yes} (a Scheme 
+interpreter written in Scheme) or \textit{no} (a Scheme interpreter 
+written in Java). Call the programs that say \textit{no} to themselves \textit{self-hating} programs. 
+Now assume that there is a computer program that takes other 
+programs as input and says \textit{yes} to all the \textit{self-hating} 
+programs. \\
+a.\tab 
+Assuming this program never runs forever on an input, analyze 
+what happens when this program is input to itself. \\
+b.\tab Consider the possibility that the program will run forever 
+answering neither \textit{yes} or \textit{no} on some input\textit{.}
+
+
+15.\tab 
+Counting each arithmetic calculation or comparison, extraction 
+or exchange of a card as one operation, what is the worst-case 
+order of growth of an algorithm that sorts numbered cards in 
+the following way? 
+
+
+a.\tab 
+Find the largest valued card in the deck by shuffling through 
+one card at a time extracting a card if it is the largest one 
+seen so far, and swapping the previously largest card back into 
+the deck. When the largest has been found, place this card face 
+down in a new pile and repeat the previous process until no cars 
+in the original pile are left. Explain your answer.\\
+b.\tab This time we assume that the largest number on any of the \textit{n} cards 
+is \textit{n}$^{\mathit{2}}$\textit{.} We sort the cards by placing a set of \textit{n}$^{\mathit{2}}$ 
+cards numbered from 1 to \textit{n}$^{\mathit{2}}$ on a table. Then one by 
+one, place each card on top of the number equal to it on the 
+desk. This method can be improved to work in linear time. Explain 
+how. Hint: Use division.
+
+\end{document}

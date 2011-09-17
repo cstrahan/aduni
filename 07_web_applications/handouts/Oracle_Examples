@@ -1,0 +1,99 @@
+create table students (
+       student_id	      integer not null,
+       name		      varchar(30) unique not null,
+       home_town	      varchar(30),
+       home_state	      char(2),
+       age		      integer not null
+);
+
+
+insert into students 
+       (student_id, name, home_town, home_state, age) 
+    values 
+       (1, 'Dan Parker', 'Guyton', 'GA', 23);
+
+insert into students 
+       (student_id, name, home_town, home_state, age) 
+    values 
+       (2, 'Bob Broderic', 'San Ramon', 'CA', 23);
+
+create table short_students as (select student_id, name from students);
+
+
+create sequence student_seq start with 100;
+
+insert into students 
+       (student_id, name, home_town, home_state, age) 
+    values 
+       (student_seq.nextval, 'Bob Broderic', 'San Ramon', 'CA', 23);
+
+
+create table fav_food (
+       food_id	      integer primary key,
+       name	      varchar(25) not null,
+       calories	      integer
+);
+
+create sequence food_seq start with 1;
+
+insert into fav_food 
+       (food_id, name, calories)
+   values
+       (food_seq.nextval, 'Carrot', 45);
+
+insert into fav_food 
+       (food_id, name, calories)
+   values
+       (food_seq.nextval, 'Ice Cream', 45);
+
+
+select * from short_students, fav_food
+       
+
+
+
+drop table fav_food;
+drop sequence food_seq;
+drop table short_students;
+drop table students;
+drop sequence student_seq;
+
+
+
+create table tas (
+       ta_id	  integer primary key,
+       ta_name	  varchar(10) not null
+);
+
+create table students (
+       student_id	  integer primary key,
+       ta_id		  references tas,
+       student_name	  varchar(10)
+);
+       
+insert into tas (ta_id, ta_name) values (1, 'dan';)
+
+insert into tas (ta_id, ta_name) values (2, 'sam');
+
+insert into tas (ta_id, ta_name) values (3, 'mike');
+
+insert into students (student_id, ta_id, student_name) values (1, 1 , 'bob');
+
+insert into students (student_id, ta_id, student_name) values (2, 1 , 'allen');
+
+insert into students (student_id, ta_id, student_name) values (3, 1 , 'andrew');
+
+insert into students (student_id, ta_id, student_name) values (4, 2 , 'julie');
+
+insert into students (student_id, ta_id, student_name) values (5, 3 , 'jim');
+
+
+
+
+
+
+
+
+
+
+

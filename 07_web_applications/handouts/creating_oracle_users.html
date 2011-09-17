@@ -1,0 +1,20 @@
+SVRMGR>  select file_name from dba_data_files;
+
+[output should be something like this:
+       <dbf-directory>/system01.dbf
+       <dbf-directory>/tools01.dbf
+       <dbf-directory>/rbs01.dbf
+      ...
+]
+
+
+SVRMGR> create tablespace <service_name> datafile '<dbf-dir>/<service_name>01.dbf' size 50m autoextend on default storage (pctincrease 1);
+
+SVRMGR> create user <service_name> identified by <db_password> default tablespace <service_name> temporary tablespace temp quota unlimited on <service_name>;
+
+SVRMGR> grant connect, resource, ctxapp to <service_name>;
+
+SVRMGR> grant javasyspriv to <service_name>;
+
+SVRMGR> exit;
+

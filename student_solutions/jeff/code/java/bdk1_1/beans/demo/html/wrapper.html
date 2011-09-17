@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Wrapped beans</title>
+</head>
+
+<body>
+<h1>Wrapped beans</h1>
+
+Simple HTML page to show three beans running inside the generic
+BeanWrapper applet.
+<p>
+The trhee beans are a juggler bean, a molecule viewer bean, and
+a serialized sorter bean.  The juggler and the sorter are both
+beans and applets, whereas the molecule view is simply a bean.
+<p>
+Try running this page with the JDK 1.1 appletviewer, or with HotJava 1.0.
+<p>
+<applet
+    codebase=../
+    code=sunw/wrapper/BeanWrapper.class
+    width=144
+    height=125>
+<param name=bean value=sunw.demo.juggler.Juggler>
+</applet>
+
+<applet
+    codebase=../
+    code=sunw/wrapper/BeanWrapper.class
+    width=150
+    height=150>
+<param name=bean value=sunw.demo.molecule.Molecule>
+</applet>
+
+<applet
+    codebase=../
+    code=sunw/wrapper/BeanWrapper.class
+    width=100
+    height=100>
+<param name=bean value=sunw.demo.sort.SorterBean>
+</applet>
+
+<p>
+KGH 1/19/97
+<p>
+
+</body>
+</html>

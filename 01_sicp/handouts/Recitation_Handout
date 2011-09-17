@@ -1,0 +1,309 @@
+;;;
+;;; recitation-eval.scm
+;;;
+;;; From SICP Instructor's Manual, pp. 121-122.
+;;;
+;;; ADU SICP, October 2000.
+;;;
+;;; Comments and minor modifications, John Pezaris, 10/2000.
+;;; Exercises taken from the Instructor's Manual and comments  extended.
+
+;;; The ADU-Evaluator is a modification of the full-blown evaluator which was
+;;; presented in lecture and is part of the problem set for this unit.  This
+;;; evaluator is smaller, and all of the abstraction barriers have been broken
+;;; down -- we use the concrete CADDR (and similar) selectors to get at the
+;;; various bits and pieces of expressions.  *This is not the way you would
+;;; really build an evaluator!* But it makes understanding ours a little
+;;; easier.
+;;;
+;;; Our language here will be ADU-Scheme where all keywords have been prefixed
+;;; by "adu:".  So, for example, we will write expressions like,
+;;;
+;;;     (adu:define (square x) (adu:* x x))
+;;;
+;;; to help us keep track of exactly which primitives and special forms are
+;;; which.  It is, in every other sense, just like Scheme.  To make things
+;;; *completely* clear, we could even prepend the "adu:" moniker to symbols,
+;;; as in:
+;;;
+;;;     (adu:define (adu:square adu:x) (adu:* adu:x adu:x))
+;;;
+;;; but that gets a bit tiresome.  Use colored chalk (or ink) instead.  
+;;;
+;;; For the examples at the end of this file, we assume the following bindings
+;;; have already been made in the GLOBAL-ENVIRONMENT:
+;;;
+;;;    adu:+ ... [ prim-proc-add ]
+;;;    adu:- ... [ prim-proc-sub ]
+;;;    adu:* ... [ prim-proc-mul ]
+;;;    adu:< ... [ prim-proc-less-than? ]
+;;;
+;;; Everything else is either a special form (in ADU-Scheme) or a variable
+;;; that gets bound as expressions are evaluated.
+
+
+;;; ADU-EVAL
+;;;
+;;; The first half!
+;;;
+;;; This takes an expression (which is a list!) and evaluates it in the
+;;; supplied environment.
+
+(define (adu-eval exp env)
+
+  ;; dispatch on expression type
+  (cond 
+
+   ;; BASE CASES
+
+   ;; self-evaluating (eg, numbers)
+   ((number? exp)				; self-evaluating?
+    exp)					;   return exp
+
+   ;; symbols -- value will be fetched from environment
+   ((symbol? exp)				; variable?
+    (lookup-variable-value exp env))		;   look up value in env
+
+
+   ;; SPECIAL FORMS
+   
+   ;; rule for quoted objects
+   ;; (adu:quote <expr>)
+   ((eq? (car exp) 'adu:quote) 			; quoted?
+    (cadr exp))					;   return rest of list!
+   
+   ;; rule for procedure objects in the environment model
+   ;; (adu:lambda (<params>) <body>)
+   ((eq? (car exp) 'adu:lambda)			; lambda?
+    (list 'proc-obj				;   make-procedure
+	  (cadr exp)				;   the lambda parameters
+	  (caddr exp)				;   the lambda body
+	  env))					;   the defining environment
+   
+   ;; rule for if statements
+   ;; (adu:if <predicate> <consequent> <alternate>)
+   ((eq? (car exp) 'adu:if)			; adu:if?
+    (eval-adu:if exp env))              	;   pass on the joy
+   
+   ;; can add other special forms -- define, set!, begin, cond
+   ;; the code would go here ...
+   
+
+   ;; COMBINATIONS
+   ;; -- a.k.a. non-special forms --
+   ;; (<operator> <arg1> <arg2> ... <argN>)
+   (else
+    (adu-apply (adu-eval (car exp) env)		; operator
+	       (list-of-values (cdr exp)	; operands
+			       env)))))
+
+
+;;; ADU-APPLY
+;;;
+;;; The other half!
+;;;
+;;; This takes an procedure object (the first argument) and applies it to a
+;;; list of evaluated arguments (the second argument).
+
+(define (adu-apply procedure arguments)
+
+  ;; dispatch on procedure type
+  (cond 
+
+   ;; primitive procedure?
+   ;; (most every fully-evaluatable expression eventually gets here)
+   ((primitive-procedure? procedure)		; magic
+    (apply-primitive-procedure procedure arguments))
+
+   ;; procedure object?
+   ((eq? (car procedure) 'proc-obj)      
+    ;; procedure is (proc-obj <params> <body> <env))
+    ;; rule for making a new frame in the environment model
+    (adu-eval
+
+     ;; the procedure body ...
+     (caddr procedure)				; procedure body
+
+     ;; ... and the environment in which to evaluate it which
+     ;; will be the procedure's defining environment extended to bind the
+     ;; formal parameters to the actual values.
+     (extend-environment			
+       (cadr procedure)				; formal parameters
+       arguments				; actual parameters
+       (cadddr procedure))))			; procedure environment
+
+   ;; it can be nothing else!
+   (else
+    (error "Unknown procedure type -- ADU-APPLY" procedure))))
+
+
+;;; LIST-OF-VALUES
+;;;
+;;; Helper function to evaluate a list of expressions.  Not unlike
+;;; MAP.
+
+(define (list-of-values exps env)
+  (if (null? exps)
+      '()
+      (cons (adu-eval (car exps) env)
+	    (list-of-values (cdr exps) env))))
+
+
+;;; EVAL-ADU:IF
+;;;
+;;; Ignores possibility of IF with no alternate.
+
+(define	(eval-adu:if exp env)
+  (if (true? (adu-eval (cadr exp) env))		; if predicate
+      (adu-eval (caddr  exp) env)		; if consequent
+      (adu-eval (cadddr exp) env)))		; if alternate
+
+
+;;; TRUE?
+;;;
+;;; Needed for EVAL-ADU:IF.
+
+(define (true? x)
+  (not (eq? x false)))
+
+
+;;; ENVIRONMENT ABSTRACTION
+;;;
+;;; The environment abstraction.  This contains a sequence of frames, each
+;;; holding definitions (bindings) between variables and values at that level.
+;;; These are how we will implement the environment frames for the environment
+;;; model.
+
+;;; EXTEND-ENVIRONMENT
+;;;
+;;; Here we implement a frame as a list of bindings (variable-value pairs)
+;;; instead of as a pair of a variable list and a value list.  This is
+;;; directly analogous to the TABLE abstraction seen earlier in section.
+
+(define (extend-environment vars vals base-env)
+  (cons (make-frame vars vals) base-env))
+
+;;; MAKE-FRAME
+;;;
+;;; Create a new frame from two lists, one of variable names and the other of
+;;; variable values.  Associations (bindings) are made between the elements of
+;;; the two, in order.
+
+(define (make-frame vars vals)
+  (cond ((and (null? vars) (null? vals))
+	 '())
+	((null? vars)
+	 (error "Too many arguments supplied" vals))
+	((null? vals)
+	 (error "Too few arguments supplied" vars))
+	(else
+	 (cons (cons (car vars) (car vals))	; make binding!!
+	       (make-frame (cdr vars) (cdr vals))))))
+
+;;; LOOKUP-VARIABLE-VALUE
+;;;
+;;; Given a variable name and an environment, find the binding for that
+;;; variable and return it, or trigger an error if no binding was found.
+
+(define (lookup-variable-value var env)
+  (if (null? env)
+      (error "Unbound variable" var)
+      (let ((binding (assq var (car env))))	; look in 1st frame
+	(if (eq? binding false)
+	    (lookup-variable-value var (cdr env))
+	    (cdr binding)))))
+
+;;; ASSQ
+;;;
+;;; Like ASSOC in Chapter 3, but uses EQ? instead of EQUAL?
+
+(define (assq var bindings)
+  (cond ((null? bindings)
+	 false)
+	((eq? var (caar bindings))
+	 (car bindings))
+	(else
+	 (assq var (cdr bindings)))))
+	 
+
+;;; EXERCISES
+;;;
+;;; Trace out the evaluation of the following expressions.
+
+;;; Exercise 1
+;;;
+;;; 1
+;;;
+;;; Evaluation of this simple self-evaluation expression illustrates the
+;;; ADU-EVAL dispatch on expression type.
+
+;;; Exercise 2
+;;;
+;;; (adu:+ 3 4)
+;;;
+;;; Evaluation of a simple combination shows the essential flow from ADU-EVAL
+;;; to ADU-APPLY.  We assume the application of the primitive procedure
+;;; PRIM-PROC-ADD to its arguments is automagically done, but we still must
+;;; fetch the value of the symbol "adu:+" from the global environment (we
+;;; glaze over where the global environment comes from for now) which will be
+;;; a primitive procedure.
+
+;;; Exercise 3
+;;;
+;;; (adu:+ (adu:* 3 4) (adu:* 5 6))
+;;;
+;;; This illustrates the recursive evaluation of subexpressions, through
+;;; repeated calls through ADU-EVAL.  Watch carefully as LIST-OF-VALUES maps
+;;; ADU-EVAL over the argument list ((* 3 4) (* 5 6)) and builds up a list of
+;;; evaluated arguments (12 30).  Notice that this *cannot* be accomplished
+;;; with a direct call to ADU-EVAL, as the expression which is the argument
+;;; list will be expected to have an operator in the first position -- but
+;;; that has already been stripped off, and thus would generate an error.
+
+;;; Exercise 4
+;;;
+;;; ((adu:lambda (x) (adu:* x x)) 3)
+;;;
+;;; This illustrates the binding of a variable and the way in which ADU-APPLY
+;;; recursively evaluates the body of the compound procedure.  It also shows
+;;; the evaluation of the ADU:LAMBDA special form and the evaluation of a
+;;; bound variable.  The environment model's actions are seen in partial glory
+;;; here.
+
+;;; Exercise 5
+;;;
+;;; (((adu:lambda (x)
+;;;      (adu:lambda (y) (adu:+ x y)))
+;;;   3)
+;;;  4)
+;;;
+;;; This illustrates lexical scoping.  In particular, it shows how the
+;;; evaluation of a ADU:LAMBDA expression retains an environment containing
+;;; the binding of the free variable (X in this case).  The environment
+;;; model's glory continues to be revealed.
+
+
+;;; Exercise 6
+;;;
+;;; ((adu:lambda (x y)
+;;;    ((adu:lambda (y) (adu:+ x y))
+;;;     (adu:* x y)))
+;;;  3
+;;;  4)
+;;;
+;;; This illustrates lexical scoping in a more complex case where a variable
+;;; is shadowed.  The environment model is displayed in full glory!
+
+;;; Exercise 7
+;;;
+;;; ((adu:lambda (x)
+;;;    (adu:if (adu:< x 0) (adu:- 0 x) x))
+;;;  2)
+;;;
+;;; This illustrates the evaluation of the ADU:IF special form, the most
+;;; interesting of the special forms (after ADU:LAMBDA).  Make sure you
+;;; understand why we place the ADU:IF statement in a procedure body.
+
+;;;
+;;; end.
+

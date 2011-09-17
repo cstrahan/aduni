@@ -1,0 +1,16 @@
+Welcome to our lovely source tree! =)
+
+This file is mostly for testing purposes, but it is probably not such
+a bad idea to talk about a few neat CVS commands.
+
+From the command line, you can add a new file to CVS with
+
+bash$ cvs add <filename>
+
+You can also register a file with CVS in emacs with "m-x vc-register"
+Also, you can checkin the file you're working with using the command
+"c-x c-q".
+
+Let's rock it! -JMR
+
+

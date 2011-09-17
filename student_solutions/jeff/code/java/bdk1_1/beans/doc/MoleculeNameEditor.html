@@ -1,0 +1,84 @@
+ 
+<html>
+<head>
+<title>MoleculeNameEditor Color-Annotated Source</title>
+</head>
+<body BGCOLOR=#C0C0C0>
+<h1><center>MoleculeNameEditor Color-Annotated Source</center></h1>
+<hr>
+
+<p>
+The Molecule example provides a good example of how to provide a 
+<font color=white>custom
+Property Editor</font> for a specific property.  The custom Property
+Editor is implemented in the MoleculeNameEditor class. The MoleculeBeanInfo
+class specifies MoleculeNameEditor as the Property Editor. 
+
+<h3>MoleculeBeanInfo.java</h3>
+<pre>
+package sunw.demo.molecule;
+import java.beans.*;
+
+public class MoleculeBeanInfo extends SimpleBeanInfo {
+
+//Since only the molecule name property is returned from this function,
+//only the molecule name is exposed as an editable property.
+
+    <font color=white>public PropertyDescriptor[] getPropertyDescriptors() {</font>
+        try {<font color=white>
+            PropertyDescriptor pd = new PropertyDescriptor("moleculeName",
+                                                        Molecule.class);</font>
+	//a custom property editor is indicated..<font color=white>
+            pd.setPropertyEditorClass(MoleculeNameEditor.class);</font>
+	//and the array with the single property is returned..<font color=white>
+            PropertyDescriptor result[] = { pd };
+            return result;</font>
+        } catch (Exception ex) {
+            System.err.println("MoleculeBeanInfo: unexpected exeption: " + ex);
+            return null;
+        }
+    }    
+
+}
+</pre>
+<hr>
+<h3>MoleculeNameEditor.jav</h3>
+<pre>
+
+package sunw.demo.molecule;
+
+/**
+ * Special case property editor for molecule names.
+ */
+<font color=white>
+public class MoleculeNameEditor
+		extends java.beans.PropertyEditorSupport {
+
+    public String[] getTags() {
+	String result[] = {
+	    "HyaluronicAcid",
+	    "benzene",
+	    "buckminsterfullerine",
+	    "cyclohexane",
+	    "ethane",
+	    "water"};
+	return result;
+    }
+
+}</font>
+</pre>
+
+<hr>
+<center>
+<p>
+<font size=1>
+Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems Inc.
+<p>
+Copyright &#169;
+1996 Sun Microsystems, Inc., 2550 Garcia Ave., Mtn. View, CA 94043-1100 USA.
+<br>All rights reserved.
+</font>
+</center>
+</body>
+</html>
+

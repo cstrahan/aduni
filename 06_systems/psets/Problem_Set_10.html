@@ -1,0 +1,44 @@
+<html><head>
+<title>aD Uni System Course
+</title>
+</head>
+<body >
+<h2>Assignment handed out on Tuesday, March 13, 2001</h2>
+
+<h4>Due in Recitation on 3/14/2001:</h4>
+
+Read Chapters 10 and 11 from the text.  There are many proofs.
+You don't have to spend the time to understand them inside and out.
+Instead, understand the implication of the proofs (e.g., under which
+circumstances you can solve the byzantine generals problem).
+Your writing/discussion assignment:
+<blockquote>
+Distributed mutual exclusion can be accomplished using a variety of
+algorithms.  Several are described in the text.  Those algorithms,
+however, react differently to process failures.  <br><br>
+
+Suppose that at most 1 process can fail. If you were able to reliably
+detect the failure, which algorithm would you choose for distributed
+mutual exclusion?  Explain why.  How does your algorithm react if you
+cannot reliably detect the failure?  What kind of approach would you
+then use to achieve distributed mutual exclusion?
+<br><br> 
+Hint 1: Use a case-based analysis.  Consider the following cases:
+<ul>
+
+<li> the failed process was in a critical section (e.g., was holding the
+exclusivity)
+
+<li> the failed process was waiting to enter the critical section
+
+<li> the failed process was not waiting and was not in the critical section 
+</ul>
+
+Hint 2: Think about the consensus problem
+
+</blockquote>
+
+
+
+</body>
+</html>

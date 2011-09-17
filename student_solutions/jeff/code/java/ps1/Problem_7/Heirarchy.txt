@@ -1,0 +1,20 @@
+public class Country
+	has States / Provinces
+	has Capitol
+	has Boundries
+	has Neighbors
+	
+	
+State / Province
+      has Cities
+      has Capitol
+      has Boundries
+      has Neighbors
+
+Cities
+	distance() - between cities
+Rivers
+	
+Boundry Segment
+	borderOf()
+      

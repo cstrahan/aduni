@@ -1,0 +1,22 @@
+download a copy of restart-aolserver
+$ scp 10.11.0.68:/tmp/restart-aolserver ~/
+$ mv ~/restart-aolserver /usr/local/bin/
+note: if you have problems with permissions do the move as root
+
+
+make the tcl directory
+$ mkdir /opt/web/<yourservername>/tcl
+
+grap a copy of the librabries
+$ scp 10.11.0.68:/tmp/usefull-tcl.tar /opt/web/<yourservername/tcl/
+
+untar the libraries
+$ cd /opt/web/<yourservername/tcl/
+$ tar -xvf usefull-tcl.tar
+
+restart-aolserver
+
+$ restart-aolserver <youservername>
+
+more help for pset1 can be found at 
+http://philip.greenspun.com/internet-application-workbook/examples-basics/

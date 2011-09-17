@@ -1,0 +1,69 @@
+Date: Wed, 17 Jan 2001 21:13:35 GMT
+Server: Apache-AdvancedExtranetServer/1.3.14 (Linux-Mandrake/2mdk) PHP/4.0.3pl1
+X-Powered-By: PHP/4.0.3pl1
+Set-Cookie: PHPSESSID=172c1c1931bf66ca2c03f19a1341cc9d; path=/
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html
+content-length: 1655
+----------
+getContentType: text/html
+getContentLength: 1655
+getContentEncoding: null
+getDate: 979766015000
+getExpiration: 375007920000
+getLastModified: 0
+----------
+<html>
+<head>
+<center>
+<a href="http://209.6.192.245">
+<img src = "/graphics/nestor.png?PHPSESSID=172c1c1931bf66ca2c03f19a1341cc9d" alt="nestor.pantheon" border="0"></a>
+</center>
+<p></p>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#000080" alink="#FF0000"> <title>When are we coming home?</title>
+ <body>
+  <p>
+ <h1>When are we coming home?</h1>
+ <p>
+ </p>
+ 
+<table border=1 width=100%>
+<td><center><b>Bunny</b></center></td>
+<td><center><b>Coming Home</b></center></td>
+<td><center><b>Mood</b></center></td>
+<td><center><b>Comments</b></center></td>
+<td><center><b>Last Modified</b></center></td>
+<tr>
+<td><a href="viewclub.php?club_id=1&PHPSESSID=172c1c1931bf66ca2c03f19a1341cc9d&PHPSESSID=172c1c1931bf66ca2c03f19a1341cc9d">Jeffy</a></td>
+<td>Late -- (but before 8)</td>
+<td>Silly</td>
+<td>*buggles* Tired bunnies are, well... tired! *smooch* Love you, doing some puttering. Your da best.
+									</td>
+<td>Wed Jan 17 13:32:09 EST 2001</td>
+</tr>
+<tr>
+<td><a href="viewclub.php?club_id=5&PHPSESSID=172c1c1931bf66ca2c03f19a1341cc9d&PHPSESSID=172c1c1931bf66ca2c03f19a1341cc9d">Varia</a></td>
+<td>On the way home</td>
+<td>Tired</td>
+<td>Well, finally got something I needed so here for maybe 1 1/2 hours more.</td>
+<td>Wed Jan 17 16:00:06 EST 2001
+</td>
+</tr>
+</table>
+<p>
+<hr>
+<i>This page is maintained by Jeffrey M. Radcliffe <a href="mailto:radcliffe@linuxfreemail.com">&lt;radcliffe@linuxfreemail.com&gt;</a></i>
+<center><i>
+<p><p>
+"... And remember: if you don't like the news, go out and make some of
+your own."
+        	-- "Scoop" Nisker, KFOG radio reporter Preposterous Words
+</i>
+</center>
+</body>
+. . 

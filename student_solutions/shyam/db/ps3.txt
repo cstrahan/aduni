@@ -1,0 +1,465 @@
+DATABASE TUNING PROJECT
+=======================
+
+======================== Query a ============================
+We picked a query that matches on the name of 2 forms and then
+returns 65 rows from the errors table. We did no tune this query
+
+SQL> SELECT * FROM dbi_errors WHERE form_id in
+  (SELECT form_id FROM dbi_forms WHERE form_name LIKE '%PMT%');
+
+Timings from 4 runs of the query
+Elapsed: 00:00:01.50
+Elapsed: 00:00:01.45
+Elapsed: 00:00:01.50
+Elapsed: 00:00:01.46
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=8234 Card=61494 Bytes=4796532)
+   1	0   NESTED LOOPS (Cost=8234 Card=61494 Bytes=4796532)
+   2	1     TABLE ACCESS (FULL) OF 'DBI_FORMS' (Cost=82 Card=2038 Bytes=77444)
+   3	1     TABLE ACCESS (BY INDEX ROWID) OF 'DBI_ERRORS' (Cost=4 Card=1046639 Bytes=41865560)
+   4	3	INDEX (RANGE SCAN) OF 'DE_FORM_ID_CHECK_ID_UN' (UNIQUE) (Cost=3 Card=1046639)
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	  6  db block gets
+	554  consistent gets
+	541  physical reads
+	  0  redo size
+       4919  bytes sent via SQL*Net to client
+	869  bytes received via SQL*Net from client
+	  6  SQL*Net roundtrips to/from client
+	  2  sorts (memory)
+	  0  sorts (disk)
+	 64  rows processed
+----------------------------------------------------------
+
+
+======================== Query b ============================
+Query for number of forms with errors in each state. We tuned this
+query by creating an index and using a hint. See details at the
+end of this query.
+
+--------- b1 untuned query
+
+SQL> SELECT error_state, COUNT(DISTINCT form_id) AS forms
+ FROM dbi_errors GROUP BY error_state;
+
+ERROR_STATE						FORMS
+-------------------------------------------------- ----------
+fixed							 3753
+found							 5177
+passed							34687
+unedited-illegible-irs					   79
+unedited-illegible-org					   56
+unedited-org_error					 3298
+unsure							  123
+
+7 rows selected.
+
+4 runs of the untuned query
+Elapsed: 00:01:01.18
+Elapsed: 00:01:00.95
+Elapsed: 00:01:00.94
+Elapsed: 00:01:00.94
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=28750 Card=7 Bytes=77)
+   1	0   SORT (GROUP BY) (Cost=28750 Card=7 Bytes=77)
+   2	1     TABLE ACCESS (FULL) OF 'DBI_ERRORS' (Cost=2145 Card=1046639 Bytes=11513029)
+
+
+Statistics
+----------------------------------------------------------
+	233  recursive calls
+	 68  db block gets
+      14199  consistent gets
+      14808  physical reads
+	  0  redo size
+	778  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  5  sorts (memory)
+	  1  sorts (disk)
+	  7  rows processed
+
+--------- b2 tuning with index
+
+SQL> create index i_e_es_fid on dbi_errors(error_state, form_id); 
+SQL> analyze table dbi_errors compute statistics;
+
+4 runs after tuning
+Elapsed: 00:00:33.61
+Elapsed: 00:00:19.56
+Elapsed: 00:00:19.11
+Elapsed: 00:00:19.15
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=6960 Card=7 Bytes=77)
+   1	0   SORT (GROUP BY) (Cost=6960 Card=7 Bytes=77)
+   2	1     INDEX (FULL SCAN) OF 'I_E_ES_FID' (NON-UNIQUE) (Cost=6960 Card=1046639 Bytes=11513029)
+
+Statistics
+----------------------------------------------------------
+	  8  recursive calls
+	 29  db block gets
+       6963  consistent gets
+       7527  physical reads
+	  0  redo size
+	778  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  1  sorts (memory)
+	  1  sorts (disk)
+	  7  rows processed
+
+--------- b3 tuning with index and hint
+
+SQL> SELECT /*+ INDEX_FFS(dbi_errors i_e_es_fid) */ error_state,
+ COUNT(DISTINCT form_id) AS forms
+ FROM dbi_errors GROUP BY error_state;
+
+4 runs of tuned query with hint
+Elapsed: 00:00:18.05
+Elapsed: 00:00:18.03
+Elapsed: 00:00:18.03
+Elapsed: 00:00:18.02
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=27662 Card=7 Bytes=77)
+   1	0   SORT (GROUP BY) (Cost=27662 Card=7 Bytes=77)
+   2	1     INDEX (FAST FULL SCAN) OF 'I_E_ES_FID' (NON-UNIQUE) (Cost=1057 Card=1046639 Bytes=11513029)
+
+Statistics
+----------------------------------------------------------
+	  8  recursive calls
+	 55  db block gets
+       7006  consistent gets
+       7570  physical reads
+	  0  redo size
+	778  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  1  sorts (disk)
+	  7  rows processed
+
+--------- b4 reversed index!!
+
+SQL> create index i_e_fid_es on dbi_errors(form_id, error_state); 
+SQL> analyze table dbi_errors compute statistics;
+
+Elapsed: 00:00:19.60
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=33552 Card=7 Bytes=77)
+
+
+
+Note on optimization: b1 The untuned query ran for about a minute
+(all the first runs of the queries take longer probably due
+to the effects of caching) with nearly 15000 physical reads.
+b2 With an index on error_state and form_id, the time drops to
+about 33 - 19 seconds (variabilty probablly due to caching)
+and the physical reads to 7500. b3 We tried a FFS hint with no
+furthur improvement. b4 Reversing the columns of the index dramatically
+increased the cost of the query as expected, but not the total
+execution time.
+
+
+
+======================== Query c ============================
+The number of approved vs unapproved forms. We used a bitmap
+index to tune the query. Details at the end of the query.
+
+--------- c1 untuned query
+
+SQL> SELECT approved_p, COUNT(*)
+ FROM dbi_forms GROUP BY approved_p;
+
+A   COUNT(*)
+- ----------
+f	9703
+t      31048
+
+Elapsed: 00:00:02.31
+Elapsed: 00:00:00.81
+Elapsed: 00:00:00.81
+Elapsed: 00:00:00.81
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=386 Card=2 Bytes=2)
+   1	0   SORT (GROUP BY) (Cost=386 Card=2 Bytes=2)
+   2	1     TABLE ACCESS (FULL) OF 'DBI_FORMS' (Cost=82 Card=40751 Bytes=40751)
+
+Statistics
+----------------------------------------------------------
+	170  recursive calls
+	  6  db block gets
+	570  consistent gets
+	534  physical reads
+	  0  redo size
+	475  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  6  sorts (memory)
+	  0  sorts (disk)
+	  2  rows processed
+
+--------- c2 tuning with bitmap index
+
+SQL> create bitmap index i_f_ap on dbi_forms(approved_p);
+SQL> analyze table dbi_forms compute statistics;
+
+SQL> SELECT approved_p, COUNT(*)
+ FROM dbi_forms GROUP BY approved_p;
+
+Elapsed: 00:00:00.71
+Elapsed: 00:00:00.65
+Elapsed: 00:00:00.65
+Elapsed: 00:00:00.65
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=7 Card=2 Bytes=2)
+   1	0   SORT (GROUP BY NOSORT) (Cost=7 Card=2 Bytes=2)
+   2	1     BITMAP CONVERSION (COUNT)
+   3	2	BITMAP INDEX (FULL SCAN) OF 'I_F_AP'
+
+Statistics
+----------------------------------------------------------
+	522  recursive calls
+	  1  db block gets
+	113  consistent gets
+	 16  physical reads
+	  0  redo size
+	475  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  9  sorts (memory)
+	  0  sorts (disk)
+	  2  rows processed
+
+
+--------- c3 tuning with index and hint
+
+SQL> SELECT /*+ INDEX_FFS(dbi_forms i_f_ap) */ approved_p, COUNT(*)
+ FROM dbi_forms GROUP BY approved_p;
+
+Elapsed: 00:00:01.60
+Elapsed: 00:00:00.66
+Elapsed: 00:00:00.65
+Elapsed: 00:00:00.65
+
+
+Note on optimization: c1 the untuned query took .80 seconds and
+did a complete access of the the forms table. Since this table
+is pretty small, this query does not take very long. c2 Using
+a bitmap index on approved_p (since it is a boolean variable
+we bitmapped it) significantly decreased the physical reads from
+534 to 16. Total time dropped to 0.65 seconds. c3 No improvement
+was seen with FFS, probably because the index is small and fits
+into memory and does not have to be read from disk.
+
+
+======================== Query d ============================
+Query for summary of activity by user_id. details of optimization
+below.
+
+--------- d1 untuned query
+
+SQL> SELECT last_modifying_user AS user_id, count(*) AS modifications
+ FROM dbi_errors GROUP BY last_modifying_user;
+
+   USER_ID MODIFICATIONS
+---------- -------------
+	11	 1029512
+       137	      34
+       155	      32
+       176	     158
+      1017	     256
+      1076	      48
+      1176	     733
+      1835	     916
+      ...	    ...
+
+Elapsed: 00:00:47.86
+Elapsed: 00:00:40.91
+Elapsed: 00:00:41.28
+Elapsed: 00:00:41.11
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=18342 Card=22 Bytes=66)
+   1	0   SORT (GROUP BY) (Cost=18342 Card=22 Bytes=66)
+   2	1     TABLE ACCESS (FULL) OF 'DBI_ERRORS' (Cost=2145 Card=1046639 Bytes=3139917)
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	 19  db block gets
+      14129  consistent gets
+      13167  physical reads
+	  0  redo size
+       1394  bytes sent via SQL*Net to client
+	536  bytes received via SQL*Net from client
+	  3  SQL*Net roundtrips to/from client
+	  2  sorts (memory)
+	  0  sorts (disk)
+	 22  rows processed
+
+--------- d2 tuning with index
+
+SQL> create index i_e_lmu on dbi_errors(last_modifying_user); 
+SQL> analyze table dbi_errors compute statistics;
+
+SQL> SELECT /*+ INDEX_ASC(dbi_errors i_e_lmu) */ last_modifying_user AS user_id,
+ count(*) AS modifications
+ FROM dbi_errors GROUP BY last_modifying_user;
+
+Elapsed: 00:00:04.68
+Elapsed: 00:00:04.63
+Elapsed: 00:00:04.61
+Elapsed: 00:00:04.55
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=4211 Card=22 Bytes=66)
+   1	0   SORT (GROUP BY NOSORT) (Cost=4211 Card=22 Bytes=66)
+   2	1     INDEX (FULL SCAN) OF 'I_E_LMU' (NON-UNIQUE) (Cost=4211 Card=1046639 Bytes=3139917)
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	  0  db block gets
+       4213  consistent gets
+       3187  physical reads
+	  0  redo size
+       1394  bytes sent via SQL*Net to client
+	536  bytes received via SQL*Net from client
+	  3  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+	 22  rows processed
+
+Note on optimization: d1 The untuned query ran for about 41 seconds
+and did a full scan of the the dbi_errors table with 13,000 physical
+reads. d2 Indexing on the last_modifying_user significantly reduced
+the physical reads to 3100 since only the index had to scanned; time
+dropped to 4.5 seconds. We also ran the query with a FFS hint
+which did not improve the running time on the indexed query.
+
+
+======================== Query e ============================
+After disabling the constraint, 3 new rows were inserted so that
+form #415002 had a total of 3 check_id = 53 and 2 of 52.
+
+SQL> alter table dbi_errors disable constraint de_form_id_check_id_un;
+SQL> insert into dbi_errors (error_id, form_id, check_id, error_state,
+  last_modified, last_modifying_user, modified_ip_address) values
+  (1052233, 415002, 53, 'passed', sysdate, 11, '127.0.0.1');
+SQL> insert into dbi_errors (error_id, form_id, check_id, error_state,
+  last_modified, last_modifying_user, modified_ip_address) values
+  (1052234, 415002, 53, 'passed', sysdate, 11, '127.0.0.1');
+SQL> insert into dbi_errors (error_id, form_id, check_id, error_state,
+  last_modified, last_modifying_user, modified_ip_address) values
+  (1052235, 415002, 52, 'passed', sysdate, 11, '127.0.0.1');
+
+--------- e1 untuned query
+
+SQL> select form_id, form_name from dbi_forms where approved_p = 't'
+  and form_id in (select distinct form_id from dbi_errors
+  group by form_id, check_id having count(*) > 1);
+
+   FORM_ID   FORM_NAME
+   415002    HIGHWAY 1
+
+Elapsed: 00:04:09.51
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=42225 Card=30741 Bytes=1598532)
+   1	0   MERGE JOIN (Cost=42225 Card=30741 Bytes=1598532)
+   2	1     VIEW OF 'VW_NSO_1' (Cost=41477 Card=52332 Bytes=680316)
+   3	2	SORT (UNIQUE) (Cost=41477 Card=52332 Bytes=313992)
+   4	3	  FILTER
+   5	4	    SORT (GROUP BY) (Cost=41477 Card=52332 Bytes=313992)
+   6	5	      TABLE ACCESS (FULL) OF 'DBI_ERRORS' (Cost=2145 Card=1046639 Bytes=6279834)
+   7	1     SORT (JOIN) (Cost=748 Card=20376 Bytes=794664)
+   8	7	TABLE ACCESS (FULL) OF 'DBI_FORMS' (Cost=82 Card=20376 Bytes=794664)
+
+Statistics
+----------------------------------------------------------
+	150  recursive calls
+	 44  db block gets
+      14725  consistent gets
+      27134  physical reads
+       2680  redo size
+	435  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  4  sorts (memory)
+	  2  sorts (disk)
+	  1  rows processed
+
+--------- e2 tuning query with rewriting the query and indexing
+
+SQL> create index i_e_fi_ci on dbi_errors(form_id, check_id);
+SQL> select /*+ index(f DF_FORM_ID_PK) */ distinct f.form_id, f.form_name from 
+  dbi_forms f, (select form_id from dbi_errors group by form_id, check_id 
+  having count(*) > 1) t where f.form_id = t.form_id
+  and f.approved_p = 't';
+
+Elapsed: 00:01:37.35
+
+Execution Plan
+----------------------------------------------------------
+   0	  SELECT STATEMENT Optimizer=CHOOSE (Cost=2588 Card=30742 Bytes=1321906)
+   1	0   SORT (UNIQUE) (Cost=2588 Card=30742 Bytes=1321906)
+   2	1     MERGE JOIN (Cost=1201 Card=30742 Bytes=1321906)
+   3	2	TABLE ACCESS (BY INDEX ROWID) OF 'DBI_FORMS' (Cost=691 Card=20376 Bytes=794664)
+   4	3	  INDEX (FULL SCAN) OF 'DF_FORM_ID_PK' (UNIQUE) (Cost=158 Card=20376)
+   5	2	SORT (JOIN) (Cost=510 Card=52333 Bytes=209332)
+   6	5	  VIEW (Cost=26 Card=52333 Bytes=209332)
+   7	6	    FILTER
+   8	7	      SORT (GROUP BY) (Cost=26 Card=52333 Bytes=313998)
+   9	8		INDEX (FULL SCAN) OF 'I_E_FI_CI' (NON-UNIQUE) (Cost=26 Card=1046642 Bytes=6279852)
+
+Statistics
+----------------------------------------------------------
+	 16  recursive calls
+	  2  db block gets
+       5730  consistent gets
+      11948  physical reads
+	  0  redo size
+	435  bytes sent via SQL*Net to client
+	425  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  5  sorts (memory)
+	  1  sorts (disk)
+	  1  rows processed
+
+
+Note on optimization: e1 the untuned query was written as a subselect
+and took 4 min with 27000 physical reads. e2 We used a hint to force
+the use of the primary key index of dbi_forms. Indexing on form_id and
+check_id on dbi_errors was crucial in reducing the time to 1 min 30 sec.
+Placing 'distinct' on the outer table also produced some improvement.
+The optimized query does a full scan of 2 indexes rather then the tables
+itself (as in the untuned query). One interesting thing we noticed was
+in the use of 'IN' vs '=' with the subselect query. IN ran at about
+2 min while = ran in 30 sec. However, = can be used only if the subselect
+query returns a single form_id.
+
+=======================================================================
+
+
+

@@ -1,0 +1,629 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Rubik's Cube</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>Breadth-First Search</title>
+</head>
+<body>
+<h2>Breadth-First Search</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#25300">How to find your way out of a maze</a>
+    <li><a href="#25301">Goals</a>
+    <li><a href="#25302">Reachability of the exit field</a>
+    <li><a href="#25303">Computing Distances</a>
+    <li><a href="#25304">Computing the Shortest Path</a>
+    <li><a href="#25305">What if edges have different lengths?</a>
+    <li><a href="#25341">What if the maze is 3-dimensional?</a>
+    <li><a href="#25342">Why don't we use depth-first search?</a>
+    <li><a href="#25380">Hoppers</a>
+    <li><a href="#25381">It's just another graph problem!</a>
+    <li><a href="#25382">Rubik's Cube</a>
+</ul><hr>
+    <a name="25300">
+    <h2>How to find your way out of a maze</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+  0         1         2         3
+  0123456789012345678901234567890123456
+0 #################################E###
+1 ###....#.....#......###...#...#...#.#
+2 #...##...###...####.....#..##.#.##..#
+3 #.#########.###....##.####.##.#.#..##
+4 #.............##.######..#......#...#
+5 #####.#####.#..........#.##########.#
+6 #S..........###.#.#.##..............#
+7 #####################################
+</pre>
+
+    
+    
+    
+    
+    <ul>
+<li>Maze is given as 2-dimensional array of characters.<li>
+'.' = empty field<li>
+'#' = wall<li>
+'S' = start position (6,1)<li>
+'E' = exit (0,30)
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25301">
+    <h2>Goals</h2>
+    <hr>
+    
+    
+    
+    
+    
+    Our goal is to develop a program that answers the following 
+three questions (ordered by increasing difficulty):
+
+<ol>
+<li>Is the exit reachable from the start? (Yes or No)
+<li>How many steps does it take to reach the exit
+on a shortest path?
+<li>Output a shortest path from the start to the exit.
+</ol>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25302">
+    <h2>Reachability of the exit field</h2>
+    <hr>
+    
+    
+    
+    
+    
+    We see the problem as a graph problem: Each empty field 
+('S', 'E', and '.') is a vertex. Each pair of adjacent 
+vertices is connected by an undirected edge. We will
+solve the problem by breadth-first search.
+<p> 
+Since the graph is already implicitly given by the 
+character matrix of the maze, the only additional 
+data structure we need is a color matrix:
+<pre>
+int color[num_rows][num_columns];
+</pre>
+<ul>
+<li><code>white</code> = an undiscovered vertex (not yet in the queue)
+<li><code>gray</code>  = a vertex currently in the queue
+<li><code>black</code> = a finished vertex (not in the queue anymore)
+</ul>
+In the beginning, all vertices are colored white. We
+will color them gray when we enqueue them, 
+and black when we dequeue them.
+<pre>
+for row from 0 to num_rows-1 {
+  for column from 0 to num_columns-1 {
+    color[row][column] = white;
+  }
+}
+</pre>
+We initialize the queue with the start field.
+<pre>
+q = new queue();
+q.enqueue(start_row,start_column);
+color[start_row][start_column] = gray;
+</pre>
+Now -- while the queue is not empty -- we run the loop 
+of the breadth-first search.
+<pre>
+while (q.head != q.tail) {
+  v = q.dequeue();
+  color[v.row][v.column] = black;
+  for each (r,c) adjacent to (row,column) {
+    if (maze[r][c]!='#' && color[r][c]==white) {
+      q.enqueue(r,c);
+      color[r][c] = gray;
+    }
+  }
+}
+</pre>
+
+After the loop has finished, all nodes reachable from the
+start are black. The unreachable nodes are still white.
+<pre>
+switch (color[exit_row][exit_column]) {
+  case white: 
+    print("Exit is unreachable");
+    break;
+  case black: 
+    print("Exit is reachable");
+    break;
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25303">
+    <h2>Computing Distances</h2>
+    <hr>
+    
+    
+    
+    
+    
+    We need another matrix to store distances.
+<pre>
+int distance[num_rows][cum_columns];
+</pre>
+<ul>
+<li>We set the distance of the start node to 0
+<li>We initialize all other distances with "infinity". 
+<li>When we enqueue a node, we set its distance to the distance of its predecessor + 1.
+</ul>
+<pre>
+for row from 0 to num_rows-1 {
+  for column from 0 to num_columns-1 {
+    color[row][column] = white;
+    <b>distance[row][column] = MAXINT;</b>
+  }
+}
+q = new queue();
+q.enqueue(start_row,start_column);
+color[start_row][start_column] = gray;
+<b>distance[start_row][start_column] = 0;</b>
+while (q.head != q.tail) {
+  v = q.dequeue();
+  color[v.row][v.column] = black;
+  for each (r,c) adjacent to (row,column) {
+    if (maze[r][c]!='#' && color[r][c]==white) {
+      q.enqueue(r,c);
+      color[r][c] = gray;
+      <b>distance[r][c] = distance[row][column] + 1;</b>
+    }
+  }
+}
+switch (color[exit_row][exit_column]) {
+  case white: 
+    print("Exit is unreachable.");
+    break;
+  case black: 
+    print("Exit is reachable<b> in "+distance[exit_row][exit_column+" steps"</b>);
+    break;
+}
+</pre>
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25304">
+    <h2>Computing the Shortest Path</h2>
+    <hr>
+    
+    
+    
+    
+    
+    We need another array to store the predecessor
+of each node.
+<pre>
+vertex pred[num_rows][num_columns];
+</pre>
+The start node has no predecessor.
+For all other nodes, the predecessor is set
+when the node is enqueued.
+<pre>
+for row from 0 to num_rows-1 {
+  for column from 0 to num_columns-1 {
+    color[row][column] = white;
+    distance[row][column] = MAXINT;
+  }
+}
+q = new queue();
+q.enqueue(start_row,start_column);
+color[start_row][start_column] = gray;
+distance[start_row][start_column] = 0;
+<b>pred[start_row][start_column] = null;</b>
+while (q.head != q.tail) {
+  v = q.dequeue();
+  color[v.row][v.column] = black;
+  for each (r,c) adjacent to (row,column) {
+    if (maze[r][c]!='#' && color[r][c]==white) {
+      q.enqueue(r,c);
+      color[r][c] = gray;
+      distance[r][c] = distance[row][column] + 1;
+      <b>pred[r][c] = vertex(row,column);</b>
+    }
+  }
+}
+switch (color[exit_row][exit_column]) {
+  case white: 
+    print("Exit is unreachable.");
+    break;
+  case black: 
+    print("Exit is reachable in "+distance[exit_row][exit_column]+" steps: ");
+    <b>print_path_to(exit_row,exit_column);</b>
+    break;
+}
+</pre>
+In the end, the array <code>pred</code> provides enough 
+information to reconstruct the path.
+ 
+<pre>
+print_path_to (r,c) {
+  if (pred[r][c]!=null) {
+    print_path_to(pred[r][c].row,pred[r][c].column);
+  } 
+  print("("+r+","+c+")");
+}
+</pre>
+
+    
+    
+    
+    
+    
+    
+    </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25305">
+    <h2>What if edges have different lengths?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>In our problem, all edges have length 1. <li>
+If edges have different lengths, use Dijkstra's algorithm.<li>
+Breadth-first search uses a queue. Dijkstra's algorithm uses a <b>priority queue</b> with nodes ordered by distance. This is the only difference.
+
+    
+    </ul>
+    
+    
+    
+    <pre>
+for row from 0 to num_rows-1 {
+  for column from 0 to num_columns-1 {
+    color[row][column] = white;
+    distance[row][column] = MAXINT;
+  }
+}
+q = new <b>PriorityQueue();</b>
+q.enqueue(start_row,start_column);
+color[start_row][start_column] = gray;
+distance[start_row][start_column] = 0;
+pred[start_row][start_column] = null;
+while (q.head != q.tail) {
+  v = q.dequeue();
+  color[v.row][v.column] = black;
+  for each (r,c) adjacent to (row,column) {
+    if (maze[r][c]!='#' && color[r][c]<b>!=black) {
+      d = distance[row][column] + edge_length[row][column][r][c];
+      if (color[r][c]==white) {
+        q.enqueue(r,c);
+        color[r][c] = gray;
+        distance[r][c] = d;
+        pred[r][c] = vertex(row,column);
+      }
+      if (color[r][c]==gray && d < distance[r][c]) { 
+        distance[r][c] = d;
+        push up vertex (r,c) in priority queue;
+        pred[r][c] = vertex(row,column);
+      }</b>
+    }
+  }
+}
+</pre>
+
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25341">
+    <h2>What if the maze is 3-dimensional?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    <ul>
+<li>No reason to worry. The algorithm stays the same.<li>
+The vertices will have three components (e.g. (row,column,level)) instead of two.<li>
+The arrays <code>maze</code>, <code>color</code>, <code>distance</code> and <code>pred</code> will all be 3-dimensional.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25342">
+    <h2>Why don't we use depth-first search?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Depth-First search could be used to answer our first question: "Is the exit reachable from the start?"<li>
+However, depth-first search is not suitable for the other two problems. Only breadth-first search finds the shortest solution.
+
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25380">
+    <h2>Hoppers</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+###################
+#.....#############
+#..##.#############
+#..##.#############
+#..##.#############
+#S.##............E#
+###################
+</pre>
+    
+    
+    
+    
+    <ul>
+<li>Hoppers can fly over any square, but they can only land on empty squares.<li>
+At any point in time, a hopper has a velocity (v<sub>x</sub>,v<sub>y</sub>).<li>
+In each move, a hopper can change speed from (v<sub>x</sub>,v<sub>y</sub>) to (v<sub>x</sub> +/- 1, v<sub>y</sub> +/- 1).<li>
+Exercise: In a maze of size <code>rows*cols</code>, how fast can a hopper get at most?
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25381">
+    <h2>It's just another graph problem!</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>A hopper's state can be described by a 4-tuple <code>(x,y,vx,vy)</code>.<li>
+We set up a graph with one node for each possible state.<li>
+The start node is <code>(start_x, start_y, 0, 0)</code>.<li>
+The exit nodes are all states of the form <code>(exit_x, exit_y, ..., ...)</code>.<li>
+Two nodes <code>u</code> and <code>v</code> are connected, if the state <code>v</code> can be reached from <code>u</code> in one step.<li>
+<pre>
+class vertex {
+  int x;
+  int y;
+  int vx;
+  int vy;
+}
+
+int color[num_rows][num_cols][num_speeds][num_speeds];
+int distance[num_rows][num_cols][num_speeds][num_speeds];
+vertex pred[num_rows][num_cols][num_speeds][num_speeds];
+</pre>
+                                                                                
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="25382">
+    <h2>Rubik's Cube</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Given an initial configuration of Rubik's Cube, how many moves does it take to solve it?<li>
+The cube configurations are the vertices of the graph.<li>
+There's an edge between two configurations A and B, if there's a move that turns A and B.<li>
+Since the number of nodes in this graph is huge, we cannot use arrays for <code>color</code>, <code>distance</code>, or <code>pred</code>. We have to use hashtables.<li>
+To be honest, if the initial configuration is too far away from the solution, the queue will get too large, and your machine will run out of memory in this problem.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+<p><i>Last modified 2001-02-12</i>
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left>mdettinger@arsdigita.com</td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

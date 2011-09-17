@@ -1,0 +1,151 @@
+Extract "Extract-529" 5 5 282 85
+Extract "Extract-528" 5 21 226 84
+Extract "Extract-527" 5 0 404 83
+Extract "Extract-526" 6 26 502 87
+Register "pc" 86 19
+Constant "Constant-548" 30 424 118
+Switch "wdsel" 0 2 0 223 440
+Mux "wamux" 2 408 137
+Text "Text-843" "pcsel" 29 444
+Text "Text-842" "xaddr" 56 355
+Switch "ra2sel" 0 1 1 265 141
+Text "Text-841" "wdsel" 188 443
+Constant "Constant-535" 1 104 51
+Switch "bsel" 0 1 1 276 272
+Mux "amux" 2 214 265
+Adder "Adder-534" 104 71
+Mux "pcmux" 4 92 438
+Text "Text-839" "memop" 232 366
+Switch "werf" 0 1 0 193 186
+Text "Text-838" "aluop" 165 318
+Text "Text-837" "bsel" 248 273
+Text "Text-836" "asel" 165 272
+Text "Text-835" "werf" 164 188
+Text "Text-834" "wasel" 335 143
+Text "Text-833" "ra2sel" 227 143
+Text "Text-831" "pcen" 31 25
+Switch "memop" 0 2 0 275 361 334 304
+Controlbit "trapbit" 1 402 148
+Alu "alu" 226 304
+BusBuild "BusBuild-591" 1 "1,0[30:3],a[2:0]" 40 382
+Controlbit "opbits" 6 529 116
+Mux "wdmux" 3 246 436
+BusBuild "BusBuild-530" 1 "a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20],a[20:5]" 343 87
+RegFile "rf" 218 166
+Switch "aluop" 0 15 0 201 316
+Switch "xaddr" 0 7 1 42 353
+Switch "wasel" 0 1 1 371 141
+Switch "clock" 0 1 220 460 10
+Mux "ra2mux" 2 286 137
+Mux "bmux" 2 294 268
+Controlbit "zero" 1 277 240
+Zerotest "Zerotest-584" 247 236
+Switch "asel" 0 1 0 193 269
+Switch "pcen" 0 1 0 62 23
+Switch "pcsel" 0 3 0 62 442
+Memory "mem" "/home/sviswesw/hcw/shared/traptest.uasm" 189 10 294 357
+
+Wire "Wire-559" "ra2mux.out" "rf.ra2" - 
+Wire "Wire-558" "bmux.out" "alu.b" 306 294 290 294 - 
+Wire "Wire-557" "amux.out" "alu.a" 226 296 242 296 - 
+Wire "Wire-555" "alu.out" "pcmux.3" "wdmux.1" "mem.Da" 266 365 144 365 - - 266 381 - 
+Wire "Wire-554" "Adder-534.s" "amux.0" "wdmux.0" "pcmux.1" 112 256 218 256 - 112 389 250 389 - - 
+Wire "Wire-553" "rf.rd1" "amux.1" "pcmux.2" "Zerotest-584.in" - 234 231 128 231 - 234 244 - 
+Wire "Wire-552" "rf.rd2" "mem.wD" "bmux.0" 298 252 428 252 - - 
+Wire "Wire-550" "mem.Id" "Extract-528.in" "Extract-529.in" "Extract-527.in" "BusBuild-530.a" "Extract-526.in" 205 74 234 74 - 205 74 290 74 - 205 74 412 74 - 205 74 349 74 - 205 74 510 74 - 
+Wire "Wire-549" "Constant-548.Q" "wamux.1" - 
+Wire "Wire-547" "wamux.out" "rf.wa" 420 174 - 
+Wire "Wire-546" "Extract-527.out" "ra2mux.1" "wamux.0" 412 118 306 118 - 412 118 412 118 - 
+Wire "Wire-545" "Extract-529.out" "ra2mux.0" - 
+Wire "Wire-544" "Extract-528.out" "rf.ra1" - 
+Wire "Wire-543" "Constant-535.Q" "Adder-534.a" - 
+Wire "Wire-542" "pcmux.out" "pc.D" 120 469 26 469 26 10 116 10 - 
+Wire "Wire-541" "pc.Q" "Adder-534.b" "mem.Ia" - 116 50 - 
+Wire "Wire-712" "memop.Q" "mem.cmd" - 
+Wire "Wire-710" "werf.Q" "rf.wren" - 
+Wire "Wire-594" "BusBuild-591.out" "pcmux.0" 46 425 96 425 - 
+Wire "Wire-539" "wdmux.out" "rf.wd" 266 472 512 472 512 190 - 
+Wire "Wire-588" "Extract-526.out" "opbits.b" 510 120 - 
+Wire "Wire-586" "Zerotest-584.out" "zero.b" - 
+Wire "Wire-583" "BusBuild-530.out" "bmux.1" 349 237 314 237 - 
+Wire "Wire-582" "aluop.Q" "alu.op" - 
+Wire "Wire-580" "asel.Q" "amux.s" - 
+Wire "Wire-813" "xaddr.Q" "BusBuild-591.a" - 
+Wire "Wire-578" "bsel.Q" "bmux.s" - 
+Wire "Wire-576" "wasel.Q" "wamux.s" "trapbit.b" - 388 145 388 152 - 
+Wire "Wire-574" "ra2sel.Q" "ra2mux.s" - 
+Wire "Wire-570" "wdsel.Q" "wdmux.s" - 
+Wire "Wire-568" "pcsel.Q" "pcmux.s" - 
+Wire "Wire-564" "pcen.Q" "pc.en" - 
+Wire "Wire-562" "clock.Q" "pc.clk" "rf.clk" "mem.clk" 168 14 168 27 - 168 14 168 174 - 464 365 - 
+Wire "Wire-560" "mem.Dd" "wdmux.2" 428 422 282 422 - 
+
+ControlRom "trap" "opbits" 60 189
+# useful constant:
+FIRSTOP = 24
+
+# we use wasel to indicate whether this is a bad op code or not;
+# wasel should be 1 if opbits is a bad op code.
+# (You'll have to write the expression yourself)
+
+xaddr = 1
+wasel = FIRSTOP>opbits || opbits==26 || opbits==28 || opbits==39 || opbits==43 || opbits==47 || opbits==55 || opbits==59 || opbits==63
+
+
+
+
+
+
+
+
+
+
+ROMEND
+
+ControlRom "rom" "opbits" "zero" "trapbit" 60 169
+HALT = 0
+LD = 24
+ST = 25
+JMP = 27
+BRZ = 29
+BRNZ = 30
+LDR = 31
+ALU = 32
+ALUC = 48
+
+pcen	= opbits != HALT
+pcsel	= trapbit ? 0 : opbits == JMP ? 2 : opbits+zero == 30 ? 3 : 1
+ra2sel	= ALU > opbits
+asel	= opbits == LD || opbits == ST || opbits >= ALU
+bsel	= ALU > opbits || opbits >= ALUC
+aluop	= ALU > opbits ? 0 : opbits%16
+wdsel	= opbits == LD || opbits == LDR ? 2 : opbits >= ALU ? 1 : 0
+memop	= opbits == LD || opbits == LDR ? 1 : opbits == ST ? 2 : 0
+werf	= opbits == HALT || opbits == ST ? 0 : 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ROMEND
+
+END

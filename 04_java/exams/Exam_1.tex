@@ -1,0 +1,586 @@
+
+\documentclass{article}
+
+\setlength{\textwidth}{6.0in}
+\setlength{\textheight}{9.0in}
+\setlength{\headheight}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\parskip}{1.5ex plus 0.5ex minus 0.5ex}
+\setlength{\topmargin}{0.5in}
+\setlength{\topskip}{0.0in}
+\setlength{\evensidemargin}{0.5in}
+\setlength{\oddsidemargin}{0.5in}
+\newcounter{exercise}
+\newcounter{problem}
+\newcounter{question}[problem]
+\newcommand{\exercise}[1]{\bigskip\noindent{\large\bf Exercise \stepcounter{exercise} \arabic{exercise}: {#1}}}
+\newcommand{\problem}[1]{\bigskip\noindent{\large\bf Problem \stepcounter{problem} \arabic{problem}: {#1}}}
+\newcommand{\question}[1]{\pagebreak[3]\bigskip\indent{\bf Question} \stepcounter{question} \arabic{question}: {#1}? }
+
+
+\begin{document}
+
+\newcommand{\answertab}[4]{ 
+\par
+\begin{tabular}{l l}
+A. {#1} & B. {#2} \\
+C. {#3} & D. {#4}
+\end{tabular}
+\par
+\medskip
+Final Answer: 
+\medskip
+}
+
+\begin{center}
+\LARGE
+Object-Oriented Programming in Java
+\end{center}
+\bigskip
+{\noindent\Large\bf Quiz 1 \hfill  Jan 10, 2001}
+\hrule
+
+\problem{Who wants to be a Java developer?}
+\noindent (with apologies to Regis)
+
+Fill in your answer in the space provided.
+
+
+\question
+{Which is these word-pairs represents the IS-A relationship ( in English)}
+
+\answertab{duck/bird}{bird/fly}{beak/bird}{bird/nest}
+
+\question
+{Which is these pairs represents the HAS-A relationship}
+
+\answertab{bird/duck}{bird/fly}{bird/beak}{bird/flying\_animal}
+
+\question
+{Which is these pairs represents the BEHAVES-LIKE relationship}
+
+\answertab{bird/duck}{bird/fly}{bird/beak}{bird/flying\_animal}
+
+\question
+{Which phrase below best describes the relationship between Country and
+Capital}
+
+\answertab{IS-A}{HAS-A}{USES}{BEHAVES-LIKE}
+
+
+\question
+{Which Java technology best supports the IS-A relationship}
+
+\answertab{Inheritance}{Access Restriction}{Strong Typing}{Garbage Collection}
+
+\question
+{Which Java keyword is used to specify inheritance}
+
+\answertab{extends}{implements}{public}{static}
+
+\question
+{Which Java keyword is used to specify compliance with an interface}
+
+\answertab{extends}{implements}{public}{static}
+
+\question
+{Which Java keywords can not appear in a class declaration}
+
+\answertab{extends}{private}{void}{abstract}
+
+\question
+{Is it possible to use the techniques of object oriented programming
+in a language that does not specifically support OOP}
+
+\answertab{Yes}{No}{}{}
+
+
+\question
+{Are private classes only for malicious corporations closely guarding
+their proprietary code}
+
+\answertab{Yes}{No}{}{}
+
+
+\question
+{Which Java keywords can not appear in instance variable definitions}
+
+\answertab{extends}{protected}{int}{private}
+
+\question
+{Which Java keywords can not appear in method definitions}
+
+\answertab{implements}{void}{static}{private}
+
+
+\question
+{Which of these fragments represents the HAS-A relationship between
+Foo and Bar}
+
+\answertab
+{class Foo extends Bar\{\}
+}
+{
+class Foo implements Bar\{
+\}
+}
+{
+class Foo \{
+   private Bar mybar;
+\}
+}
+{
+abstract class Bar extends Foo\{
+\}
+}
+
+
+\question
+{Which line of code in the following can be inserted in place of the comments,
+to perform the initialization described by the comments}
+\begin{verbatim}
+     public class T {
+          int r;
+          int s;
+
+          T(int x, int y) {
+               r = x;
+               s = y;
+          }
+     }
+
+     class S extends T {
+          int t;
+
+          public S(int x, int y, int z){
+               // insert here the code
+               // that would do the correct initialization
+               // r= x  and s= y
+               t=z;
+          }
+     }
+\end{verbatim}
+
+\answertab{T(x, y);}{this(x, y);}{super(x, y);}{super(x, y, z);}
+
+\question
+{What do the  'public' and 'private' keywords relate to}
+\answertab{Typing}{Garbage Collection}{Polymorphism}{Access Restriction}
+
+\question
+{Which Java technologies  most powerfully supports the programming
+concept of ``encapsulation''}
+
+\answertab{Container Classes}{Access Restriction}{Garbage Collection}{Typing}
+
+\question
+{Which Java technologies  most powerfully support the programming
+concept of ``abstraction''}
+
+\answertab{Inheritance and Polymorphism}{Heap Allocation}{Garbage Collection}{Applets}
+
+
+\newpage
+\problem{Program Analysis: Short Answer}
+
+\question
+{What are the values of {\tt i},{\tt a}, and {\tt b}
+after the following code fragment runs.}
+\begin{verbatim}
+int i;
+int a=1;
+int b=0;
+for(i=0;i<10;i++){
+   a = a * 2;  
+   b++;
+}
+\end{verbatim}
+\par
+{\tt i =  }
+\par
+{\tt a = }
+\par
+{\tt b = }
+
+\par
+
+\question
+{What is the value of {\tt a}
+after the following code fragment runs}
+\begin{verbatim}
+int a=0;
+while(true){
+    if(a > 20) break;
+    a = a+1;
+}
+\end{verbatim}
+\par
+{\tt a =  }
+\par
+
+\question
+{What three lines will the following code print out
+when compiled and run}
+
+\begin{verbatim}
+public class Spindle{
+        public static void main(String[] args){
+                int[] a = new int[] {1,2,3,4};
+                int b = 5;
+                int c =6;
+
+                Fold.mutilate( a , b, c);
+                System.out.println( a[0]);
+                System.out.println( b);
+                System.out.println( c );
+        }
+
+}
+
+class Fold{
+        static void mutilate( int[] a, int b , int c) {
+                a[0] = 7;
+                b = 8;
+                c = 9;
+        }
+}
+\end{verbatim}
+
+line1:
+
+line2:
+
+line3:
+
+
+\question
+{What does the class Test below print out if it is compiled and run}
+
+\begin{verbatim}
+public class Test
+{
+        int x;
+
+        Test(String s){
+                this();
+                System.out.println(s);
+                System.out.println("This");
+        }
+
+        Test(int x){
+                this("is");
+        }
+
+        Test(){
+                System.out.println("a test.");
+        }
+
+        public static void main(String[] args)
+        {
+           int val = 2;
+           Test t = new Test(val);
+        }
+}
+\end{verbatim}
+
+Test prints out:
+\vspace{1.0in}
+
+\newpage
+The next three short answer question use the following group of classes.
+
+\begin{verbatim}
+
+/**
+ * An interface with one method
+ */
+interface Face1{
+   public void bar();
+}
+
+/**
+ * A class with an accessor and method foo()
+ */
+class Class1{
+    private int size = 0;
+    private String name;
+    
+    Class1(String name){
+       this.name = name;
+    }
+
+    public String getName(){
+       return(name);
+    }
+
+    public void foo(){
+       System.out.println(``Class1.foo()'');
+    }
+}
+
+/**
+ * A class inheriting from Class1
+ */
+class Class2 extends Class1 implements Face1{
+    int size = 0;
+    int x;
+
+    Class2(String name){
+       super(name);
+    }
+
+    public void foo(){
+       System.out.println(``Class2.foo()'');
+    }
+
+    public void bar(){
+       System.out.println(``Class2.bar()'');
+    }
+}
+
+\end{verbatim}
+
+\newpage
+\question
+{What does the following print out}
+\begin{verbatim}
+public class TestClass{
+
+   public static void main(String[] args){
+       Class1 c = new Class2(``me'');
+       c.foo();
+   }
+
+}
+\end{verbatim}
+\par
+Ans:
+\par
+
+\question
+{What does the following print out}
+\begin{verbatim}
+public class TestClass{
+
+   public static void main(String[] args){
+        Class1 c = new Class1(``me'');
+        c.foo();
+   }
+
+}
+\end{verbatim}
+\par
+Ans:
+\par
+
+\question
+{What does the following print out}
+\begin{verbatim}
+public class TestClass{
+
+   public static void main(String[] args){
+        Class2 c = new Class2(``me'');     
+        System.out.println(c.getName());
+   }
+}
+\end{verbatim}
+\par
+Ans:
+\par
+
+\question
+{What does the following print out}
+\begin{verbatim}
+public class TestClass{
+
+   public static void main(String[] args){
+        Face1 c = new Class2(``me'');     
+        c.bar();
+   }
+}
+\end{verbatim}
+\par
+Ans:
+\par
+
+
+\newpage
+\problem{Class Implementation}
+
+In this problem we ask you to implement part of a class Fraction, which
+represents fractions of the form $a/b$ where $a$ and $b$ are integers,
+($1/2$, 4/6, 101/432. etc.).
+In the space below, complete the class Fraction. Use {\tt int}
+to store the numerator and denominator.
+
+Include a constructor that initializes from a numerator and denominator.
+
+Write an instance method for addition.
+[Hint: $a/b + c/d = (ad+bc)/bd$.]
+
+Write a static method for multiplication.
+[Hint: $a/b * c/d = ac/bd$.]
+
+Write a static {\tt main()} that allocates two Fractions,
+$1/2$ and $3/4$ and stores their sum in a third variable.
+
+(Be merciful to graders: please write clearly).
+
+\begin{verbatim}
+/**
+ * Class Fraction. Represent the fraction X/Y where X and Y are integers
+ */
+public class Fraction{
+   /**
+    * Your instance vars here
+    */
+
+
+
+
+
+
+
+
+
+   /**
+    * Your constructor here
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Continued on next page
+
+
+
+
+
+
+
+   /**
+    * Your add method here
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /**
+    * Your static mult method here
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /**
+    * Your static main  here
+    */
+
+
+
+
+
+
+
+
+
+}
+\end{verbatim}
+
+
+
+\newpage
+\problem{OOP Design}
+
+You are designing an OO program to help people plan an evening out.
+It is proposed that the following classes be used. Add inheritance
+( {\tt extends} phrases ) and instance variables to show the
+IS-A and HAS-A relationships between these classes. Do not introduce
+any additional classes or and instance variables of any basic type.
+[Note: By Business, we mean anything that would appear in the Yellow Pages].
+
+\begin{verbatim}
+class Address
+{
+
+
+
+}
+
+class Business
+{
+
+
+
+
+
+}
+
+class City
+{
+
+
+
+
+
+}
+
+class Restaurant
+{
+
+
+
+
+
+}
+
+class Theater
+{
+
+
+
+
+
+
+}
+\end{verbatim}
+
+\end{document}
+
+
+
+
+

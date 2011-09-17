@@ -1,0 +1,17 @@
+Subject: If you like coding puzzles...
+Date: Tue, 28 Nov 2000 14:07:12 -0500
+From: dg <dgoddeau@speechworks.com>
+To: shai@stonehill.edu
+
+2 balance puzzles, you get to weigh things on a balance against
+either other (ie each weighing gives you <, =, or > ).
+
+1) 8 balls, 7 identical in weight, 1 slightly different. In 3 weighings
+find the odd ball and whether it is lighter or heavier. There are at
+least 2 solutions, neither of which I remember off hand.
+
+2) 6 balls, 2 red, 2 white, 2 blue. One of each color is Heavy,
+one of each is Light. Heavies all weigh the same as do Lights.
+In 2 weighings, label the balls. (3 is of course triv).
+
+                -dg

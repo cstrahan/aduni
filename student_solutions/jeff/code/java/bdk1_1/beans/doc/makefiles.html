@@ -1,0 +1,63 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>Building BDK examples</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<center>
+<h1>
+Building BDK examples</h1></center>
+The BDK includes makefiles for rebuilding the BDK and all the examples
+using either nmake Makefiles on Windows or gnumake GNUmakefiles on Unix<sup><font size=-2>TM</font></sup>.
+<p>Note that you can build beans without using any kind of make utility.
+We provide example gnumake and nmake makefiles merely as a convenience
+for developers.
+<h2>
+<a NAME="Windows"></a>"nmake" Makefiles</h2>
+The BDK can be rebuilt on Win32 systems using the Microsoft <i>nmake</i>
+utility. This is available as part of various Microsoft tools products,
+and is also available for download as a self-extracting .exe from Microsoft's
+ftp site as:
+<ul>
+<li>
+<a href="ftp://ftp.microsoft.com/Softlib/MSLFILES/nmake15.exe">ftp://ftp.microsoft.com/Softlib/MSLFILES/nmake15.exe</a></li>
+</ul>
+The "nmake" compatible makefiles are either called Makefile or end in the
+suffix ".mk". Thus beanbox\Makefile and demo\juggler.mk are nmake makefiles.
+The makefiles expect you to have Java 2 SDK version 1.2 (or later) installed
+and to have the bin directory on your windows PATH.
+<p>For clarity, the makefiles for the example beans have been broken up
+into a separate package.mk makefile for each example package. Thus to make
+the "buttons" package, you should cd to the demo directory and do "nmake
+-f buttons.mk"
+<p>To rebuild the entire BDK from scratch, cd to the directory where you
+have installed the BDK and do "nmake clean all".
+<h2>
+<a NAME="Unix"></a>"gnumake" GNUmakefiles</h2>
+The BDK can be rebuilt on Unix systems using the <i>gnumake</i> utility.
+A number of different "make" utilities are available on Unix systems, we
+used gnumake because it has been very widely ported. You can obtain a copy
+of gnumake from <a href="gnu.txt">one of the GNU ftp sites</a>.
+<p>The "gnumake" compatible makefiles are either called GNUmakefile or
+end in the suffix ".gmk". Thus beanbox/GNUmakefile and demo/juggler.gmk
+are gnumake makefiles. The makefiles expect you to have Java 2 SDK 1.2
+(or later) installed and to have the bin directory on your Unix PATH.
+<p>For clarity, the makefiles for the example beans have been broken up
+into a separate package.gmk makefile for each example package. Thus to
+make the "buttons" package, you should cd to the demo directory and do
+"gnumake -f buttons.gmk"
+<p>To rebuild the entire BDK from scratch, cd to the directory where you
+have installed the BDK and do "gnumake clean all".&nbsp;
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

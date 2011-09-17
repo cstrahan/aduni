@@ -1,0 +1,9 @@
+A: link {text-decoration: none}
+A: active {text-decoration: none}
+A: visited {text-decoration: none}
+.logo {color: #005e8a; text-align: left; font-family: Arial, sans-serif; font-size: x-large; font-weight: bold}
+.title {color: #b18343; text-align: left; font-family: Arial, sans-serif; font-size: large; font-weight: bold}
+.navigation {font-family: Arial, sans-serif; font-size: small}
+.right {text-align: right}
+.action {font-family: Arial, sans-serif}
+.copyright {text-align: center; font-family: Arial, sans-serif; font-size: small}

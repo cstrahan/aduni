@@ -1,0 +1,200 @@
+<html>
+<head>
+<title>ADUni - Theory of Computation - Problem Set 03 Solutions</title>
+</head>
+
+<body fgcolor=black bgcolor=white>
+<center>
+A R S D I G I T A &nbsp V N I V E R S I T Y<br>
+<font size=+2>Month 8: Theory of Computation</font><br>
+Problem Set 3 Solutions - Mike Allen
+</center>
+
+<ol>
+
+<li><font size=+1>NPDAs</font><p>
+	Construct non-deterministic pushdown automata to accept the following languages.<p>
+
+	<ol type=a>
+	<li>	{1<sup>n</sup>0<sup>n</sup> | n>0}<br><img src="Problem_Set_03_Files/1a-ans.gif"><p>
+	<li>	{0<sup>n</sup>1<sup>2n</sup> | n>=0}<br><img src="Problem_Set_03_Files/1b-ans.gif"><p>
+	<li>	{1<sup>n</sup>0<sup>n</sup> | n>0} U {0<sup>n</sup>1<sup>2n</sup> | n>=0}<br><img src="Problem_Set_03_Files/1c-ans.gif"><p>
+	<li>	(0+1)* - {ww | w in {0,1}*} (complement of ww)<br><img src="Problem_Set_03_Files/1d-ans.gif"><p>
+	</ol>
+
+<li><font size=+1>DPDAs</font><p>
+	Construct deterministic pushdown automata to accept the following languages.<p>
+
+	<ol type=a>
+	<li>	{10<sup>n</sup>1<sup>n</sup> | n>0} U {110<sup>n</sup>1<sup>2n</sup> | n>0}<br><img src="Problem_Set_03_Files/2a-ans.gif"><p>
+	<li>	Binary strings tha contain an equal number of 1s and 0s.<br><img src="Problem_Set_03_Files/2b-ans.gif"><p>
+	<li>	Binary strings with twice as many 1s as 0s.<br><img src="Problem_Set_03_Files/2c-ans.gif"><p>
+	<li>	Binary strings that start and end with the same symbol and have the same number of 0s as 1s.<br><img src="Problem_Set_03_Files/2d-ans.gif"><p>
+	</ol>
+
+<li><font size=+1>CFGs</font><p>
+	Construct context free grammars to accept the following languages.<p>
+
+	<ol type=a>
+	<li>	(2.4b) {w | w starts and ends with the same symbol}<p>
+		<b><tt>	S -> 0A0 | 1A1<br>
+			A -> 0A | 1A | e</tt></b><p>
+
+	<li>	(2.4c) {w | |w| is odd}<p>
+		<b><tt>	S -> 0A | 1<br>
+			A -> 0S | 1S | e</tt></b><p>
+
+	<li>	(2.4d) {w | |w| is odd and its middle symbol is 0}<p>
+		<b><tt>	S -> 0 | 0S0 | 0S1 | 1S0 | 1S1</tt></b><p>
+
+	<li>	{0<sup>n</sup>1<sup>n</sup> | n>0} U {0<sup>n</sup>1<sup>2n</sup> | n>0}<p>
+		<b><tt>	S -> 0A1 | 0B11<br>
+			A -> 0A1 | e<br>
+			B -> 0B11 | e</tt></b><p>
+
+	<li>	{0<sup>i</sup>1<sup>j</sup>2<sup>k</sup> | i!=j or j!=k}<p>
+		<b><tt>	S -> AC | BC | DE | DF<br>
+			A -> 0 | 0A | 0A1<br>
+			B -> 1 | B1 | 0B1<br>
+			C -> 2 | 2C<br>
+			D -> 0 | 0D<br>
+			E -> 1 | 1E | 1E2<br>
+			F -> 2 | F2 | 1F2</tt></b><p>
+
+	<li>	Binary strings with twice as many 1s as 0s.<p>
+		<b><tt>	S -> e | 0S1S1S | 1S0S1S | 1S1S0S</tt></b><p>
+	</ol>
+
+<li><font size=+1>Ambiguity</font><p>
+
+	<ol type=a>
+	<li> Explain why the grammar below is ambiguous.<p>
+	<tt>	S -> 0A | 1B<br>
+		A -> 0AA | 1S | 1<br>
+		B -> 1BB | 0S | 0</tt><p>
+
+	The grammar is ambiguous because we can find strings which have multiple derivations:
+
+	<table cellpadding=0 border=0 cellspacing=24>
+	<tr>
+	<td><hr noshade>
+	<tt>	<b>S</b><br>
+		0<b>A</b><br>
+		0 0<b>AA</b><br>
+		00 1<b>S</b> 1<br>
+		001 1<b>B</b> 1<br>
+		0011 0 1</tt><hr noshade>
+	<td><hr noshade>
+	<tt>	<b>S</b><br>
+		0<b>A</b><br>
+		0 0<b>AA</b><br>
+		00 1 1<b>S</b><br>
+		0011 0<b>A</b><br>
+		00110 1</tt><hr noshade>
+	</table>
+
+	<li>(extra credit)<p>
+
+	<li>Demonstrate that G (see problem set) is ambiguous.<p>
+
+	The ambiguity is primarly due to the following rules:
+	<ul>	<li><tt>IF-THEN -> if condition then STMT</tt>
+		<li><tt>IF-THEN-ELSE -> if condition then STMT else STMT</tt></ul><p>
+
+	If we start with an IF-THEN statement and substitute an IF-THEN-ELSE for the consequent, we get:<p>
+
+	<tt>if condition then if condition then STMT else STMT</tt><p>
+
+	However, if we start with an IF-THEN-ELSE clause and substitute an IF-THEN for the consequent, we get the same thing. So, it is ambiguous.
+	Note that many real programming languages (such as C and Java) exhibit this exact ambiguity in their syntax.<p>
+
+
+	<li>(extra credit)<p>
+	</ol>
+
+<li><font size=+1>Converting to Normal Form</font><p>
+
+	<ol type=a>
+
+	<li>	Put the following grammar into Chomsky Normal Form.<p>
+
+		<tt>	S -> A | AB0 | A1A<br>
+			A -> A0 | e<br>
+			B -> B1 | BC<br>
+			C -> CB | CA | 1B</tt><p>
+	
+		Remove all e rules<p>
+
+		<tt>	S -> <b>e</b> | A | AB0 | A1A | <b>B0</b> | <b>A1</b> | <b>1A</b><br>
+			A -> A0 | <b>0</b><br>
+			B -> B1 | BC<br>
+			C -> CB | CA | 1B</tt><p>
+
+		Remove unit rules<p>
+
+		<tt>	S -> e | <b>A0</b> | <b>0</b> | AB0 | A1A | B0 | A1 | 1A<br>
+			A -> A0 | 0<br>
+			B -> B1 | BC<br>
+			C -> CB | CA | 1B</tt><p>
+	
+		Convert remaining rules into proper form<p>
+
+		<tt>	S -> e | A0 | 0 | AS<sub>1</sub></b> | B0 | A1 | 1A<br>
+			A -> A0 | 0<br>
+			B -> B1 | BC<br>
+			C -> CB | CA | 1B<br>
+			<b>S<sub>1</sub> -> B0 | 1A</b></tt><p>
+
+		<tt>	S -> e | A<b>N<sub>0</sub></b> | AS<sub>1</sub></b> | B<b>N<sub>0</sub></b> | A<b>N<sub>1</sub></b> | <b>N<sub>1</sub></b>A<br>
+			A -> A<b>N<sub>0</sub></b> | <b>0</b><br>
+			B -> B<b>N<sub>1</sub></b> | BC<br>
+			C -> CB | CA | <b>N<sub>1</sub></b>B<br>
+			S<sub>1</sub> -> B<b>N<sub>0</sub></b> | <b>N<sub>1</sub></b>A<br>
+			<b>N<sub>0</sub> -> 0</b><br>
+			<b>N<sub>1</sub> -> 1</b><br></tt><p>
+
+		NOTE: We did not need to create a new start state because the given one did not appear in the right side of any rule.<p>
+
+	<li>	Convert the following grammar into an equivalent one with no unit productions and no useless symbols.<p>
+
+		<tt>	S -> A | CB<br>
+			A -> C | D<br>
+			B -> 1B | 1<br>
+			C -> 0C | 0<br>
+			D -> 2D | 2</tt><p>
+
+		Converts to<p>
+
+		<tt>	S -> <b>0C</b> | <b>0</b> | <b>2D</b> | <b>2</b> | CB<br>
+			A -> C | D<br>
+			B -> 1B | 1<br>
+			C -> 0C | 0<br>
+			D -> 2D | 2</tt><p>
+
+		A is now useless and can be removed.<p>
+
+	</ol>
+
+<li><font size=+1>Derivations in Chomsky Normal Form</font><p>
+
+	<ol type=a>
+
+	<li>	(2.19) Show that if G is a CFG in Chomsky normal form, then for any string w in L(G) of length n>=1, exactly 2n-1 steps are required for any derivation of w.<p>
+
+	We begin with a single nonterminal ("S") and form the string by making substitutions according to the rules. Each rule of the form A->BC adds a new nonterminal, and each rule of the form A->a converts one nonterminal into a terminal. Since it takes n-1 steps to grow our string from the original nonterminal to n nonterminals, and then n steps to convert each of those nonterminals into terminals, it takes 2n-1 steps to derive a string of length n.<p>
+
+	<li>	(2.20) Let G be a CFG in Chomsky normal from that contains b variables. Show that if G generates some string using a derivation with at least 2<sup>b</sup> steps, then L(G) is infinite.<p>
+
+	L(G) is infinite if any nonterminal shows up in a reduction of itself because this indicates a loop in the grammar. In the largest possible derivation, starting with the start variable ("S") we replace it with two other variables and each of those are replaced with two other variables and so on. Since no variable can be repeated along any branch of the tree without creating a cycle, the tree will be depth b and will contain 2<sup>b</sup>-1 nodes. So, if a derivation requires 2<sup>b</sup> or more steps, the grammar must contain a cycle and L(G) must be infinite.<p>
+
+	</ol><p>
+
+<li><font size=+1>Two Way PDAs</font><p>
+
+	Show that the set {0<sup>n</sup>1<sup>n</sup>0<sup>n</sup> | n>0} is accepted by a 2-way PDA.<p><img src="Problem_Set_03_Files/7-ans.gif"><p>
+
+	This 2-way PDA works by moving right across the string to make sure it begins with 0<sup>n</sup>1<sup>n</sup>. Then it moves left to the beginning of the 1s and continues to the right to check for 1<sup>n</sup>0<sup>n</sup>.<p>
+
+</ol>
+</body>
+</html>

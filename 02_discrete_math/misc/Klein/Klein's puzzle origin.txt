@@ -1,0 +1,43 @@
+Subject: Re: Hamming Codes
+Date: Thu, 15 Jun 2000 09:36:19 -0700 (PDT)
+From: "Samuel J. Klein" <sjklein4913@yahoo.com>
+To: Shai Simonson <shai@stonehill.edu>
+
+The problem was presentd to me by D.J.Newman
+thirty-three years ago.  It was just a problem -- no
+mention of Hamming codes -- and fun to solve.
+
+--- Shai Simonson <shai@stonehill.edu> wrote:
+> Did you find any info on Hamming codes...
+>
+> It surprised me that you had never heard of them....
+> not because you
+> should have, but because your problem
+> is just the basic idea in disguise.  (the obvious
+> connection eluding me
+> for 3 days!!)
+>
+>
+> --
+>
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
+> Shai Simonson, Professor
+> ArsDigita University
+> 80 Prospect St.
+> Cambridge, MA
+>
+> Department of Mathematics and Computer Science
+> Stonehill College, North Easton, MA 02357
+> Voice: (508) 565-1008 Fax: (508) 565-1444
+> Email: shai@stonehill.edu
+> Home Page:
+> http://academics.stonehill.edu/compsci/SHAI.HTM
+>
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-
+>
+>
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Photos -- now, 100 FREE prints!
+http://photos.yahoo.com

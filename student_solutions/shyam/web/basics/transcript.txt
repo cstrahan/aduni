@@ -1,0 +1,46 @@
+PS - 1 Exercise 6 
+Shyam Visweswaran
+Transcript from SQL*Plus
+
+SQL> create table my_courses (
+  2    course_number varchar(20)
+  3  );
+
+Table created.
+
+SQL> insert into my_courses (course_number) values ('8.01')
+  2  ;
+
+1 row created.
+
+SQL> insert into my_courses (course_number) values ('8.02');
+
+1 row created.
+
+SQL> insert into my_courses (course_number) values ('8.03');
+
+1 row created.
+
+SQL> select * from my_courses;
+
+COURSE_NUMBER
+--------------------
+8.01
+8.02
+8.03
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from my_courses;
+
+COURSE_NUMBER
+--------------------
+8.01
+8.02
+8.03
+
+SQL> drop table my_courses;
+
+Table dropped.

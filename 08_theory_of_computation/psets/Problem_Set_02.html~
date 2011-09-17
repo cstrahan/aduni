@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>ADUni - Theory of Computation - Problem Set 02</title>
+</head>
+
+<body fgcolor=black bgcolor=white>
+<center>
+A R S D I G I T A &nbsp V N I V E R S I T Y<br>
+<font size=+2>Month 8: Theory of Computation</font><br>
+Problem Set 2 - Prof. Shai Simonson
+</center>
+
+
+<ol>
+
+<li><font size=+1>Minimizing FSM's</font><p>
+Consider the Finite Automaton below. Construct the smallest Deterministic Finite Automaton which accepts the same language.  Finally, draw a regular expression that represents the language accepted by your machine and draw a Regular Grammar that generates it.<p>
+
+	<img src="1.gif"><p>
+
+<li><font size=+1>Regular or Not?</font><p>
+You must prove that your choice is correct<p>
+
+	<ol type=a>
+	<li>The set of strings that have an even number of double zeros in them. (Note that three zeros in a row count as 2 double zeros). 
+	<li>The set of strings over the alphabet {0} of the form 0<sup>n</sup> where n is not a prime.  
+	<li>The set of all strings of the form xwx<sup>R</sup> where x and w are non-empty strings over the alphabet {0,1}, and the big R over the x means the reverse of x.
+	<li>The set of all strings over the alphabet {0} whose length is n! for some n > 0.
+	<li>The set of all binary strings that read backwards the same as forwards (pallindromes).
+	<li>1.17 a,b,c in the text
+	<li>1.18 in the text
+	<li>1.23 a,c in the text
+	<li>1.37 in the text
+	</ol><p>
+
+<li><font size=+1>Decision Algorithms</font><p>
+Give decision algorithms to determine if a Regular set<p>
+
+	<ol type=a>
+	<li>Contains all strings of the form 0*1*.
+	<li>Is co-finite. (its complement is finite).
+	<li>4.14 in the text
+	</ol><p>
+
+<li><font size=+1>Regular Grammars</font><p>
+	<ol type=a>
+	<li>Write down a regular (also called left-linear) grammar to generate the set of strings that are evenly divisible by 5 when interpreted as a binary string.
+	<li>A right-linear grammar is a context-free grammar where each production must be either in the form A->Ba, or A->b, where a and b are terminal symbols and A and B are non-terminals. (The regular grammars we did in class are called left-linear).  Right-linear grammars are also equivalent to finite state machines. Explain how to convert a given finite state machine, to an equivalent right-linear grammar. You may use an example to illustrate.
+	</ol><p>
+
+<li><font size=+1>Single Symbol Regular Languages</font><p>
+	<ol type=a>
+	<li>Prove that every language of the form 0<sup>mx+b</sup>, where m and b are positive integer constants and x ranges from 0 to infinite, is regular.
+	<li>Describe a regular set over the alphabet {0} that is NOT of the form from part (a).
+	<li>Extra Credit:  Characterize all regular sets over the alphabet {0}, and prove your answer.  That is, prove that every regular set over the alphabet {0} is of some particular form.
+	</ol><p>
+
+<li><font size=+1>Triple Extra Credit:  Minimizing FSM’s</font><p>
+
+Describe a method to implement the FSM minimization algorithm that runs in O(n log n) time, rather than O(n<sup>2</sup>).  Write a program implementing your method.
+
+
+</ol>
+</body>
+</html>

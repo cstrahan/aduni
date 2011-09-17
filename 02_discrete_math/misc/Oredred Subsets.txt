@@ -1,0 +1,59 @@
+Subject: Here is Doron Z.'s reply to my question about
+Date: Sun, 19 Nov 2000 22:56:46 -0500
+From: Shai Simonson <shai@stonehill.edu>
+To: ADUstudents <aduni-students@arsdigita.org>,
+     Shai Simonson <shai@stonehill.edu>, "Tara S. Holm" <tsh@math.mit.edu>,
+     Michael S Allen <mallen@MIT.EDU>,
+     Dimitri Kountourogiannis <dimitri@math.mit.edu>, rif@MIT.EDU
+
+Ordered subsets of a set with n elements ---
+
+Dear Shai,
+ That's great that you could spend so much time on ralbag!
+Concerning the Shai sequence, I don't recall ever seeing
+it as such. Of course, the derangement satisfy
+D_n=n*D_{n-1}\pm 1 so it is probably signed dernagement.
+Remmel has a combinatorial proof that is not totally obvious,
+so perhaps it can be extended to the Shai sequence.
+Of course Shalosh can obtain the recurrence from the sum automatically.
+Best wishes
+Doron
+
+The query I sent him is below...
+
+Hello Doron --
+
+I am teaching discrete math this semester and I was working on the
+following problem which I am sure is part of a standard treatment -- but
+
+I cannot find any mention of this in my usual looking places...
+
+Would you mind enlightening me?
+
+To count the number of ways to choose a subset of n elements when we DO
+care about the order seems to be the sum of
+
+C(n,0) + C(n,1) + 2!C(n,2) + 3!C(n,3) + ... + n!C(n,n)
+
+This gives a recurrence equation T_n = n*T_(n-1) + 1.
+
+Questions:
+
+1.  Is there a simple combinatorial explanation for this recurrence?
+2.  Is there a closed form for this recurrence?
+3.  It seems like there might be some similarity between this sum and
+the number of derangements.  Is there?
+
+Thanks for your expertise.
+--
+ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн----
+        Shai Simonson, Professor
+        ArsDigita University
+        141 Portland St. (Use 80 Prospect St. for mailing)
+        Cambridge, MA 02139
+
+Voice Mail:     (617) 386-4236
+Fax:            (617) 494-8174
+Email:          shai@stonehill.edu
+Home Page:      http://academics.stonehill.edu/compsci/SHAI.HTM
+нннннннннннннннннннннннннннннннннннннннннннннннннннннннннн-----

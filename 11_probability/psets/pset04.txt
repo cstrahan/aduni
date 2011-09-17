@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Problem Set 1: Getting started with vectors, functions, and plots in Matlab
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 1. create vector x, representing the domain of a function 
+x = -10:0.1:10;
+
+
+%% 2. write a function 'square' that takes as input a vector x,
+%% and oututs a vector y, such that y_i is x_i*x_i. 
+%% This function should be in an m-file named square.m
+%% Use 'help function' to get syntax of matlab functions
+%% Use '.*' to do a vector-multiply operation.
+
+y = square(x);
+
+
+%%3. Plot the results of the above square function using the 'plot' command.
+%% Plot the results both as discrete points, and as a continuous line.
+%% Use 'help plot' to get the syntax of plot.
+
+
+%% 4. Adjust the axis of the above plot using the 'axis' command so that x
+%% is from -20 to 20, and y is from -200 to 200
+
+
+%% 5. Create and plot functions for x^2, x^3, x^4, on different axes using the
+%% 'subplot' command. Give a title to each of the subplots.
+
+%% 6. Plot functions for x^2, x^3, x^4 on the same axes, in different colors.
+%% Use 'hold on' to draw multiple plots. 
+
+%%7. Use the 'legend' command to create a legend for the plot in 6.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% uniform pdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%8a. Create a function 'uniform(x, a, b)' that takes three inputs:
+%% domain vector x, scalar a, scalar b, and returns three outputs:
+%% pdf vector u, scalar mean of pdf, scalar variance of pdf
+x=[-10:0.1:10];
+[u, mu, vu] = uniform(x, -2, 2);
+
+%%8b. Plot the pdf.  Adjust axes so that y axis is from 0 to 1.
+%% Write the mean and variance on the title bar.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% gaussian pdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 9a. Create a function 'gauss(x, mean, variance)' that takes three inputs:
+%% domain vector x, scalar mean, scalar variance, and returns the pdf vector.
+
+g = gauss(x, 0, 1);
+
+%%9b. Plot the pdf with appropriate axes.
+%% Write the mean and variance on the title bar.
+
+%%10. Use vectors x and g to compute:
+%% a. area under the curve g
+%% b. area under the curve g between 0 and 10
+%% c. area under the curve g between -2 and 2.
+%% Useful commands: 'find(x > -2 & x < -2)'
+
+
+%%11a. Plot the above uniform and gaussian pdfs on the same plot.  Use legend to
+%% annotate plot.  
+%%11b. Create a vector M such that m_i is 0 if u_i > g_i, 1 otherwise.
+%% Plot m on the same figure as 11a.
+
+

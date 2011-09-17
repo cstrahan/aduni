@@ -1,0 +1,314 @@
+FAVE Technologies
+
+Systems Project Proposal
+March 21, 2001
+Copyright 2001
+
+Shyam Visweswaran
+Todd Sjoblom
+Gary Dmytryk
+
+
+Abstract
+  
+The inherent nature of the Internet as an asynchronous network has presented 
+challenges to the development of IP telephony,particularly the difficulty of
+ensuring quality of service.  We propose a three-part methodology to approach 
+this issue using 1) a feature analysis of speakers' voices for more efficient
+compression, 2) developing an adaptive protocol regarding the state of the network 
+to optimize packet routing, and 3) a network of proxy servers to perform the routing.
+The central ideas of this proposal are to reduce the amount of information needed to
+transmit voice data, and to find the best route for this transmission.
+
+
+I.  Introduction
+
+Optimization of voice transmission over the Internet
+
+The objective of this proposal is to develop protocols to optimize 
+transmission of voice over the Internet. Over the last decade, Internet
+Protocol telephony (IP telephony) that uses the Internet Protocol's
+packet-switching to carry voice has become a viable alternative
+to the traditional dedicated circuit-switched telephone network. The
+challenge in IP telephony has been to deliver voice (in addition to video
+and data) packets in a dependable flow to the user over the Internet which
+by design is an asynchronous network with the inherent lack of delivery
+guarantees.
+
+One protocol for implementing IP telephony that has been proposed is
+Voice over Internet Protocol (VoIP), which is a set of facilities for
+managing the delivery of voice information using the Internet Protocol (IP).
+VoIP uses the various G.7xx protocols for voice digitization and compression,
+the H.323 protocols for setting up, managing and tearing down sessions and
+the real-time protocol (RTP) to help ensure that packets get delivered in
+a timely way. Currently, the single most important factor inhibiting wide
+acceptance of  IP telephony the difficulty in guaranteeing Quality of
+Service (QoS).
+
+We want to explore ways of improving QoS of voice delivery over the
+Internet by specifically examining 3 modalities. First, we want to examine
+Feature Analysis and Voice Encoding (FAVE) as a candidate for better voice
+compression.  FAVE has the potential to greatly reduce the amount of information
+required for the transmission of voice by producing a unique voiceprint for each user,
+thereby decreasing the amount of information needed to encode the speaker's message.  
+A superior compression method would reduce packet traffic over the network. 
+
+Second, we want to develop an adaptive protocol that would use information
+about network congestion, load, latency and other factors to dynamically
+optimize the transmission of packets from the sender by re-routing future
+packets. One source of information will be the receiver who will transmit
+information about packet loss, packet quality, and latency to the sender. We
+expect that this information will be insufficient for an adaptive algorithm
+to be able to reroute packets efficiently.
+
+This leads to the third aspect - the concept of having servers spread across 
+the Internet (like Akamai) that can be used for routing packets as well as 
+providing network related information to the adaptive algorithm at the sender's end.
+
+Advances in one or more of the above-mentioned areas could lead to a dramatic
+improvement in the transmission of real-time voice over the Internet.
+
+
+
+II.  Proposal
+
+A.  Improvements to voice transmission using FAVE
+
+1. Current high-quality POTS uses 64Kbps on dedicated connections.
+
+	 The Plain Old Telephone System (POTS) uses the high quality non-packet G.711 protocol, for Pulse Code Modulation  (PCM) of voice frequencies.  G.711 requires a bandwidth of 64Kbps for one conversation, sampling 8000 times per second to obtain 1 Byte of information for the amplitude of the voice.  The input signal accentuates the frequencies most important for voice (100 Hz to 4000 Hz).  There is no computational delay.  A fiber optical trunk line carries many conversations through Time Delay Multiplexing (TDMX).
+
+2.  Compressed voice in small packets.
+
+	We want quality which approaches that of G.711, even as we use packets over the Internet.  To reduce congestion, we need to keep packets very small.  Other existing voice   encoding protocols, such as G.729 and G.723.1, are linear prediction analysis-by-synthesis vocoders.  They compress to as low as 5.3Kbps, but the low-bit-rate vocoders show reduced quality, increased delay, and greater MIPS.  We suggest a new protocol which compresses voice by making use of certain universal characteristics of human speech.  We strive to preserve quality by encoding and decoding a message in the context of the speaker's voiceprint.  Our resulting compression is so extreme (about 64b of data), and the packets are so few (about 10 spaced throughout a second), that telco's may be able to multiplex twenty-fold more conversations onto their trunk lines.  
+	Note that we are not creating an automated speech recognition tool, whereby the speaker's voice would be automatically and correctly transcribed into compact ASCII text in the speaker's native language.  Such systems are too slow and too incorrect for our purposes, though they will of course improve with hardware and algorithms. 	
+
+3. Internet's latency and jitter must be mitigated to allow telephony. 
+
+	The delivery of packets over the Internet is not in real time.  Rather, packets may be dropped or be jittery (late or reordered). The Internet Protocol (IP) cannot guarantee low latency.  We instead reduce the size of the packets, so that they will travel quickly (i.e. they are not broken up) and will be less likely to be dropped (when overfilling a router's buffer).  We encode the information of the speaker's voice to three levels of accuracy, as we adapt to the needs of the "hearer" and the current state of the Internet.  The encoding will be through feature analysis, which we call Feature Analysis Voice Encoding (FAVE).
+
+4. The speaker's voice and language encoded with FAVE.
+
+	The speaker will have software which has been trained on his/her language and voice.  It will store the speaker's special phonetic and prosodic characteristics, as they distinguish this from other speakers of the native language's phonemes.  FAVE's protocol will transmit the speaker's unique characteristics just once to the hearer's FAVE-enabled application, and compactly encode the rest of the speech as phonemes and prosody.  These are decoded at the hearer's end through FAVE-enabled software. 
+
+5.  Speech and sound.
+
+	Sound travels through the air as a wave of compression and rarefaction.  If the sound is a pure tone (like a tuning fork), then the molecules oscillate at a given frequency and amplitude.  For general musical sounds, the fundamental frequency is colored by overtones (harmonics) at simple ratios to it.  The amplitude of the overtones determines the quality of the musical sound -- an oboe is different from a clarinet.  Human vowels are musical sounds; a male's fundamental frequency is 120 Hz., about an octave below middle C.  General sounds -- and consonants -- are more complicated mixtures of frequencies, without the pleasing numerical ratios. 
+
+6.  Phonemes underlie their surface variants.
+
+	English has 41 underlying sounds, with which even toddlers spell their internal dictionary.  (Other languages have 11 to a 141 such phonemes.)  English has minimal pairs like "lay" and "ray."  Even without the context of a sentence, these syllables mean different things.  So, in English, /l/ and /r/ are phonemes.  All babies can hear this difference, and change their sucking behavior.  But in a language where there is no such minimal pair, a 6-month-old child will learn to ignore the difference.  For a Japanese adult, [l] vs. [r] is a meaningless distinction -- hard to say and hear -- and not phonemic.  When we get past the deep phonemes, and study the surface variants (or allophones), we may find substitutions which sound a bit strange, but don't change the meaning.  For example, the phoneme /p/ in English has a slight  following [h] sound, which a French person can hear, but we rarely can.  We say English [p] like an aspirated [b] without glottal vibration; the French use no aspiration.  We have trouble learning French as an adult, because we've trained ourselves to say [p]+[h].  "La pipe" sounds to us like "la beep."  But for both French and English, /p/ is the phoneme.  /p/ is what we transmit.  Its amount of aspiration is automatically added by the speaker, and also by FAVE at the hearer's end.
+
+7. Volume and Pitch; Emphasis and Prosody.
+
+	At the syllable level, languages use stress and tone to distinguish words of different meaning.  English has some of this (per-FUME, PER-fume), and so we'll encode the level of stress.  But more important, on the telephone, is making up for the loss of visual clues we get in a face-to-face conversation.  We will encode a careful rendering of sentence stress and pitch.  These sounds, which last over several letters, are called suprasegmentals.  They let us know what's important, when a question is being raised, and when the speaker is about to turn the  conversation over to the hearer.  Letting the hearer know that a transfer point is coming up will help mitigate the problems of latency, jitter, and dropping.  
+ 
+8. Feature analysis.
+
+	There is a universal alphabet of the sounds that a child can learn to speak.  An approach, out of Prague, was able to determine the 10 features whose presence or absence defines all 41 phonemes of English and many other languages.  These are the minimal distinctions that our nerves use to articulate a sound or to hear the difference between two sounds.  And these are the bits that FAVE will send to encode the phonemes of a message.  But, as we saw above with /p/, there are surface phonetic characteristics of speech, which make English different from French, and you different from me, and you in a hurry, or whispering, different from normal.  These have finer distinctions than a binary choice.  FAVE will have already encoded the voiceprint of a speaker as: a fundamental frequency; the quality (i.e. strength of overtones) of a vowel; the aspiration of voiceless /p/; the amount of nasalization; the effect of where the tongue hits to articulate /t/; etc.  These phonetic aspects will be automatically subtracted at the encoding, and added at the decoder.  The prosodic contours will be more continuous and more variable.  We will store, in the voiceprint,  the normal speed in syllables per second, and volume in decibels and Hertz, the normal range in these three characteristics, the range in pitch for a question, and the normal increase(s) in volume to accentuate a syllable.  Then the FAVE prosodic contour will be the change from the baseline.  "What -  do  - YOU - think?" is indeed a question, but the slowdown in speed and the increase in stress on the word "you" will come across as important clues for the hearer.   
+
+9. Digital Signal Processing of voice into features.
+
+
+	Speech has evolved to maximize information transfer via our nerves, vocal tract, air, ears, and nerves again.  The same linguistic feature analysis that distinguishes the position of the tongue, to articulate a vowel, also describes how we can hear the single bit distinction of /i/ from /e/.  It's in the relative strength of the overtones.  We sense it as a high vowel; we describe it with a boolean feature [+high].  Or the difference between /k/ and /g/, which is the delay in vibrating the vocal folds before the next vocalic sound, is the feature [+voice].  The technology of signal processing, even in the 1950's, was able to  distinguish the overtones which define a high, back consonant to give /k/ or /g/, and further to distinguish /k/ from /g/, by the time in milliseconds till the onset of the speaker's fundamental frequency.  (Current parametric vocoders do transmit the boolean [+voiced] as a characteristic of frequent sound samples.  FAVE will transmit all features, but only of phonemes.)  In FAVE, software alone will look at the input signal from the microphone of the PC or telephone, and compute the amplitude of the speaker's fundamental frequency, and of its overtones.  (These change with the prosody of the sentence.) 
+
+10.  Handshaking transmits the voice characteristics of the two speakers.
+
+ 	While the communication protocol H.323 is establishing two-way communication, FAVE will try to send the voiceprints of the two speakers to the opposite machines.  This is a file of perhaps 80 Kbits, to be transmitted in a one-time burst of 100Kbps, if the participants agree to waiting through the time of an extra dummy dial-tone.  The rest of the message is as slow as 320bps, being just the features, or 1Kbps to encode more subtle colorings.
+
+11. When two conversants talk again, FAVE saves bandwidth by reusing their voiceprints.
+
+	On a subsequent dial-up, handshaking will establish that the voiceprints have already been stored.  There is no need to retransmit them (unless we have a new version of FAVE).  After you speak with family, friends, and frequent business associates, you will not pay the penalty of transmitting the voiceprint.  You will only transmit the information content (the features) of the message itself.
+
+12.  Adaptations to low bandwidth or low MIPS.
+
+ 	If there is not enough bandwidth for bursting the voiceprint at dial-up, then the voiceprint may be piggy-backed on to the encoding of the message itself. We won't discuss this here. 
+ 	There may still not be enough bandwidth to transmit the voiceprint.  Then FAVE degrades the voice to, e.g., a generic male speaker of English, and transmits the phonemes and underlying prosody.  The next time, we hope for a better connection.
+	If there is bandwidth, but not the 50 MIPS needed to encode, or the 30 MIPS to decode, then another technology is more appropriate.  However, FAVE may still send the sounds as a high-quality phonetic message, but more compactly than 64Kbps.  FAVE's adaptation to dropping and jitter may be useful even here.
+ 
+13.  Vowels, which last longest, are transmitted with a predicted length.
+
+	There are about 4 syllables per second.  (You can count with /wunwunthousand/.)  The vowel itself lasts for most of the syllable, and is colored in frequency by the surrounding consonants.  The vowel's fundamental frequency changes with the prosody of the sentence, as does its volume.  Its duration comes from the speaker's normal speed and the special speed of the sentence.  If we had no jitter, then the next consonant arrives on time -- either 1/10 second for a voiceless /p/, or 2/10 for a voiced /b/.  With jitter, we may instead get a late /p/, and our decoder can adapt by accentuating [p]'s overtones, volume, and aspiration to make it sound more like [p] and less like [b].
+
+14.  Non-voice noises are ignored to enhance conversation.
+
+	The analysis of speech into phonemes filters out the ambient office noise.  You won't hear a pin drop, because that's not a speech sound.  Silence is not transmitted, except perhaps once per sentence, to cut off a trailing vowel as the speaker's breath and volume fade.  Echo cancellation is required in telephony, and will be handled at each speaker's end.
+
+15. Internet congestion will drop packets, and the hearer will be fine.
+
+	In live conversation, we already miss perhaps 50% of what is said, and yet do fine in our  understanding.  On a telephone, where there are fewer redundant clues, FAVE is careful to ensure quality and prosody.  But some of the packets will be dropped.  If FAVE hasn't received a consonant by the time its vowel must be terminated, then it can substitute noise.  The hearer may never even notice.  Warren & Warren (in a 1970 Scientific American article) found no confusion  among hearers of the following sentences, where # symbolizes noise:
+	It was found that the #eel was on the axle.
+	It was found that the #eel was on the shoe.
+	It was found that the #eel was on the orange.
+	It was found that the #eel was on the table.
+
+16.  Internet congestion will cause jitter, and FAVE will adapt.
+
+	If FAVE finds that it has often injected noise, due to dropping (as above) or due to jitter, then it can adapt.  If it was only using half the available bandwidth, then it can henceforth transmit the coloring of a vowel.  As a vowel finishes, its frequencies are affected by the next consonant, so that we can send the tentative features of the next consonant even before it is fully articulated.  Similarly, as a consonant finishes, it is affected by the next vowel.  /sh/ in "she" is different from /sh/ in "shoe".   FAVE will be able to encode that the next sound is rounded, or high, without knowing precisely what that phoneme will be.  FAVE at the hearer's end will color the white noise which it must insert for a dropped or jittery packet, so that the noise sounds more like the missing packet would have.  And if the packet does arrive late, due to jitter, but not too late, then it might be abbreviated and slipped right into place. 
+	If a consonant is lost inside of a quickly articulated cluster, where there is no vowel coloring as a clue, then FAVE might use feature analysis to deduce the class of the consonant.  For example, it might merge the sounds of the only possible semi-vowels, [l] and [r], in /sp#ay/
+
+17. Benefit for wireless telephony with low bandwidth.
+
+	When your cell-phone knows your voice, it can encode your messages compactly.  Your bandwidth and power needs are diminished.  Call someone at your home or office who has your voiceprint, and the bandwidth you require is minimized.  FAVE just transmits phonemes and prosodic contours, while adapting to mitigate dropped packets and jitter.  FAVE's low ratio of data to header will let telco's strip off the headers and multiplex tens of thousands of FAVE conversations on their trunk lines.  
+
+18. Benefit for email and lectures.
+
+	When the FAVE protocol is used to attach voice to an email or to a written lecture, then the compression provides an economy of storage and speed of transmission over the Internet.  In this application, there is no problem with jitter, because we can use TCP/IP to handle dropped or jittery packets.  The recipient of the email could use a future word-processing application to right-click on a sentence, and listen to the original author reading the sentence.  The cost of storing the voice will be about triple the size of the text, and not 64Kbps.  Hearing the author will clarify the author's intent, and emotion.   (And if the text was in fact automatically generated by some speech recognition software, then hearing the voice will help mitigate the inevitable errors of transcription.)  Handicapped users  can switch methods of delivery, as can users in environments where the speed of visual clues is counterbalanced by the inconvenience of reading a screen.  
+
+B.  Adaptive routing protocol
+
+The function of the adaptive protocol is to determine the optimal routing path from the call sender to the telecommunications company's Network Access Point (NAP) on their high-speed trunk line, and then from the NAP to the receiver of the call.  Research will be required to determine a detailed specification, but the following points, at least, will be addressed:
+  
+- this protocol would run on all proxy FAVE servers (i.e. 'phone servers')
+- responsible for finding neighboring proxies when it comes up
+- on booting up it contacts DNS to figure out its 'neighbors'
+- multicasts its 'neighbors' every few minutes
+- neighbors reply with information about their load and neighborhood congestion
+- after a certain time-out period, the proxy collects responses it has received;
+        computes latencies from each neighbor and tabulates the info it
+        has received in the replies
+- computes the 'fastest' hop to a proxy that is not overloaded and directs packets
+        it has received to that proxy
+- if all latencies are very high or all neighbors are reporting heavy loads
+        it converts packets to a more compressed format, drops every other packet
+        or reduces size of packets
+
+C.  Distribution of proxies on the Internet
+
+- proxies are 'phone' servers that run the adaptive protocol algorithm and are
+        strategically placed around the internet
+- questions to be answered: how many proxy servers are needed and how should
+        they be geographically distributed
+- clients are computers connected to the Internet that either initiate a call
+        or receive a call
+- a client initiating a call connects to the nearest available proxy and transfers
+        the voice data
+- the 'best path' from client A (initiating the call) to client B (receiving the call)
+        has to be found:  actually, this involves finding the best path from client A to the Network                        Access Point and again from the network to client B.   A greedy strategy where every proxy hands the packets over to its nearest and fastest neighbor should probably work and this needs to be explored
+
+
+Further Description of proxy network
+
+For telephone conversations between human users, latencies of up to 150 ms are excellent
+ and latencies of up to 300ms acceptable.  The Internet hops involved in the transmission
+ of packets from one user to the other is the single most important factor of delay.  This
+ latency is determined by many factors describing the state of the network adjoining
+ the path taken by the packets; moreover, the path itself can be different from packet
+ to packet.  Factors include increased traffic or load on an intermediate server or servers,
+ server and link failures, and packet loss and packet corruption.
+
+A set of servers (proxies) distributed strategically across the Internet would be used
+ to monitor these factors locally and use this information to route packets accordingly.
+ A client initiating a conversation will multicast its intention to the nearest set of
+ proxies (that can be located using the DNS) which in turn send information about the
+ network latency and quality of transmission to their nearest set of neighbors. The
+ client then picks the proxy with the optimal transmission characteristics and
+ transmits the packets to it. In turn the proxy routes the packets through the 'best'
+ proxies to the destination.
+
+Two important issues are: how to find the 'best' proxy, and what are the best locations
+ for locating the proxies?  A local greedy algorithm where each proxy communicates with
+ some limited number of neighboring proxies and obtains information about their loads
+ and the round-trip time from itself to its neighbors can be used to compute the next
+ proxy on the path. Periodically, a proxy will multicast information about its load
+ to its neighbors and in turn will receive replies about their respective loads. The
+ round-trip times for each neighbor can be computed and would be an indicator of
+ traffic on that particular hop.
+
+Finding the best location and the optimal number of proxies will need investigation
+ into the Internet topology and traffic patterns. One idea is to use randomly placed
+ proxies and this may prove to be an acceptable solution.
+
+Proxies can crash and come up periodically and we need a mechanism by which proxy
+ failures can be detected so that it will not be used for packet transfer by its
+ neighbors. When a proxy comes up and connects to the Internet it should be able
+ to obtain the IP addresses of its nearest neighboring proxies: the regular Internet
+ DNS service may be sufficient to obtain this information or we may need our own DNS
+ servers that can be queried to obtain this information.
+
+Topics not considered:
+- call session setup, maintenance and tear down (which the VoIP does). We need
+        not consider these issues since our main focus is on optimizing transport
+        when a call is underway. Already existing protocols can handle these
+        issues.
+
+
+III.  Related Work
+
+Chomsky, Noam and Halle, Morris  The Sound Pattern of English  New York:  Harper and Row, 	1968
+Coulouris, George, Dollimore, Jean, and Kindberg, Tim  Distributed Systems:  Concepts and 	Design  New York:  Addison-Wesley, 2001
+Crystal, David  The Cambridge Encyclopedia of Language  Cambridge:  Cambridge University 	Press, 1987
+Lehiste, Ilhe (ed.)  Readings in Acoustic Phonetics  Cambridge:  MIT Press, 1967
+Minoli, Daniel and Minoli, Emma  Delivering Voice over IP Networks  New York:  John Wiley 	& Sons, 1998
+Minoli, Daniel and Minoli, Emma  Delivering Voice over Frame Relay and ATM  New York:  	John Wiley and Sons, 1998
+Morgan, Edward B.  Voice Over Packet  Telogy Networks White Paper, 1997
+Soulhi, Said  "Telephony  over packet networks"  IEEE Canadian Review, Winter 1999
+TelephonyWorld.com  Designing Global VoIP/ and FoIP Solutions Networks
+
+www.open323.org  H.323 Standards
+www.iec.org (Internet Engineering Consortium)  Web ProForum Tutorial:  H.323
+www.cis.ohio-state.edu  H.323 and Associated Protocols
+www.cc.gatech.edu  Caching and Akamai
+www.protocols.com  IP Protocol
+www.3com.com  Understanding IP Addressing
+project.jipmer.org
+
+
+ 
+IV.  Milestones and Scheduling
+
+A.  3 months
+
+We'll start with the items of greatest variability, which are:  the analysis of speech into features on a palm-sized device; developing the adaptive algorithm for analyzing network traffic.
+
+B.  6 months
+
+If FAVE can be implemented in software, even on small machines, then our goal is to encode English at 95% accuracy of phonemes, not prosody.  This will be a local test, not across the Internet.  Simultaneously, we will work on the distribution of proxies.  Assuming the greedy algorithm is satisfactory, work with one telecommunications company to understand their server topology and geometry.	
+
+C.  12 months
+
+Transmit and receive English, on a low-latency line, at 98% accuracy of phonemes, and 60% accuracy of prosodic features.  Test adaptive algorithms for handling latency and jitter.  Internet engineers will help the FAVE team with testing and tools.
+
+D.  18 months
+
+A prototype which transmits speech coast-to-coast between two FAVE-enabled applications, each on a medium-latency network connected to a fast trunk line.
+
+
+
+V.  Resource Requirements
+
+Without delving into precise budget allocations, a rough sketch of the resources needed to begin development of our technologies is offered below.  It consists of two parts:  the first is staffing, the more critical aspect; next concerns physical assets, which are more flexible in our estimation.
+
+A.  Staffing
+
+We envision our personnel requirements at startup as demanding a staff of eleven for our technology modules and for management as follows:
+
+- The core FAVE encoding team will be directed by one of our principals, a software engineer and linguist who has worked with Noam Chomsky, assisted by two people having degrees in electronic engineering and 3-7 years of related voice technology experience, working to encode certain linguistic features of the human voice into a voiceprint unique to each user of our product.
+- The delivery of the product over the Internet will be developed by another team of five engineers working in two pairs on our network and software technologies.  This would be composed of, firstly, two network specialists, and then, two computer scientists with experience in developing algorithms and large software projects, overseen by a senior systems engineer able to participate in both aspects of the team's work, and to coordinate their efforts using best practice project methodologies.
+- The management team would consist of three people.  We require a seasoned and proven person to serve as chief technologist, who would work with the leaders of the two development teams to insure system integration, act as project manager, and participate together with the project executive in presenting our proposals and progress to potential investors, future clients, and project partners.  The aforementioned project executive is the person chiefly responsible for external relations, as well as, in cooperation with the chief technologist and team leaders, organizational and business development.  Finally, a well-organized and efficient person will be needed to serve as administrator and office manager.
+
+B.  Physical Resources
+
+- Office Space  We are considering a space just outside Kendall Square in Cambridge, MA currently held but unoccupied by the arsDigita Corporation, which is being offered for lease furnished with cubicles and Aeron chairs at each desk.
+- Office Supplies.  PC's for everyone on staff.  Miscellaneous expenses included.
+- Hardware.  In order to develop our prototype routing network, we will purchase some big, honking machines to construct a test network at our lab.
+- Travel.  The core FAVE team will deliver papers at upcoming conferences on linguistics and computing in Amsterdam, Rome, and Champaign-Urbana, IL.  We also need to budget for travel expenses incurred while developing our cross-country prototype.
+
+
+D.  Budget
+
+Salaries	 and Benefits			150,000	Team leaders and executives (4)
+					120,000	Engineers and administrator (7)
+				          1,440,000	Total salaries	
+
+Office Space				15,000		Monthly rent * 18 months	
+				           270,000		Total
+
+Office Supplies				36,000		PCs and miscellaneous expenses	
+Hardware				75,000		Network routing lab
+
+Travel					50,000		
+
+Total budget			      $1,871,000
+
+

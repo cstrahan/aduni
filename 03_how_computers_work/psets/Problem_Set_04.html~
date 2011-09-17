@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>6</title>
+</head>
+
+<body>
+
+<h1 align="center">How Computers Work</h1>
+
+<h1 align="center">Problem Set 4</h1>
+
+<h2>Problem 1: (Warm-up -- work alone)</h2>
+
+<h3 align="center"><u>a</u></h3>
+<div align="center">
+  <center>
+
+<PRE><img border="0" src="pset_04_html_files/p1a.gif" width="165" height="210"></PRE>
+  </center>
+</div>
+
+<h3 align="center"><u>b</u></h3>
+<div align="center">
+  <center>
+
+<PRE><img border="0" src="pset_04_html_files/p1b.gif" width="166" height="228"></PRE>
+  </center>
+</div>
+
+<h3 align="center"><u>c</u></h3>
+<div align="center">
+  <center>
+
+<PRE><img border="0" src="pset_04_html_files/p1c.gif" width="187" height="229"></PRE>
+  </center>
+</div>
+
+<h3 align="center"><u>d</u></h3>
+<div align="center">
+  <center>
+
+<PRE><img border="0" src="pset_04_html_files/p1d.gif" width="237" height="217"></PRE>
+  </center>
+</div>
+
+<h3 align="center"><u>e</u></h3>
+<div align="center">
+  <center>
+
+<PRE><img border="0" src="p1e.gif" width="329" height="222"></PRE>
+  </center>
+</div>
+
+<PRE>&nbsp;</PRE>
+<PRE>&nbsp;</PRE>
+<p>A. For the above circuits , determine the logic function implemented. Wire
+connections are determined as follows: Anywhere there is a black dot on top of two or more wires, they are electrically connected. If two wires cross and there
+is no black dot, there is no connection. If three wires intersect in a T, they are connected, whether there is a dot or not. When a wire runs
+perpendicularly across the gate of a MOS transistor, the wire connects to the
+gate terminal. For circuit d) assume only one of <i>S_0, S_1, </i>or <i> S_2</i> can be high at a time.</p>
+<p>B. Suppose a datasheet specifies for an inverter: <i> Vil</i> = 1.2 V, <i> Vih</i> = 3.8 V,
+with VDD = 5 V. What must the minimum gain of the device be in the forbidden region to ensure noise margins on both ends of at least
+0.5V?</p>
+<h2>Problem 2: (Collaborative)</h2>
+<p>The diagram below is supposed to be a synchronizer system which enables one
+to provide an asynchronous input to a synchronous system by clocking it through two flip-flops. The idea is that even though FF1 may be put into the
+meta-stable
+state, the output of FF2 will be valid when required by the synchronous system,
+provided the meta-stability in FF1 doesn't last too long. If it does, there is a
+synchronizer failure.</p>
+<div align="center">
+  <center>
+<PRE><img border="0" src="p2.gif" width="650" height="281"></PRE>
+  </center>
+</div>
+<p>A. Assuming zero contamination delay and zero hold time for the flip-flops,
+what is the longest duration that a meta-stable state can persist in FF1 without
+causing failure? Give your answer in terms of the clock period and the setup
+time of the
+flip-flops.</p>
+<p>B. Marginal Devices is marketing a system like this one, and Ben Bitdiddle is
+the chief designer. He has chosen to implement the synchronizer with an old TTL
+technology flip-flop that has a 20ns setup time. Assume the internal gain of the
+circuit inside the flip-flops is 10 with a delay time constant, <font face="Symbol">t</font>
+= 2ns. Also, assume the clock period is 100 ns. How long will it take, on
+average, before the synchronizer fails if the input (ASYNCIN) changes at a
+100KHz rate, with roughly a 500ns rise/fall time? If Marginal sells 5000 of
+these devices per year, how many failures should they expect to deal with in one
+year?</p>
+<p>C. Marginal's synchronizer was so successful that they decide to put out a
+second version. Ben Bitdiddle has left the company to go get his Ph.D, and Louis
+Reasoner, recently laid off from Nonlinear Technology, is now the chief
+designer. Since---as we all know---faster is better, he decides to replace the
+old system clock with one that runs at 20MHz. In addition, the marketing
+department launches a successful ad campaign that leads to sales of 10000 units
+per year.
+How long should it take for them to get their first complaint from an irate
+customer?</p>
+<h2>Problem 3: (Non-collaborative)</h2>
+<p>A 7-segment display is often used to display decimal numbers. Shown below is
+one unit, with the segments labeled <i>a-g</i>, and the numbers that it should be able to display.</p>
+<div align="center">
+  <center><PRE><img border="0" src="p3.gif" width="617" height="285"></PRE>
+  </center>
+</div>
+<p>A. Assuming the input is a 4-bit (positive only) number, write the truth
+table that takes 4 input bits and generates 7 bits of output.</p>
+<p>B. Write the Boolean function in sum-of-products form, for each segment, <i>a-g</i>.</p>
+<p>C. Design a PLA, as shown in lecture with a NAND plane and a NOR plane, to
+implement the 7-segment display.
+</p>
+
+<p>&nbsp;
+</p>
+
+</body>
+
+</html>

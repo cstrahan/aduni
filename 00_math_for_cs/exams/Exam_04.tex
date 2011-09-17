@@ -1,0 +1,363 @@
+\documentclass[10pt]{amsart}
+ 
+\setlength{\parsep}{3pc}
+\setlength{\itemsep}{0.2in}
+
+
+\usepackage{fullpage}
+\usepackage{psfig}
+
+
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\to}{\rightarrow}
+
+\newtheorem{thm}{Theorem}[section] 
+\newtheorem{theorem}[thm]{Theorem} 
+\newtheorem{corollary}[thm]{Corollary} 
+\newtheorem{lemma}[thm]{Lemma} 
+\newtheorem{prop}[thm]{Proposition} 
+\newtheorem{definition}[thm]{Definition} 
+\newtheorem{remark}[thm]{Remark}  
+\newtheorem{fact}{Fact}[section]
+
+\newenvironment{EG}[1]{{\vspace{1 ex}}\noindent {\sc Example.}{#1}{\hfill{$\diamondsuit$}}\\{\vspace{1 ex}}}
+
+
+
+\title[\hskip 0.2in Final Exam\hfill Name:\hskip 2in]{Exam 4:  Final Exam}
+
+\begin{document}
+
+%\renewcommand{\arraystretch}{2}
+
+\begin{figure}[h]
+\centerline{
+\psfig{figure=logo.ps}
+}
+\end{figure}
+
+\centerline{\Large{\sc{Month 0: Mathematics for Computer Science}}}
+\medskip
+
+\maketitle
+
+\vfill
+
+
+\centerline{\LARGE{September 29, 2000}}
+
+\vskip 1in
+
+\hskip 2in\Large{Name:}
+
+\vskip 1in
+
+\noindent You may  not consult any books or papers.  You may use a
+calculator (or the calculator on your computer), but you may not use
+any other computing or graphing device other than your own head!
+
+Numerical answers should be integers, unless otherwise indicated!
+
+Show all your work.  A (correct) numerical answer with no work indicated
+may not get full credit.  An incorrect answer with accompanying work may
+earn partial credit.
+
+\vfill\pagebreak
+
+
+\begin{enumerate}
+
+\begin{center}
+{\sc Calculus}
+\end{center}
+
+
+\item  {\sc Short Answer} (Three parts.  50 points.) Suppose you are
+given a differentiable function $f(x)$. 
+\begin{enumerate}
+\item If $f'(0)=1$, what does this tell you about the original
+function $f(x)$?
+\vfill
+\item If $\int_{-1}^1f(x)\ dx=4$, what does this tell you about the
+original function?
+\vfill
+\item If the graph of $f(x)$ from $x=2$ to $x=4$ is the graph in the
+figure below, what does the integral
+$$
+\int_2^4\pi(f(x))^2\ dx
+$$
+compute?
+
+\begin{figure}[h]
+\flushright{
+\parbox{3in}{
+\psfig{figure=function4.ps,width=2in}
+}}
+\flushright{
+\parbox{3in}{
+\caption[square]{This shows the graph of the function $f(x)$ from
+$x=2$ to $x=4$.}
+}
+}
+\end{figure}
+\end{enumerate}
+\pagebreak
+
+\item {\sc Pennies from heaven.}  (Three parts.  50 points.)
+\begin{enumerate}
+\item An office worker on the eighth floor
+of the Hancock building decides to throw a penny out of his window to
+see how big of a dent it will make in the sidewalk.  We know that
+acceleration is $-32\ ft/s^2$, where $ft$ is feet and $s$ is seconds.
+(The negative sign signals that acceleration is {\em down} towards the 
+ground.)  If he throws the penny upwards with an initial velocity of
+$18\ ft/s$, and his office window is $60$ feet off the ground, what is
+the function describing the height of the penny in terms of the number 
+of seconds since the penny was thrown? ({\sc Hint:} When you integrate
+the acceleration to get the velocity, remember to add in the
+additional information to get your constant of integration! etc.)
+\vfill
+\item Suppose an office worker a couple floors down also throws a 
+penny.  This
+time, the function describing the height of the function is
+$f(t)=-16t^2+32t+48$.  (Don't worry if this doesn't match your answer 
+in the first part -- it should not!) Graph this function of the
+height.  (Graph paper on the next page.) When does
+this second penny hit the ground?  What is its velocity when it hits the
+ground?
+
+
+\vfill\pagebreak
+
+\begin{figure}[h]
+\begin{center}
+\psfig{figure=graphPaper.ps}
+\end{center}
+\end{figure}
+
+
+
+\vfill\pagebreak
+
+
+\item Unbeknownst to the second penny-thrower on the sixth floor, there is
+a
+sharp-shooting penny-thrower on the twelfth floor.  When she sees this
+second penny-thrower
+starting to throw his penny, she pulls one out of her own.  She throws 
+her penny at exactly the same time with an initial velocity of $16\ ft/s$
+{\em downwards}, and throws it from a height of $96\ ft$. What function
+describes the height of this third penny? At what time after the second 
+and third pennies are thrown are those two pennies at
+the same height (thereby potentially colliding midair if the sharpshooter
+is any good!)?
+\end{enumerate}
+
+\vfill\pagebreak
+
+\item {\sc Moving day.} (One part. 40 points.) Erica buys a $30$
+inch by $30$ inch piece of corrugated cardboard, and uses it to make a
+box with a lid.  She cuts out the corners (and throws them away!), and
+folds the following shape along the dotted lines to make the box.
+What are the dimensions of the box made from this cardboard that has
+maximum volume?
+
+\begin{figure}[h]
+\flushright{
+\parbox{3in}{
+\psfig{figure=box.ps,width=2in}
+}}
+\flushright{
+\parbox{3in}{
+\caption[square]{This is a rough sketch of the box Erica is going to
+make.  She throws away the shaded portions of the poster board, and
+folds along the dotted lines. (Not to scale!!)}
+}
+}
+\end{figure}
+
+\vfill\pagebreak
+
+\item {\sc Buoy in the harbor.} (2 parts.  40 points.)
+
+\begin{enumerate}
+\item Consider the function $y=3x$.  Rotate the region enclosed by
+this function, $y\leq 3$ and $x\geq 0$, around the $y$-axis.  The
+resulting solid is a cone.  Compute its volume.
+
+
+\begin{figure}[h]
+\flushright{
+\parbox{3in}{
+\psfig{figure=cylGraph.ps,width=2in}
+}}
+\flushright{
+\parbox{3in}{
+\caption[square]{This is a rough sketch of the region you are to
+rotate around the $y$-axis.}
+}
+}
+\end{figure}
+
+\vfill\pagebreak
+
+
+\item  You have computed the volume of a cone of height $3$ with 
+radius $1$.  Suppose this cone is
+weighted at the tip, and is floating as a buoy in the water (see
+figure).  The cone is weighted in such a way that $\frac{1}{4}$ of its 
+volume is below the surface of the water.  If $x$ is the height of the 
+portion below the water, then the volume of the portion below the
+water is
+$$
+V_x=\frac{\pi x^3}{27}.
+$$
+If $V$ is the total volume of the cone (which you computed above),
+then use Newton's method to solve the equation
+$$
+\frac{\pi x^3}{27}=\frac{V}{4}\ \longrightarrow\ \frac{\pi x^3}{27}-\frac{V}{4}=0
+$$
+for the zero.  This $x$ will be the height of the portion under the
+water.  Do two (2) iterations of Newton's method ({\sc Hint:} the root 
+is between $1$ and $2$.  You will not get an integer answer!)
+
+\begin{figure}[h]
+\flushright{
+\parbox{3in}{
+\psfig{figure=buoy.ps,height=2in}
+}}
+\flushright{
+\parbox{2.75in}{
+\caption[square]{This is a figure showing the buoy.  The shaded
+portion represents the part of the cone which is underwater.  The
+volume of this portion is $V_x=\frac{\pi x^3}{27}$.}
+}
+}
+\end{figure}
+
+\vfill\pagebreak
+
+
+
+\end{enumerate}
+
+\begin{center}
+{\sc Linear Algebra}
+\end{center}
+
+
+
+\item {\sc Short Answer.} (3 parts.  50 points.) Consider the following
+system of equations and corrseponding coefficient matrix.
+$$
+\left\{\begin{array}{ccccccccccc}
+2x_1 & + & 2x_2&+&2x_3&+&6x_4&+&14x_5&+&22x_6\\
+x_1 & + & x_2 & - & x_3 & - & x_4 & - &  x_5 & - & 3x_6\\
+ &  & &  & 2x_3 & +& 3x_4 & + &  7x_5 & + & 10x_6\\
+-x_1 & - & x_2 & - & x_3 & - & 4x_4 & - &  8x_5 & - & 13x_6\\
+ &  &  &  &  & & 2x_4 & + &  2x_5 & + & 11x_6
+\end{array}\right.
+$$
+\vskip 0.5in
+$$
+A=\left[\begin{array}{rrrrrr}
+2&2&2&6&14&22\\
+1&1&-1&-1&-1&-3\\
+0&0&2&3&7&10\\
+-1&-1&-1&-4&-8&-13\\
+0&0&0&2&2&11
+      \end{array}\right]
+$$
+
+\begin{enumerate}
+\item Just by looking at this system of equations, can you tell
+whether or not this will have a {\em unique} solution to
+$$
+A\cdot x=\left[\begin{array}{c}1\\2\\3\\4\\5\\6\\7\end{array}\right]?
+$$
+\vfill\pagebreak
+\item The reduced row echelon form of $A$ is
+$$
+R=\left[\begin{array}{rrrrrr}
+1&1&0&0&2&0\\
+0&0&1&0&2&0\\
+0&0&0&1&1&0\\
+0&0&0&0&0&1\\
+0&0&0&0&0&0
+	\end{array}\right].
+$$
+\begin{enumerate}
+\item What are the pivot and free variables?  What is the rank of $A$?
+\vfill
+\item What does the row of all zeroes mean?
+\vfill
+\item Explain the following statement.  There are either no solutions or
+infinitely many solutions to the equation
+$$
+A\cdot x=b.
+$$
+\end{enumerate}
+\end{enumerate}
+
+
+
+\vfill\pagebreak
+
+\item {\sc Planes, trains and automobiles.} (1 part. 30 points.)
+Suppose a paint company paints automobiles, trains and planes.  Each
+automobile takes 10 man hours to prepare, 30 man hours to paint, and 12
+man hours to add finishing touches (the painters are quite
+meticulous).  Each train takes 20 man hours to prepare, 75 man hours to
+paint, and 36 man hours to add finishing touches.  Each plane takes 40
+man hours to prepare, 135 man hours to paint, and 64 man hours to add
+finishing touches.  If the paint company decides to use 760 man hours
+towards preparation, 2595 man hours towards painting, and 1224 man hours
+towards finishing touches each week, how many planes, trains and
+automobiles do they paint each week?
+
+\vfill\pagebreak
+
+\item {\sc Rabbits, rabbits everywhere!}  (2 parts.  40 points.)
+\begin{enumerate}
+\item Consider the Fibonacci problem with a minor adjustment.  You start in
+month zero with a pair of newborn rabbits.  After one month, they
+begin to reproduce and each subsequent month they give birth to $2$
+new pairs of rabbits.  This gives us the recurrence relation
+$$
+F_n=F_{n-1}+2F_{n-2},
+$$
+with $F_0=0$ and $F_1=1$.  In this case, we can write this in matrix
+form as
+$$
+\left[\begin{array}{cc}1&2\\1&0\end{array}\right]
+\cdot\left[\begin{array}{c}F_{n+1}\\F_n\end{array}\right]
+=\left[\begin{array}{c}F_{n+2}\\F_{n+1}\end{array}\right].
+$$
+Diagonalize the matrix
+$$
+A=\left[\begin{array}{cc}1&2\\1&0\end{array}\right]
+$$
+and write it as $A=B\cdot D\cdot B^{-1}$, where $D$ is a diagonal
+matrix. ({\sc Hint:} The diagonal matrix has integer entries on the diagonal!)
+You could then solve for a closed formula for $F_n$, but you do not have
+to here!
+
+
+\vfill
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+
+
+
+
+\end{document}

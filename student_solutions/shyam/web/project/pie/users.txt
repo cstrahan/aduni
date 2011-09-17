@@ -1,0 +1,41 @@
+Menopause Group -- answers to PS on User registration
+
+Exercise 1
+
+              Q. Define an SQL data model to represent users and user groups. Before proceeding to Exercise 2, discuss this data model with your
+              teaching assistant.
+	      A.  We have showed Dan Parker our .SQL file comprising.
+
+Exercise 2
+
+              Q. Build the basic user registration and login pages. Use HTTP cookies to make the rest of the semester's work easier. Start by
+              sketching the page flow. 
+              
+	      A. Done as login.tcl and relogin.tcl and as admin/registration*.tcl
+	      
+              Q. What happens to a user who forgets his or her password? 
+	      A. At their click, we email it in clear text to their email address.
+
+Exercise 3
+              admin/admin.tcl and  the edit_user_info.tcl scripts let the adminitrator change a user's status.
+	      Current and historical statistics on user registration are visible in admin/admin.tcl by changing the calendar filtering.
+              
+	      Q: How can the administrator control who is permitted to register and use the site? What email notification options does
+              the site administrator have that relate to user registration? 
+	      A. the admin can email any user, from the admin page.
+
+Exercise 4
+
+              Q. Look at your tables again for referential integrity constraints and query performance.
+	      A. We added many many named constraints, which are alrady useful in the server error log.
+	      
+	      Q. How long will it take to look up a user by email address? ORACLE is quite quick; we could speed it up with INDEX.
+              Q. What if this email address is capitalized differently.
+	      We use the upper function to do all comparisons.  We don't ahve 2 users with the same email address? 
+              
+	      Q. Many Web services contain content that can only be viewed by members of a specific user group. With your data model, how
+              many table rows will the RDBMS have to examine to answer the question "Is User #541 a member of Group #90"? If the answer is
+              "every row in a big table", i.e., a sequential scan, what kind of index could you add to speed up the query? 
+	      A. We have to look at the group table and the user_group_map.  We haven't indexed the map on the pair user_id, group_id,
+	        so ORACLE will do a sequential scan.
+

@@ -1,0 +1,18 @@
+problem 5
+
+a. The algorithm would be to first determine which item has the best
+weight/value ratio, and stuff that into the sack until either the sack
+is full or the item runs out (if that happens, go to the next best
+weight/value ratio).
+
+b. This works because there is no 0-1 condition, which means we can
+take the best thing possible until we can take no more; there is no
+way to do better than that, and no need to. The time complexity for
+the algorithm if O(n + b) with n being the size of the knapsack and b
+being the number of different items to select from. A comparision of
+the various weight/value ratios will take c*b, and the actual stuffing
+of the knapsack will take at most n.
+
+problem 6
+
+Hahaha! <jeffrey is tired>

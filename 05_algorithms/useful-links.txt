@@ -1,0 +1,39 @@
+Here are some web-sites that might be useful
+if you'd like extra solved problems to work on.
+One is a student-run web-site for the algorithms class
+at berkeley that has sample exams from 1993-2000
+with solutions for the most recent years.
+
+http://www-hkn.eecs.berkeley.edu/student/online/cs/170/
+
+
+
+The second is for an algorithms course at Carnegie Mellon
+that has problem sets with solutions and some sample exams.
+
+http://www.cs.cmu.edu/afs/cs/academic/class/15451-f00/www/
+
+
+
+And there are a couple of really fun sites
+which both have nifty interactive applets
+for trees, graphs and sorting.
+
+http://www.seas.gwu.edu/~idsv/
+
+http://students.ceid.upatras.gr/~papagel/english/java_docs/java.htm
+
+
+Some more here too:
+http://ranger.uta.edu/~cook/aa/lectures/applets/
+
+
+
+Red-Black Trees links:
+
+http://www.ececs.uc.edu/~franco/C321/html/RedBlack/redblack.html
+
+Textbook links
+
+http://theory.lcs.mit.edu/~clr/
+

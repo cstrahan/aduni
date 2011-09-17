@@ -1,0 +1,9 @@
+PROBLEM 6 ANSWERS
+
+Inheiritance is a wonderful thing when there are a great many methods
+that are to be shared among a large number of classes.  It doesn't
+work quite so well when implementations are needing to be changed
+often among children classes; in this case interfaces work much
+better. Also, classes can use many different interfaces, while only
+inheirited class can be used.  I think a combination of the two can
+produce effective use of code.

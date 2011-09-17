@@ -1,0 +1,37 @@
+Subject: Re: A new puzzle
+Date: Wed, 14 Jun 2000 13:45:46 +0900 (JST)
+From: Michael Cohen <mcohen@u-aizu.ac.jp>
+To: Shai Simonson <shai@stonehill.edu>
+CC: Michael Greenwald <greenwald@cis.upenn.edu>, wshi@cs.unt.edu
+
+My previous analysis was flawed (making, incidentally, your agreement
+with it also wrong).  The resolution of repeated questions (to determine
+a lie) is 2^(n/2) (and not 2^(n-1)).  This is still, as you observe,
+still too loose.
+
+Anyway, i now realize (embarrassed that i didn't notice earlier)
+that the riddle yeilds easily to an information theoretic
+approach.  Namely, Hamming codes, a class of single-error-correcting
+codes.  (Your former colleague Vera Pless would be all over this.)
+
+For example, Hamming(7,4) codes encode 4 bits of non-redundant information
+into a 7-bit field, the excess 3 parity bits used to detect and correct
+single errors (which might be noise on a communication channel, toggles
+in memory/storage, or a "lie") across the entire (7-bit) encoding.
+
+"check bits" (c)        "questions" (2^c - 1)   "data" (2^c - 1 - c)    "numbers" (2^(2^c - 1 - d))
+----------------        ---------------------   --------------------    ---------------------------
+3                       7                       4                       16
+4                       15                      11                      2^11
+5                       31                      26                      2^26
+6                       63                      57                      2^57
+.
+.
+.
+
+So the answer to the riddle (number resolvable by binary sequence with single error) is
+something like:
+
+                   floor(lg2(|questions|+1))
+  [|questions| - 2^                         ]
+2^

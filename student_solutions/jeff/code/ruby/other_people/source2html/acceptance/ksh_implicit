@@ -1,0 +1,3 @@
+#!/bin/ksh
+
+echo "This is a Korn shell script"

@@ -1,0 +1,425 @@
+<html> 
+
+<head> 
+<title> Problem Set 1 Solutions </title> 
+</head>
+
+<body bgcolor="ffffff">
+
+<h1>  Problem Set 1 Solutions  </h1>
+
+<ol>
+<h3> <li> Practice with Sorting Algortihms </h3>
+<ol type="a">
+<li><b><u>Bubble Sort</u></b>. 
+The question only asked for three passes; we continue until the array 
+is sorted because it is not much more work.  The results of the inner loop 
+are shown every time a swap is made.
+
+<pre>
+Initially
+12 10  3 37 57  2 23  9
+                                                                                
+Pass 1			      <b>Pass 3</b>
+10 12  3 37 57  2 23  9        3 10  2 12 23  9 37 57    
+10  3 12 37 57  2 23  9	       <b>3 10  2 12  9 23 37 57</b>    
+10  3 12 37  2 57 23  9	                                 
+10  3 12 37  2 23 57  9	      Pass 4                     
+10  3 12 37  2 23  9 57	        3  2 10 12  9 23 37 57   
+   			        3  2 10  9 12 23 37 57                         
+Pass 2			                                 
+ 3 10 12 37  2 23  9 57	      Pass 5         
+ 3 10 12  2 37 23  9 57	        2  3 10  9 12 23 37 57   		   
+ 3 10 12  2 23 37  9 57		2  3  9 10 12 23 37 57   
+ 3 10 12  2 23  9 37 57		
+</pre>        
+    </li>
+    
+<li><b><u>Insertion Sort</u></b>. Here again, for the purposes of enlightenment,
+we run the sort until completion and show results of the inner loop iteration.
+
+<pre>
+Initially                       Pass 5, (next =  2)    
+12 10  3 37 57  2 23  9	         3 10 12 37 57 57 23  9
+			         3 10 12 37 37 57 23  9
+Pass 1, (next = 10)	         3 10 12 12 37 57 23  9
+12 12  3 37 57  2 23  9	         3 10 10 12 37 57 23  9
+10 12  3 37 57  2 23  9	         3  3 10 12 37 57 23  9
+			         2  3 10 12 37 57 23  9
+			                               
+Pass 2, (next =  3)	        Pass 6, (next = 23)    
+10 12 12 37 57  2 23  9	         2  3 10 12 37 57 57  9
+10 10 12 37 57  2 23  9	         2  3 10 12 37 37 57  9
+ 3 10 12 37 57  2 23  9	         2  3 10 12 23 37 57  9
+			                               
+			        Pass 7, (next =  9)    
+Pass 3, (next = 37) 	         2  3 10 12 23 37 57 57
+ 3 10 12 37 57  2 23  9	         2  3 10 12 23 37 37 57
+			         2  3 10 12 23 23 37 57
+			         2  3 10 12 12 23 37 57
+<b>Pass 4</b>, (next = 57)              2  3 10 10 12 23 37 57
+ <b>3 10 12 37 57  2 23  9</b>          2  3  9 10 12 23 37 57
+</pre>
+    </li>    
+
+<li><b><u>Quick Sort</u></b>. Here's an outline of the steps taken 
+analogous to figure 8.1 (page 155) in CLR, using the method Shai
+discussed in class. 
+
+<pre>
+A = 12 10  3 37 57  2 23  9 
+
+PARTITION(A, 1, 8)   pivot = 12
+
+  12 10  3 37 57  2 23  9 
+i			  j
+
+  12 10  3 37 57  2 23  9        9 10  3 12 57  2 23 37     
+   i>                 < j                 i>   < j         
+			                                   
+   9 10  3 37 57  2 23 12        9 10  3  2 57 12 23 37    
+   i                    j                 i     j          
+			                                   
+   9 10  3 37 57  2 23 12        9 10  3  2 57 12 23 37    
+            i>        < j                   i X j          
+			                                   
+   9 10  3 12 57  2 23 37        <b>9 10  3  2 12 57 23 37</b>
+            i           j                   ij.            
+			      
+</pre>
+    </li>
+
+<li><b><u>Radix Sort</u></b>.
+ <pre>
+ Initially      Pass 1      <b>Pass 2</b>  
+    12 	        10     	     2      
+    10 	        12     	     3      
+     3 	         2     	     9      
+    37 	         3     	    10      
+    57 	        23     	    12
+     2 	        37     	    23      
+    23 	        57     	    37      
+     9	         9     	    57      
+</pre>
+    </li>
+
+<li><b><u>Merge Sort</u></b>. The following tree-like diagram shows
+    how A is changes as the recursive calls to mergesort and
+    subsequent merges are performed.
+
+<pre>
+A =  12        10          3        37         57         2        23        9
+        merge                merge                merge               merge
+A =     10 12                 3 37                 2 57                9 23
+                   merge                                     merge
+A =              3 10 12 37                                2  9 23 57
+                                       merge
+A =                            2  3  9 10 12 23 37 57
+</pre>
+So, after the recursive calls MERGE-SORT(A, 1, 4) and
+MERGE-SORT(A, 5, 8), but before MERGE( A , 1, 4, 8), we have
+<pre>
+<b>A =   3 10 12 37  2  9 23 57</b>
+</pre> 
+    </li>
+    </ol>
+</li>
+
+<li>
+Another slow sort.
+    <ol type="a">    
+    <li>
+    Here is a java class that implements maxsort.
+
+<pre>
+public class maxSortTest
+{
+    // Sorts an array of Comparable objects in increasing
+    // order.   
+    public static void maxSort(Comparable[] a)
+    {
+	Comparable temp;
+	int max;
+
+	for( int i = a.length-1; i >= 0; i--)
+	{
+	    max = maxIndex(a, i);
+	    temp = a[i];
+	    a[i] = a[max];
+	    a[max] = temp;
+	}
+    }
+
+    // Finds the index of the largest element in a[1..j]
+    static int maxIndex(Comparable[] a, int j)
+    {
+ 	int index = 0;
+	for( int i = 1; i <= j ; i++)
+	    if ( a[i].compareTo(a[index]) > 0) 
+	    { 
+		index = i; 
+	    }
+	return index;
+    }
+
+    public static void main(String[] args)
+    {
+	String[] test = { "the" , "quick", "brown" , "fox", "jumped", 
+			  "over" , "the", "lazy", "dog"};
+	maxSort(test);
+	for(int i = 0; i < test.length ; i++) 
+	{
+	    System.out.println(test[i]);
+	}    
+    }
+}
+</pre>
+In the above test case, the program will print out 
+<pre>
+brown
+dog
+fox
+jumped
+lazy
+over
+quick
+the
+the
+</pre>
+    </li> 
+
+    <li>
+    Maxsort is just a double loop. In the worst case it will go through
+    <b>Theta(n^2)</b> steps.        
+    </ol>
+
+<h3> <li>  Binary Search </h3>
+    <ol type="a"> 
+    <li>
+    The simplest thing to do is to first figure out the the length of
+    the array in <b>Theta(lg n)</b> time. You can do this essentially by
+    doing a Binary search for the end of the array. To start you have
+    to find an upper and lower bond for the length of the array A.
+    The upper bound will be the first 2^i such that A[2^i] is zero.
+    The lower bound will be the corresponding 2^(i-1). Finding this i,
+    and the length of the array will take <b>Theta(lg n)</b> time.  Now
+    you can run a binary search over the array, which also takes <b>Theta(lg n)</b> 
+    time, so the total time will be <b>Theta(lg n)</b>.  You can make your
+    algorithm a bit nicer by stopping the length search as soon as you have 
+    an upper bound on the array size, and carrying out the value search at
+    the same time.
+
+ </li>
+
+    <li>On the i-th pass, the first i elements, A[1..i] of the array 
+    will be sorted. We can then use a binary search on these
+    i elements to find out where the i+1 th element should be placed.
+    While this does cut down the search part from worst case <b>Theta(i)</b>, to worst
+    case <b>Theta(lg i)</b>, the insertion part will still be worst case <b>Theta(i)</b>, since
+    we have to shift part or all of A[1,..,i] over by one to make room for 
+    A[i+1], so the binary search does not improve the time complexity of the
+    algorithm.
+    </li>   
+    </ol>
+</li>
+
+
+<h3> <li> A better Quicksort? </h3> We can guarantee <b>Theta(n lg n)</b>
+worst case behavior by making the pivot be the median of the list,
+rather than the first element of the list. It takes <b>Theta(k)</b> time to
+find the median of a list of length k, and <b>Theta(k)</b> to partition it,
+so we can do both in <b>Theta(k)</b> time.  By making the pivot be the median, 
+each recursive call to quicksort will be on a list of length half as long, 
+so the depth of the recursion tree will be at most lg n, with a recursion 
+<b>T(n) = T(n/2) + Theta(n)</b>.  The worst case running time for this algorithm
+is <b>Theta(n lg n)</b>.  
+
+Randomized quicksort is a few times faster on average, so for most 
+applications this isn't a better algorithm.
+
+</li>
+
+
+
+<h3> <li> When Constant Factors Matter </h3>
+
+     <ol type="a">
+     <li> A list of length k can be sorted by insertion sort
+     in worst case <b>Theta(k^2)</b> so n/k of these will take 
+     worst-case time <b>Theta((n/k) * k^2)</b> = <b>Theta (nk)</b> 
+    </li>
+
+     <li> The time required for all the merges at one depth of the 
+     recursion tree will always be n. The number of levels of the
+     tree will be lg( n/k ), hence the time complexity will be 
+     <b>Theta(n lg(n/k))</b>. </li>
+     
+     <li>
+     The value of k can be no more than <b>Theta(lg n)</b> or else 
+     <b>Theta(nk + n lg(n/k))</b> will be greater than <b>Theta(n lg n)</b>
+     <li>
+     The optimal value of k to choose is best found by testing run times for various
+     values of k.
+     </li>
+     </ol>
+
+</li>
+
+
+<h3> <li> Building Heaps </h3>
+    <ol type="a">
+    <li>
+    The method that starts at the leaves and moves up is the iterative
+    version of building a heap by building two subheaps then pushing
+    the root down. The method that starts at the root and moves down
+    is the iterative version of building a heap by first building a heap
+    of length n-1 less and then pushing the n-th element upwards.  
+    Note that the base cases of a recursive method are where the
+    corresponding iterative method will begin.
+    </li>
+
+    <li>
+The length n heap from a length n-1 heap method (top down) has recurrence
+<pre>
+T(n) = T(n-1) + lg n
+</pre>
+so by repeated substitution
+<pre>
+T(n) = lg n + lg(n-1) + ... + lg(2) + lg(1)
+     = Theta( n lg(n) )
+</pre>
+
+The heap from two subheaps method (bottom up) has recurrence
+<pre>
+T(n) = 2 T(n/2) + lg n 
+     = Theta(n), 
+</pre>
+by the master theorem.
+    </li> <br>
+
+    <li>
+    no code yet
+    </li> 
+   
+    <li>
+    Top down method: 15 10 14 7 9 11 13 1 4 3 8 2 6 5 12
+    <br> <br>
+    Bottom up method: 15 11 14 9 10 13 7 8 4 2 5 12 6 3 1 
+    
+    </li>    
+
+    </ol>
+
+
+</li>
+
+<h3> <li> Using Heaps to Find the k-th Largest </h3>
+
+    <ol type="a">
+    
+    <li>
+    Building the heap takes <b>Theta(n)</b> time. Deleting an item
+    takes <b>Theta(lg n)</b> time. So deleting k items takes
+    <b>Theta(k lg n)</b> time and so finding the k-th largest
+    takes <b>Theta(n + k lg n)</b> time overall. 
+    </li> 
+
+    <li>
+    Instead of deleting an item from the heap, we can use an extra
+    heap to keep track of the possible candidates for next largest
+    element. At the start the only thing on the new heap is the
+    root. At each stage the root of the new heap is the next largest
+    element.  We delete this root from the new heap and and insert its
+    children from the old heap to the new heap. This adds a net
+    of one more item to the new heap. After finding the kth largest
+    element, there will be k items on the new heap. The time complexity 
+    builiding the new heap is k lg k, since it must be built using a top-down
+    method as in problem 6. So the total time complexity of finding the
+    k-th largest will be <b>Theta(n + k lg k)</b>.
+    
+    </li>   
+
+    <li>
+    no code yet
+    </li>
+    </ol>
+</li>
+
+<h3> <li> An Application of Bucket Sort </h3>
+ <ol><li>First we calculate our product array C.  This contains n integers b/t 1 and n^2
+(n multiplications).  We would like to simply perform radix sort on C, treating its elements 
+as two-digit numbers base n, but the range of such numbers is from 0 to (n^2 - 1).  
+So we subtract one from each element of C for the purposes of sorting. 
+
+     <li>We sort the elements of C first by <tt>(C(i)-1)mod n</tt> (n subtractions and 
+n calculations <i>mod</i> n), and then by the integer part of <tt>((C(i)-1)/n)</tt> 
+(n subtractions and n truncated divisions).</li>
+
+    <li>This makes for 5n calculations each of which can be carried out in constant 
+time, for a total running time of <b>Theta(n)</b>.</li>
+</ol>
+</li>
+
+
+<h3> <li> Algorithm Design Challenge </h3>
+
+  Shai showed how to do this in <b>Theta(n^2)</b> in class.  
+  Can a clever divide-and-conquer algorithm do better?
+
+</li>
+
+
+
+<h3> <li> d-ary Heaps (Check Your Sources) </h3>
+<u>Problem 7-2, pg. 192:</u>
+<p>
+ <b>a)</b> We can represent a d-ary heap as an array for any d, breadth first as we have done when d = 2.
+Let us assume we have an array A[1..n] representing an n-node d-ary heap.  Then 
+  <ul><li>the d children of node i are nodes (d*(i-1)+2) through (d*(i)+1)</li>
+      <li>the last node with children is node (<tt>int((n-2)/d)+1</tt>), and in general
+          the parent of node i is node (<tt>int((i-2)/d)+1</tt>)</li>
+  </ul>
+<p>
+ <b>b)</b> A d-ary heap of height h has at most (1+d+d^2+...+d^h) elements, which is between 
+d^h and 2*d^h for d > 1.  This means a heap of size n has a height of <b>Theta(log_d(n))</b>.  
+  <ul><li> It takes <b>Theta(n)</b> comparisons to build a heap, regardless of d
+      <li> It takes <b>O(d*log_d(n))</b> steps to extract the maximum element
+      <li> It takes <b>O(log_d(n))</b> steps to insert a new element
+  </ul>
+</p>
+
+Our guest speaker claimed that 3-ary heaps are better than binary heaps.  Let's 
+double-check:
+<ul><li>The time it takes to building a heap is independent of d.
+    <li>Inserting a new element into a d-ary heap is faster as d increases.  
+    <li>Extracting the maximum of a heap, the most useful and costly heap operation,
+takes O(d*log_d(n)) time.  For what d is this fastest?  log_d(n) = (lg n / lg d), 
+so we can write d*log_d(n) as (d / lg d)*(lg n).  (d / lg d) is minimized when 
+d = <i>e</i>, or about 2.718, and is smaller for d=3 than for any other integer.
+Checking by hand shows that extracting the maximum is <u>five and a half percent</u> 
+faster for 3-ary heaps than for binary heaps**.
+<pre>
+(3 / lg 3)
+----------  = 0.9464...
+(2 / lg 2)
+</pre>
+
+</li>
+</ul>
+
+** try to minimize (d / lg d) by differentiating.  
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+

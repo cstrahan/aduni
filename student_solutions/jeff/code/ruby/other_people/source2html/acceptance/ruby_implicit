@@ -1,0 +1,3 @@
+#!/usr/local/bin/ruby
+
+puts "A Ruby Program"

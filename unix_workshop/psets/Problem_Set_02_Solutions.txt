@@ -1,0 +1,178 @@
+Unix Problem Set 2 Solutions
+[Todd Sjoblom & Rusty Holleman]
+
+1. (a)
+  [root@localhost unix-course]# cp /var/log/syslog .
+  [root@localhost unix-course]# chown todd syslog
+
+(b)
+  [todd@localhost unix-course]$ grep -c "localhost kernel:" syslog
+  146
+  [todd@localhost unix-course]$
+
+(c)
+  [todd@localhost unix-course]$ cat syslog | sed -e
+   's/^.*localhost \([^:\[]*\).*$/\1/' | sort | uniq -i
+  anacron
+  crond
+  kernel
+  keytable
+  . . .
+  xfs
+  [todd@localhost unix-course]$
+
+2. Video server shell script:
+
+#!/bin/sh
+###############################
+IP=10.11.0.247
+
+for d in "$@" ; do
+  if [ -d "${d}" ] ; then
+    for f in "${d}"/* ; do
+      if [ -f ${f} ] ; then
+        BASE=`basename "${f}"`
+        RAMNAME=`echo ${BASE} | sed -e 's/rm$/ram/'`
+        if [ -e "${BASE}" ] ; then
+          echo "Link exists for ${BASE}"
+        else
+          ln -s "${f}" .
+        fi
+        if [ -e "${RAMNAME}" ] ; then
+          echo "${RAMNAME} already exists"
+        else
+          echo "rtsp://${IP}/${BASE}" > ${RAMNAME}
+          echo "Created ${RAMNAME}"
+        fi
+      fi
+    done
+  fi
+done
+###############################
+
+3. Comment-free diff:
+
+In two parts.   First, a sed script which uncomments a file:
+
+  #!/bin/sed -f
+  #  see http://www.dbnet.ece.ntua.rg/~george/sed/sedtut_1.html
+  #  for details.
+  
+  # if no /* get next
+  /\/\*/!bDOUBLE
+  
+  # here we've got an /*, append lines until we get the corresponding
+  # */
+  :x
+  /\*\//!{
+  N
+  bx
+  }
+  
+  # delete /*...*/
+  s/\/\*.*\*\///
+  
+  :DOUBLE
+  s/^\(.*\)\/\/.*$/\1/
+
+And a shell script which uncomments two files and uses regular diff to
+compare the output.
+
+  #!/bin/bash
+  
+  for f in $* ; do
+    if [ ! -f "${f}" ] ; then
+      echo "${f} is not a file"
+      exit
+    fi
+  done
+  
+  # run the uncomment script on each input and diff the 2 outputs
+  # this is fancy bash syntax, which lets the output of a command
+  # look like a file
+  
+  diff -b <(./uncomment.sh $1) <(./uncomment.sh $2)
+
+4. The Cornell script example
+
+  #!/bin/sh
+  
+  # Checks for exactly three arguments
+  if [ "$3" == "" -o "$4" != "" ] ; then
+    exit 1
+  fi
+  
+  # Check to see if the first two arguments are the names of two existing
+  # files (referred to as file1 and file2 below) and exits with error code 2
+  # otherwise.
+  if [ ! -f $1 -o ! -f $2 ] ; then
+    exit 2
+  fi
+  file1=$1
+  file2=$2
+  
+  # Check to see that the third argument is not a file that already exists
+  if [ -e $3 ] ; then
+    exit 3
+  fi
+  file3=$3
+  
+  # Check to see that SCRIPT refers to a runnable program
+  if [ ! -x ${SCRIPT} ] ; then
+    exit 4
+  fi
+  
+  # Set the SCRIPT environment variable to the contents of the first line of
+  # file and runs the program that the SCIRPT environment variable used to
+  # point to, with input being redirected from file2
+  OLDSCRIPT=${SCRIPT}
+  NEWSCRIPT=`head -1 ${file1}`
+  
+  export SCRIPT=${NEWSCRIPT}
+  ${OLDSCRIPT} < ${file2}
+  
+  # Creates file3 and puts the following in there in the specified order:
+  #  1. All the lines from file1 that contain at least one letter a, sorted
+  #    (by the sort program with no options).
+  #  2. All the lines from file2 that contain nothing but digits, sorted
+  #    numerically.
+  grep a  ${file1} | sort > ${file3}
+  grep "^[0-9][0-9]*$" ${file2} | sort >> ${file3}
+  
+  # Prints the number of lines in both file1 and file2 combined, followed by
+  # a space, followed by the value of the environment variable PRINT -- No,
+  # changed to SCRIPT - on its stdout (and does not print anything else on
+  # stdout, except, possibly, for the output the program named in the SCRIPT
+  # environment variable).
+  lines=`cat ${file1} ${file2} | wc -l`
+  echo ${lines} ${SCRIPT}
+  
+  exit 0
+
+
+5. Self-printing shell script
+
+First, since the script must be stored in the file system, we can easily
+write a program that prints the right file out of the filesystem.
+
+  cat self.sh
+
+We can make a slightly more complex program by slightly abusing the script
+processing in unix (that Unix reads the first line of a script, and uses
+that as a command to then process the entire file).
+  #!/bin/cat
+  
+
+But finally, a shell script which really does compute itself, with no
+filesystem or OS tricks:
+  
+  #!/bin/bash
+  PGM='echo -e "#\\041/bin/bash"\012echo PGM="\047"${PGM}"\047"\012echo -e $PGM'
+  echo -e "#\041/bin/bash"
+  echo PGM="'"${PGM}"'"
+  echo -e $PGM
+  
+
+  
+
+  

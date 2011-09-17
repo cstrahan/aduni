@@ -1,0 +1,20 @@
+QUESTIONS FOR PROBLEM 3
+
+The advantages of using static methods for a unary method like scale()
+lie in the fact that the original class object is not altered in any
+way, which is very useful in many cases where one wants to use
+something to produce a great number of results from one bit of input. 
+
+This can also be seen as a disadvantage in circumstances where one
+does not need to keep old values around, but would rather mutator the
+current object. If object grow very large, this could also become a
+memory/processor time issue as well.
+
+Static methods allow for uninstantiated access which is very often a
+useful thing. In many cases it does not make sense to have to create
+an instance of a class in order to use its methods (such as having to
+create a SinFunc object in order to gain its functionality). The
+downside of using static functions is that changes to particular
+classes are much more difficult to make, and sometimes an operation
+needs to rely on non-static methods.
+

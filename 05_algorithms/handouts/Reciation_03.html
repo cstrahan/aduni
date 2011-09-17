@@ -1,0 +1,568 @@
+
+
+<html>
+<head>
+  <link rel=stylesheet href="/wp/style/default/style.css" type="text/css">
+  <title>Second Attempt: O(n)</title>
+</head>
+<body>
+
+
+
+<html>
+<head>
+  <title>Hashing</title>
+</head>
+<body>
+<h2>Hashing</h2>
+a <a href="../../">WimpyPoint</a> presentation owned by <a href="/shared/community-member?user_id=7471">Mark Dettinger</a> 
+<hr>
+<ul>
+    <li><a href="#24856">a + b = K ?</a>
+    <li><a href="#24869">First Attempt: O(n<sup>2</sup>)</a>
+    <li><a href="#24870">How about this algorithm?</a>
+    <li><a href="#24871">Analysis</a>
+    <li><a href="#24872">Hashtables</a>
+    <li><a href="#24873">The basic idea</a>
+    <li><a href="#24874">How likely are collisions?</a>
+    <li><a href="#24875">Ways to resolve collisions</a>
+    <li><a href="#24927">Open Hashing</a>
+    <li><a href="#24930">Linear Probing</a>
+    <li><a href="#24931">Quadratic Probing</a>
+    <li><a href="#24932">Double Hashing</a>
+    <li><a href="#24934">Universal Hashing</a>
+    <li><a href="#24938">Second Attempt: O(n)</a>
+</ul><hr>
+    <a name="24856">
+    <h2>a + b = K ?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>You are given a list of N non-negative integers.                Your job is to find out if the list contains two integers a and b that add up to K. If yes, then output a and b.<li>
+Design an efficient algorithm.<li>
+N &lt;= 10<sup>6</sup><li>
+K &lt;= 10<sup>9</sup>
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24869">
+    <h2>First Attempt: O(n<sup>2</sup>)</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+int a[N+1];
+
+for i=1 to N-1 {
+  for j=i+1 to N {
+    if (a[i] + a[j] == K) {
+      print(a[i]+ " and "+a[j]);
+      return;
+    }
+  }
+}
+print("no such integers");
+</pre>
+
+    
+    
+    
+    
+    <ul>
+<li>Running Time: O(n<sup>2</sup>)<li>
+Can you do better than this?
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24870">
+    <h2>How about this algorithm?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+int a[N+1];
+boolean checked[K+1];
+
+for i=0 to K { checked[i] = false; }
+for i=1 to N {
+  checked[a[i]] = true;
+  if (checked[K-a[i]]==true) {
+    print(a[i]+" and "+(K-a[i]));
+    return;
+  }
+}
+print("no such integers");
+</pre>  
+    
+    
+    
+    
+    <ul>
+<li>Running Time: O(n+k)<li>
+But is this really better?
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24871">
+    <h2>Analysis</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>If K is larger than N<sup>2</sup>, then the second algorithm is worse.<li>
+For a large K, the initialization phase takes a long time.<li>
+The array <code>checked[]</code> might be too large for the memory available. <li>
+Huge waste of memory: Most of the array <code>checked[]</code> will be empty.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24872">
+    <h2>Hashtables</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>A memory-efficient alternative for sparse arrays.<li>
+The set of posible keys (here: {0,1,2,...,K-1,K}) is called the <b>universe</b>.<li>
+If the universe U is much larger than the number of keys actually stored (here: N), then a hashtable might be better than a standard array.<li>
+In our problem we have |U| = 10<sup>9</sup> and N &lt;= 10<sup>6</sup>.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24873">
+    <h2>The basic idea</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+int hashtable[M];  // M > N
+
+void store (int key, int value) {
+  hashtable[h(key)] = value;
+}
+
+void get_value (int key) {
+  return hashtable[h(key)];
+}
+
+int h (int key) {
+  return h % M;
+}
+</pre>
+     
+    
+    
+    
+    
+    <ul>
+<li>Instead of using <code>key</code> as the index, we use <code>h(key)</code>.<li>
+<code>h</code> is a function that maps the universe U of possible keys to the indices of the hashtable.<li>
+<code>h : U -> {0,1,2,...,M-2,M-1}</code><li>
+Usual hash functions:
+<ul>
+<li>h(k) = k mod "a prime not too close to a power of 2"
+<li>h(k) = floor(m*(k*c mod 1)) with 0&lt;c&lt;1 (Knuth suggests c = (sqrt(5)-1)/2 = 0.6180339887...)
+</ul><li>
+Problem: Collisions. Two keys might be mapped to the same index.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24874">
+    <h2>How likely are collisions?</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>In a room with 35 people, how likely is it that two people have the same birthday?<li>
+|U| = 365<li>
+N = 35
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24875">
+    <h2>Ways to resolve collisions</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Open Hashing<li>
+Linear Probing<li>
+Quadratic Probing<li>
+Double Hashing
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24927">
+    <h2>Open Hashing</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>Each element of the hashtable is a linked list of elements that got mapped to this location.<li>
+If you store N keys in a table of size M, the lists will have an average length of N/M.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24930">
+    <h2>Linear Probing</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>If a cell is already in use, take the next one.<li>
+<code>h<sub>i</sub>(key) = h(key) + i<li>
+Problem: Clustering
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24931">
+    <h2>Quadratic Probing</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>If cell <code>x</code> is already taken, try x+1, x+4, x+9, x+16,..., until you find an empty cell.<li>
+<code>h<sub>i</sub>(key) = h(key) + i*i</code><li>
+At least: No clustering anymore.<li>
+But if many keys are mapped to the same cell <code>x</code>, each key runs through the same sequence of cells until an empty cell is found.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24932">
+    <h2>Double Hashing</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>On the <code>i</code>th try to find an empty cell for <code>key</code>, use the hash function:<br> <code>h<sub>i</sub>(key) = (h(key) + i*h'(key)) mod m</code>.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24934">
+    <h2>Universal Hashing</h2>
+    <hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul>
+<li>One problem remains: No matter which hash function you choose, there will always be a worst-case input where each key is hashed to the same slot.<li>
+Solution: Randomize the hash function!<li>
+Have a set of hash functions ready and choose from them after the program started.<li>
+A collection H of hash functions is called <b>universal</b>, if  for each pair of distinct keys x,y, the number of hash functions for which h(x)=h(y) is exactly |H|/m.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+    <a name="24938">
+    <h2>Second Attempt: O(n)</h2>
+    <hr>
+    
+    
+    
+    
+    
+    <pre>
+t = new Hashtable;
+for i=1 to N {
+  t.put(a[i],1);
+  if (t.get(K-a[i])!=NULL) {
+    print(a[i]+" and "+(K-a[i]));
+    return;
+  }
+}
+print("no such integers");
+</pre>
+    
+    
+    
+    
+    <ul>
+<li>The Java class Hashtable uses Open Hashing.
+
+    
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    <pre>
+    
+    
+    
+    </pre>
+
+
+
+
+  <hr>
+
+  <table width=100% cellspacing=0 cellpadding=0>
+    <tr>
+      <td align=left><a href=mailto:mdettinger@arsdigita.com>Mark Dettinger</a></td>
+      <td align=right></td>
+    </tr>
+  </table>
+</body>
+</html>
+

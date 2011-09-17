@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>
+Recitation 8 Notes
+</title>
+</head>
+<body bgcolor="#ffffff">
+
+<center><h2> Ars Digita University <br> Theory of Computation <br>
+ Recitation 8, 05/14/01 </h2></center>
+
+<h2>Topics</h2>
+Today we'll mainly catch up on all the problems from previous handouts we haven't
+done yet.
+<ul>
+<li> Aisde: Languages as infinitely long streams of bits, complexity and compression
+<li>Leftmost and Rightmost derivations.
+<li>Parse Trees.
+<li>Chomsky Normal Form. What it is useful for.
+<li>Converting a grammar to Chomsky normal form.
+<li>Intro to the pumping lemma for context free languages.
+</ul>
+<h2> Languages and streams o' bits</h2>
+
+Here is a list (well, the beginning of a list) of all possible strings
+that can be made from the characters a and b. They are ordered so that
+all strings of length 1 come first, then strings of length 2 then strings
+of length 3, ... etc.
+
+<pre>
+e a  b  aa ab ba bb aaa aab aba abb baa bab bba bbb aaaa aaab aaba aabb abaa abab abba abbb baaa baab baba babb bbaa bbab bbba bbbb aaaaa aaaab aaaba aaabb aabaa aabab aabba aabbb abaaa abaab ababa ababb abbaa abbab abbba abbbb baaaa baaab baaba baabb babaa babab babba babbb bbaaa bbaab bbaba bbabb bbbaa bbbab bbbba bbbbb aaaaaa aaaaab aaaaba aaaabb aaabaa aaabab aaabba aaabbb aabaaa aabaab aababa aababb aabbaa aabbab aabbba aabbbb abaaaa abaaab abaaba abaabb ababaa ababab ababba ababbb abbaaa abbaab abbaba abbabb abbbaa abbbab abbbba abbbbb baaaaa baaaab baaaba baaabb baabaa baabab baabba baabbb babaaa babaab bababa bababb babbaa babbab babbba babbbb bbaaaa bbaaab bbaaba bbaabb bbabaa bbabab bbabba bbabbb bbbaaa bbbaab bbbaba bbbabb bbbbaa bbbbab bbbbba bbbbbb
+</pre>
+<p>
+A language is an infinite stream of bits.
+
+Example a(a+b)*
+<p>
+<pre>
+0 1  0   1  1  0  0   1   1   1   1   0   0   0   0    1    1    1    1    1    1    1    1    0    0    0    0    0    0    0    0     1     1     1     1     1     1     1     1     1     1     1     1     1     1     1     1     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      1      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      
+</pre>
+
+
+Example (ab)*
+<p>
+<pre>
+1 0  0   0  1  0  0   0   0   0   0   0   0   0   0    0    0    0    0    0    1    0    0    0    0    0    0    0    0    0    0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      1      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      
+</pre>
+
+
+<h2> Problems to work on </h2>
+Work on the problems from previous handouts
+<hr>
+Dimitri Kountourogiannis, <a href="mailto://dimitrik@alum.mit.edu">dimitrik@alum.mit.edu</a>
+</html>

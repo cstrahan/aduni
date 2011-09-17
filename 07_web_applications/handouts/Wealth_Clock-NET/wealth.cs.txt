@@ -1,0 +1,90 @@
+namespace pset1
+{
+    using System;
+    using System.Collections;
+    using System.ComponentModel;
+    using System.Data;
+
+	// note that these must also be added in the Solution Explorer
+	// as 'references'
+	using System.Net;
+	using System.IO;
+	using System.Text.RegularExpressions;
+
+    using System.Web;
+    using System.Web.SessionState;
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
+    using System.Web.UI.HtmlControls;
+
+    /// <summary>
+    ///    Summary description for wealth.
+    /// </summary>
+    public class wealth : System.Web.UI.Page
+    {
+		public double ms_price;
+		public double us_population;
+		public double gates_shares = 141159990*8;
+		public string s_price;
+
+		public wealth()
+		{
+			Page.Init += new System.EventHandler(Page_Init);
+        }
+
+		/// grab a page given its url, and return it as one huge string
+		public string get_URL_string(string url)
+		{
+			WebRequest myRequest = WebRequestFactory.Create(url);
+			WebResponse myResponse = myRequest.GetResponse();
+			Stream s = myResponse.GetResponseStream();
+			StreamReader r = new StreamReader(s);
+			
+			return r.ReadToEnd();
+		}
+
+		public double get_US_population() 
+		{
+			string page = get_URL_string("http://www.census.gov/cgi-bin/popclock");
+
+			Regex reg = new Regex("<H2>[^0-9]*([0-9]+),([0-9]+),([0-9]+).*</H2>");
+			Match m=reg.Match(page);
+			double pop = Int32.FromString( 
+						m.Group(1).ToString() + m.Group(2).ToString() + m.Group(3).ToString());
+
+			return pop;
+		}
+		public double get_MSFT_price()
+		{
+			// if nasdaq is willing to give it to us, it's nicer...
+			string page = get_URL_string("http://www.nasdaq.com/asp/quotes_quick.asp?mode=Stock&symbol=MSFT");
+
+			Regex reg = new Regex( "\\x24&nbsp;([0-9.]+)" );
+			s_price = reg.Match(page).Group(1).ToString();
+			return s_price.ToDouble();
+		}
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+			us_population = get_US_population();
+			ms_price = get_MSFT_price();
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            //
+            // CODEGEN: This call is required by the ASP+ Windows Form Designer.
+            //
+            InitializeComponent();
+        }
+
+        /// <summary>
+        ///    Required method for Designer support - do not modify
+        ///    the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+		{
+			this.Load += new System.EventHandler (this.Page_Load);
+		}
+    }
+}

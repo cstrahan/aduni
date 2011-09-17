@@ -1,0 +1,57 @@
+
+# This makefile delivers two beans (OurButton and ExplicitButton)
+# in a single JAR file.
+
+CLASSFILES= \
+	sunw/demo/buttons/ExplicitButton.class \
+	sunw/demo/buttons/ExplicitButtonBeanInfo.class \
+	sunw/demo/buttons/ExternalizableButton.class \
+	sunw/demo/buttons/OurButton.class \
+	sunw/demo/buttons/ExplicitButtonCustomizer.class 
+
+DATAFILES= \
+	sunw/demo/buttons/ExplicitButtonIcon16.gif \
+	sunw/demo/buttons/ExplicitButtonIcon32.gif \
+	sunw/demo/buttons/BlueButton.ser \
+	sunw/demo/buttons/OrangeButton.ser
+
+JARFILE= ../jars/buttons.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/buttons/OurButton.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	echo "" >> manifest.tmp
+	echo "Name: sunw/demo/buttons/ExplicitButton.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	echo "" >> manifest.tmp
+	echo "Name: sunw/demo/buttons/OrangeButton.ser" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	echo "" >> manifest.tmp
+	echo "Name: sunw/demo/buttons/BlueButton.ser" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/buttons/*.class $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+# Rule for compiling a normal .java file
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+# Rule for running a program to create a serialized orange buton.
+sunw/demo/buttons/OrangeButton.ser: $(CLASSFILES) sunw/demo/buttons/OrangeButtonWriter.class
+	export CLASSPATH; CLASSPATH=. ; \
+	java sunw.demo.buttons.OrangeButtonWriter $@
+
+# Rule for running a program to create a serialized blue buton.
+sunw/demo/buttons/BlueButton.ser: $(CLASSFILES) sunw/demo/buttons/BlueButtonWriter.class
+	export CLASSPATH; CLASSPATH=. ; \
+	java sunw.demo.buttons.BlueButtonWriter $@
+
+clean:
+	/bin/rm -f sunw/demo/buttons/*.class
+	/bin/rm -f sunw/demo/buttons/*.ser
+	/bin/rm -f $(JARFILE)

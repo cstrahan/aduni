@@ -1,0 +1,295 @@
+<html>
+<head>
+  <title>
+   Lecture 3
+  </title>
+</head>
+<body bgcolor="#88aaff">
+<h3>Lecture3</h3>
+<h2>Inheritance</h2>
+<ul>
+<h4>Introduction</h4>
+<li>It is a general principle of OOP
+and good programming in general to try to have each piece of
+code or logical function appear only once. If you find a (as is often
+the case), that similar code appears in multiple places, for example,
+similar methods in different classes, try to factor the code so
+it appears once. 
+<li> One reason why this is a good policy is that when that algorithm or
+functionalty must be modified or extended (as it almost surely will),
+it only has to be changed in one place. There is no need to hunt through
+the code to find (almost) all of the places to be modified.
+<li>There are several mechanisms to support this sort of code re-use:
+<ul>
+<li>Abstraction: If you have a lot of sections of code doing similar things,
+try to focus on what they have in common, and how to implement it so
+that a simgle, more general implementation can replace several sections.
+<li>Re-use through method calls: An example: the static and instance
+methods on Vect2D do the same thing. One could be implemented by calling 
+the other.
+<li>Inheritance: todays'topic
+</ul>
+
+  <ul>
+  <li>Inheritance is the (according to some) the essence of OOP.
+  </li>
+  <li>Inheritance allows common behavior and implementation to be 
+factored out in parent classes and shared. Child classes only need to 
+implement child specific functions. 
+  <li>Child classes (or subclasses) inherit data and methods from
+their parent classes (superclasses).
+  <li>Child classes are more specific, parent classes more general.
+  </li>
+  </ul>
+  </ul>
+<h4>Inheritance in Java</h4>
+    <ul>
+    <li>Use 'extends' keyword to indicate inheritance.
+    <li>Example: Complex Numbers
+   Complex numbers are mathematical entities of the for a+bi, where (i*i = -1).
+   and a and b are real numbers. Complex numbers support addition, subtraction,
+   abs, reciprocal. Since complex numbers can be considered points in a plane,
+   we can inherit from Vect2D rather than starting from scratch.
+<pre>
+      class Complex extends Vect2D{
+
+      }
+</pre>
+
+    <li>Child class inherits parent's public methods and instance vars.
+<pre>
+    Complex a = new Complex();
+    Complex b = new Complex();
+    Complex c = a.add(b);       // inherits add routine from Vect2D
+
+</pre>
+
+    <li>Parent instance referenced through keyword 'super'. In particular,
+the parent's constructor is called as super(). Parent's constructor
+must be explicitly called by child class constructor (otherwise empty
+constructor is used).
+<pre>
+      class Complex extends Vect2D{
+
+          Complex(double r,double i){
+	    super(r,i);      // Call parent constructor
+          }
+      }
+</pre>
+
+<pre>
+      Complex c = new Complex(1.0,1.0);   // new child call instance
+      double abs = c.length();            // methods of parent are available
+<pre>
+    <li> For Complex, we want to rename some methods.
+
+    <li>Method of child class CANNOT access provate vars of parent, must
+use accessors, mutator.
+<pre>
+      class Complex extends Vect2D{
+
+          Complex(double r,double i){
+	    super(r,i);
+          }
+
+          // rename some accessors, must use parent's accessors as
+	  //   parent's instance vars are private.
+	  double getReal(){ return(getX();}
+	  double getImag(){ return(getY();}
+	  double abs(){ return(length();}
+      }
+<pre>
+
+    <li> Child class can add additional methods. For example Complex numbers
+support multiplication, division, and conjugation.
+<pre>
+      class Complex extends Vect2D{
+          ...Constructor and accessors
+
+	  // Multiplication by Vect2D
+	  // Note: must change parent class to protected or..
+	  //   use accessors.
+	  public Complex mult(Complex b){
+	    double real = (getX() * b.getX()) - (getY() * b.getY()); 
+	    double imag = (getX() * b.getY()) + (getY() * b.getX()); 
+	    Complex result = new Complex(real,imag); 
+	    return(result);
+          }
+
+	  // Return Conjugate
+	  public Complex conj(){
+	     return(new Complex(x,-y));
+          }
+
+	  public Complex recip(Complex b){
+	      double abs = abs();
+	      Complex result = conj();
+	      return(conj.scale(1/abs));
+          }
+
+      }
+<pre>
+
+  </li>
+    <li>It is good practice to factor out common code in parent methods
+even when overriding, and call from child class implementations.
+    </li>
+  <li>Inheritance is based on the 'is-a' relationship. For example:
+birds,mammals, and reptiles are all vertibrates. The share common properties
+and behavior as vertibrates as well as properties specific to their subclass.
+  </li>
+  <li>Another common relationship is the 'has-a' relationship. The
+relationship between a whole and it's components. For example. bird have
+wings,legs,color,habitat etc. Our Vect2D class HAS x and y components.
+On the other hand, a Complex IS a Vect2D with some additional functionality.
+Understanding these relationships is an important part of OOP and program
+design.
+  </li>
+  <li>Issue: Of course there is always more than one way to carve up the world.
+More than one possible hierarchy and the hierarchies are not necessarily 
+consistant.(eg flying_animals -> birds,bats,insects). More about this problem
+in next lecture. Using class inheritance we have to pick the most important
+decomposition.
+  </li>
+
+    <li> One a single parent is allowed in Java (full multiple inheritance
+is supported in C++ and CommonLisp...use with extreme caution).
+    </li>
+</ul>
+<h4>Polymorphism</h4>
+
+<pre>
+Child classes can also override the parent's methods. This is useful if,
+       a) the child's behavior is slightly different form the parents or,
+       b) certain behavior is not defined for the parent, but is for all
+          child classes. In this case the method is usually defined in
+	  the parent class, and overridden on all child classes.
+
+Another example: Say we have a generic class for representing nodes
+in a binary tree. Each node in the tree can have a left and right
+descendent. Leaf nodes are merely tree nodes with no children.
+
+
+abstract class ExprNode{
+    private ExprNode left = null;
+    private ExprNode right = null;
+    public ExprNode();        // constructs leaf node (no children)
+    public ExprNode(ExprNode l,ExprNode r);    // construct interior node
+    public ExprNode getLeft();
+    public ExprNode getRight();
+    public void setLeft(ExprNode n);
+    public void setRight(ExprNode n);
+    public boolean isLeaf();   // returns true if no children
+    // add later
+    public abstract int evaluate(); // compute value
+
+}
+
+Now, say we want ot use this to represent and evaluate arithmetic
+expression tree such as ((3 + 4) * (2 - 1)). 
+We can represent this
+as a tree where the interior nodes hold the operator and the
+leaf node the literals. We need to extend ExprNode with 2 new types
+
+/**
+ * Node type for literal values
+ */
+class LitNode extends ExprNode{
+   // instance var
+   private int value;  // value for this node
+   // Constructor
+   LitNode(int value);     // always a leaf node
+   public int getValue();  // accessor
+}
+
+class OpNode extends ExprNode{
+   // Lame Java syntax for defining class constants
+   // (note 'final' keyword, prevents assignment)
+   static public final int PLUS = 1;
+   static public final int TIMES = 2;
+   static public final int MINUS = 3;
+   // instance var
+   private int operator;  // operator for this node
+   // Constructor
+   OpNode(int op,ExprNode l,ExprNode r);     // op must match one of above
+
+}
+
+
+Now we can build a tree
+
+   // Note: we can use cariable of parent type to hold child. Java does
+   //  explicit upcasting
+   ExprNode t1 = new LitNode(2);
+   ExprNode t2 = new LitNode(1);
+   ExprNode tree = new OpNode(OpNode.TIMES,t1,t2); // build ( 2 * 1 )
+
+However, we still need to add evaluate() routine to OpNode and LitNode.
+
+class LitNode extends ExprNode{
+   ... stuff from before...
+   public int evaluate(){return value;}
+}
+
+class OpNode extends ExprNode{
+ ...stuff ...
+ public int evaluate(){
+     // Unfortunately we still have to downcase, but the branch on
+     // node type is no longer necessary
+    ExprNode el = getLeft();
+    int lval = el.evaluate();
+    int rval = getRight().evaluate();   // shorter form
+    if(op == PLUS) return(lval + rval)
+    else if(op == TIMES) return(lval * rval)
+    else    ....
+
+ }
+}
+
+Even though we are referring to an instance with a variable typed
+as the parent type (here ExprNode), Java remembers the complete type
+of the instance. When we call a method on the instance, Java uses the
+appropriate method for each instance subtype (as it we had cast to
+it's actual type). This is called "polymorphism" and is much of
+the power of inheritance and OOP.
+
+We could further use polymorphism to remove the branching on operator
+type. How?
+
+</pre>
+
+<h4>Notes on  inheritance</h4>
+  <ul>
+  <li>Implicit upcasting: A variable declared as a parent class can be assigned
+an object from a child class (of course only methods defined on the parent
+are available).
+  </li>
+  <li>All classes in Java implicitly inherit from the superclass Object,
+which has a variety of methods including clone(), equals()
+and toString(). These should be implemented by all classes. [Note: the default
+equals() actually implements 'eq' (ie reference equality).
+  </li>
+  <li>Downcasting: can only downcast to true type of object, otherwise
+Java throws an exception (and your program dies).
+  </li>
+  <li>Reflection: Objects can describe themselves. The information Java
+       keeps about instances and classes is accessable to the programmer,
+       mainly via the Class type Ex. Class.instanceOf() returns the type
+       of an object.
+  </li>
+  </ul>
+</li>
+</ul>
+<hr>
+<h3>Recitation</h3>
+<ul>
+<li>Review lecture and answer questions
+<li>Perhaps additional example.
+<li>Properties of the Object class
+<li>Misc topics: packages
+<li>Use of polymorphic (Object) containers, Vector, Hashtable, etc
+</ul>
+
+</body>
+
+

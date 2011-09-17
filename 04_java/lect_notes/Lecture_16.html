@@ -1,0 +1,239 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture16</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Component Object Models</h2>
+Binary components, also known as component objects or controls, represent
+the leading edge of software technology. This area contains a number of
+good ideas and much promise. However, it also abounds with hype, promotion,
+and competition. In this lecture we will try to cover the basic ideas
+and introduce the player and the technologies without getting too much into
+details.
+
+<h3>Components</h3>
+<ul>
+<li> We have often used the term component to refer to GUI elements such
+as buttons (which we have also called widgets). The term component in this
+lecture refers to a different, more general, but as we will see related notion.
+<li> The motivation behind components (binary components, component objects,
+the terms are mostly interchangable) is to take the concepts of software
+re-usability, abstraction, and encapsulation to the next level. Components
+are OOP on steroids.
+<li> We have seen these concepts implemented in Java in the form of classes
+and interfaces. However, these are treated very traditionally from a 
+programming point of view, they are all compiled together in the same language
+(Java) and the compiler has access to all of the application's class files 
+when compiling any class. These classes are all linked together are loaded
+into a single process to run.
+<li> Components are analagous to classes, but they
+<ul>
+<li> Are not necessarily written in the same language as the application.
+<li> Are dynamicly and extensively configurable by the application as runtime.
+<li> Expose their behavior to the application only as an abstract interface.
+<li> Support introspection so the application can deduce the interface
+at runtime, rather than compile time
+<li> Do not necessarily live in the same process, or on the same machine
+as an application that uses them.
+</ul>
+<li> One goal of component technology is to create re-useable modules
+(ie components) with complex behavior which can be easily controlled
+by scripting or integrated into a larger application.
+<li> Another goal is to allow the component to be written is a different
+language from the application that uses it. This allows complex functionality
+to be optimized inside components in a language like C, yet allows the
+components to be used from high-level, easy-to-use languages like VB or Perl.
+<li> A third is to separate the component from the calling application so
+the need not be in the same process, or on the same machine.
+<li> The main players in the component game (and their technologies) are:
+<ul>
+<li> Microsoft (OLE, COM/DCOM, COM+, ActiveX, MTS)
+<li> Java (JavaBeans, RMI, EJB)
+<li> OMG (CORBA, IIOP)
+</ul>
+<li> Component technology, although really a common set of ideas, splits into
+two sub-area depending on which of the goals above is most important.
+These two areas can be thought of as:
+<ul>
+<li> Scriptable components, including GUI components, mainly used
+in client applications (although also useful on Web servers).
+<li> Distributed components, main used in multi-tier enterprise applications.
+</ul>
+Microsoft and Java have entries in both of these areas, while CORBA/IIOP
+is mainly targetted to enterprise applications.
+</ul>
+<h3>Scriptable Components</h3>
+<ul>
+<li> This model works best for components with functions that are
+useful in many applications, but difficult to re-implement. Some examples
+are
+<ul>
+<li> GUI components in general, especially the more complex ones:
+chart display, HTML display.
+<li> Gui elements which also encapsulate an application: Spread sheets,
+XML editor, etc.
+<li> Signal processing components: MP3 encoders, decoders, image encoders,
+decoders, speech synthsizers, speech recognizers.
+<li> Misc processer: XML parsers, compression, encryption, etc.
+</ul>
+<li> Each of the items listed above have the property that they encapsulate
+functionality which is difficult to build, but conceptually easy to use once
+built. For example, the algorithms behind speech synthesis are difficult to 
+implement, but the interface for using a speech synthsis program is simple:
+You give it a text string, it produces a waveform.
+<li> There are, of course, stand-alone programs that have the functionalities
+described above. But it is often useful to be able to embed and use these 
+functionalities in the context of a larger application, without the
+hassle of implementing them from scratch.
+<li> This is the promise of scriptable components, that one can download
+or by pre-compiled configurable modules that can be easily incorporated
+into programs written in a variety of languages (after all, if the hard work
+is done is the components, our language to glue them together can be very
+high-level). This model changes application building from the tedious
+low-level programming of basic functionality, configuring pre-built
+components, connecting them to GUI controls, and scripting them to work
+together. 
+<li> Microsoft promoted these ideas early on with their OLE and ActiveX
+technologies. OLE was disigned to allow the active embedding of
+components into documents; for example a spreadsheet into a text document.
+ActiveX was targetted originally toward GUI components.
+<li> These components could be written in C/C++, yet scripted in VB and
+manipulated with graphical design tools. Using these components and
+graphical design tools, a programmer can put together a GUI layout and
+connect the necessary GUI events into the objects the are to control.
+<li>Java's entry into the scriptable components area, it's answer to ActiveX,
+is called JavaBeans.
+<li> Unlike other vendors, Java's components not language independent. They
+are meant to be written in Java and scripted in Java (though perhaps with
+graphical design tools support). This does make the construction of
+Java components easier, even if they are not portable.
+<li> In fact, JavaBeans are just classes. They do not even have to inherit
+from some master class like servlets or applets. However, they do have
+to follow a strict set of naming conventions for their methods, or
+supply an auxilliary BeanInfo class object that describes them. These
+naming conventions (or the BeanInfo) allow graphical builder tools or
+scripted application to use the components without knowing their complete
+behavior ahead of time. They allow the properties (instance vars) 
+of the JavaBean and their types to be deduced from their interfaces.
+This allows them to be edited and configured on the fly, essentially
+have the program itself do some of the progamming.
+<li> The book contains somewhat more information about JavaBeans, but their
+are several books on JavaBeans alone, and interest has grown as their use
+has moved beyond the GUI sphere to include Web-server applications.
+JavaBeans are an important part of JSP-based Web app development.
+<li> JavaBeans demo?
+</ul>
+</ul>
+<h3>Distributed Components</h3>
+<ul>
+<li>
+The second application of component object technology is distributed
+componenents in enterprise applications. The vision behind this is
+to have the diverse collections of databases and information systems,
+running on a variety of hardware architectures, all work together as
+(more or less) one large Object-Oriented Program. This is an ambitous
+vision, and it must be said the current software technology
+is far from achieving it in a straightforward, maintainable and reliable
+way. 
+<li> What we will discuss is a small part of the overall problem, namely,
+how to create and use an object (ie a class instance) is an application if
+the actual instance is in antoher process, or on another machine on the 
+network, running on a different operating system
+and written in a different language.
+<li> To get a handle on this, we need to consider what the application
+need to know and have to access a local class.
+<ul>
+<li> The interface: It needs to know what methods are available to call
+<li> Constructor: It needs a way to construct an instance of a class.
+<li> Reference: It needs to have a reference to a class instance to
+assign to variables, and call methods on.
+<li> Argument passing and return: It needs a way to pass arguments into 
+the method and get a return value.
+<li> A method (procedure) call mechanism: A way to actually make a method
+call and wait for the return. Normally this pushes a new frame on the
+call stack and jumps to the method code.
+</ul>
+<li> Now let's look at how to implement these in a distributed
+environment. Consider the situation where we have the application running
+in a process on some client machine, and the object class we want to use
+exists in a process on a server machine.
+<li>The idea is to use a design pattern know as Proxy. We create a object
+(a class and instances) in the client process that behaves to the application
+like a local instantiation of the object it wants to use. It does not
+actually implement any of the actual object's functionality, it is merely a 
+facade that gives the application the impression it is talking to a
+local instance. 
+<li>The proxy (also called the Stub) supports instance creation 
+(eg <code>new</code>) and can return to the application a reference to
+an object. This reference is not to the ACTUAL object that the application
+wants to use, but to a local version of something the BEHAVES like
+the actual object, in other words, has the same interface.
+<li> The proxy will somehow, talk to the remote machine and mediate between
+the application and the remote object.
+<li> In order for the proxy to work, we need a way to specify the interface
+that the object supports and the application expects. In Java, this could
+be simply an <code>interface</code> definition. However, if we want to
+support distributed objects written an different languages, we need a
+way to define interfaces that is language independent.
+<li> These languages are called IDL's (Interface Definition Languages). Each
+distributed component scheme (Java, CORBA, COM/DCOM) has it's own version,
+although the all look more or less like Java interfaces. The main difference
+is that IDL's must use a set of datatypes (int, float, string, etc) that
+are defined independent of any specific language (fortunately most languages
+suppport more or less the same set of basic types).
+<li> An interface, written in IDL defines the behavior of the object as
+it appears to any application.
+<li> Matching the proxy on the server side, there must be something that
+looks to the object like the calling application, and communicates over the
+network to the client process. This is sometimes called the skeleton.
+It does not actually contain the application's logic and code, it is merely
+something to make a standard method call on the object.
+<li> Now we have our client application calling methods on the proxy, and
+the skeleton calling methods on the object. All we have to do
+now is get the proxy and skeleton to communicate. Essentially, we need some
+sort of inter-process, intermachine calling mechanism. The various
+object technologies have their own version of this.
+<ul>
+<li> In CORBA, this is mediated by ORB's (Object Request Brokers) that
+manage the interprocess procedure calls. Intermachine procedure calls are 
+implemented by the ORBs on each machine communicating through IIOP
+(Internet InterORB Protocol).
+<li> In Java, this is mediated by Java's RMI (Remote Method Invocation)
+mechanism.
+<li> In Microsoft systems, DCOM is the native mechanism.
+<li> These systems interoperate to a certain extent, for
+example, there is RMI over IIOP.
+</ul>
+<li> What these RMI-like mechanisms all have to do is, <em>marshall</em>
+the arguments to be passed (convert them from the calling languages format
+to a neutral network format), send the arguments, an identifier for the
+remote instance to be accessed, and the name or ID of the methods to be called.
+The far end of the network connection, finds the instance to be called,
+converts the arguments to local formats, and the skeleton then calls the
+desired method on the specified instance. When the method returns, the
+reverse of this interaction occurs to pass back any return values over
+the network to the callers.
+<li> The beauty of the scheme, which really shows the power of interfaces,
+it that the application thinks it is talking to a local object and the 
+server object thinks it is being called by a local application.
+<li> Of course in practice there are a lot more issues.
+<ul>
+<li>
+How does the client machine find a server machine that supports the 
+desired object.
+<li> What happens if either machine or the network crashes during the
+operation.
+<li> How does one do sharing and synchronization.
+</ul>
+<li> Finally, remote objects are only one part of the problem of distributed
+enterprise applications. Another set of issues are how to
+implement persistence (data that remains stable beyond any
+execution of the application), and transactions (sequences of operations
+that have a number of important properies such as atomicity and consistency).
+This will be our topic for Monday.
+</body>
+</html>
+
+

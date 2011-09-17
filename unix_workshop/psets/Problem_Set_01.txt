@@ -1,0 +1,26 @@
+Reference:  http://www.cs.cornell.edu/Courses/cs114/2000FA/
+
+	
+PSET1 - Monkeys in the Filesystem 
+
+1. Create a directory in /tmp/ called unix-course.
+   Remember your root password?  Become root, and create a file
+   named "I am owned by root" in your directory, unix-course.  As
+   your regular user id, edit this file to contain the name of your
+   favorite food.  Note that you fail.  Without becoming root, rename the
+   file to "i_am_owned_by_root".  Note your success.  Why can you rename
+   the file, but not edit it?
+
+2. Create a subdirectory in unix-course named A, and a subdirectory B
+   in A.  Set the permissions on A such that any other user can access
+   files in A, but cannot list the files in A.  Become the "nobody" user
+   to verify that it behaves as you expect (nobody is a powerless local
+   user created for times when a process should run with minimal
+   permissions.  Note, though, that nobody has no password.)
+
+3. Create an empty file named -\\\\
+   Rename it to be ~//// .  Just kidding.  You can't do that.  Rename
+   it to ~\\\\ .
+
+4. Do you still have your java files?  Find the total numbers of lines of
+   Java code that you wrote.  Hint: use find, wc.

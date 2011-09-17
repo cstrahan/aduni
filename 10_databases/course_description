@@ -1,0 +1,17 @@
+<p>
+A more formal approach to Relational Database Management Systems, 
+compared the way they were covered during Web Applications. 
+Database systems are discussed from the physical layer 
+of B-trees and file servers to the abstract layer of relational design. 
+Also includes alternative and generic approaches to database 
+design and database management system including relational, object-relational, and object-oriented systems, SQL 
+standards, algebraic query languages, integrity constraints, triggers, 
+functional dependencies, and normal forms. Other topics include tuning 
+database transactions, security from the application perspective, and data warehousing. 
+</p>
+<p>
+Text: <i>Database Management Systems</i>, Ramakrishnan and Gehrke. 
+</p>
+<p>
+Requirements: Two exams, 10 assignments, one project. 
+</p>

@@ -1,0 +1,319 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>lecture19</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Persistence, Databases, and Transactions, XML</h2>
+In many, if not all, large applications, there is a need for some data to
+persist between invocations of the program. A simple example is the 
+configuration information in our PS3 program. Scientific programs have
+to store large numerical datasets. Enterprise, business,
+and e-commerce applications particularly are organized around 
+large amounts of stored information.
+<p>
+If the amount information to be stored is small and structured, a simple
+flat text file representation will suffice. For large amounts of numerical
+data, binary files are required and the format is usually application specific.
+<p>
+Occasionally, one want to save and restore a representation of the set
+of objects in an OOP program. This is a little more difficult, since the
+object can contain references to each other. These references are
+memory addresses and will not be stable from one instance of the program to
+another. The solution to this problem is straightforward (if tedious). One
+essentially builds a dictionary or array of all the objects to be dumped,
+convert all references to indexes or keys in this dictionary. the dump
+both the dictionary and object contents (with now contain only basic types).
+To reverse the process, one reads the datafile, building the dictionary and
+creating the objects, the converts the indexes (or keys) back into references.
+The <em>serialization</em> and <em>object stream</em> features of Java do this
+automatically for you. In languages such as C, it must be done by hand.
+<h3>Databases</h3>
+The need for persistently storing large amounts of structured has been around
+since computers were first applied to business processes. Businesses need
+to store employee records, customer records, inventory data, account and
+financial information, vendor information and more.
+Gradually a set of best practices evolved on how to do this and these ideas
+were incorporated and refined into subsystems callede database programs.
+<p>
+There is a full course on databases later in the year, and the Web course will
+touch on them also. Here we will introduce them and focus on
+the relationship between databases and object-oriented programming.
+<p>
+Most database programs provide at least 4 functions.
+<ul>
+<li> The persistent and reliable storage of structured information
+<li> A  flexible and powerful way to query the database, update
+the database, and analyze the database contents.
+<li> Synchronized access to data so that multiple clients can
+read and write data simultaneously 
+<li> Robust access and update of database contents, so that is any
+part of the system fails, the database will remain intact and consistent.
+</ul>
+<h4>Database Tables</h4>
+The first of these is the most basic and if it is all a program
+requires, can be implemented in flat file formats. Most databases
+programs today are <em>relational</em> databases. This means they
+store their data in a collection of tables of fixed formation. Each
+table has a number of columns representing the name and type of the
+data in that column. These correspond roughly to the instance variables
+in an class declaration. Each row provides values for the column data
+and corresponds conceptually to an object instance. Each table typically
+has a column whose value uniquely identifies the row (the is usually
+different from the row index since it must be constant across
+resorting, addition, and deletion of rows). This column is often
+called the <em>primary key</em> or primary reference. Using the primary
+key as a column value, a row in one table can contain a reference
+to an instance (row) in another table. Thus we can create the equivalent
+of link object representations in our database.
+<p>
+What is missing from databases that we have in OOP? Primarily inheritance,
+(which can be implemented by hand), methods, and polymorphism. Some attempts
+have been made to bring the database model even closer to the object model
+(ie object-oriented databases), but these have not yet replaced the
+relational model.
+<h4>Query Language</h4>
+On of the features provided by databases is a query language to access,
+and update the database. Since database access is a specialized operation,
+higher level languages can be designed to perform this function more
+easily than with basic programming languages like Java or C.
+The database industry has eventually converged around a language called
+SQL as a standard.
+<p>
+You will learn SQL in detail in your database course. Here is an example to
+give you the basic idea.
+<pre>
+SELECT FirstName,LastName,Salary from EMPLOYEE
+where (Salary > 10000) and (FirstName == 'Sam');
+<pre>
+When executed, this will return a subset of the EMPLOYEE table
+having only the columns <code> FirstName,LastName</code>
+and ,<code>Salary</code> and whose rows match the conditions in
+the <code>where</code> clause. If type at a database console app, this
+will print back something like:
+<pre>
+FirstName      LastName     Salary
+----------------------------------
+Sam             Nunn         12000
+Sam             Digita       20000
+</pre>
+There are many powerful features of SQL, but this is the basic idea.
+<h4>Synchronization and Robustness</h4>
+This is what really pay the big bucks for in a database program. The previous
+two features are fairly straightforward to implement (also query
+optimization is a challenge). These last two are much more difficult.
+<p>
+We saw a little of the problem when we discussed thread synchronization.
+Say we have two operations (these would actually be SQL statements)
+on an account table, Deposit(account, amount), and Withdraw(account, amount)
+in an environment where many user are reading and writing the database.
+Say we also want to do transfers which Withdraw from one account , then
+deposit into another.
+As in the case of threads, we need synchronization operations to ensure
+the update operations are thread safe. But we actually need much stronger
+guarantees. We need <em>transaction</em> support.
+<h4>Transactions</h4>
+A transaction is a sequence of operation considered as a unit for which
+a certain set of conditions is guaranteed. These conditions are often
+referred to as the ACID conditions (or the ACID tests), based on their
+names.
+<ul>
+<li>Atomicity - the sequence of operations either all take place or none
+do. If there is a failure part-way through the sequence, the database remains
+in the original condition. If the transaction succeeds, it is said to be 
+<em>committed</em>
+<li>Consistency - the database is transform from on valid state to another.
+Users are allowed to define validity checks on database states (eg balances
+have to be positive). If the transaction would result in an invalid
+state, it is not performs and the database remains as if it were
+never attempted.
+<li>Isolation
+The view of the database seen by each client is always globally consistent.
+If client 1 is performing a transfer transaction, client 2 will either
+see the database state before the transfer or after. Client 2 will never see
+a database state that corresponds to a partial implementation of the
+transaction (eg the withdrawal completed but the deposit not).
+<li>Durability
+Once a transaction is committed it remain independent of hardware, software,
+or network failures. The database can always be restored to the current valid
+state. (There are various levels of this guarantee, depending on how
+widespread a catastrophe you want to plan for.).
+</ul>
+These guarantees define transactions. You will here much more about them in
+weeks to come.
+<h4>Database Access from Java: JDBC</h4>
+It is often the case that databases not only need to be accessed from
+console applications and report generators, but from programs as well.
+This is particularly true in distributed and Web applications where data
+must be extracted from the database, formatted and presented to the user.
+In order to accomplish this database vendors provide programmatic interfaces
+to their databases and client system provide facilities for accessing
+databases.
+<p>
+The Java mechanism for accessing remote databases is called JDBC ( and is
+more or less Java's answer to ODBC). While we won't into details here
+(Volume2 of Core Java gives an introduction, there are several books that
+cover the subject completely). Any database programming interface
+(like JDBC) system must support the following operations:
+<ul>
+<li> Interfacing the client environment to the database. This requires
+a JDBC driver for the particular database to be interfaced. These are
+available commercially.
+<li> Establishing a connection to a particular database and logging into
+to establish privedges. The usually returns some sort of DB Connection object.
+<li> Defining queries and SQL statements. These are usually objects as
+well whose constructors take a SQL statement String as an argument.
+<li> Executing statements on a connections and committing a sequence
+of statements as a transaction.
+<li> Parsing result tables from SQL queries back into the format of the
+calling language.
+</ul>
+JDBC (now JDBC2) has facilities and classes for doing all of these things
+and is fairly straightforward to use, once you understand the underlying model.
+<h3>XML</h3>
+It is probably worth saying a little about XML at this point as it is
+currently a hot topic in the programming and Internet fields. 
+In common, with OOP and Relational Databases, it is a representation of
+structured data.
+XML differs in purpose from OOP and Databases. It focuses on the transmission,
+organization, authoring, and presentation of structured data rather than
+the storage, transactions, or programming.
+<h4>Data Description vs Presentation</h4>
+One of the problems with HTML is that it is neither a complete
+document (or data) description language, nor a very good page formatting
+or UI generating language. The fact the Web pages look even as good as 
+they do is a testament to the quality and energy of Web programmers.
+<p>
+XML attempts to correct some of the weaknesses in HTML in that it's
+goal is to more clearly separate the concepts of data description and
+data formatting and presentation. A text document in XML would be
+entirely described in terms of document components (Chapters, sections,
+headings, tables, footnotes, etc). An entirely different document, usually
+called a <em>style sheet</em> would describe (often, but not always, also
+in XML) how to format these structures for a particular display technology.
+Structured data, for example the result of a database query, would also
+be described in terms of its component data, separated
+from any display and presentation information.
+<h4>Syntax</h4>
+XML is not really a language, but rather a syntax for languages. Each XML
+application must define it's own application specific XML sublanguage to
+operation. For example, XHTML is an XML compatible version of HTML and
+MathML is an XML standard for describing mathematical formulas for display
+in documents and Web pages.
+<p>
+The syntax of XML languages is a particularly simple. Like HTML, XML documents
+consist of text plus <em>markup</em> elements describing the structure 
+of the text.
+The elements are contained in angle brackets. (Which means that angle
+brackets in XML text must be escaped so they do not appear as markup. A
+hassle with writing XML lectures in HTML.). Internally the elements
+contain a tag and one or more attribute-value pairs. Example XML tags:
+<pre>
+&lt;picture src="url1" name="myname"&gt;
+</pre>
+Unlike HTML, the values must be given and enclosed in "". Also unlike
+HTML each tag must have a corresponding close tag. Also, all element
+names and attributes are case-sensitive.
+<pre>
+&lt;/picture&gt;
+</pre>
+The open and close tags must match in stack order. 
+<p>
+Inside any element (in between the open and close tags) one can have
+text data with additional markup. The intent is that this data is
+somehow describe by the enclosing tags.
+There is a special syntax for tags with no enclosed text or data.
+<pre>
+&lt;picture src="url1" name="myname"/&gt;
+</pre>
+This is about it. Clearly this system can be used for describing the components
+of text documents (books, articles, etc). It can also be used to describe
+structed data as in out DB example above
+<pre>
+&lt;EmployeeList&gt;
+  &lt;Employee&gt;
+   &lt;FirstName&gt;Sam&lt;/FirstName&gt;
+   &lt;LastName&gt;Nunn&lt;/LastName&gt;
+   &lt;Salary&gt;12000&lt;/Salary&gt;
+  &lt;/Employee&gt;
+  &lt;Employee&gt;
+   &lt;FirstName&gt;Sam&lt;/FirstName&gt;
+   &lt;LastName&gt;Digita&lt;/LastName&gt;
+   &lt;Salary&gt;20000&lt;/Salary&gt;
+  &lt;/Employee&gt;
+&lt;/EmployeeList&gt;
+</pre>
+<h4>Specification</h4>
+To describe a particular XML application language, one must specify what the
+element tags are, what attributes are allowed for each, and what their 
+relationships are (what elements can element which other elements).
+XML languages can be described in a text document, called a DTD, which
+follows a standard syntax). Unfortunately, this syntax is not itself
+XML (although is also have a lot of angle brackets. There is another
+standard for describing XML languages called Schemas in which the language
+description language is itself XML compatible.
+<p>
+The syntax of DTDs and Schema is tedious, although not difficult, so will
+not present examples here. There are many books on XML that cover this
+in great detail.
+<h4>Parsing and programming</h4>
+To operate on XML data within a program one needs a way to parse the
+document into a data structure. Fortunately, this is fairly easy. In fact
+oner of the benefits on XML is that it is easily parsable, since the
+underlying structure of the XML document is a tree of elements and data.
+XML is in fact, self-parsing, all that is really needed is a means
+to convert the text representation into a set of datatypes.
+<p>
+There are two standard interfaces for parsing and manipulating XML
+in programs: SAX and DOM. SAX is an event-based model the processes
+the document serially. It allows the programmer to override 
+processing methods that get called each time a begin or end tag is encountered.
+The DOM parser produces a tree structure in memory representing the
+document and provides an interface for accessing the this tree structure
+(which looks like standard tree methods, with addition methods for
+accessing attributes). DOM, by the way, stands for Document Object Model.
+There are SAX and DOM libraries for C++ and Java available from Apache.com
+Java also has a simplified version of DOM called JDOM.
+<h4>Transformation</h4>
+The another bit of technology that has grown up around XML is
+transformation languages. There are two reasons for XML transformation.
+The first is to keep the notion of document (or data) representation and
+transform from one representation to another (performing expansions or
+translations or re-organizations [for examples compiling table of contents]).
+The other is to transform the data representation XML into a presentation
+format (HTML, tex, PDF, XSL:FO, etc). 
+<p>
+There are several technologies for specifying and performing these
+transformations. The older, and still current, technologies are the
+style sheet systems that grew up around HTML, particularly CSS (Cascading
+Style Sheets). These associate with each element type (possibly in
+context) a display format (font, color, etc). Another system called
+DSSSL, is used by the popular DocBook text document description language
+(XML compatible).
+<p>
+Document transformations can be accomplished entirely with the XML milieu using 
+XSL, and XSLT. XSL is an XML compatible type sheet and tree transformation
+language. XSLT is a translator that takes an XML document and an XSL
+style sheet and produces as new XML document. Associated with XSL is a display
+formatting language called XML:FO which can be the final output of
+such a transformation, though few systems now support display of
+XSL:FO natively. The beauty of the all XML scheme is that both the
+XSL style sheet and the original XML document can undergo multiple
+levels of transformation before final re-transmission or display.
+<p>
+There is much more to be read about XML, much of it standards and details.
+I refer you to the many books on XML, XML and Java, and to the Apache
+Web site where a lot of interesting open source work is going on
+in connection with Java and XML.
+</body>
+
+</html>
+
+
+
+
+
+
+
+

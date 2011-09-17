@@ -1,0 +1,12 @@
+<p>
+This course covered the mathematical topics most directly related to computer science. Topics included: logic, relations, functions, basic set theory, countability and counting arguments, proof techniques, mathematical induction, graph theory, combinatorics, discrete probability, recursion, recurrence relations, and number theory. Emphasis will be placed on providing a context for the application of the mathematics within computer science.  The analysis of algorithms requires the ability to count the number of operations in an algorithm. Recursive algorithms in particular depend on the solution to a recurrence equation, and a proof of correctness by mathematical induction. The design of a digital circuit requires the knowledge of Boolean algebra. Software engineering uses sets, graphs, trees and other data structures. Number theory is at the heart of secure messaging systems and cryptography. Logic is used in AI research in theorem proving and in database query systems. Proofs by induction and the more general notions of mathematical proof are ubiquitous in theory of computation, compiler design and formal grammars. Probabilistic notions crop up in architectural trade-offs in hardware design. 
+</p>
+<p>
+Text: <i>Discrete Mathematics and its Applications</i>, Rosen. 
+</p>
+<p>
+Reference:  <i>Concrete Mathematics</i>, Graham, Knuth and Patashnik
+</p>
+<p>
+Requirements: Four exams, seven problem sets, one research problem set. 
+</p>

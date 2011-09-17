@@ -1,0 +1,32 @@
+
+CLASSFILES= \
+	sunw/demo/molecule/Atom.class \
+	sunw/demo/molecule/Matrix3D.class \
+	sunw/demo/molecule/Molecule.class \
+	sunw/demo/molecule/MoleculeNameEditor.class \
+	sunw/demo/molecule/MoleculeBeanInfo.class \
+	sunw/demo/molecule/XYZChemModel.class
+
+DATAFILES= 
+
+JARFILE= ../jars/molecule.jar
+
+all: $(JARFILE)
+
+# Create a JAR file with a suitable manifest.
+
+$(JARFILE): $(CLASSFILES) $(DATAFILES)
+	echo "Name: sunw/demo/molecule/Molecule.class" >> manifest.tmp
+	echo "Java-Bean: True" >> manifest.tmp
+	jar cfm $(JARFILE) manifest.tmp sunw/demo/molecule/*.class \
+		sunw/demo/molecule/*.xyz $(DATAFILES)
+	@/bin/rm manifest.tmp
+
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+clean:
+	/bin/rm -f sunw/demo/molecule/*.class
+	/bin/rm -f $(JARFILE)
+

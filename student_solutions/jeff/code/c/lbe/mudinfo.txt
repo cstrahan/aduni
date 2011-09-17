@@ -1,0 +1,15 @@
+From:	 Tom Hickerson <tom_hickerson@hotmail.com>
+Subject: addresses of Java MUD code bases
+To:	 radcliffe@linuxfreemail.com
+                                                        Sun 08:52
+
+OK, here are two, actually:
+ www.andreasen.org is one, he has sponsored a "16k MUD" programming 
+ competiton and one of the muds is Java, others are written in Python, Perl, 
+ C, etc.
+ www.wolfmud.org is the other, HUGE code base from what I can see, I dl'ed it 
+ at home and it had lots of classes already coded in there. Some definite 
+ limitations do exist however (you can't go northeast, southeast, etc. 
+ movement is limited to the six basic directions) that we could work on.
+ Good luck on the exam, eh?
+ Tom H.

@@ -1,0 +1,277 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.51 [en] (X11; U; SunOS 5.6 sun4u) [Netscape]">
+   <title>Example Beans</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<center><a NAME="top"></a></center>
+
+<center>
+<h1>
+Example Beans</h1></center>
+As part of the BDK we include a number of example beans that demonstrate
+various aspects of the JavaBeans architecture.
+<p>The following beans are all present in the default ToolBox palette for
+the <a href="beanbox.html">BeanBox</a>. Their sources are in the "demo"
+directory.
+<p>In addition, color-annotated source code for ExplicitButton, JellyBean,
+Juggler, Molecule, and OurButton is used to illustrate various Beans topics.
+<ol>
+<li>
+<a href="#BridgeTester">BridgeTester</a></li>
+
+<li>
+<a href="#ChangeReporter">ChangeReporter</a></li>
+
+<li>
+<a href="#ExplicitButton">ExplicitButton</a> (*Customization)</li>
+
+<li>
+<a href="#EventMonitor">EventMonitor</a></li>
+
+<li>
+<a href="#SELECT">JDBC SELECT</a></li>
+
+<li>
+<a href="#JellyBean">JellyBean</a> (*Properties)</li>
+
+<li>
+<a href="#Juggler">Juggler</a> (*Persistence/Serialization, *BeanContext)</li>
+
+<li>
+<a href="#Molecule">Molecule</a> (*Custom Property Editor)</li>
+
+<li>
+<a href="#OrangeButton">OrangeButton</a></li>
+
+<li>
+<a href="#OurButton">OurButton</a> (*Events)</li>
+
+<li>
+<a href="#QuoteMonitor">QuoteMonitor</a></li>
+
+<li>
+<a href="#SortItem">SortItem</a></li>
+
+<li>
+<a href="#TickTock">TickTock</a></li>
+
+<li>
+<a href="#TransitionalBean">TransitionalBean</a></li>
+
+<li>
+<a href="#Voter">Voter</a></li>
+</ol>
+
+<hr>
+<ol>
+<h3>
+<a NAME="BridgeTester"></a>BridgeTester</h3>
+The BridgeTester is a test bean that supports a wide range of different
+property types.
+<h3>
+<a NAME="ChangeReporter"></a>ChangeReporter</h3>
+The ChangeReporter is a small text window that can be used to display changes
+to bound properties.
+<p>Try
+<a href="beanbox.html#event">connecting up</a> the PropertyChange
+event from (say) an <a href="#OurButton">OurButton</a> to the reportChange
+method of a ChangeReporter bean. Then when you change a bound property
+on the OurButton, the ChangeReporter will report the change.
+<p>This provides a simple way of checking that your bean is correctly firing
+PropertyChange events from its bound properties.
+<h3>
+<a NAME="ExplicitButton"></a>ExplicitButton</h3>
+ExplicitButton is a subclass of <a href="#OurButton">OurButton</a> that
+adds no new functionality, but simply adds a BeanInfo class to specify
+the bean's behaviour and icons. <a href="ExplicitButtonBeanInfo.html">Color-annotated
+source code</a> illustrates how this BeanInfo class is used to expose specific
+properties and events.
+<p>When you compare an ExplicitButton with an OurButton, you will see that
+the ExplicitButton has a smaller set of properties and a smaller set of
+better named events in the Edit/Events sub-menu. The ExplicitButton also
+has an icon in the ToolBox; the monochrome icon shown is returned by ExplicitButtonBeanInfo
+when the ToolBox requests a color icon.
+<p>The ExplicitButton also comes with a trivial customizer, the
+<a href="../demo/sunw/demo/buttons/ExplicitButtonCustomizer.java">ExplicitButtonCustomizer</a>
+that simply lets you change the label for the button. (This is not a particularly
+good use of a customizer!)
+<p>The ExplicitButton also indicates that it has some hidden-state (which
+in this case is a lie!) by using the FeatureDescriptor's attribute/value
+mechanism to specify in the bean's BeanDescriptor an attribute named "hidden-state"
+to be Boolean true. Following the JavaBeans 1.01 API specification, code
+generation cannot be done in this case and serialization must be used instead.
+<h3>
+<a NAME="EventMonitor"></a>EventMonitor</h3>
+The EventMonitor bean allows you to monitor all the events fired by a source
+bean. It does this by analyzing the source bean and creating event adaptors
+for all the different kinds of events fired by the bean.
+<p>The <a href="../demo/sunw/demo/encapsulatedEvents/">EventMonitor sources</a>
+provide an example of how a sophisticated bean, such as a bean container,
+can dynamically generate code to handle arbitrary kinds of events from
+other beans.
+<p>To use the EventMonitor bean you must:
+<ul>
+<li>
+<a href="beanbox.html#event">Connect an event</a> from a source bean to
+the EventMonitor's initiateEventSourceMonitoring method.</li>
+
+<li>
+Provoke the source bean to fire an instance of that event. For example
+if you wired up "mouse click", click the mouse over the source bean.</li>
+</ul>
+
+<p><br>As soon as that first event is delivered from the source bean to
+the EventMonitor, the EventMonitor will leap like a Tasmanian Devil on
+the source bean, analyze it, discover all the different events it fires,
+and create and register an event listener for each type of event. It will
+then report whenever any of these events are fired.
+<p>You may want to
+<a href="beanbox.html#resize">resize</a> the EventMonitor
+bean to see all the different event output.
+<h3>
+<a NAME="SELECT"></a>JDBC SELECT</h3>
+The JDBC SELECT bean contacts a target database at a specified JDBC URL
+and runs a SQL SELECT statement to display specified columns from a target
+table. You need to have JDBC access to a true SQL database (such as Oracle
+or Microsoft SQL Server) to use this bean.
+<p>Because the JDBC SELECT bean is fairly complex to configure, it comes
+with its own customizer that helps you to configure the bean.
+<p>After dropping the JDBC SELECT bean onto the middle composition window,
+select the Edit/Customize... menu item to bring up the bean customizer.
+<p>This prompts you initially for a target database URL and a login name
+and password. Then you can use the customizer to view the available database
+tables (push either "User tables" or "All Tables") and select a target
+table. The customizer then shows the various columns in that target table
+and lets you chose which columns you want displayed in the bean. As you
+chose columns, the bean is updated to show the current output of the corresponding
+SQL SELECT statement.
+<p>You can <a href="beanbox.html#event">connect up</a> an OurButton Action
+event to call the SELECT bean's "update" method, so that you can cause
+the bean to re-execute its SELECT.
+<h3>
+<a NAME="JellyBean"></a>JellyBean</h3>
+JellyBean is a very simple bean. It simply draws an oval and supports a
+bound property "color" and a constrained property "priceInCents". The JellyBean
+provides mono and color icons in 16x16 and 32x32; the 16x16 color icon
+is displayed in the ToolBox.
+<p>Initially you will be able to edit the JellyBean's priceInCents field
+without difficulty. However if you
+<a href="beanbox.html#event">connect
+up</a> the JellyBean's vetoableChange event to a
+<a href="#Voter">Voter</a>
+bean's vetoableChange handler method, then when you try to change the JellyBean's
+price, the constrained property change will be rejected. <a href="JellyBean.html">Color-annotated
+source code</a> describes how to implement constrained and bound properties.
+<h3>
+<a NAME="OrangeButton"></a>OrangeButton</h3>
+OrangeButton is a bean that is just like
+<a href="#ExplicitButton">ExplicitButton</a>
+except that its default color is Orange.
+<p>It is interesting because it's implemented as a serialized object, which
+was formed by taking a regular ExplicitButton, changing its background
+color and serializing it to a file. See the creating program in <a href="../demo/sunw/demo/buttons/OrangeButtonWriter.java">OrangeButtonWriter.java</a>
+<h3>
+<a NAME="Juggler"></a>Juggler</h3>
+The Juggler bean runs a very simple animation.
+<p>You can start and stop the animation by
+<a href="beanbox.html#event">connecting</a>
+the button push events on two
+<a href="#ExplicitButton">ExplicitButtons</a>
+to the startJuggling and stopJuggling methods on a Juggler.
+<p><a href="Juggler.html">Color-annotated source code</a> for Juggler illustrates
+Serialization/Persistence.
+<p>The Juggler has a very simple JugglerBeanInfo class that defines a 16x16
+color icon for the Juggler, that gets displayed in the ToolBox.
+<p>You can perform method tracing by setting the debug property to true,
+illustrating the use of a service provided by Juggler's nesting BeanContext,
+the beanbox.
+<h3>
+<a NAME="Molecule"></a>Molecule</h3>
+The Molecule bean displays a 3-D representation of a molecule. You can
+rotate the molecule by clicking on the bean and dragging the mouse.
+<p>You can also rotate the molecule by connecting up buttons to the rotateX
+and rotateY methods of the Molecule.
+<p>The Molecule comes with its own MoleculeNameEditor custom Property Editor
+for the "moleculeName" property. This Property Editor lets you chose from
+one of 6 different simple molecules to display in the Molecule bean. The
+molecule descriptions are read from descriptor files that the Molecule
+bean load as class-name relative resources. <a href="MoleculeNameEditor.html">Color-annotated
+source code</a> illustrates how to implement this Property Editor.
+<h3>
+<a NAME="OurButton"></a>OurButton</h3>
+The OurButton bean is a subclass of java.awt.Canvas that acts as a simple
+GUI button. Clicking on the button will cause it to fire a standard AWT
+actionPerformed event.
+<p>OurButton exposes the standard java.awt.Component properties (foreground,
+background, font, and name) and adds four of its own (label, fontSize,
+largeFont, and debug). Notice how the font related properties interact,
+so that if you change fontSize from 12 to 24, then the font and largeFont
+properties are also updated.
+<p>OurButton will dynamically resize itself whenever its label or font
+is changed, so that the text exactly fits in the bean.
+<p><a href="OurButton.html">Color-annotated source code</a> for OurButton.java
+illustrates how to implement an event listener and an event source.
+<h3>
+<a NAME="QuoteMonitor"></a>QuoteMonitor</h3>
+The QuoteMonitor bean uses Java
+<a href="http://java.sun.com/beans/related.html">Remote
+Method Invocation (RMI)</a> to contact a remote quote server and displays
+either real or imaginary stock quote values.
+<p>To start a local RMI quote server that generates imaginary values for
+the QuoteMonitor to display, cd to the demo directory and if you are on
+Windows type "start nmake -f quote.mk run" or if you are on Unix type "gnumake
+-f quote.mk run &amp;".
+<h3>
+<a NAME="SortItem"></a>SortItem</h3>
+The SortItem is a serialized bean. It is created by the
+<a href="../demo/sunw/demo/sort/SortItemWriter.java">SortItemWriter.java</a>
+program.
+<p>You can click on the sorter bean to start it sorting. You can change
+the sort algorithm in the PropertySheet to be any of "BubbleSort", "QSort",
+or "BidirBubbleSort".
+<p>If you're feeling like a little hacking, try changing the SortItem to
+have a custom property editor for its sort algorithm, like the Molecule
+does for its molecule name.
+<h3>
+<a NAME="TickTock"></a>TickTock</h3>
+The TickTock bean is a very simple "invisible" bean. When you select it
+from the ToolBox and drop it onto the composition window it will come up
+as a small rectangle showing the bean name. You can hide this using the
+"hide invisible beans" item under the "view" menu.
+<p>TickTock fires a PropertyChange event at regular intervals. You can
+change the interval using the property sheet. Try <a href="beanbox.html#event">connecting
+up</a> the TickTock's PropertyChange event to a ChangeReporter to watch
+the events being fired.
+<h3>
+<a NAME="TransitionalBean"></a>TransitionalBean</h3>
+The Transitional bean is a very simple bean that follows the JDK 1.0.2
+compatibility rules, so that it can run on JDK 1.0.2 as well as on JDK
+1.1 or higher.
+<h3>
+<a NAME="Voter"></a>Voter</h3>
+The Voter is a simple bean that is designed to process vetoableChange events.
+By default it rejects all vetoableChange requests, though you can change
+its vetoAll property to "true" and it will allow changes.
+<p>If you
+<a href="beanbox.html#event">connect up</a> the vetoableChange
+events from a bean which supports constrained properties (such as the
+<a href="#JellyBean">JellyBean</a>
+with its priceInCents property) to a Voter bean then you can reject any
+proposed changes to constrained properties.
+<p>This allows you to test your bean's use of constrained properties.</ol>
+
+<p><br>
+<hr>
+<center>
+<p><font size=-2>Java, JavaBeans, and JavaSoft are trademarks of Sun Microsystems
+Inc.</font>
+<p><font size=-2>Copyright &copy; 1996 Sun Microsystems, Inc., 2550 Garcia
+Ave., Mtn. View, CA 94043-1100 USA.</font>
+<br><font size=-2>All rights reserved.</font></center>
+
+</body>
+</html>

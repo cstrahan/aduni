@@ -1,0 +1,69 @@
+<html><head>
+<title>Sample Quiz Questions
+</title>
+</head>
+<body >
+<h2>Sample Quiz 1 Questions</h2>
+<ul>
+
+<h4>For the quiz, you may bring the class notes, the papers that were
+assigned, your writing assignments, the presentation you prepared, and
+the text book (assuming it arrives...)</h4>
+
+In <i>Ethernet: Distributed Packet Switching for Local Computer
+Networks</i>, the author describes a link-layer protocol used to send
+packets around a local computer network.  The physical medium for this
+network is a coax cable (like the kind you get cable TV from).  The
+communicating computers are connected to the same cable at the same
+time.<br><br>
+
+<b>Q1:</b> When two computers try to inject a message into the cable
+at the same time, the messages <i>collide</i>.  What does the Ethernet
+Protocol say the computers should do to try to get their respective
+packets out? 
+
+<br><br> <b>Q2:</b> You are getting bad performance on your local
+Ethernet network.  A little investigation shows that your nemesis, Net
+Vader, is watching lots of videos - and he's sharing the same Ethernet
+cable as you!  To retaliate, you decide to create a rogue Ethernet
+card that gives preference to your packets over NV's during a
+collision.  What will your card do different when a collision is
+detected? Be concrete.<br><br>
+
+<b>Q3:</b> The paper describes the use of a packet
+transceiver for connecting two coax cables into what looks like a
+single cable.  Describe how such a system should handle
+collisions.  (Hint: Consider two cases: A collision on one cable but
+not the other, a collision on both cables at the same time)<br><br>
+
+<b>Q4:</b> Do you think the tranceiver setup described in Q3 would
+scale out to hundreds of cable segments connected together?  Briefly
+describe why you think it would or would not.<br><br>
+
+
+In <i>Disk System Architectures for High-Performance Computing</i>,
+you learned about the 5 RAID levels.  Suppose you are configuring a
+service like photo.net with three RAIDs.  In the questions below, make
+sure you explain your choice and list the key assumptions you used to
+choose the RAID you think is most appropriate.<br><br>
+
+<b>Q5:</b> You must first configure a RAID for photo.net's swap file.
+Given your knowledge of virtual memory, what RAID level is most
+appropriate?  (assume photo.net has enough main memory to prevent
+thrashing)<br><br>
+
+<b>Q6</b> Now, you must configure a RAID for photo.net's JPG files.
+These are the photo files that Philip or users upload.  Assume there
+are 50,000 JPG files on photo.net and that 250 jpg files are uploaded
+each day.  Also assume that photo.net must serve several requests for
+distinct JPG files at any one time, all day long.  What RAID level is
+most appropriate?<br><br>
+
+<b>Q7</b> Finally, you must configure the RAID for the Oracle database
+files.  Like the JPG case, there are many more reads than writes.
+Unlike the JPG case, Oracle uses only a handful of very large files.
+Most of the time, the same file is being read or written.  What RAID
+level is most appropriate?<br><br>
+
+</body>
+</html>

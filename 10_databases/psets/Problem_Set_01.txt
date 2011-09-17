@@ -1,0 +1,18 @@
+Assignment 1, Due Tuesday morning in lecture.
+
+From the text book:
+Exercise 5.8: 1, 2a,b,d,f,h,l
+
+Exercise 5.10
+
+Problem 1: Design the tables for a car rental agency.
+The main tables are listed below.
+
+Agents, customers, Cars , Agency location  and
+reservations.
+
+One of the locations is at the airport that is
+operational 24 hours. Include the integrity
+constraints and any triggers that you may envision in
+the reservation system.
+

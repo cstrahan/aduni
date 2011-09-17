@@ -1,0 +1,20 @@
+
+CLASSFILES= \
+	sunw/wrapper/BeanWrapper.class
+
+
+all: $(CLASSFILES)
+
+
+%.class: %.java
+	export CLASSPATH; CLASSPATH=. ; \
+	javac $<
+
+
+# Run the Juggler as a wrapped applet inside AppletViewer.
+view: all
+	appletviewer html/wrapper.html
+
+clean:
+	/bin/rm -f $(CLASSFILES)
+

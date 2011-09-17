@@ -1,0 +1,43 @@
+The specs for NFS4 can be found here: http://www.nfsv4.org/.  While Echo is not a current project, NFS4 incorporates many of the kinds of ideas they had.
+
+
+MIT Systems Page from 2000
+
+Hi,
+
+You might find the following
+to be a useful reference. It's last year's
+homepage of the MIT systems course.
+
+<A HREF="http://web.mit.edu/6.033/2000/www/home.html">MIT 6.033 Spring 2000</A>
+
+Should you become stuck when writing your Systems papers, you may find the following useful:
+http://www.dack.com/web/bullshit.html
+Use wisely.
+Contributed by Kevin McCulloch on 03-03-2001
+
+
+Here's an online tutorial on virtual memory. 
+There's too much information there but the
+introductory parts might be helpful 
+(also has a cool java demo :-)
+
+<a href="http://cne.gmu.edu/modules/vm/">
+Virtual Memory Tutorial</a>
+
+The following is an advanced faq on unix  
+programming that goes into more detail on
+some of the things we were talking about in 
+recitation.
+
+<a href="http://www.landfield.com/faqs/unix-faq/programmer/faq">Unix Programming FAQ</a>
+
+
+To get ideas for the Project the following sites may be useful.
+
+<a href="http://www.ietf.org/">Internet Engineering Task Force</a>
+
+<a href="http://www.freesoft.org/CIE/index.htm">Internet Encyclopedia</a>
+
+
+

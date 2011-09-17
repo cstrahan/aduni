@@ -1,0 +1,15 @@
+<p>
+Topics on the engineering of computer software and hardware systems:
+techniques for controlling complexity, system infrastructure, networks
+and distributed systems, atomicity and coordination of parallel
+activities, recovery and reliability, privacy of information, impact
+of computer systems on society.  Case studies of working systems and
+outside reading in the current literature provide comparisons and
+contrasts.   The group project is to write an NSF systems proposal to
+fund a middle-ware product, for announcement RFP01-63.
+</p><p>
+Text: <i>Distributed Systems</i>, Coulouris, Dollimore, Kindberg.  The
+Mythical Man-Month,  Brooks.  Selected papers.
+</p><p>
+Requirements: One exam, eight essays, one project.
+</p><br>

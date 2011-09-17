@@ -1,0 +1,251 @@
+\documentclass[12pt]{article}
+\usepackage{times}
+\usepackage{amssymb,amsmath}
+\usepackage{psfig}
+\usepackage{epsfig}
+
+
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+
+\newcommand{\Real}{{\mathbb R}}
+
+\newsavebox{\savepar}
+\newenvironment{boxit}{\begin{lrbox}{\savepar}
+   \begin{minipage}[b]{\linewidth} }
+ {\end{minipage}\end{lrbox}\fbox{\usebox{\savepar}}}
+
+\newenvironment{alg}{
+\begin{tabbing}
+foo\=foo\=foo\=foo\=foo\=foo\= \kill}
+{\end{tabbing}}
+
+\newcommand{\mynote}[1]{\marginpar{\tiny #1}}
+%\newcommand{\mynote}[1]{}
+
+\begin{document}
+\begin{center}
+{\large Problem Set 5 Solutions}
+\end{center}
+
+\section{World Series Odds}
+% Grading:
+% 25 points
+% 
+
+
+This problem is at first a bit misleading, because the base case occurs
+when all the games have already been played.  For example, in a series of
+11 games, the base case is when the fearless Team A has won 6 games, or
+when Team B has won 6 games.  
+More formally, for a $2n+1$-game series,
+\[
+ P(n+1,a)=1
+\]
+and
+\[
+ P(a,n+1)=0
+\]
+( but $P(a,b)$ is undefined for $a+b>2n+1$ ).
+
+We can define $P(a,b)$ recursively in terms $P(a+1,b)$ and $P(a,b+1)$:
+\[
+  P(a,b) = 0.5*P(a+1,b) + 0.5*P(a,b+1) \mbox{for $a,b < n+1$}
+\]
+
+We can represent $P$ as an $n \times n$ array $A$, with $A[a][b] =
+P(a,b)$.
+
+\begin{alg}
+$A \leftarrow new array[n][n]$ \\
+{\bf foreach} ${\mathit elem} \in A$ \\
+\> $A \leftarrow 'unset$ \\
+{\sc Find-Odds}($a$,$b$) \\
+\> {\bf if} $a = n+1$ \\
+\> \>return 1 \\
+\> {\bf else if} $b = n+1$ \\
+\> \>return 0 \\
+\> {\bf else} \\
+\> \>{\bf if} $A[a][b] \neq 'unset$ \\
+\> \> \>return $A[a][b]$ \\
+\> \>{\bf else} \\
+\> \> \>$A[a][b] \leftarrow 0.5*\mbox{\sc Find-Odds}(a+1,b) + 0.5*\mbox{\sc Find-Odds}(a,b+1)$
+\end{alg}
+
+Note that this solution is really a form of {\em memoization}, a cousin to
+dynamic programming.  The result is similar, but in memoization you start
+with a recursive solution, but remember the result of recursive calls so
+that the answer to a specific subproblem is only computed once.
+
+\section{The Electoral College}
+
+Start off with a basic dynamic programming solution to the 0-1 Knapsack
+problem.  We loop through the available items, 
+
+\begin{alg}
+$K[][] \leftarrow W \times n \mbox{ array of nils}$ \\
+\\
+; $t$ is the total capacity, and $n$ is the number of objects \\
+{\sc Knap}($t$,$n$) \\
+\> {\bf for} $c \leftarrow 0 \dots t$ \\
+\> \> $K[c][0] \leftarrow 0$ \\
+\> \> {\bf for} $r \leftarrow 1 \dots n$ \\
+\> \> \> ; if you include object $r$ \\
+\> \> \> {\bf if} $c - cost[r] > 0$ \\
+\> \> \> \> $a \leftarrow value[r] + K[c-cost[r]][r-1]$ \\
+\> \> \> {\bf else} $a \leftarrow 0$ \\
+\> \> \> $b \leftarrow K[c][r-1]$ \\
+\> \> \> $K[c][r] \leftarrow \max (a,b)$ 
+\end{alg}
+
+Now to apply the 0-1 knapsack problem to the partition problem.  We can
+consider each state's block of votes as an item, with both cost and value
+equal to the number of electoral college members for the state.  We
+set the capacity of the knapsack to half of the total votes.  If the
+maximal packing of the knapsack fills it exactly, then we have effectively
+tied the election.  
+
+\section{Carnival Games}
+\subsection{Recursive Solution}
+Given:
+\[
+ A[i][j] = \mbox{cost to visit node $i,j \in 0 \dots n-1$}
+\]
+
+Define a recursive function which returns the best cost if starting at a
+node $i,j$ (note that we use $0\dots n-1$ rather than $1\dots n$ as the
+problem states --- this is just for ease of programming):
+
+\begin{alg}
+{\sc Recursive-Search}($i$,$j$) \\
+\> {\bf if} $i > n$ \\
+\> \> return 0
+\> else
+\> \> $a \leftarrow \mbox{\sc Recursive-Search}(i+1,j) $ \\
+\> \> $b \leftarrow \mbox{\sc Recursive-Search}(i+1,j+1 \mod n) $ \\
+\> \> $c \leftarrow \mbox{\sc Recursive-Search}(i+1,j+n-1 \mod n) $ \\
+\> \> return A[i][j] + min(a,b,c) \\
+\\
+{\sc Best-Path} \\
+\> $\mathit{best} \leftarrow \inf$ \\
+\> {\bf for} $\mathit{start} \leftarrow 0 \dots n-1$ \\
+\> \> $\mathit{best} \leftarrow min(\mathit{best},\mbox{\sc Recursive-Search}(0,start))$ \\
+\> {\bf return} $\mathit{best}$
+\end{alg}
+
+How expensive is this?  {\sc Recursive-Search}$(i,j)$ is initially called
+$n$ times in {\sc Best-Path}, and in each recursive call, another 3
+subcalls are made.  The depth of the call tree is $n$, yielding a
+complexity of $\Theta(n*3^n)$, which is quite painful.
+
+\subsection{Using Dynamic Programming}
+How about a dynamic programming approach?
+
+\begin{alg}
+{\sc Dyn-Search} \\
+\> {\bf for} $j \leftarrow 0 \dots n-1$ \\
+\> \> $cost[n-1][j] \leftarrow A[i][j]$ \\
+\> {\bf for} $i \leftarrow n-2 \dots 0$ \\
+\> \> {\bf for} $j \leftarrow 0 \dots n-1$ \\
+\> \> \> $cost[i][j] \leftarrow A[i][j] +$ \\
+\> \> \> \> $min(cost[i+1][j],cost[i+1][j+1 \mod n],cost[i+1][j+n-1 \mod n])$ 
+\end{alg}
+
+Now how expensive is it?  There are no recursive calls, just loops.  The
+first loop is run $n$ times, and the body of the nested loops runs $n^2$
+times, leading to a time complexity of $\Theta(n^2)$.
+
+\section{Applications of the Knapsack Problem}
+\subsection{Recursive}
+
+Given $n$, the amount to make change for, and $C$, a set of denominations:
+
+\begin{alg}
+{\sc Make-Change}($n$,$C$) \\
+\> {\bf if} $n = 0$ \\
+\> \> {\bf return} 1 \\
+\> {\bf else if} $n < 0$ \\
+\> \> {\bf return} 0 \\
+\> {\bf else} \\
+\> \> $sum \leftarrow 0$ \\
+\> \> {\bf for-each} $d \in C$ \\
+\> \> \> $sum \leftarrow sum + \mbox{\sc Make-Change}(n-d)$ \\
+\> \> {\bf return} $sum$ 
+\end{alg}
+
+\subsection{Dynamic Programming}
+
+\begin{alg}
+$D$ an array of denominations \\
+\\
+{\sc Make-Change}($n$,$i$) \\
+\> {\bf for} $m \leftarrow 0 \dots n$ \\
+\> \> {\bf for} $j \leftarrow 0 \dots i$ \\
+\> \> \> {\bf if} $m - D[j] > 0$ \\
+\> \> \> \> $C[m,j] \leftarrow C[m-D[j],j] + C[m,j-1]$ \\
+\> \> \> {\bf else} \\
+\> \> \> \> $C[m,j] \leftarrow C[m,j-1]$ \\
+\> {\bf return} $C[n,i]$ 
+\end{alg}
+
+The algorithm runs in $\Theta(nm)$ time, where $n$ is the amount for which
+you are making change, and $m$ is the number of denominations.
+
+\section{The Liquid Knapsack}
+
+Sort the objects by value-per-cost.  Starting with the most valuable
+objects, add as much of each object as possible until the bag is full.
+Voil\'a.  The sorting costs $O(n \log n)$, and we can select the best
+objects in linear time, for an overall $O(n \log n)$ algorithm.
+
+\section{Simple Parsing}
+
+First, the basic CYK algorithm in pseudocode (this is almost verbatim from
+the lecture notes):
+\begin{alg}
+{\sc CYK}($s$,$P$) \\
+\> ; first fill in the base case of $y=1$ \\
+\> $n \leftarrow \mathit{length}(s)$ \\ 
+\> {\bf for} $x \leftarrow 1 \dots n$ \\
+\> \> $V(x,1) \leftarrow \{ A | A \rightarrow s[x] \mbox{ is a production} \}$ \\
+\> {\bf for} $y \leftarrow 2 \dots n$ \\
+\> \> {\bf for} $x \leftarrow 1 \dots n - y + 1$ \\
+\> \> \> $V(x,y) \leftarrow \empty$ \\
+\> \> \> {\bf for} $k \leftarrow 1 \dots y - 1$ \\
+\> \> \> \> $V(x,y) \leftarrow V(x,y) \cup \{ A | A \rightarrow BC \mbox{ is a production}$ \\
+\> \> \> \> \> where $B \in V(x,k)$ and $C \in V(x+k,y-k) \}$ \\
+\> {\bf return} $S \in V(x,n)$ 
+\end{alg}
+
+In the above example, $V(x,y)$ is a set of a symbols ${A | A\rightarrow BC
+\mbox{ is a production } }$.  If we also record what substring was produced
+by $B$ and $C$ ({\em i.e.} the $k$ for which $B \in V(x,k)$ and $C \in
+V(x+k,y-k)$), then at the end we can reconstruct the particular productions
+used.  This is accomplished by keeping tuples $(A,k)$ in $V(x,y)$.
+
+\begin{alg}
+{\sc Annotated-CYK}($s$,$P$) \\
+\> ; first fill in the base case of $y=1$ \\ 
+\> $n \leftarrow \mathit{length}(s)$ \\ 
+\> {\bf for} $x \leftarrow 0 \dots n$ \\
+\> \> $V(x,1) \leftarrow \{A,1 | A \rightarrow s[x] \mbox{ is a production} \}$ \\
+\> {\bf for} $y \leftarrow 2 \dots n$ \\
+\> \> {\bf for} $x \leftarrow 1 \dots n - y + 1$ \\
+\> \> \> $V(x,y) \leftarrow \empty$ \\
+\> \> \> {\bf for} $k \leftarrow 1 \dots y - 1$ \\
+\> \> \> \> $V(x,y) \leftarrow V(x,y) \cup \{ (A,k) | A \rightarrow BC \mbox{ is a production}$ \\
+\> \> \> \> \> where $(B,i) \in V(x,k)$ and $(C,j) \in V(x+k,y-k) \}$ \\
+\> {\bf return} $(S,z) \in V(x,n)$ \\
+\\
+; print how the symbol A produces the substring $s[x:x+y]$ \\
+{\sc Show-Productions}($(A,x,y)$) \\
+\> {\bf print} ``$A \rightarrow s[x:x+y]$'' \\
+\> {\bf if} $y>1$ ; print sub-productions \\
+\> \> $B,C \mbox{ such that } (A,k) \in V(x,y), B \in V(x,k), \mbox{ and } C \in V(x+k,y-k)$ \\
+\> \> {\bf print} ``$A \rightarrow BC$'' \\
+\> \> {\sc Show-Productions}($B$,$x$,$k$) \\
+\> \> {\sc Show-Productions}($C$,$x+k$,$y-k$) \\
+\end{alg}
+
+\end{document}

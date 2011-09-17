@@ -1,0 +1,567 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Employee SpeechWorks">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+   <title>lecture10</title>
+</head>
+<body bgcolor="#88aaff">
+<h2>GUI Components (Widgets)</h2>
+In the previous lecture, we discussed handling events from the mouse (and
+by analogy the keyboard, window manager, etc). Modern user interfaces abound
+with complex display and functional units. Although it is possible to build
+an entire GUI from scratch handling only the basic events, it is not only
+tedious and time comsuming. To save programmers from this chore, most GUI
+environments provide a set of pre-built library components that implement
+commonly used UI functionality. These GUI components (often called widgets)
+process the basic mouse and keyboard events in their windows and communicate
+with the rest of the program through a set of method calls (API)
+and by sending their own events (which are processed through the event queue
+just like the basic mouse and keyboard events).
+<p>
+There is another benefit to these widget sets besides saving the  programmer
+some work. Programs using a particular Widget set will all tend to have
+similar "look-and-feel"-s and behave similarly. This is a great benefit to the
+user who can count on things to look the same and act the same between
+programs. 
+<p>
+There are really no new paradigms or technologies involved in using 
+widgets. They are created and added using the same methods we used for JPanels
+when discussing graphics. The event handling follows that used for the mouse
+events. The additional complexities introduced by GUI components are really
+to their variety, functionality, and sheer number per program. In particular,
+the issues are:
+<ul>
+<li> How to instantiate components and link them into the window hierarchy.
+<li> How to handle events from the components, and determine which component
+an event came from, without the program becoming unmanageable. (There is
+only one mouse and one keyboard, but there can be tens of buttons in a
+single application).
+<li> How to transfer data into and out of components. We addressed this
+problem a bit when discussing mouse handlers. It gets more difficult
+as the amount and complexity of component data increases.
+<li> How to organize and present the components on the screen (layout)
+</ul>
+<p>
+Much of the effort of GUI programming is combing the books and 
+on-line documentation.
+There are around 20 component types in Java, we will only give a small
+sampling in this lecture, chosen to illustrate the basic points above.
+We are also going to postpone a discussion of layout for another time.
+<p>
+We are also going to ignore the whole issue of what makes a good GUI design.
+This is far beyond the scope of this course and is a field in itself ( there
+are many books on this subject, along with several journals and conferences).
+
+<h3>
+Basic Components: Buttons
+</h3>
+<ul>
+<li> Buttons are one of the simplest components and generalizes the
+mouse application we wrote in last lecture.
+<li> The basic button class is JButton. It creates a clickable rectangular
+area labeled with either a text string or an icon(image). The label is
+passed into the constructor.
+<li> Buttons can be added to Panels or Frames. (the choice is determined
+by layout concerns which we will deal with later). Let's rename FrameTest
+to WidgetTest and add our button. We are adding to the drawing panel for
+simplicity. 
+<pre>
+	JButton toggle = new JButton("Toggle");
+	// Random stuff we just have to do (the book explains, kind of)
+	Container contentPane = myframe.getContentPane();
+	// add panel
+	contentPane.add(mypanel);
+	// add button to panel
+	mypanel.add(toggle);
+</pre>
+<li> We now have an application with a button. However, in order to get 
+it to do something we need to add an event listener. The event class
+trigger by buttons (and many widgets) is <code>ActionEvent</code>, the
+handling method is the <code>actionPerformed</code>, method of the
+<code>ActionListener</code> interface. So we make our listener class:
+<pre>
+class ButtonHandler implements ActionListener{
+    public void actionPerformed(ActionEvent e){
+	System.out.println("Toggle pressed");
+    }
+
+}
+</pre>
+and add it to our button
+<pre>
+	toggle.addActionListener(new ButtonHandler());
+	mypanel.add(toggle);
+</pre>
+<li> Cool, but as we found with the mouse handler, in order to be useful,
+the handler must somehow have access to program data. As in the mouse case
+we will address this by making the handler an inner class of MyPanel and
+moving the instantiation of the button into the MyPanel constructor.
+(The book, in chapter 8, has an example of how you can use
+anonymous inner classes to avoid names all of your listener classes.
+We will skip this "optimization").
+And for our content, we will swipe the color toggling code from lecture 9.
+<pre>
+    // Now an inner class so we can access data.
+    class ButtonHandler implements ActionListener{
+	public void actionPerformed(ActionEvent e){
+	    if(current.equals(Color.red))
+		current = Color.blue;
+	    else
+		current = Color.red;
+	    repaint();
+	}
+	
+    }
+
+    MyPanel(){
+	JButton toggle = new JButton("Toggle");
+	// add listener
+	toggle.addActionListener(new ButtonHandler());
+	// add button
+	add(toggle);
+    }
+</pre>
+We now have the same application as in lecture 9, but the toggling only
+occurs when the mouse clicks in the button.
+<li>
+We could add another button to the panel to turn the color green, by
+creating a new button and listener class. However, we can also try to
+reuse our listener for both buttons. (Doing one vs. the other is purely a 
+design decision to be based on which makes for code that is easiest to
+understand and modify).
+<p> The actionPerformed method, if shared, needs to be able to tell which
+button was pressed. It can do that based on information on the ActionEvent.
+It can get a string associated with the event through 
+<code>getActionCommand()</code> or the source object (the button) through
+<code>getSource()</code>. The ActionCommand string for buttons defaults to
+the label string.
+<p>
+To use the getSource method, we have to have the button variables in scope
+to compare against. So we will now make them instance variables on
+myclass (rather than local to the constructor).
+<li> There are several varieties of buttons and button collections in Java,
+CheckBoxes, RadioBoxes, ComboBoxes. They all work similarly. Refer to
+the book and doc for more.
+</ul>
+<h4>Text Input</h4>
+<ul>
+<li> Let's now add a different type of widget. One that is used to input
+a single text field. Creating and adding this component is familar, we use
+the same approach as for buttons, only we pass in the size and default
+string into the constructor.
+<li> Text components, like all Swing components, use the Model-View-Controller
+pattern in their internal implementation. In the can of text components,
+the Model is based on a Document interface (standard Document-type interfaces
+are prevalent these days, there are several associated with the various
+XML standards. This one, however, is specific to Java). We could use
+the underlying model to get events that change the underlying document
+(rather than tracking every keystroke). The book explains this in detail.
+<li> We are going to be less ambitious here and only respond to text input
+when the user hits return in the test box. This causes the text input
+widget to send an Action event. We are going to again reuse our
+Action listener (which may or may not be good style!).
+<li> The TextField component has getText and setText methods to access
+the model data.
+<pre>
+    Color current = Color.red;
+    String msg = "Hello World";
+
+    // button variables now instace vars.
+    //  May as well init here.
+    JButton toggle = new JButton("Toggle");
+    JButton green = new JButton("Green");
+    JTextField text = new JTextField(10);
+
+
+    // Button listener. Now an inner class so we
+    //  can access mypanel data.
+    class ButtonHandler implements ActionListener{
+	public void actionPerformed(ActionEvent e){
+	    // check source, if green button, set color
+	    if(e.getSource() == green){
+		current = Color.green;
+	    }
+	    else if(e.getSource() == text){
+		String s = text.getText();
+		if(s != null) msg = s; // install as new msg
+		repaint();
+	    }
+	    else{ // do toggle stuff
+		if(current.equals(Color.red))
+		    current = Color.blue;
+		else
+		    current = Color.red;
+	    }
+	    repaint();
+	}
+	
+    }
+
+    MyPanel(){
+	// add listeners
+	ButtonHandler b = new ButtonHandler();
+	toggle.addActionListener(b);
+	green.addActionListener(b);
+	text.addActionListener(b);
+	// add buttons (and text field)
+	add(toggle);
+	add(green);
+	add(text);
+    }
+
+</pre>
+<li> Although we won't discuss them here, check to book to learn how
+to use Sliders (easy) and JTextArea. Also check out using the latter
+with JScrollPane to and scrolling with no work.
+</ul>
+<h4>Menus</h4>
+<ul>
+<li>Menus are actually buttons from a functional point of view, they
+are just initialized and displayed differently.
+<li>We need to first make a menu bar, then add menus, than add items 
+to the menu and provide listeners to the items. The listeners we need are
+again ActionListeners. We could reuse our ButtonListener, except that
+the branching is on buttons, not our menu items. For now we will duplicate
+and modify.
+<pre>
+class MyPanel extends JPanel{
+
+    // Color and string are now instance vars so we can change them
+    Color current = Color.red;
+    String msg = "Hello World";
+
+    // button variables now instace vars.
+    //  May as well init here.
+    JTextField text = new JTextField(10);
+    // Menu items created by menu.add(), still need to keep them for handler
+    JMenuItem toggle;
+    JMenuItem green;
+
+    // We are using button Listener verbatim. Only difference
+    //  is that we changed our buttons above to JMenuItems
+    class ButtonHandler implements ActionListener{
+	public void actionPerformed(ActionEvent e){
+	    // check source, if green button, set color
+	    if(e.getSource() == green){
+		current = Color.green;
+	    }
+	    else if(e.getSource() == text){
+		String s = text.getText();
+		if(s != null) msg = s; // install as new msg
+		repaint();
+	    }
+	    else{ // do toggle stuff
+		if(current.equals(Color.red))
+		    current = Color.blue;
+		else
+		    current = Color.red;
+	    }
+	    repaint();
+	}
+	
+    }
+
+    // Need myframe so we can add menubar 
+    //  (could do in main and pass in menubar instead)
+    MyPanel(JFrame myframe){
+	// Need to add menu stuff and add to frame (not panel)
+	JMenuBar mb = new JMenuBar();
+	myframe.setJMenuBar(mb);
+	// create menu and add to menuber
+	JMenu cmenu = new JMenu("Colors");
+	// Note: book is in error here, calls non-existant addMenu()
+	mb.add(cmenu);
+	// add() method on menu creates and adds menu items
+	toggle = cmenu.add("Toggle");
+	// add a horiz line to look cool
+	cmenu.addSeparator();
+	green = cmenu.add("Green");
+	// make one instance of listener and add to all
+	//  works exactly the same as for buttons
+	ButtonHandler b = new ButtonHandler();
+	toggle.addActionListener(b);
+	green.addActionListener(b);
+	text.addActionListener(b);
+
+	// add text field
+	add(text);
+    }
+
+    public void paintComponent(Graphics g){
+	super.paintComponent(g);
+
+	//	    System.out.println("paintComponent");
+	g.setColor(current);
+	g.drawString(msg,50,100);
+    }
+
+}
+</pre>
+<li> Say we wanted to share our handler between the menu items AND buttons.
+The book shows how to do this in Chapter 9. There is an interface called
+Action which extends ActionListener with stuff to deal with labels and icons.
+By implementing Action instead of action listener and parameterize the
+constructor with a name one can share the code. Both JButton and JMenuItem
+have constructors that accepts an Action arg which is used to set
+both the label and the listener.
+</ul>
+<h4>Dialog boxes</h4>
+<ul>
+<li>
+Dialog boxes give the program the ability to pop up new frames to
+request context specific user input. This simplifies the UI since
+only those commands available all the time must be shown in the default
+UI.
+<li>Dialogs come in two varieties model and modeless. Modal dialogs
+bloc the application from continuing until they close. Modeless dialogs
+run in parallel with the application.
+<li> Java provides a number od methods on JOptionPane that will popup
+simple modal dialog boxes (for example, warning msg boxes that remain until
+the user click on OK).
+<li> Creating a more elaborate dialog is also fairly easy.
+<ul>
+<li> Create a new frame, but instead of extending JFrame, extend JDialog.
+<li> Constructor must call super(Frame parent,String name,boolean modal).
+<li> Keep instance variables for the data the dialog is supposed to set.
+<li> Add panels and components to the contentPane of the JDialog
+<li> Add listeners for the components.
+<li> Traditionally an OK button is used to return. 
+<li> All actions that can close the dialog window (windowClose, OK button etc)
+must call hide(), dispose(), or setVisible(false) to return from dialog
+properly.
+<li> In main app, we want to show the dialog create a new instance of
+the class. [Note: The book claims you can create a single instance and
+re-use it. I have not gotten this to work. Although it works fime the first
+time, it does not seem to pop up again!!]
+<li> To popup dialog call the show() method on the dialog instance.
+<li> Show() will block until dialog returns (by calling hide9), dispose(),
+or setVisible(false) ).
+<li> When dialog returns, use accessors or utility methods to access dialog
+data set by user. Traditionally, user input from dialogs is ignored unless
+the OK button has been clicked. Any other return (ie Cancel, windowClose)
+usually ignored the new data.
+<li> The example here uses accessors to get dialog data. The book uses
+a different technique. Study them both and use what's convenient. There
+are lots of ways to peel a radish.
+</ul>
+<li>Following is new code for DialogTest to pop up dialog and get data
+<pre>
+    // new ButtonHandler that calls dialog from menu item rather
+    //   than toggling color directly
+    class ButtonHandler implements ActionListener{
+	public void actionPerformed(ActionEvent e){
+	    // check source, if green button, set color
+	    if(e.getSource() == ditem){
+		// We do not seem to be able to create and re-use a
+		//  dialog the way the book does! Must create new every time???
+		MyDialog dialog = new MyDialog(null);
+		dialog.show(); // popup dialog
+		// get data out
+		current = dialog.getCurrent();
+	    }
+	    else if(e.getSource() == text){
+		String s = text.getText();
+		if(s != null) msg = s; // install as new msg
+	    }
+
+	    repaint();
+	}
+	
+    }
+</pre>
+<li>Following is complete code from MyDialog
+<pre>
+public class MyDialog extends JDialog{
+
+    // must make instance var since we need it to access panel data.
+    DialogPanel dialogPanel;
+
+    public MyDialog(JFrame parent){
+	// must call JDialog constructor, 
+	//  final arg true makes show() blocking.
+	super(parent,"Color Dialog",true);
+	setSize(200,200);        // size in pixels
+	// new default close action -- DISPOSE rather then EXIT
+	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	// Add panel
+	dialogPanel= new DialogPanel(this);
+	getContentPane().add(dialogPanel);
+    }
+
+    public Color getCurrent(){
+	// just forward request
+	return(dialogPanel.getCurrent());
+    }
+
+}
+
+// DialogPanel hold buttons. Class has listener as inner class
+class DialogPanel extends JPanel{
+    // the dialog that contains me, needed to call isVisible(false)
+    JDialog dialog;
+
+    // This color is not used to draw, it is just the 'model' that
+    //  this dialog alters. This data is retrieved by the main app
+    //  through the getCurrent9) method
+    Color current = Color.black;
+
+    // Handler for Mouse presses and clicks
+    //  Extends MouseAdapator 
+    //      (which implements MouseListener with empty methods)
+    // We use an inner class so we can access to data on JPanel
+
+    JButton toggle = new JButton("Toggle");
+    JButton green = new JButton("Green");
+    JButton ok = new JButton("OK");
+
+
+    // Button listener. Now an inner class so we
+    //  can access mypanel data.
+    class ButtonHandler implements ActionListener{
+	public void actionPerformed(ActionEvent e){
+	    // check source, if green button, set color
+	    if(e.getSource() == green){
+		current = Color.green;
+	    }
+	    else if(e.getSource() == toggle){ // do toggle stuff
+		if(current.equals(Color.red))
+		    current = Color.blue;
+		else
+		    current = Color.red;
+	    }
+	    else{ // OK
+		// setVisible(false) close dialog and causes show() to return!
+		dialog.hide();
+	    }
+	}
+	
+    }
+
+    DialogPanel(JDialog dialog){
+	// make one instance of listener and add to all
+	this.dialog = dialog;
+	ButtonHandler b = new ButtonHandler();
+	toggle.addActionListener(b);
+	green.addActionListener(b);
+	ok.addActionListener(b);
+	// add buttons (and text field)
+	add(toggle);
+	add(green);
+	add(ok);
+    }
+
+    public Color getCurrent(){
+	return(current);
+    }
+
+}
+</pre>
+<li> Java supplies built-in dialog types for choosing Filenames (including
+a directory browser feature) and colors. The book and doc describe their
+use.
+</ul>
+<h4>Table Widget</h4>
+Finally, we will end with a most complex widget that with a more complex model.
+<ul>
+<li> The table widget represents data in columns and row, like a spreadsheet.
+<li> The model for the table widget can be any class that implements
+the TableModel interface (natch'). There is, as usual, a convenience class
+that implements most of the methods called AbstractTableModel. We only
+need to implement
+<ul>
+<li>public int getRowCount();
+<li> public int getColumnCount();
+<li>  public Object getValueAt(int row, int column);
+</ul>
+though String getColumnName() is also useful. Note that this model
+allows entirely dynamic computation of the table cell contents (much
+as the paintComponent() method allows dynamic computation of graphics.
+<li> Cells can be made editable by having the isCellEditable(r,c) method
+return true for those cells.
+<li> The Widget updates the model when edits are done by calling showValueAt().
+<li> It is possible to select cells by cell, row, column, or region. The
+book explains how to deal with selections. Curiously there does not
+seem to be an event indicates cell selection. (though perhaps there
+is and I just haven't found it.)
+<li> Below is code for a simple table of numbers. The second column
+is editable. Note also use of JScrollPane to get scrolling.
+<pre>
+class MyFrame extends JFrame{
+
+    public MyFrame(){
+	// set up UI
+	setTitle("MyFrame");
+	setSize(200,200);        // size in pixels
+	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// make model
+	MyTableModel model = new MyTableModel(31);
+	// make table
+	JTable table = new JTable(model);
+	// Random stuff we just have to do (the book explains, kind of)
+	Container contentPane = getContentPane();
+	// add panel with scroller
+	JScrollPane scroll = new JScrollPane(table);
+	contentPane.add(scroll);
+
+    }
+
+}
+
+class MyTableModel extends AbstractTableModel{
+    int rows = 2;
+    int cols = 2;
+    String[] colnames = {"Day","Hours"};
+    Integer[] hours;
+    MyTableModel(int rows){
+	this.rows = rows;
+	hours = new Integer[rows];
+	for(int i=0;i<rows;i++){
+	    hours[i] = new Integer((int)(Math.random() * 8.0));
+	}
+    }
+    
+    public int getColumnCount(){
+	return(cols);
+    }
+    public String getColumnName(int c){
+	return(colnames[c]);
+    }
+    public int getRowCount(){
+	return(rows);
+    }
+    public Object getValueAt(int r, int c){
+	if(c == 0) return(new Integer(r));
+	else return(hours[r]);
+    }
+    public void setValueAt(Object value, int r, int c){
+	hours[r] = new Integer((String)value);
+    }
+    // make second column editable
+    public boolean isCellEditable(int r, int c){
+	if(c > 0) return(true);
+	return(false);
+    }
+}
+
+public class TableTest{
+
+    // OK let's have our main() create a frame.
+    public static void main(String[] args){
+	MyFrame myframe = new MyFrame();
+	myframe.show();
+    }
+}
+</pre>
+</ul>
+<h4>Postscript</h4>
+There are many other interesting widgets including spinners, progress bars,
+toolbars, tree widgets, tab widget (one of my fav's), and HTML/RTF text
+widgets. Explore and have fun.
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,277 @@
+<html>
+<head>
+  <title>
+   Lecture 1
+  </title>
+</head>
+<body bgcolor="#88aaff">
+<h2>Lecture 2<h2>
+<h3>Classes</h3>
+<pre>
+
+Prelude: The Java String data type
+    - String is a built-ing data type representing character strings
+    - String variable can use standard initialization syntax
+           String s = "foo";
+    - Java overloads the + operator to cover String concatentation
+           "foo" + "bar"  -> "foobar"
+
+    - String variables are reference types
+       String a = "foo";
+       String b = a;       // a and b are 'eq', reference same object.
+
+    - Unlike integer variables, and like array variables, Strings involve
+        two units of memory, the String variable itself, and the storage
+	referenced by the string variable (string of characters).
+
+    - Stack vs heap storage
+
+    - String's are an example of a built-in object type.
+    - In addition to '+' operator, the string type supports several
+       'methods' For example,
+           String s = "foo";
+	   int len = s.length();  // length method return number of chars (3)
+
+    - We saw static methods in the previous lecture, these are essentially
+        global functions in the C or Scheme sense. The length() method of
+	String is an 'instance' method. The means it has access to the
+	data of a particular instance of the String on with it was invoked.
+
+    - In general method call syntax is   objectvar.methodname(args..);
+
+    - There are also static methods of string. For example:
+        String.valueOf(int i) -- returns String representation of i.
+
+    - The general static  method call syntax is  ClassName.methodName(args...)
+
+    - Instance methods are essentially function calls with one implicit 
+        argument: the object instance on which the method is called.
+
+    - Strings support other methods
+         char charAt(int i)  -- returns character at position i
+	 String substr(int start, int len) -- returns substring
+    - String's are immutable, once created they cannot be altered (this
+        is not true of objects in general.
+
+    - It is important to keep the distinction between the Class String
+        and instances of String (ie "foo").
+
+    - String ( and objects in general) are created by calling their
+       'constructor' routine with the operator 'new'
+
+           String s = new String("foo");
+
+    - Constructors have the name of the object type (the class). A class
+          can have multiple constructors with different argument signatures.
+
+    - Constructors are always called with 'new';
+
+    - Unlike C++, Java has no destructors. Object instances are garbage
+       collected when no longer references (as in Scheme).
+
+       {
+          String a = new String("foo");  // create new string
+	  String b = a;                  // init var with existing string
+	  String c = a.concat(b);        // concatentate a and b (same as a+b)
+	  int i = c.length();            // i set to 6
+	  String d = c.substring(2);     // d set to "ofoo"
+	  boolean e = d.equals("ofoo");  // e set to true
+       }
+
+
+Defining Classes
+
+   - String is a built-in object type (this lets Java use '+' for concat)
+   - Java (and other OO languages) allows programmers to create user defined
+       classes, extending the type system with new object types.
+
+   - Defining new classes is a matter of defining the data each instance
+       maintains, and the set of methods that manipulate that data.
+
+   - As a running example, we will develop a class to represent Vect2D
+       numbers z=a+bi
+
+   - Classes are defined with keyword 'class'. The source for a class must
+       be in a .java file of the same name (case sensitive)
+
+       class Vect2D {
+
+       }
+
+   - The data carried by each class instance is defined as instance variables.
+
+       class Vect2D {
+          double x = 0.0;   // x component (initialized to 0)
+	  double y = 0.0;   // y component (initialized to 0)
+       }
+
+   - Instance vars can be initialized in their definition as well as
+       their constructor.
+
+   - Constructor routines have the same name as the class and return no type
+      (not even void).
+
+
+       class Vect2D {
+          // Declare instance vars private, only class methods can access
+          private double x = 0.0;  // x component (initialized to 0)
+	  private double y = 0.0;  // y component (initialized to 0)
+
+	  // Construct Vect2D from x and yinary parts
+	  public Vect2D(double xval, double y){
+	       x = xval;  // instance vars are in scope in class methods
+	       this.y = y;
+          }
+
+       }
+
+   - The implicit instance argument is bound to the reserved variable 'this'
+        We could have used this.x instead of x.
+
+   - Since data members are private (always good practice), we provide
+        accessor routines to access them. There is a naming convention:
+	for variable 'foo' accessor is getFoo()
+
+       class Vect2D {
+          // Declare instance vars private, only class methods can access
+          private double x = 0.0;   
+	  private double y = 0.0;   
+
+	  ... Constructors etc....
+
+	  // Accessors
+	  public double getX(){
+	     return(x);
+          }
+
+	  public double getY(){
+	     return(y);
+          }
+
+       }
+
+   - We are making Vect2D an immutable type, otherwise we would
+      supply mutator methods as well (convention setFoo())
+
+   - Vect2D should support an absolute value methods (sqrt r2 + i2)
+   
+       class Vect2D {
+          // Declare instance vars private, only class methods can access
+          private double x = 0.0;  
+	  private double y = 0.0;  
+
+	  ... Constructors, Accessors etc....
+
+	  // absolute value routine.
+	  public double length(){
+	     return(Math.sqrt((x*x) + (y*y)));
+          }
+
+       }
+
+     
+   - Vect2D should support an binary operations add and mult. We have
+       a choice: make them static binary methods as in
+
+         public static Vect2D add(Vect2D a, Vect2D b);
+
+       or unary instance methods
+	
+         public Vect2D add(Vect2D b);    // first argument implicit
+
+      Binary (static form emphesizes symmetry while unary (instance) form
+        more flexible due to inheritance. We'll do both here.
+
+
+       class Vect2D {
+          // Declare instance vars private, only class methods can access
+          private double x = 0.0;   // x part (initialized to 0)
+	  private double y = 0.0;   // yinary part
+
+	  ... Constructors, Accessors etc....
+
+	  // Multiplication by a real (scaling)
+	  public Vect2D scale(double s){
+	    Vect2D result = new Vect2D();  // empty constructor
+	    // Class methods can access instance var of ALL instances
+	    //  (assuming it has references in scope).
+	    result.x = (x * s);
+	    result.y = (y * s); 
+	    return(result);
+          }
+
+	  // Addition
+	  public Vect2D add(Vect2D b){
+	    Vect2D result = new Vect2D();  // empty constructor
+	    // Class methods can access instance var of ALL instances
+	    //  (assuming it has references in scope).
+	    result.x = x + b.x; 
+	    result.y = this.y + b.y; // to be explicit
+	    return(result);
+          }
+
+	  // Addition
+	  public static Vect2D add(Vect2D a, Vect2D b){
+	    Vect2D result = new Vect2D();  // empty constructor
+	    // Class methods can access instance var of ALL instances
+	    //  (assuming it has references in scope).
+	    result.x = a.x + b.x; // to be explicit
+	    result.y = a.y + b.y; // to be explicit
+	    return(result);
+          }
+
+       }
+
+    - As in above, methods can be overloaded with different argument signatures
+
+Design with classes: Typical class types
+
+   - As we can see, developing classes and programming methods is pretty
+      straightforward. The challanging part is deciding which classes
+      to create and what methods to support.
+
+   - Some common catagories of classes in typical programs
+
+   Database -- classes that essentially represent database objects, common
+                  in business ( or psuedo-business apps). Ex
+		  Employee, Manager, Order, RushOrder, InventoryItem, ...
+		  Many programs are consist essentially of DB manipulation,
+		    always ask 'why not use a real DB?'
+
+   Algebraic -- classes represent algebraic types (eg Complex)
+   Container -- classes to hold collections of objects: lists, hashtables, etc.
+   I/O and Network -- mediate access to external data streams.
+   GUI objects -- Buttons, frames, text areas, etc.
+   Graphics -- Fonts, images, brushes, etc.
+   Callbacks -- a technical use of objects to pass methods around as arguments
+                 and store as data (methods are not first-class objects in
+		 Java, they need a supporting instance).
+
+</pre>
+<hr>
+<pre>
+
+Recitation:
+
+   Review: 
+
+   public,private,protected keywords for methods,variables
+   static, final keywords 
+
+   initialization of instance vars (order of initialization)
+
+   strange, but useful Java syntax involving
+   new in argument    foo(new String("bar"));
+   new in expr        (new String("foo")).length
+   return value as expr   foo(b).bar(c);
+
+   mutators
+   implications of lack of destructor (resource cleanup).
+
+   java.util.* classes and on-line doc.
+
+</pre>
+</body>
+</html>
+
+

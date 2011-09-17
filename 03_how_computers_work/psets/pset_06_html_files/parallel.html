@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Generator" CONTENT="Microsoft Word 97">
+   <META NAME="GENERATOR" CONTENT="Microsoft FrontPage 4.0">
+   <TITLE>After two straight all-nighters spent working on his Beta design, Ben Bitdiddle rushes off to his final 6</TITLE>
+</HEAD>
+<BODY>
+<B><h2>Problem 1: Explicit Parallelism</h2>
+</B><FONT SIZE=-1>After two straight all-nighters spent working on his Beta design, Ben Bitdiddle
+rushes off to his final ADU lecture. Only moments into his discussion
+the professor’s lecture wonders off onto some tangent about how the Ferengi
+from Star Trek would be the ideal cache managers. Ben’s concentration suddenly
+to fails him. Within seconds Ben falls into a deep sleep.</FONT>
+<P><FONT SIZE=-1>Ben awakens to find that 20 years and, more importantly,
+40 semesters have passed since he last made his way to class. As his head
+clears he realizes that he is still sitting in an ADU lecture. Even stranger,
+Ben comes to recognize the both the stale jokes and thinning curly locks
+of the esteemed lecturer<FONT FACE="Symbol">&frac34;</FONT> Professor (now
+Emeritus) Pratt.</FONT>
+<P><FONT SIZE=-1>Little has changed. The canonical programming example
+used is still a recursive factorial routine. However, the implementation
+is slightly different than Ben remembers.</FONT>
+<DIR>
+<DIR><FONT FACE="Comic Sans MS"><FONT SIZE=-2>int factorial(int n) {</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>return facthelp(1, n);</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>}</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>parallel int facthelp(int from,
+int to) {</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>int mid;</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>if (from >= to) return from;</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>mid = (from + to)/2;</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>return (facthelp(from, mid)
+* facthelp(mid+1, to));</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>}</FONT></FONT></DIR>
+</DIR>
+
+<DL>
+<DT>
+<FONT SIZE=-1>A.&nbsp;&nbsp;&nbsp;&nbsp; Ignoring the parallel keyword,
+how many times is the facthelp( ) function called for a given value of
+n? How does this compare to the version from twenty years earlier (shown
+below)?</FONT></DT>
+
+<BR>&nbsp;
+<P>&nbsp;
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>int factorial(int n) {</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>if (n > 0)</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>return n*fact(n-1);</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>else</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>return 1;</FONT></FONT>
+<P><FONT FACE="Comic Sans MS"><FONT SIZE=-2>}</FONT></FONT>
+<P><FONT SIZE=-1>Ben soon realizes that the new factorial routine is intended
+for an explicitly parallel machine. The professor explains that the parallel
+functions are assigned to processors and executed in parallel with the
+function that calls them. The caller function is considered the parent
+processor and the parallel functions are its children. When the parent
+requires the result of one or more children to make further progress it
+automatically stalls and waits.</FONT>
+<P><FONT SIZE=-1>B.&nbsp;&nbsp;&nbsp; Ben remembers that the old version
+of the factorial function that he was taught ran in O(n) cycles. What is
+the execution-time complexity of the new parallel&nbsp;&nbsp; factorial
+function?</FONT>
+<P><FONT SIZE=-1>C.&nbsp;&nbsp;&nbsp; Is the factorial algorithm given
+suited for implementation on a SIMD processor? Explain.</FONT>
+<P><FONT SIZE=-1>D.&nbsp;&nbsp;&nbsp; Is the programming language extension
+described best suited for implementation on a SIMD or MIMD parallelism?
+Explain.</FONT></DL>
+
+</BODY>
+</HTML>

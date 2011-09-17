@@ -1,0 +1,9 @@
+<p>
+An introduction to programming and the power of abstraction, using Abelson and Sussman's classic textbook of the same name.   Key concepts include:  building abstractions, computational processes, higher-order procedures, compound data, data abstractions, controlling interactions, generic operations, self-describing data, message passing, streams and infinite data structures, meta-linguistic abstraction,  interpretation of programming languages, machine model, compilation, and embedded languages.
+</p><p>
+Text:  <i>Structure and Interpretation of Computer Programs</i>, Abelson and Sussman
+</p><p>
+Reference:  <i>Simply Scheme</i>, Harvey and Wright.
+</p><p>
+Requirements:  Three exams and nine problem sets.
+</p><br>
